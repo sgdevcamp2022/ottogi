@@ -1,6 +1,6 @@
 import { ChangeEventHandler } from "react";
 import styled from "styled-components";
-import SearchIcon from "@mui/icons-material/Search";
+import SearchIcon from "../../atoms/Icons/SearchIcon";
 
 interface SearchInputProps {
   value: string;

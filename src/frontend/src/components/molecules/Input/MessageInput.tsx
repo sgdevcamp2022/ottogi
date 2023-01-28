@@ -1,6 +1,6 @@
 import { MouseEventHandler, useRef } from "react";
 import styled from "styled-components";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AddCircleIcon from "../../atoms/Icons/AddCircleIcon";
 
 interface MessageInputProps {
   value: string;
