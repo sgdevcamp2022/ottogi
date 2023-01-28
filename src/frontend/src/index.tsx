@@ -1,26 +1,26 @@
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import GlobalStyle from "./styles/globalStyle";
-import { ThemeProvider } from "styled-components";
-import theme from "./styles/theme";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "styled-components";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import GlobalStyle from "./styles/globalStyle";
+import theme from "./styles/theme";
 
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
         <GlobalStyle />
         <HelmetProvider>
           <App />
         </HelmetProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

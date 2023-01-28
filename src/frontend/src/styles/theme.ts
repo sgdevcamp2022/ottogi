@@ -10,9 +10,10 @@ export type BackgroundColorType =
   | "green-1"
   | "green-2"
   | "orange"
-  | "border";
+  | "border"
+  | "transparent";
 export type ColorType = "white" | "black-1" | "black-2" | "grey-1" | "grey-2" | "grey-3" | "grey-4" | "blue" | "red-1" | "red-2";
-
+export type BorderColorType = "default" | "focus" | "success";
 interface FontSize {
   xs: string;
   sm: string;
@@ -31,10 +32,12 @@ interface BackgroundColor {
   "grey-2": string;
   "grey-3": string;
   "grey-4": string;
+  "grey-5": string;
   "green-1": string;
   "green-2": string;
   orange: string;
   border: string;
+  transparent: string;
 }
 
 interface Color {
@@ -46,14 +49,22 @@ interface Color {
   "grey-3": string;
   "grey-4": string;
   blue: string;
+  green: string;
   "red-1": string;
   "red-2": string;
+}
+
+interface BorderColor {
+  default: string;
+  focus: string;
+  success: string;
 }
 
 interface ThemeType {
   fontSize: FontSize;
   backgroundColor: BackgroundColor;
   color: Color;
+  borderColor: BorderColor;
 }
 
 const theme: ThemeType = {
@@ -71,13 +82,15 @@ const theme: ThemeType = {
     "black-1": "#202225",
     "black-2": "#18191c",
     "grey-1": "#2f3136",
-    "grey-2": "#4f545c",
-    "grey-3": "#747f8d",
-    "grey-4": "#e3e5e8",
+    "grey-2": "#40444b",
+    "grey-3": "#4f545c",
+    "grey-4": "#747f8d",
+    "grey-5": "#e3e5e8",
     "green-1": "#447b4c",
     "green-2": "#3ba55c",
     orange: "#faa61a",
     border: "#4f545c7a",
+    transparent: "transparent",
   },
   color: {
     white: "#fff",
@@ -88,8 +101,14 @@ const theme: ThemeType = {
     "grey-3": "#b9bbbe",
     "grey-4": "#dcddde",
     blue: "#4ca7e5",
+    green: "#6bc076",
     "red-1": "#ed4245",
     "red-2": "#c74945",
+  },
+  borderColor: {
+    default: "#16181a",
+    focus: "#4c9ed8",
+    success: "#496e51",
   },
 };
 
