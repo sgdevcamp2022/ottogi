@@ -1,3 +1,4 @@
+import { useState } from "react";
 import SearchInput from "./SearchInput";
 
 export default {
@@ -5,4 +6,7 @@ export default {
   component: SearchInput,
 };
 
-export const Search = () => <SearchInput />;
+export const Search = () => {
+  const [value, setValue] = useState("");
+  return <SearchInput value={value} onChange={({ target: { value } }) => setValue(value)} />;
+};

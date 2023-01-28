@@ -1,3 +1,4 @@
+import { useState } from "react";
 import MessageInput from "./MessageInput";
 
 export default {
@@ -5,4 +6,7 @@ export default {
   component: MessageInput,
 };
 
-export const Message = () => <MessageInput />;
+export const Message = () => {
+  const [text, setText] = useState("");
+  <MessageInput value={text} nickname="nno3onn" onChange={(value: string) => setText(value)} onClick={() => {}} />;
+};
