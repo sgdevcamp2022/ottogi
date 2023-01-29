@@ -3,11 +3,6 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { MouseEventHandler } from "react";
 
-// const serverImageSx = {
-//   "&:hover": {
-//     margin: 10,
-//   },
-// };
 interface ServerImageProps {
   onMouseover: MouseEventHandler<HTMLButtonElement>;
   onClick: MouseEventHandler<HTMLButtonElement>;
@@ -15,12 +10,7 @@ interface ServerImageProps {
 
 const ServerImage = ({ onMouseover, onClick }: ServerImageProps) => {
   return (
-    <StyledIconButton
-      onMouseOver={onMouseover}
-      onClick={onClick}
-      // sx={{ serverImageSx, m: 0, p: 0, borderRadius: 1, boxShadow: "none" }}
-      // onMouseOver={(e)=>}
-    >
+    <StyledIconButton onMouseOver={onMouseover} onClick={onClick}>
       {/* borderRadius로 이미지 동그란 정도 조절하기 */}
       <Avatar className="avatar"></Avatar>
     </StyledIconButton>
@@ -39,9 +29,4 @@ const StyledIconButton = styled(IconButton)`
   border-radius: 5rem;
 `;
 
-const StyledAvatar = styled(Avatar)`
-  &:hover {
-    border-radius: 1.5rem;
-  }
-`;
 export default ServerImage;

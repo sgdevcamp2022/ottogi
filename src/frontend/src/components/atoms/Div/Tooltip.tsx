@@ -6,7 +6,7 @@ import styled from "styled-components";
 interface TipProps {
   children: ReactElement;
   title: String;
-  place:
+  place?:
     | "bottom"
     | "left"
     | "right"
