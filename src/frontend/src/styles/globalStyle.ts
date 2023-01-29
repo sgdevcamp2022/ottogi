@@ -17,11 +17,16 @@ const GlobalStyle = createGlobalStyle`
 
 
   ${reset}
-
-  html, body, div, span, input, textarea, button {
-    font-family: 'gg sans Medium';
-    font-size: 16px;
+  body { 
+    font-family: 'gg sans Medium', "Apple SD Gothic Neo";   
+    font-size: 16px;  
+  }
+  * {
     box-sizing: border-box;
+  }
+  a {
+      text-decoration: none;
+      color: inherit;
   }
 `;
 
