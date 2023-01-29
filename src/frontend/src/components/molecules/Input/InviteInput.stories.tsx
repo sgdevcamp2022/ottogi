@@ -1,3 +1,4 @@
+import { useState } from "react";
 import InviteInput from "./InviteInput";
 
 export default {
@@ -5,4 +6,7 @@ export default {
   component: InviteInput,
 };
 
-export const Invite = () => <InviteInput />;
+export const Invite = () => {
+  const [text, setText] = useState("");
+  return <InviteInput value={text} onChange={({ target: { value } }) => setText(value)} onClick={() => console.log(1)} />;
+};
