@@ -25,6 +25,8 @@ const DefaultInput = ({ value, onChange, placeholder = "", fontSize = "base", co
 };
 
 const DefaultInputContainer = styled.input<{ color: ColorType; fontSize: FontSizeType; backgroundColor: BackgroundColorType }>`
+  width: 100%;
+  height: 100%;
   padding: 0.625rem;
   border: none;
   border-radius: 4px;

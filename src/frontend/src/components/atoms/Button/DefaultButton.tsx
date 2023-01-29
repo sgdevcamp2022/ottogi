@@ -35,10 +35,8 @@ export const DefaultButtonContainer = styled.button<{
   height: 100%;
   font-size: 16px;
   border: none;
-  color: "white";
-  background-color: "red";
-  /* color: ${({ theme, color }) => theme.color[color]}; */
-  /* background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]}; */
+  color: ${({ theme, color }) => theme.color[color]};
+  background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
   font-weight: ${({ fontWeight }) => fontWeight};
   border-radius: 4px;
   cursor: pointer;

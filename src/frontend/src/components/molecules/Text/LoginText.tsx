@@ -1,22 +1,18 @@
 import styled from "styled-components";
-import BigTitle from "../../atoms/Text/BigTitle";
+import Text from "../../atoms/Text/Text";
 
 const LoginText = () => {
   return (
     <LoginTextContainer>
-      <BigTitle text="돌아오신 것을 환영해요!" />
-      <p>다시 만나다니 너무 반가워요!</p>
+      <Text text="돌아오신 것을 환영해요!" fontSize="2xl" fontWeight="bold" mb={12} />
+      <Text text="다시 만나다니 너무 반가워요!" color="grey-3" />
     </LoginTextContainer>
   );
 };
 
 const LoginTextContainer = styled.div`
   text-align: center;
-
-  p {
-    color: ${({ theme }) => theme.color["grey-3"]};
-    font-size: ${({ theme }) => theme.fontSize["base"]};
-  }
+  margin-bottom: 1.25rem;
 `;
 
 export default LoginText;

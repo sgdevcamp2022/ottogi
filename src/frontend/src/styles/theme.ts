@@ -102,7 +102,7 @@ const theme: ThemeType = {
     "grey-2": "#a3a6aa",
     "grey-3": "#b9bbbe",
     "grey-4": "#dcddde",
-    blue: "#4ca7e5",
+    blue: "#00aff4",
     green: "#6bc076",
     "red-1": "#ed4245",
     "red-2": "#c74945",

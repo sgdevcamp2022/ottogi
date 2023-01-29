@@ -13,7 +13,7 @@ interface InviteInputType {
 const InviteInput = ({ value, onChange, onClick, borderColor = "default" }: InviteInputType) => {
   return (
     <InviteInputContainer borderColor={borderColor}>
-      <input maxLength={37} value={value} onChange={onChange} placeholder="사용자명#0000 입력" />
+      <input maxLength={37} value={value} onChange={onChange} placeholder="사용자 이메일 입력" />
       <InviteButton disabled={value === ""} onClick={onClick} fontWeight="normal" color="white" backgroundColor="primary">
         친구 요청 보내기
       </InviteButton>

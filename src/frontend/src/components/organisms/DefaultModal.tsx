@@ -2,12 +2,13 @@ import styled from "styled-components";
 
 interface AuthModalProps {
   children: React.ReactElement;
+  width: number;
 }
 
-const AuthModal = ({ children }: AuthModalProps) => {
+const AuthModal = ({ children, width }: AuthModalProps) => {
   return (
     <Background>
-      <AuthModalContainer>{children}</AuthModalContainer>
+      <AuthModalContainer width={width}>{children}</AuthModalContainer>
     </Background>
   );
 };
@@ -22,7 +23,7 @@ const Background = styled.div`
 
 const AuthModalContainer = styled.div<AuthModalProps>`
   background-color: ${({ theme }) => theme.backgroundColor["grey-2"]};
-  width: 30rem;
+  width: ${({ width }) => width}px;
   border-radius: 0.375rem;
   padding: 2rem;
 `;
