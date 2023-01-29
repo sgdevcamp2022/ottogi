@@ -33,6 +33,7 @@ interface BackgroundColor {
   "grey-3": string;
   "grey-4": string;
   "grey-5": string;
+  "grey-6": string;
   "green-1": string;
   "green-2": string;
   orange: string;
@@ -82,10 +83,11 @@ const theme: ThemeType = {
     "black-1": "#202225",
     "black-2": "#18191c",
     "grey-1": "#2f3136",
-    "grey-2": "#40444b",
-    "grey-3": "#4f545c",
-    "grey-4": "#747f8d",
-    "grey-5": "#e3e5e8",
+    "grey-2": "#36393f",
+    "grey-3": "#40444b",
+    "grey-4": "#4f545c",
+    "grey-5": "#747f8d",
+    "grey-6": "#e3e5e8",
     "green-1": "#447b4c",
     "green-2": "#3ba55c",
     orange: "#faa61a",

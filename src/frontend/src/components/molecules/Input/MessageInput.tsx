@@ -42,7 +42,7 @@ const MessageInput = ({ value, nickname, onChange, onClick }: MessageInputProps)
 const MessageInputContainer = styled.label`
   border-radius: 0.25rem;
   display: flex;
-  background-color: ${({ theme }) => theme.backgroundColor["grey-2"]};
+  background-color: ${({ theme }) => theme.backgroundColor["grey-3"]};
 `;
 
 const AddButton = styled.button`

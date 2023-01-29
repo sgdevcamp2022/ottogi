@@ -31,6 +31,9 @@ const DefaultInputContainer = styled.input<{ color: ColorType; fontSize: FontSiz
   color: ${({ theme, color }) => theme.color[color]};
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
   background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
+  &:focus {
+    outline: none;
+  }
 `;
 
 export default DefaultInput;
