@@ -3,4 +3,9 @@ import styled from "styled-components";
 
 const StateDisturbIcon = styled(DoDisturbOnRoundedIcon)``;
 
-export default () => <StateDisturbIcon />;
+interface StateIconProps {
+  fontSize: number;
+  padding?: number;
+}
+
+export default ({ fontSize, padding = 1 }: StateIconProps) => <StateDisturbIcon sx={{ fontSize, padding: `${padding}px`, borderRadius: 25 }} />;

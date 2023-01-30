@@ -23,6 +23,7 @@ const MessageInput = ({ value, nickname, onChange, onClick }: MessageInputProps)
     resizeTextAreaHeight();
     onChange(value);
   };
+
   return (
     <MessageInputContainer>
       <AddButton onClick={onClick}>

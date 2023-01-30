@@ -3,7 +3,6 @@ import styled from "styled-components";
 import DefaultButton from "../components/atoms/Button/DefaultButton";
 import Text from "../components/atoms/Text/Text";
 import DefaultModal from "../components/organisms/DefaultModal";
-import emailPng from "../assets/email.png";
 
 const Verify = () => {
   return (
@@ -14,8 +13,8 @@ const Verify = () => {
       <DefaultModal width={480}>
         <>
           <TextContainer>
-            <EmailImage src={emailPng} alt="" width="120" height="120" />
-            <Text text="Email Verified!" fontSize="2xl" fontWeight="bold" mb={12} />
+            <EmailImage src={"email.png"} alt="" width="120" height="120" />
+            <Text text="Email Verified!" color="white" fontSize="2xl" fontWeight="bold" mb={12} />
           </TextContainer>
           <ButtonContainer>
             <DefaultButton text="Continue to Discord" onClick={() => {}} />

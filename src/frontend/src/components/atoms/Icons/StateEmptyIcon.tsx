@@ -5,4 +5,9 @@ const StateEmptyIcon = styled(DarkModeIcon)`
   transform: scaleX(-1);
 `;
 
-export default () => <StateEmptyIcon />;
+interface StateIconProps {
+  fontSize: number;
+  padding?: number;
+}
+
+export default ({ fontSize, padding = 1 }: StateIconProps) => <StateEmptyIcon sx={{ fontSize, padding: `${padding}px`, borderRadius: 25 }} />;

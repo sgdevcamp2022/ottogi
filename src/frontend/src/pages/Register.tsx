@@ -4,7 +4,6 @@ import styled from "styled-components";
 import DefaultButton from "../components/atoms/Button/DefaultButton";
 import LinkText from "../components/atoms/Text/LinkText";
 import Text from "../components/atoms/Text/Text";
-import BigTitle from "../components/atoms/Text/Text";
 import DefaultModal from "../components/organisms/DefaultModal";
 import LoginForm from "../components/organisms/LoginForm";
 import useInput from "../hooks/common/useInput";
@@ -31,7 +30,7 @@ const Register = () => {
       <DefaultModal width={480}>
         <>
           <TextContainer>
-            <Text text="계정 만들기" fontSize="2xl" fontWeight="bold" mb={12} />
+            <Text text="계정 만들기" color="white" fontSize="2xl" fontWeight="bold" mb={12} />
           </TextContainer>
           <LoginFormContainer>
             <LoginForm text="이메일" value={email} onChange={changeEmail} />
@@ -41,7 +40,7 @@ const Register = () => {
           </LoginFormContainer>
           <LoginFormContainer>
             <LoginForm text="비밀번호" value={password} onChange={changePassword} />
-          </LoginFormContainer>{" "}
+          </LoginFormContainer>
           <ButtonContainer>
             <DefaultButton text="계속하기" onClick={onRegister} />
           </ButtonContainer>

@@ -9,7 +9,7 @@ const Span = ({ text }: SpanProps) => {
 };
 
 const SpanBlock = styled.span`
-  color: ${({ theme }) => theme.color["red-1"]};
+  color: ${({ theme }) => theme.color["red"]};
 `;
 
 export default Span;

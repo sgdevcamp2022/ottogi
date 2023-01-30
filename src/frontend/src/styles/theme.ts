@@ -12,7 +12,7 @@ export type BackgroundColorType =
   | "orange"
   | "border"
   | "transparent";
-export type ColorType = "white" | "black-1" | "black-2" | "grey-1" | "grey-2" | "grey-3" | "grey-4" | "blue" | "red-1" | "red-2";
+export type ColorType = "white" | "black-1" | "black-2" | "grey-1" | "grey-2" | "grey-3" | "grey-4" | "blue" | "red" | "red-2";
 export type BorderColorType = "default" | "focus" | "success";
 interface FontSize {
   xs: string;
@@ -36,6 +36,7 @@ interface BackgroundColor {
   "grey-6": string;
   "green-1": string;
   "green-2": string;
+  red: string;
   orange: string;
   border: string;
   transparent: string;
@@ -51,8 +52,7 @@ interface Color {
   "grey-4": string;
   blue: string;
   green: string;
-  "red-1": string;
-  "red-2": string;
+  red: string;
 }
 
 interface BorderColor {
@@ -92,6 +92,7 @@ const theme: ThemeType = {
     "green-2": "#3ba55c",
     orange: "#faa61a",
     border: "#4f545c7a",
+    red: "#ed4245",
     transparent: "transparent",
   },
   color: {
@@ -104,8 +105,7 @@ const theme: ThemeType = {
     "grey-4": "#dcddde",
     blue: "#00aff4",
     green: "#6bc076",
-    "red-1": "#ed4245",
-    "red-2": "#c74945",
+    red: "#c74945",
   },
   borderColor: {
     default: "#16181a",
