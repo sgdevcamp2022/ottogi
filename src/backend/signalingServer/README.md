@@ -226,10 +226,8 @@ socket.on('transport-produce',async({kind, rtpParameters, appData}, callback) =>
 ## 추가 필요: 
 <br>1. workers를 늘려야 서버에 대한 부하가 줄어든다. - 이에 대한 정보를 좀 찾아보자
 <br>2. mediasoup handler를 이용하여 다른 부라우저간의 연결성도 확보해두자
-<br>3. 에러사항 7.과 관련이 있는데, enable로 처리를 하면 계속 녹화가 진행된다.. close후 refresh 하는 방법을 알아봐야함.
-
-<br>4. 화면공유 및 음성에 대한 정보도 전송을 할 수 있어야한다.
-<br>5. txtConnection을 이용하여 로딩중 화면을 보여줄 수 있도록 작업
+<br>3. 화면공유 및 음성에 대한 정보도 전송을 할 수 있어야한다.
+<br>4. txtConnection을 이용하여 로딩중 화면을 보여줄 수 있도록 작업
 
 <br>
 
@@ -240,10 +238,6 @@ socket.on('transport-produce',async({kind, rtpParameters, appData}, callback) =>
 3. ~~퇴장시 영상정보 삭제가 안됨~~ 23.01.22 update 
 4. 에러 이후 server복구가 안 됨 <br> -> 에러 발생사항 확인 중
 5. Edge로 들어가면 접근이 안 됨 -> 핸들러와 관련이 있음<br>(다른 브라우저들은 조사해봐야함)
-<img src = "./docs/data/img/mediasoupHandler.jpg" weidth = "40%">
-    - API는 [mediasoup - client](https://mediasoup.org/documentation/v3/mediasoup-client/api/) 참조 바람
-<br>
-
 6. 여러 User가 Publish를 연속적 빠르게 하면, Consumer 화면이 검은색 화면으로 출력됨
 7. ~~Finish를 하면 화면이 종료가 안되는 현상 발생~~ 23.01.25 update - 다시 검은화면으로 변경됨
 8. Streaming 중 간헐적으로 publish 혹은 Finish를 누르면 error 가 발생함 <br>-> try{}catch{}로 잡기 때문에 피해는 안가는 것으로 보임
