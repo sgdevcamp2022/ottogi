@@ -236,7 +236,7 @@ connections.on('connection', async socket=>{ // socket => client
         // add producer to the prodcer array
         const {roomName} = peers[socket.id];
         addProducer(producer, roomName)
-        informConsumer(roomName, socket.id, producer.id)
+        informConsumer(roomName, socket.id, producer.id, producer.kind)
         // get log for producer
         console.log('Producer ID : ', producer.id, producer.kind)
         producer.on('transportclose', ()=>{
@@ -248,8 +248,8 @@ connections.on('connection', async socket=>{ // socket => client
             producerExist : producers.length >= 1 ? true : false // client is just join when room is exist
         })
     })
-    const informConsumer =(roomName, socketId, id) =>{
-        console.log(`just joined, id : ${id} to ${roomName}, ${socketId}`)
+    const informConsumer =(roomName, socketId, id, kind) =>{
+        console.log(`Just joined!! id : ${id} - ${kind} to ${roomName}, ${socketId}`)
     // A new producer just joined
     // let all consumers to consume this producer
         producers.forEach(producerData => {
@@ -257,11 +257,11 @@ connections.on('connection', async socket=>{ // socket => client
                 const producerSocket = peers[producerData.socketId].socket
                 // use socket to send producer id to producer
                 // new producer will send his Id to all other consumers(producers)
-                producerSocket.emit('new-producer', { producerId: id })
+                producerSocket.emit('new-producer', {producerId: id})
             }
         })    
     }
-
+    
     socket.on('getProducers', callback => {
         //return all producer transports
         const { roomName } = peers[socket.id]
@@ -270,10 +270,32 @@ connections.on('connection', async socket=>{ // socket => client
             if ((producerData.socketId !== socket.id) && (producerData.roomName === roomName)) {
             producerList = [...producerList, producerData.producer.id]
             }
+            console.log("producer를 받아왔습니다.",producerData.producer.id, producerData.producer.kind)
         })
         // return the producer list back to the client
         callback(producerList)
     })
+
+    // socket.on('getProducers', callback => {
+    //     //return all producer transports
+    //     const { roomName } = peers[socket.id]
+    //     let producerList = []
+    //     producers.forEach(producerData => {
+    //         if ((producerData.socketId !== socket.id) && (producerData.roomName === roomName)) {
+                
+    //             producerList.forEach(informs =>{
+    //                 if (!informs.include(producerData.producer.id)){
+    //                     console.log('hello')
+    //                     producerList = 
+    //                     [...producerList, 
+    //                         [producerData.producer.id, producerData.producer.kind]];
+    //                 }
+    //             })
+    //         }
+    //     })
+    //     // return the producer list back to the client
+    //     callback(producerList)
+    // })
 
     //about recevers
     socket.on('transport-recv-connect', async({dtlsParameters, serverside_ConsumerTransportId})=> {
@@ -284,7 +306,7 @@ connections.on('connection', async socket=>{ // socket => client
         await consumerTransport.connect({dtlsParameters})
     })
 
-    socket.on('consume', async({rtpCapabilities, remoteProducerId, serverside_ConsumerTransportId}, callback) =>{
+    socket.on('consume', async({rtpCapabilities, remoteProducerId, serverside_ConsumerTransportId, serverside_ConsumerKind}, callback) =>{
         try{
             const {roomName} = peers[socket.id]
             const router = rooms[roomName].router
@@ -301,6 +323,8 @@ connections.on('connection', async socket=>{ // socket => client
                     rtpCapabilities,
                     paused : true,  //have to resume this play back
                 })
+                console.log("ABOUT kind : ", consumer.kind,"와",serverside_ConsumerKind)
+                
                 consumer.on('transportclose',()=>{
                     console.log('transport close from consumer')
                 })

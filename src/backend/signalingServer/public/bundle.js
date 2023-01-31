@@ -21519,7 +21519,7 @@ const getLocalStream = () =>{
     return
   }
   navigator.mediaDevices.getUserMedia({
-    audio : false,
+    audio : true,
     video : {
       width : {
         min : 640,
@@ -21541,6 +21541,7 @@ const streamSuccess = (stream)=>{
   localVideo.srcObject = stream;
   Streaming = stream
 
+  audioParams= { track: stream.getAudioTracks()[0], ...audioParams };
   videoParams = { track: stream.getVideoTracks()[0], ...videoParams };
 
   console.log("videoParams",videoParams)
@@ -21629,9 +21630,20 @@ const createSendTransport = async ()=>{
 
 // for connect [Send transport & produce]
 const connectSendTransport = async()=>{
-  // Warning! [readystate가 왜 업데이트가 안되는지 파악이 안됨.... (Refresh가 되지 않음)] 23.01.24 -> readonly라 직접변경은 안됨
+
+  audioProducer = await producerTransport.produce(audioParams) // this event will triggered when producer Transport start
+  console.log(`audio - ${audioProducer.id} confirmed`)
+  audioProducer.on('trackened', ()=>{
+    console.log('track ended')
+    //close audio tarck
+  })
+  audioProducer.on('transportclose', ()=>{
+    console.log('transport ended')
+    //close audio tarck
+  })
 
   videoProducer = await producerTransport.produce(videoParams) // this event will triggered when producer Transport start
+  console.log(`video - ${videoProducer.id} confirmed`)
   videoProducer.on('trackened', ()=>{
     console.log('track ended')
     //close video tarck
@@ -21642,6 +21654,7 @@ const connectSendTransport = async()=>{
   })
 }
 
+// 23.01.29 - kind를 넘겨받아야 복제 되는 경우 방지가능할듯... -> 23.01.31 consumingTransport를 이용하여 해결 
 // server have to inform the client of a new producer just joined // and ready for consume
 socket.on('new-producer',({producerId}) => signalNewConsumerTransport(producerId))
 const getProducers = () => {
@@ -21661,22 +21674,28 @@ const getProducers = () => {
 //============================================================================================
 const signalNewConsumerTransport = async (remoteProducerId)=>{
   //check if we are already consuming the remoteProducerId
+  if (consumingTransports.includes(remoteProducerId)) {
+    return;}
+  consumingTransports.push(remoteProducerId);
+
   await socket.emit('createWebRTCTransport',{consumer : true}, ({params})=>{
     if (params.error){
       console.log(params.error)
       return
     }
+
     console.log(`PARAMS... ${params}`)
     let consumerTransport;
     try {
       consumerTransport = device.createRecvTransport(params)
     } catch (error) {
       // exceptions: 
-      // {InvalidStateError} if not loaded
-      // {TypeError} if wrong arguments.
+      // InvalidStateError - if not loaded
+      // TypeError - if wrong arguments.
       console.log(error)
       return
     }
+    
     consumerTransport.on('connect', async({dtlsParameters}, callback, errback) =>{
       try{
         // signal of local DTLS parameters to the serverside transport
@@ -21691,26 +21710,29 @@ const signalNewConsumerTransport = async (remoteProducerId)=>{
         errback(error)
       }
     })
-    connectRecvTransport(consumerTransport, remoteProducerId, params.id)
+    
+    connectRecvTransport(consumerTransport, remoteProducerId, params.id, params.kind)
     // [ params.id ] is "server side" consumer transpor id
     // this is transported by server 'createWebRTCTransport' 
   })
 }
 
-const connectRecvTransport = async(consumerTransport, remoteProducerId, serverside_ConsumerTransportId)=>{
+/// 이부분에서 video audio가 복제되서 넘어옴
+const connectRecvTransport = async(consumerTransport, remoteProducerId, serverside_ConsumerTransportId, serverside_ConsumerKind)=>{
   await socket.emit('consume',{
     rtpCapabilities : device.rtpCapabilities,
     remoteProducerId,
     serverside_ConsumerTransportId,
+    serverside_ConsumerKind,
   },
-  
+
   async({params}) =>{
     if (params.error){
       console.log('Cannot consume')
       return
     }
     
-    console.log(`Consumer Params ${{params}}`)
+    console.log(`Consumer Params ${params.kind}`)
     const consumer = await consumerTransport.consume({
       id : params.id,
       producerId : params.producerId,
@@ -21727,11 +21749,11 @@ const connectRecvTransport = async(consumerTransport, remoteProducerId, serversi
         consumer,
       }
     ]
-
 //============ Create Video
-    createVideo(false, remoteProducerId)
+    createTrack(false, remoteProducerId, params.kind)
 //========================================
     const {track} = await consumer
+    console.log(track)
     // remoteVideo.srcObject = new MediaStream([track]) //this is for 1-1 connection 
     document.getElementById(remoteProducerId).srcObject = new MediaStream([track])
     // socket.emit('consumer-resume')//this is for 1-1 connection 
@@ -21752,6 +21774,7 @@ socket.on('producer-closed', async({remoteProducerId})=>{
   //we need to close the client-side consumer and associated transport
 //========= 상대방 종료시 데이터 삭제
   await deleteVideo(false, remoteProducerId)
+  consumingTransports.pop(remoteProducerId)
 //==============================
 })
 
@@ -21787,28 +21810,30 @@ const finishStream = async () =>{ // ProducerId : 내 아이디 , remoteProducer
         console.log('transport ended')
         //close video tarck
       })
+
       //23.01.29 Params의 Track이 업데이트가 제대로 안되었기 때문에 pamras undefine 진행
       //이랬더니 track 정보 및 params 정보가 일체로 업데이트가 진행되면서 정상적으로 동작했다.
-      
       videoParams = undefined
+      audioParams = undefined
       isStreaming = false
+      consumingTransports = [] // Producing이 끝나 consuming을 하지 않음
     })
   }
 }
 
-const createVideo = async(isProducer = false, ProducerId) =>{
+const createTrack = async(isProducer = false, ProducerId,kind) =>{
   if(isProducer === false)
   {
-    try{
-      const newElem = document.createElement('div')
-      newElem.setAttribute('id', `td-${ProducerId}`)
+    const newElem = document.createElement('div')
+    newElem.setAttribute('id', `td-${ProducerId}`)
+    if (kind === 'audio'){
+      newElem.innerHTML = `<audio id="${ProducerId}" autoplay></audio>`
+    }
+    else if (kind === 'video'){
       newElem.setAttribute('class','remoteVideo')
       newElem.innerHTML = `<video id="${ProducerId}" autoplay class = "video"></video>`
-      videoContainer.appendChild(newElem);
-    }catch(error){
-      console.log("cannot make other usres video")
-      throw error
     }
+    videoContainer.appendChild(newElem);
   }
   if(isProducer === true)
   {
