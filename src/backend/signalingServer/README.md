@@ -230,7 +230,6 @@ socket.on('transport-produce',async({kind, rtpParameters, appData}, callback) =>
 <br>4. txtConnection을 이용하여 로딩중 화면을 보여줄 수 있도록 작업
 
 <br>
-
 <br>
 
 
