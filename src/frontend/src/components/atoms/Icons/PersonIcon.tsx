@@ -14,4 +14,4 @@ const PersonIcon = () => (
   </Crop>
 );
 
-export default PersonIcon;
+export default () => <PersonIcon />;
