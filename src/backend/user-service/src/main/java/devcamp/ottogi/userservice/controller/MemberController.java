@@ -1,6 +1,7 @@
 package devcamp.ottogi.userservice.controller;
 
 import devcamp.ottogi.userservice.dto.FriendRequestDto;
+import devcamp.ottogi.userservice.dto.FriendResponseDto;
 import devcamp.ottogi.userservice.dto.MemberResponseDto;
 import devcamp.ottogi.userservice.response.CommonResponse;
 import devcamp.ottogi.userservice.service.MemberService;
@@ -12,7 +13,11 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 import static devcamp.ottogi.userservice.domain.TextMessages.*;
 
@@ -36,10 +41,17 @@ public class MemberController {
         return ResponseEntity.ok(memberService.findMemberInfoByEmail(email));
     }
 
-    @PostMapping("/friend")
+    @PostMapping("/addfriend")
     public CommonResponse<Object> addFriend(HttpServletRequest request, @RequestBody FriendRequestDto friendRequestDto){
-        Long id = Long.parseLong(request.getHeader("id"));
-        log.info("email : {}",friendRequestDto.getEmail());
-        return responseService.getSuccessResponse(FRIEND_ADD_SUCCESS, memberService.addFriend(id, friendRequestDto.getEmail()));
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(FRIEND_ADD_SUCCESS, memberService.addFriend(userId, friendRequestDto.getEmail()));
     }
+
+    @GetMapping("/showfriend")
+    public CommonResponse<Object> showFriend(HttpServletRequest request){
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(FRIEND_SHOW_SUCCESS, memberService.showFriend(userId));
+    }
+
+
 }

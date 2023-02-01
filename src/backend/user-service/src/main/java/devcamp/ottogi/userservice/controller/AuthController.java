@@ -4,7 +4,9 @@ import devcamp.ottogi.userservice.dto.MemberLoginDto;
 import devcamp.ottogi.userservice.dto.MemberRequestDto;
 import devcamp.ottogi.userservice.dto.TokenDto;
 import devcamp.ottogi.userservice.dto.TokenRequestDto;
+import devcamp.ottogi.userservice.entity.Friend;
 import devcamp.ottogi.userservice.exception.ApiException;
+import devcamp.ottogi.userservice.repository.FriendRepository;
 import devcamp.ottogi.userservice.response.CommonResponse;
 import devcamp.ottogi.userservice.service.AuthService;
 import devcamp.ottogi.userservice.service.EmailService;
@@ -12,10 +14,11 @@ import devcamp.ottogi.userservice.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
 
 import static devcamp.ottogi.userservice.domain.TextMessages.*;
 import static devcamp.ottogi.userservice.exception.ErrorCode.*;
@@ -28,6 +31,7 @@ public class AuthController {
     private final AuthService authService;
     private final EmailService emailService;
     private final ResponseService responseService;
+    private final FriendRepository friendRepository;
     private String userEmail;
     private MemberRequestDto userMemberRequestDto;
 
@@ -48,7 +52,7 @@ public class AuthController {
         return responseService.getSuccessResponse(SEND_EMAIL, null);
     }
 
-    @PostMapping("/singup_simple")
+    @PostMapping("/signup_simple")
     public CommonResponse<Object> signupSimple(@RequestBody MemberRequestDto memberRequestDto) {
 
         userMemberRequestDto = new MemberRequestDto(memberRequestDto);
@@ -84,5 +88,16 @@ public class AuthController {
     @PostMapping("/reissue") //재발급
     public CommonResponse<Object> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         return responseService.getSuccessResponse(REISSUE_SUCCESS, authService.reissue(tokenRequestDto));
+    }
+
+    @GetMapping("/testfriend")
+    public String test(){
+        List<Friend> friendsById = friendRepository.findFriends(1L);
+        for (Friend friend : friendsById) {
+            log.info("sender : {}", friend.getSender().getEmail());
+            log.info("receiver : {}", friend.getReceiver().getEmail());
+            log.info("state : {}", friend.getState());
+        }
+        return "테스트 종료";
     }
 }

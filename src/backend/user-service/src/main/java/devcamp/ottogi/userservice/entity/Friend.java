@@ -16,24 +16,24 @@ import javax.persistence.*;
 @Builder
 public class Friend {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_one")
-    private Member user_one;
+    @JoinColumn(name = "sender")
+    private Member sender;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_two")
-    private Member user_two;
+    @JoinColumn(name = "receiver")
+    private Member receiver;
 
     private FriendState state;
 
-    public Friend (Member user_one, Member user_two, FriendState state){
-        this.user_one = user_one;
-        this.user_two = user_two;
+    public Friend (Member sender, Member receiver, FriendState state){
+        this.sender = sender;
+        this.receiver = receiver;
         this.state = state;
     }
 }

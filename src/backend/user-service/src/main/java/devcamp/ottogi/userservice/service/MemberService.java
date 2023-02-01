@@ -1,6 +1,8 @@
 package devcamp.ottogi.userservice.service;
 
 import devcamp.ottogi.userservice.domain.FriendState;
+import devcamp.ottogi.userservice.dto.FriendRequestDto;
+import devcamp.ottogi.userservice.dto.FriendResponseDto;
 import devcamp.ottogi.userservice.dto.MemberResponseDto;
 import devcamp.ottogi.userservice.entity.Friend;
 import devcamp.ottogi.userservice.entity.Member;
@@ -11,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static devcamp.ottogi.userservice.domain.FriendState.*;
@@ -36,22 +41,31 @@ public class MemberService {
     }
 
     public String addFriend(Long userId, String email){
-        Member user_one = memberRepository.findMemberById(userId);
-        log.info("user_one id : {}",user_one.getId());
+        Member sender = memberRepository.findMemberById(userId);
+        log.info("user_one id : {}",sender.getId());
 
-        Member user_two = memberRepository.findMemberByEmail(email);
-        log.info("user_two id : {}",user_two.getId());
+        Member receiver = memberRepository.findMemberByEmail(email);
+        log.info("user_two id : {}",receiver.getId());
 
-        friendRepository.save(new Friend(user_one, user_two, REQUEST));
-        friendRepository.save(new Friend(user_two, user_one, WAIT));
+        friendRepository.save(new Friend(sender, receiver, REQUEST));
+        friendRepository.save(new Friend(receiver, sender, WAIT));
 
         return "성공!";
     }
 
-    public String showFriendRequests(Long userId){
+    public List<FriendResponseDto> showFriend(Long userId){
+        List<Friend> friendList = friendRepository.findFriends(userId);
 
+        List<FriendResponseDto> friendResponseDtoList = new ArrayList<>();
 
-        return "친구 신청 받기 완료!";
+        for (Friend friend : friendList) {
+            friendResponseDtoList.add(new FriendResponseDto().builder()
+                    .receiver(friend.getReceiver().getEmail())
+                    .friendState(friend.getState())
+                    .build());
+        }
+
+        return friendResponseDtoList;
     }
 
 }

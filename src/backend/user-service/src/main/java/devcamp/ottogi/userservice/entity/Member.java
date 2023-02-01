@@ -38,11 +38,8 @@ public class Member {
    // 임시로 String
    private String profile;
 
-   @OneToMany(mappedBy = "user_one", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-   private List<Friend> user_one_list = new ArrayList<>();
-
-   @OneToMany(mappedBy = "user_two", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-   private List<Friend> user_two_list = new ArrayList<>();
+//   @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//   private List<Friend> friendList = new ArrayList<>();
 
    @Column(name = "created_at")
    private LocalDateTime createdAt;
