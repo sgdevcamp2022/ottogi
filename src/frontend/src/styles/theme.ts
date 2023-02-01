@@ -23,6 +23,7 @@ export type BackgroundColorType =
   | "voice-hangup";
 export type ColorType =
   | "white"
+  | "icon"
   | "msg-placeholder"
   | "auth-label"
   | "auth-desc"
@@ -76,6 +77,7 @@ interface BackgroundColor {
 
 interface Color {
   white: string;
+  icon: string;
   "msg-placeholder": string;
   "auth-label": string;
   "auth-desc": string;
@@ -142,6 +144,7 @@ const theme: ThemeType = {
   },
   color: {
     white: "#FFFFFF",
+    icon: "#F6F6F7",
     "msg-placeholder": "#DCDDDE",
     "auth-label": "#A3A6AA91",
     "auth-desc": "#A3A6AA92",
