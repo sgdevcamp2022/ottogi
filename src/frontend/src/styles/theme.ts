@@ -1,6 +1,7 @@
 export type FontSizeType = "xxs" | "xs" | "sm" | "base" | "lg" | "xl" | "xxl" | "xxxl";
 
 export type BackgroundColorType =
+  | "trans"
   | "white"
   | "primary"
   | "blocked"
@@ -8,6 +9,7 @@ export type BackgroundColorType =
   | "divider"
   | "setting"
   | "msg-input"
+  | "hover"
   | "tab3"
   | "tab2"
   | "user-tab"
@@ -50,6 +52,7 @@ interface FontSize {
 }
 
 interface BackgroundColor {
+  trans: string;
   white: string;
   primary: string;
   blocked: string;
@@ -57,6 +60,7 @@ interface BackgroundColor {
   divider: string;
   setting: string;
   "msg-input": string;
+  hover: string;
   tab3: string;
   tab2: string;
   "user-tab": string;
@@ -115,6 +119,7 @@ const theme: ThemeType = {
     xxxl: "2.25rem", // 2.25rem
   },
   backgroundColor: {
+    trans: "transparent",
     white: "#FFFFFF",
     primary: "#5865F2",
     blocked: "#8E9297",
@@ -122,6 +127,7 @@ const theme: ThemeType = {
     divider: "#4F545C7A",
     setting: "#4F545C",
     "msg-input": "#40444B",
+    hover: "#3C3F44",
     tab3: "#36393F",
     tab2: "#2F3136",
     "user-tab": "#292B2F",
