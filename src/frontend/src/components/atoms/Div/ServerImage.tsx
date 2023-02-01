@@ -24,9 +24,15 @@ const StyledIconButton = styled(IconButton)`
       transition: all 0.4s ease-in-out;
     }
   }
+  .avatar {
+    width: 3rem;
+    height: 3rem;
+  }
   margin: 0px;
   padding: 0rem !important;
   border-radius: 5rem;
+  width: 3rem;
+  height: 3rem;
 `;
 
 export default ServerImage;

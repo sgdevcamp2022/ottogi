@@ -1,13 +1,13 @@
-import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import DefaultButton from "../components/atoms/Button/DefaultButton";
-import LinkText from "../components/atoms/Text/LinkText";
-import Text from "../components/atoms/Text/Text";
-import BigTitle from "../components/atoms/Text/Text";
-import DefaultModal from "../components/organisms/DefaultModal";
-import LoginForm from "../components/organisms/LoginForm";
-import useInput from "../hooks/common/useInput";
+import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import DefaultButton from '../components/atoms/Button/DefaultButton';
+import LinkText from '../components/atoms/Text/LinkText';
+import Text from '../components/atoms/Text/Text';
+import BigTitle from '../components/atoms/Text/Text';
+import DefaultModal from '../components/organisms/DefaultModal';
+import LoginForm from '../components/organisms/LoginForm';
+import useInput from '../hooks/common/useInput';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const Register = () => {
   const [username, changeUserName] = useInput();
   const [password, changePassword] = useInput();
 
-  const onLoadLogin = () => navigate("/login");
+  const onLoadLogin = () => navigate('/login');
 
   const onRegister = () => {
     if (!email || !username || !password) {
@@ -37,11 +37,19 @@ const Register = () => {
             <LoginForm text="이메일" value={email} onChange={changeEmail} />
           </LoginFormContainer>
           <LoginFormContainer>
-            <LoginForm text="사용자명" value={username} onChange={changeUserName} />
+            <LoginForm
+              text="사용자명"
+              value={username}
+              onChange={changeUserName}
+            />
           </LoginFormContainer>
           <LoginFormContainer>
-            <LoginForm text="비밀번호" value={password} onChange={changePassword} />
-          </LoginFormContainer>{" "}
+            <LoginForm
+              text="비밀번호"
+              value={password}
+              onChange={changePassword}
+            />
+          </LoginFormContainer>{' '}
           <ButtonContainer>
             <DefaultButton text="계속하기" onClick={onRegister} />
           </ButtonContainer>

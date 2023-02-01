@@ -5,4 +5,6 @@ export default {
   component: DefaultButton,
 };
 
-export const Default = () => <DefaultButton text="로그인" onClick={() => console.log(1)} />;
+export const Default = () => (
+  <DefaultButton text="로그인" onClick={() => console.log(1)} />
+);
