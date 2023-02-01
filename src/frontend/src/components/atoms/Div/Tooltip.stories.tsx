@@ -5,4 +5,8 @@ export default {
   component: DivTooltip,
 };
 
-export const Tooltip = () => <DivTooltip />;
+export const Tooltip = () => (
+  <DivTooltip place="bottom" title="test">
+    <button>hello</button>
+  </DivTooltip>
+);
