@@ -4,7 +4,7 @@ const Main = () => {
   return (
     <>
       <Helmet>
-        <title>Discord | 친구</title>
+        <title>• Discord | 친구</title>
       </Helmet>
     </>
   );
