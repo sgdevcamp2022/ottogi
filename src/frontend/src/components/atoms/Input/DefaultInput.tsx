@@ -1,6 +1,10 @@
 import { ChangeEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType, ColorType, FontSizeType } from "../../../styles/theme";
+import {
+  BackgroundColorType,
+  ColorType,
+  FontSizeType,
+} from "../../../styles/theme";
 
 interface DefaultInputProps {
   value: string;
@@ -11,7 +15,14 @@ interface DefaultInputProps {
   backgroundColor?: BackgroundColorType;
 }
 
-const DefaultInput = ({ value, onChange, placeholder = "", fontSize = "base", color = "white", backgroundColor = "black-1" }: DefaultInputProps) => {
+const DefaultInput = ({
+  value,
+  onChange,
+  placeholder = "",
+  fontSize = "base",
+  color = "white",
+  backgroundColor = "black-1",
+}: DefaultInputProps) => {
   return (
     <DefaultInputContainer
       value={value}
@@ -24,7 +35,11 @@ const DefaultInput = ({ value, onChange, placeholder = "", fontSize = "base", co
   );
 };
 
-const DefaultInputContainer = styled.input<{ color: ColorType; fontSize: FontSizeType; backgroundColor: BackgroundColorType }>`
+const DefaultInputContainer = styled.input<{
+  color: ColorType;
+  fontSize: FontSizeType;
+  backgroundColor: BackgroundColorType;
+}>`
   width: 100%;
   height: 100%;
   padding: 0.625rem;
@@ -32,7 +47,8 @@ const DefaultInputContainer = styled.input<{ color: ColorType; fontSize: FontSiz
   border-radius: 4px;
   color: ${({ theme, color }) => theme.color[color]};
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
-  background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
+  background-color: ${({ theme, backgroundColor }) =>
+    theme.backgroundColor[backgroundColor]};
   &:focus {
     outline: none;
   }

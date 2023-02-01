@@ -11,8 +11,11 @@ const LoginText = () => {
 };
 
 const LoginTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   text-align: center;
   margin-bottom: 1.25rem;
+  width: 90%;
 `;
 
 export default LoginText;

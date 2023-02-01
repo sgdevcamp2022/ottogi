@@ -1,6 +1,6 @@
-import { ChangeEventHandler } from "react";
-import styled from "styled-components";
-import SearchIcon from "../../atoms/Icons/SearchIcon";
+import { ChangeEventHandler } from 'react';
+import styled from 'styled-components';
+import SearchIcon from '../../atoms/Icons/SearchIcon';
 
 interface SearchInputProps {
   value: string;
@@ -20,8 +20,8 @@ const SearchInputContainer = styled.label`
   width: 100%;
   display: flex;
   align-items: center;
-  background-color: ${({ theme }) => theme.backgroundColor["black-1"]};
-  color: ${({ theme }) => theme.color["grey-2"]};
+  background-color: ${({ theme }) => theme.backgroundColor['black-1']};
+  color: ${({ theme }) => theme.color['grey-2']};
   border-radius: 0.25rem;
   font-size: 20px;
   padding-right: 10px;
@@ -32,13 +32,13 @@ const SearchInputContainer = styled.label`
     border: none;
     margin: 0.0625rem;
     padding: 0 0.5rem;
-    color: ${({ theme }) => theme.color["white"]};
-    background-color: ${({ theme }) => theme.backgroundColor["transparent"]};
+    color: ${({ theme }) => theme.color['white']};
+    background-color: ${({ theme }) => theme.backgroundColor['transparent']};
     &:focus {
       outline: none;
     }
     ::placeholder {
-      color: ${({ theme }) => theme.color["grey-2"]};
+      color: ${({ theme }) => theme.color['grey-2']};
     }
   }
 `;
