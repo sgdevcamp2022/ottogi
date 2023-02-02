@@ -4,16 +4,16 @@ import Text from "../../atoms/Text/Text";
 import UserState, { StateType } from "../Div/UserState32";
 
 interface DirectButtonProps {
-  active?: boolean;
   username: string;
-  state?: StateType;
+  active?: boolean;
+  status?: StateType;
 }
 
-const DirectButton = ({ active = false, username, state = "on" }: DirectButtonProps) => {
+const DirectButton = ({ username, active = false, status = "on" }: DirectButtonProps) => {
   return (
-    <ButtonWrapper active={active} onClick={() => {}}>
+    <ButtonWrapper active={active} onClick={() => {}} height={42}>
       <DirectButtonContainer>
-        <UserState state={state} />
+        <UserState status={status} />
         <Text text={username} />
       </DirectButtonContainer>
     </ButtonWrapper>
@@ -21,11 +21,9 @@ const DirectButton = ({ active = false, username, state = "on" }: DirectButtonPr
 };
 
 const DirectButtonContainer = styled.div`
-  height: 2.625rem;
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 0.75rem;
-  padding: 0 0.5rem;
 `;
 
 export default DirectButton;

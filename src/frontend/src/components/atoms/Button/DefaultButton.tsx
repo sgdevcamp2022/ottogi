@@ -1,10 +1,13 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType, ColorType } from "../../../styles/theme";
+import { BackgroundColorType, ColorType, FontSizeType } from "../../../styles/theme";
 
 interface DefaultButtonProps {
   text: string;
   onClick: MouseEventHandler<HTMLButtonElement>;
+  width?: number | null;
+  height?: number | null;
+  fontSize?: FontSizeType;
   fontWeight?: "normal" | "bold";
   color?: ColorType;
   backgroundColor?: BackgroundColorType;
@@ -14,32 +17,50 @@ interface DefaultButtonProps {
 const DefaultButton = ({
   text,
   onClick,
+  width = null,
+  height = null,
+  fontSize = "base",
   fontWeight = "normal",
   color = "white",
   backgroundColor = "primary",
   disabled = false,
 }: DefaultButtonProps) => {
   return (
-    <DefaultButtonContainer disabled={disabled} onClick={onClick} fontWeight={fontWeight} color={color} backgroundColor={backgroundColor}>
+    <DefaultButtonContainer
+      width={width}
+      height={height}
+      disabled={disabled}
+      onClick={onClick}
+      fontSize={fontSize}
+      fontWeight={fontWeight}
+      color={color}
+      backgroundColor={backgroundColor}
+    >
       {text}
     </DefaultButtonContainer>
   );
 };
 
-export const DefaultButtonContainer = styled.button<{
+interface DefaultButtonContainerProps {
+  width: number | null;
+  height: number | null;
   color: ColorType;
   backgroundColor: BackgroundColorType;
+  fontSize: FontSizeType;
   fontWeight: "normal" | "bold";
-}>`
-  width: 100%;
-  height: 100%;
-  font-size: 16px;
+}
+
+const DefaultButtonContainer = styled.button<DefaultButtonContainerProps>`
   border: none;
+  border-radius: 4px;
+  width: ${({ width }) => (width === null ? "100%" : `${width}px`)};
+  height: ${({ height }) => (height === null ? "100%" : `${height}px`)};
+  font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
   color: ${({ theme, color }) => theme.color[color]};
   background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
   font-weight: ${({ fontWeight }) => fontWeight};
-  border-radius: 4px;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
   &:hover {
     opacity: 0.7;
   }

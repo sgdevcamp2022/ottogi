@@ -1,10 +1,10 @@
 import MicIcon from "../../atoms/Icons/MicIcon";
 import MicOffIcon from "../../atoms/Icons/MicOffIcon";
-import MicButton from "./UserOnOffButton";
+import UserOnOffButton from "./UserOnOffButton";
 
 export default {
   title: "molecules/Button",
-  component: MicButton,
+  component: UserOnOffButton,
 };
 
-export const Mic = () => <MicButton OnIcon={<MicIcon />} OffIcon={<MicOffIcon />} onClick={() => {}} />;
+export const UserOnOff = () => <UserOnOffButton OnIcon={<MicIcon />} OffIcon={<MicOffIcon />} onClick={() => {}} />;

@@ -10,25 +10,25 @@ interface MicButtonProps {
 
 const UserOnOffButton = ({ OnIcon, OffIcon, on = false, onClick }: MicButtonProps) => {
   return (
-    <MicButtonContainer onClick={onClick}>
+    <UserOnOffButtonContainer onClick={onClick}>
       <IconContainer>{on ? OnIcon : OffIcon}</IconContainer>
-    </MicButtonContainer>
+    </UserOnOffButtonContainer>
   );
 };
 
-const MicButtonContainer = styled.div`
+const UserOnOffButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 32px;
   height: 32px;
   border-radius: 4px;
-  color: ${({ theme }) => theme.color["grey-4"]};
-  background-color: ${({ theme }) => theme.backgroundColor.white};
+  color: ${({ theme }) => theme.color.icon};
+  background-color: ${({ theme }) => theme.backgroundColor.trans};
   cursor: pointer;
   &:hover {
     color: ${({ theme }) => theme.color.white};
-    background-color: ${({ theme }) => theme.backgroundColor["grey-4"]};
+    background-color: ${({ theme }) => theme.backgroundColor.active};
   }
 `;
 

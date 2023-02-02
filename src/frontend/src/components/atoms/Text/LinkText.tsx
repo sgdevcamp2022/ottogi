@@ -7,10 +7,10 @@ interface LinkTextProps {
 }
 
 const LinkText = ({ text, onClick }: LinkTextProps) => {
-  return <LinkTextBlock onClick={onClick}>{text}</LinkTextBlock>;
+  return <LinkTextContainer onClick={onClick}>{text}</LinkTextContainer>;
 };
 
-const LinkTextBlock = styled.span`
+const LinkTextContainer = styled.span`
   color: ${({ theme }) => theme.color.blue};
   font-size: ${({ theme }) => theme.fontSize.sm};
   cursor: pointer;

@@ -30,7 +30,7 @@ const Register = () => {
       <DefaultModal width={480}>
         <>
           <TextContainer>
-            <Text text="계정 만들기" color="white" fontSize="2xl" fontWeight="bold" mb={12} />
+            <Text text="계정 만들기" color="white" fontSize="xxl" fontWeight="bold" mb={12} />
           </TextContainer>
           <LoginFormContainer>
             <LoginForm text="이메일" value={email} onChange={changeEmail} />

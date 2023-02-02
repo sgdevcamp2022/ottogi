@@ -14,7 +14,7 @@ const Verify = () => {
         <>
           <TextContainer>
             <EmailImage src={"email.png"} alt="" width="120" height="120" />
-            <Text text="Email Verified!" color="white" fontSize="2xl" fontWeight="bold" mb={12} />
+            <Text text="Email Verified!" color="white" fontSize="xxl" fontWeight="bold" mb={12} />
           </TextContainer>
           <ButtonContainer>
             <DefaultButton text="Continue to Discord" onClick={() => {}} />

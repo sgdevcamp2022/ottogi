@@ -1,49 +1,69 @@
 import React, { MouseEventHandler } from "react";
 import styled from "styled-components";
+import { BackgroundColorType, ColorType } from "../../../styles/theme";
 
 interface ButtonWrapperProps {
   children: React.ReactElement;
   onClick: MouseEventHandler<HTMLDivElement>;
+  width?: number | null;
+  height?: number | null;
+  ph?: number;
   active?: boolean;
-  height?: number;
   blur?: boolean;
+  hoverBackgroundColor?: BackgroundColorType;
 }
 
-const ButtonWrapper = ({ children, onClick, active = false, height = 42, blur = false }: ButtonWrapperProps) => {
+const ButtonWrapper = ({
+  children,
+  onClick,
+  active = false,
+  width = null,
+  height = null,
+  ph = 8,
+  blur = false,
+  hoverBackgroundColor = "hover",
+}: ButtonWrapperProps) => {
   return (
     <ButtonWrapperContainer
       onClick={onClick}
-      color={active ? "white" : "grey-3"}
+      width={width}
       height={height}
-      backgroundColor={active ? "grey-4" : "transparent"}
+      color={active ? "white" : "inactive"}
+      backgroundColor={active ? "active" : "trans"}
+      ph={ph}
       blur={blur}
+      hoverBackgroundColor={hoverBackgroundColor}
     >
       {children}
     </ButtonWrapperContainer>
   );
 };
 
-type backgroundColorType = "transparent" | "grey-3" | "grey-4";
-
-const ButtonWrapperContainer = styled.div<{
-  color: string;
-  backgroundColor: backgroundColorType;
-  height: number;
+interface ButtonWrapperContainerProps {
+  width: number | null;
+  height: number | null;
+  color: ColorType;
+  backgroundColor: BackgroundColorType;
+  hoverBackgroundColor: BackgroundColorType;
+  ph: number;
   blur?: boolean;
-}>`
+}
+
+const ButtonWrapperContainer = styled.div<ButtonWrapperContainerProps>`
   display: flex;
   align-items: center;
+  width: ${({ width }) => (width === null ? "100%" : `${width}px`)};
+  height: ${({ height }) => (height === null ? "100%" : `${height}px`)};
   color: ${({ theme, color }) => theme.color[color]};
-  min-height: ${({ height }) => height}px;
   background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
   opacity: ${({ blur }) => (blur ? 30 : 100)}%;
   border-radius: 0.25rem;
-  padding: 0 8px;
+  padding: 0 ${({ ph }) => ph}px;
   cursor: pointer;
   &:hover {
-    color: ${({ theme }) => theme.color.white};
     opacity: 100%;
-    background-color: ${({ theme }) => theme.backgroundColor["grey-3"]};
+    color: ${({ theme }) => theme.color.white};
+    background-color: ${({ theme, hoverBackgroundColor }) => theme.backgroundColor[hoverBackgroundColor]};
   }
 `;
 

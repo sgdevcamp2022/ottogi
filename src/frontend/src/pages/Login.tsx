@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultButton from "../components/atoms/Button/DefaultButton";
 import LinkText from "../components/atoms/Text/LinkText";
-import Span from "../components/atoms/Text/Span";
+import Span from "../components/atoms/Text/SpanText";
 import Text from "../components/atoms/Text/Text";
 import LoginText from "../components/molecules/Text/LoginText";
 import DefaultModal from "../components/organisms/DefaultModal";

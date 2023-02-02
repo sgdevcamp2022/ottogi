@@ -14,7 +14,7 @@ interface TextButtonProps {
 const TextButton = ({
   text,
   color = "white",
-  backgroundColor = "transparent",
+  backgroundColor = "trans",
   hoverColor = color,
   hoverBackgroundColor = backgroundColor,
   onClick,
@@ -32,16 +32,19 @@ const TextButton = ({
   );
 };
 
-const TextButtonContainer = styled.span<{
+interface TextButtonContainerProps {
   color: ColorType;
   backgroundColor: BackgroundColorType;
   hoverColor: ColorType;
   hoverBackgroundColor: BackgroundColorType;
-}>`
+}
+
+const TextButtonContainer = styled.span<TextButtonContainerProps>`
   display: inline-block;
   color: ${({ theme, color }) => theme.color[color]};
   background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
-  font-weight: bold;
+  font-size: ${({ theme }) => theme.fontSize.base};
+  font-weight: 500;
   border-radius: 4px;
   text-align: center;
   margin: 0 8px;

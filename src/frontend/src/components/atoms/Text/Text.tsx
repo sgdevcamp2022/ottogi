@@ -1,29 +1,32 @@
 import styled from "styled-components";
+import { ColorType, FontSizeType } from "../../../styles/theme";
 
 type fontWeightType = "normal" | "bold";
 
 interface TextProps {
   text: string | React.ReactElement;
-  fontSize?: string;
+  fontSize?: FontSizeType;
   fontWeight?: fontWeightType;
-  color?: string;
+  color?: ColorType;
   mb?: number;
   mr?: number;
 }
 
 const Text = ({ text, fontSize = "base", fontWeight = "normal", color = "inherit", mb = 0, mr = 0 }: TextProps) => (
-  <TextBlock fontSize={fontSize} fontWeight={fontWeight} color={color} mb={mb} mr={mr}>
+  <TextContainer fontSize={fontSize} fontWeight={fontWeight} color={color} mb={mb} mr={mr}>
     {text}
-  </TextBlock>
+  </TextContainer>
 );
 
-const TextBlock = styled.p<{
-  fontSize: string;
+interface TextContainerProps {
+  fontSize: FontSizeType;
   fontWeight: fontWeightType;
-  color: string;
+  color: ColorType;
   mb: number;
   mr: number;
-}>`
+}
+
+const TextContainer = styled.p<TextContainerProps>`
   color: ${({ theme, color }) => theme.color[color]};
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
   font-weight: ${({ fontWeight }) => fontWeight};

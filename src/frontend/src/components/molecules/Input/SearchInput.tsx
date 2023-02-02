@@ -1,6 +1,7 @@
 import { ChangeEventHandler } from "react";
 import styled from "styled-components";
 import SearchIcon from "../../atoms/Icons/SearchIcon";
+import DefaultInput from "../../atoms/Input/DefaultInput";
 
 interface SearchInputProps {
   value: string;
@@ -10,36 +11,25 @@ interface SearchInputProps {
 const SearchInput = ({ value, onChange }: SearchInputProps) => {
   return (
     <SearchInputContainer>
-      <input value={value} onChange={onChange} placeholder="검색하기" />
+      <DefaultInput value={value} onChange={onChange} placeholder="검색하기" />
       <SearchIcon />
     </SearchInputContainer>
   );
 };
 
 const SearchInputContainer = styled.label`
+  border-radius: 4px;
+  min-width: 9rem;
   width: 100%;
+  height: 1.5rem;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  background-color: ${({ theme }) => theme.backgroundColor["black-1"]};
-  color: ${({ theme }) => theme.color["grey-2"]};
-  border-radius: 0.25rem;
-  font-size: 20px;
-  padding-right: 10px;
-
-  input {
-    flex: 1;
-    line-height: 1.875rem;
-    border: none;
-    margin: 0.0625rem;
-    padding: 0 0.5rem;
-    color: ${({ theme }) => theme.color["white"]};
-    background-color: ${({ theme }) => theme.backgroundColor["transparent"]};
-    &:focus {
-      outline: none;
-    }
-    ::placeholder {
-      color: ${({ theme }) => theme.color["grey-2"]};
-    }
+  padding: 0 2px;
+  background-color: ${({ theme }) => theme.backgroundColor.tab1};
+  svg {
+    font-size: ${({ theme }) => theme.fontSize.lg};
+    color: ${({ theme }) => theme.color.icon};
   }
 `;
 

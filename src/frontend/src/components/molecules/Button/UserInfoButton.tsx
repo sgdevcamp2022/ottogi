@@ -5,14 +5,14 @@ import UserState32, { StateType } from "../Div/UserState32";
 
 interface UserInfoButtonProps {
   username: string;
-  state?: StateType;
+  status?: StateType;
 }
 
-const UserInfoButton = ({ username, state = "on" }: UserInfoButtonProps) => {
+const UserInfoButton = ({ username, status = "on" }: UserInfoButtonProps) => {
   return (
-    <ButtonWrapper onClick={() => {}} height={39}>
+    <ButtonWrapper onClick={() => {}} height={39} hoverBackgroundColor="active">
       <InfoContainer>
-        <UserState32 state={state} />
+        <UserState32 status={status} />
         <Text text={username} fontWeight="bold" fontSize="sm" color="white" />
       </InfoContainer>
     </ButtonWrapper>
