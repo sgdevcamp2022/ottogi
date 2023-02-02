@@ -1,4 +1,4 @@
-package devcamp.ottogi.userservice.dto;
+package devcamp.ottogi.userservice.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberLoginDto {
+public class MemberLoginRequestDto {
     private String email;
     private String password;
 

@@ -35,11 +35,11 @@ public class Member {
    @Column(columnDefinition = "TINYINT", length = 1)
    private int status;
 
-   // 임시로 String
-   private String profile;
+   private String introduction;
 
-//   @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//   private List<Friend> friendList = new ArrayList<>();
+   private String profileImagePath;
+
+   private String profileImageName;
 
    @Column(name = "created_at")
    private LocalDateTime createdAt;
@@ -62,6 +62,14 @@ public class Member {
 
    public enum Authority{
       ROLE_USER, ROLE_ADMIN
+   }
+
+   public void nameModify(String newName){
+      this.name = newName;
+   }
+
+   public void passwordModify(String newPassword) {
+      this.password = newPassword;
    }
 
 }

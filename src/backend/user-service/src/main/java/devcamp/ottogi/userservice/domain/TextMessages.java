@@ -16,7 +16,14 @@ public enum TextMessages {
     FRIEND_ADD_SUCCESS("친구 요청 완료"),
     FRIEND_SHOW_SUCCESS("친구 조회 완료"),
     FRIEND_ACCEPT_SUCCESS("친구 승인 완료"),
-    FRIEND_REJECT_SUCCESS("친구 거절 완료");
+    FRIEND_REJECT_SUCCESS("친구 거절 완료"),
+
+    PW_MATCH_SUCCESS("비밀번호 인증이 정상적으로 완료되었습니다."),
+
+    USER_NAME_MODIFY_SUCCESS("이름 변경 성공"),
+    USER_PW_MODIFY_SUCCESS("암호 변경 성공"),
+
+    USER_DELETE_SUCCESS("계정 삭제 완료");
 
     private String message;
 }

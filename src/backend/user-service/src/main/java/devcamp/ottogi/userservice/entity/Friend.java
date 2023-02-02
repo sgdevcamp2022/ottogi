@@ -34,4 +34,8 @@ public class Friend {
         this.receiver = receiver;
         this.state = state;
     }
+
+    public void stateModify(FriendState friendState) {
+        this.state = friendState;
+    }
 }

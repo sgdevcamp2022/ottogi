@@ -1,4 +1,4 @@
-package devcamp.ottogi.userservice.dto;
+package devcamp.ottogi.userservice.dto.response;
 
 import devcamp.ottogi.userservice.domain.FriendState;
 import lombok.AllArgsConstructor;

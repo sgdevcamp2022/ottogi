@@ -1,11 +1,13 @@
 package devcamp.ottogi.userservice.service;
 
 import devcamp.ottogi.userservice.dto.*;
+import devcamp.ottogi.userservice.dto.request.MemberLoginRequestDto;
+import devcamp.ottogi.userservice.dto.request.MemberRegisterRequestDto;
+import devcamp.ottogi.userservice.dto.request.TokenRequestDto;
+import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
 import devcamp.ottogi.userservice.entity.Member;
-import devcamp.ottogi.userservice.entity.RefreshToken;
 import devcamp.ottogi.userservice.jwt.TokenProvider;
 import devcamp.ottogi.userservice.repository.MemberRepository;
-import devcamp.ottogi.userservice.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,7 +32,7 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
-    public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
+    public MemberResponseDto signup(MemberRegisterRequestDto memberRequestDto) {
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
@@ -40,7 +42,7 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDto login(MemberLoginDto memberLoginDto) {
+    public TokenDto login(MemberLoginRequestDto memberLoginDto) {
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
         log.info("authenticationToken Principal : {}", authenticationToken.getPrincipal());
@@ -59,6 +61,21 @@ public class AuthService {
 
         return tokenDto;
     }
+
+    @Transactional
+    public boolean checkPW(MemberLoginRequestDto memberLoginRequestDto){
+        try{
+            UsernamePasswordAuthenticationToken authenticationToken = memberLoginRequestDto.toAuthentication();
+
+            // 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
+            authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+
+    }
+
 
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {

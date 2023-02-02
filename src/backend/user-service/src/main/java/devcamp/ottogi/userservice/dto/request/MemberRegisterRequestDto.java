@@ -1,4 +1,4 @@
-package devcamp.ottogi.userservice.dto;
+package devcamp.ottogi.userservice.dto.request;
 
 import devcamp.ottogi.userservice.entity.Member;
 import lombok.AllArgsConstructor;
@@ -12,13 +12,13 @@ import static devcamp.ottogi.userservice.entity.Member.Authority.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberRequestDto {
+public class MemberRegisterRequestDto {
 
     private String email;
     private String password;
     private String name;
 
-    public MemberRequestDto(MemberRequestDto memberRequestDto) {
+    public MemberRegisterRequestDto(MemberRegisterRequestDto memberRequestDto) {
         this.email = memberRequestDto.getEmail();
         this.password = memberRequestDto.getPassword();
         this.name = memberRequestDto.getName();
@@ -30,7 +30,9 @@ public class MemberRequestDto {
                 .password(passwordEncoder.encode(password))
                 .name(name)
                 .status(1)
-                .profile("temp")
+                .introduction("")
+                .profileImageName("")
+                .profileImagePath("")
                 .authority(ROLE_USER)
                 .build();
     }

@@ -1,4 +1,4 @@
-package devcamp.ottogi.userservice.dto;
+package devcamp.ottogi.userservice.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

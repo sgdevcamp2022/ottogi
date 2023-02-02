@@ -1,25 +1,29 @@
 package devcamp.ottogi.userservice.controller;
 
-import devcamp.ottogi.userservice.dto.FriendRequestDto;
-import devcamp.ottogi.userservice.dto.FriendResponseDto;
-import devcamp.ottogi.userservice.dto.MemberResponseDto;
+import devcamp.ottogi.userservice.dto.request.FriendRequestDto;
+import devcamp.ottogi.userservice.dto.request.MemberLoginRequestDto;
+import devcamp.ottogi.userservice.dto.request.MemberModifyRequestDto;
+import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
+import devcamp.ottogi.userservice.exception.ApiException;
+import devcamp.ottogi.userservice.exception.ErrorCode;
 import devcamp.ottogi.userservice.response.CommonResponse;
+import devcamp.ottogi.userservice.service.AuthService;
 import devcamp.ottogi.userservice.service.MemberService;
 //import devcamp.ottogi.userservice.util.SecurityUtil;
 import devcamp.ottogi.userservice.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.List;
+import java.io.File;
 
 import static devcamp.ottogi.userservice.domain.TextMessages.*;
+import static devcamp.ottogi.userservice.exception.ErrorCode.*;
+
 
 @Slf4j
 @RestController
@@ -28,11 +32,12 @@ import static devcamp.ottogi.userservice.domain.TextMessages.*;
 public class MemberController {
     private final MemberService memberService;
     private final ResponseService responseService;
+    private final AuthService authService;
 
     @GetMapping("/info")
-    public ResponseEntity<MemberResponseDto> findMemberInfoById(HttpServletRequest request) {
-        Long id = Long.parseLong(request.getHeader("id"));
-        return ResponseEntity.ok(memberService.findMemberInfoById(id));
+    public CommonResponse<Object> findMemberInfoById(HttpServletRequest request) {
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(VIEW_SUCCESS, memberService.findMemberInfoById(userId));
     }
 
     @GetMapping("/{email}")
@@ -59,11 +64,60 @@ public class MemberController {
         return responseService.getSuccessResponse(FRIEND_ACCEPT_SUCCESS, memberService.acceptFriend(userId, friendRequestDto.getEmail()));
     }
 
-
-    @PostMapping("/rejectfriend")
+    @DeleteMapping("/rejectfriend")
     public CommonResponse<Object> rejectFriend(HttpServletRequest request, @RequestBody FriendRequestDto friendRequestDto) {
         Long userId = Long.parseLong(request.getHeader("id"));
         return responseService.getSuccessResponse(FRIEND_REJECT_SUCCESS, memberService.rejectFriend(userId, friendRequestDto.getEmail()));
+    }
+
+    @PatchMapping("/modifyimage")
+    public CommonResponse<Object> modifyProfileImage(HttpServletRequest request, @RequestParam MultipartFile file) throws Exception{
+
+        String FILE_SAVE_DIR ="/C:/Users/whipbaek/Projects/ottogi/images/";
+        String userId = (request.getHeader("id"));
+
+        if(file.isEmpty()){
+            String fullPath = FILE_SAVE_DIR + "filename" + userId + ".png";
+            log.info("파일 저장 fullPath={}", fullPath);
+            file.transferTo(new File(fullPath));
+        }
+
+        return null;
+    }
+
+    @PostMapping("/passwordcheck")
+    public CommonResponse<Object> passwordCheck(MemberLoginRequestDto memberLoginRequestDto){
+        if(!authService.checkPW(memberLoginRequestDto)){
+            throw new ApiException(PW_MATCH_ERROR);
+        }
+
+        return responseService.getSuccessResponse(PW_MATCH_SUCCESS, null);
+    }
+
+    @PatchMapping("/modify/name")
+    public CommonResponse<Object> userNameModify(HttpServletRequest request, MemberModifyRequestDto memberModifyRequestDto){
+        Long userId = Long.parseLong(request.getHeader("id"));
+        String newName = memberModifyRequestDto.getPassword();
+
+        return responseService.getSuccessResponse(USER_NAME_MODIFY_SUCCESS, memberService.userPasswordModify(userId, newName));
+    }
+
+    @PatchMapping("/modify/password")
+    public CommonResponse<Object> userPasswordModify(HttpServletRequest request, MemberModifyRequestDto memberModifyRequestDto){
+        Long userId = Long.parseLong(request.getHeader("id"));
+        String newPassword = memberModifyRequestDto.getPassword();
+
+        if (newPassword.length() < 8) {
+            throw new ApiException(SIGNUP_PW_ERROR);
+        }
+
+        return responseService.getSuccessResponse(USER_PW_MODIFY_SUCCESS, memberService.userPasswordModify(userId, newPassword));
+    }
+
+    @DeleteMapping("/userDelete")
+    public CommonResponse<Object> userDelete(HttpServletRequest request){
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(USER_DELETE_SUCCESS, memberService.userDelete(userId));
     }
 
 
