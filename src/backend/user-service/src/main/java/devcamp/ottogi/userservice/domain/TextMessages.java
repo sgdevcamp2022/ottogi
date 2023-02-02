@@ -13,8 +13,10 @@ public enum TextMessages {
     VIEW_SUCCESS("조회 완료!"),
     REISSUE_SUCCESS("토큰 재발급 완료"),
 
-    FRIEND_ADD_SUCCESS("친구 추가 완료"),
-    FRIEND_SHOW_SUCCESS("친구 조회 완료");
+    FRIEND_ADD_SUCCESS("친구 요청 완료"),
+    FRIEND_SHOW_SUCCESS("친구 조회 완료"),
+    FRIEND_ACCEPT_SUCCESS("친구 승인 완료"),
+    FRIEND_REJECT_SUCCESS("친구 거절 완료");
 
     private String message;
 }

@@ -53,5 +53,18 @@ public class MemberController {
         return responseService.getSuccessResponse(FRIEND_SHOW_SUCCESS, memberService.showFriend(userId));
     }
 
+    @PostMapping("/acceptfriend")
+    public CommonResponse<Object> acceptFriend(HttpServletRequest request, @RequestBody FriendRequestDto friendRequestDto) {
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(FRIEND_ACCEPT_SUCCESS, memberService.acceptFriend(userId, friendRequestDto.getEmail()));
+    }
+
+
+    @PostMapping("/rejectfriend")
+    public CommonResponse<Object> rejectFriend(HttpServletRequest request, @RequestBody FriendRequestDto friendRequestDto) {
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(FRIEND_REJECT_SUCCESS, memberService.rejectFriend(userId, friendRequestDto.getEmail()));
+    }
+
 
 }

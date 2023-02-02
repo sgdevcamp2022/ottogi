@@ -10,6 +10,7 @@ import devcamp.ottogi.userservice.repository.FriendRepository;
 import devcamp.ottogi.userservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +67,27 @@ public class MemberService {
         }
 
         return friendResponseDtoList;
+    }
+
+    public String acceptFriend(Long userId, String email){
+        Member receiver = memberRepository.findMemberByEmail(email);
+        log.info("user Id : {} , receiver Id : {}", userId, receiver.getId());
+        Friend friendRow_one = friendRepository.findFriendRow(userId, receiver.getId());
+        Friend friendRow_two = friendRepository.findFriendRow(receiver.getId(), userId);
+
+        friendRow_one.setState(ACCEPTED);
+        friendRow_two.setState(ACCEPTED);
+
+        return "승인 완료";
+    }
+
+    public String rejectFriend(Long userId, String email){
+        Member receiver = memberRepository.findMemberByEmail(email);
+        log.info("user Id : {} , receiver Id : {}", userId, receiver.getId());
+        friendRepository.deleteFriendRow(userId, receiver.getId());
+        friendRepository.deleteFriendRow(receiver.getId(), userId);
+
+        return "삭제 완료";
     }
 
 }
