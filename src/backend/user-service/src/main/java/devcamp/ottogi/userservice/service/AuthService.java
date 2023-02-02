@@ -66,7 +66,6 @@ public class AuthService {
     public boolean checkPW(MemberLoginRequestDto memberLoginRequestDto){
         try{
             UsernamePasswordAuthenticationToken authenticationToken = memberLoginRequestDto.toAuthentication();
-
             // 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
             authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             return true;

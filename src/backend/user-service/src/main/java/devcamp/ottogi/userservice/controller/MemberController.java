@@ -90,7 +90,6 @@ public class MemberController {
         if(!authService.checkPW(memberLoginRequestDto)){
             throw new ApiException(PW_MATCH_ERROR);
         }
-
         return responseService.getSuccessResponse(PW_MATCH_SUCCESS, null);
     }
 
@@ -99,7 +98,7 @@ public class MemberController {
         Long userId = Long.parseLong(request.getHeader("id"));
         String newName = memberModifyRequestDto.getPassword();
 
-        return responseService.getSuccessResponse(USER_NAME_MODIFY_SUCCESS, memberService.userPasswordModify(userId, newName));
+        return responseService.getSuccessResponse(USER_NAME_MODIFY_SUCCESS, memberService.userNameModify(userId, newName));
     }
 
     @PatchMapping("/modify/password")
