@@ -10,10 +10,11 @@ interface TextProps {
   color?: ColorType;
   mb?: number;
   mr?: number;
+  center?: boolean;
 }
 
-const Text = ({ text, fontSize = "base", fontWeight = "normal", color = "inherit", mb = 0, mr = 0 }: TextProps) => (
-  <TextContainer fontSize={fontSize} fontWeight={fontWeight} color={color} mb={mb} mr={mr}>
+const Text = ({ text, fontSize = "base", fontWeight = "normal", color = "inherit", mb = 0, mr = 0, center = false }: TextProps) => (
+  <TextContainer fontSize={fontSize} fontWeight={fontWeight} color={color} mb={mb} mr={mr} center={center}>
     {text}
   </TextContainer>
 );
@@ -24,6 +25,7 @@ interface TextContainerProps {
   color: ColorType;
   mb: number;
   mr: number;
+  center: boolean;
 }
 
 const TextContainer = styled.p<TextContainerProps>`
@@ -34,6 +36,7 @@ const TextContainer = styled.p<TextContainerProps>`
   margin-left: 0px;
   margin-bottom: ${({ mb }) => mb}px;
   margin-right: ${({ mr }) => mr}px;
+  text-align: ${({ center }) => (center ? "center" : "left")};
 `;
 
 export default Text;
