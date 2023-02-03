@@ -13,7 +13,6 @@ const FriendHeader = () => {
         <MainTabButton status={"모두"} />
         <MainTabButton status={"대기 중"} />
         <MainTabButton status={"친구 추가하기"} />
-        {/* <MainTabButton status={"차단"} /> */}
       </RightContainer>
     </FriendHeaderContainer>
   );

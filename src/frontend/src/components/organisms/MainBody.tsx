@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import useTabStore, { MainStatusType } from "../../store/useTabStore";
+import useMainStore, { MainStatusType } from "../../store/useMainStore";
 import MainAddFriend from "./MainAddFriend";
 import MainOnline from "./MainOnline";
 import MainTotal from "./MainTotal";
@@ -18,12 +18,16 @@ const getBodyByStatus = (status: MainStatusType) => {
 };
 
 const MainBody = () => {
-  const { mainStatus } = useTabStore(({ mainStatus }) => ({ mainStatus }));
-  return <MainBodyContainer>{getBodyByStatus(mainStatus)}</MainBodyContainer>;
+  const { mainTab, mainStatus } = useMainStore(({ mainTab, mainStatus }) => ({ mainTab, mainStatus }));
+
+  if (mainTab === "친구") {
+    return <MainBodyContainer>{getBodyByStatus(mainStatus)}</MainBodyContainer>;
+  }
+  return <>dd</>;
 };
 
 const MainBodyContainer = styled.div`
-  height: 100%;
+  flex: 1;
   padding: 0 1.25rem;
 `;
 

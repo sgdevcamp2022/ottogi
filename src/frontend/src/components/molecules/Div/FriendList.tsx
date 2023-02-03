@@ -7,13 +7,9 @@ const FriendList = () => {
     <FriendListContainer>
       <DirectMessage />
       <ListContainer>
-        <DirectButton username="허다은" />
-        <DirectButton username="허다은" />
-        <DirectButton username="허다은" />
-        <DirectButton username="허다은" />
-        <DirectButton username="허다은" />
-        <DirectButton username="허다은" />
-        <DirectButton username="허다은" />
+        {new Array(10).fill(null).map((v, idx) => (
+          <DirectButton username="허다은" id={idx} />
+        ))}
       </ListContainer>
     </FriendListContainer>
   );

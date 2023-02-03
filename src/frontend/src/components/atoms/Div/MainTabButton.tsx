@@ -1,4 +1,4 @@
-import useTabStore, { MainStatusType } from "../../../store/useTabStore";
+import useMainStore, { MainStatusType } from "../../../store/useMainStore";
 import TextButton from "../Button/TextButton";
 
 interface MainTabButtonProps {
@@ -6,7 +6,11 @@ interface MainTabButtonProps {
 }
 
 const MainTabButton = ({ status }: MainTabButtonProps) => {
-  const { mainStatus, setMainStatus } = useTabStore(({ mainStatus, setMainStatus }) => ({ mainStatus, setMainStatus }));
+  const { mainStatus, setMainStatus, setMainTab } = useMainStore(({ mainStatus, setMainStatus, setMainTab }) => ({
+    mainStatus,
+    setMainStatus,
+    setMainTab,
+  }));
 
   const getColor = (status: MainStatusType) => {
     if (status === "친구 추가하기") {
@@ -38,6 +42,7 @@ const MainTabButton = ({ status }: MainTabButtonProps) => {
 
   const changeMainStatus = (mainStatus: MainStatusType) => {
     setMainStatus(mainStatus);
+    setMainTab("친구");
   };
 
   return (

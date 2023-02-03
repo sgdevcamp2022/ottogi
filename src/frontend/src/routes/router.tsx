@@ -8,6 +8,7 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<Main />} />
+      <Route path="/:userId" element={<Main />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/*" element={<NotFound />} />

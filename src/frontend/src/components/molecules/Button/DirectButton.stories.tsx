@@ -5,4 +5,4 @@ export default {
   component: DirectButton,
 };
 
-export const Direct = () => <DirectButton username="허다은" status="empty" />;
+export const Direct = () => <DirectButton id={1} username="허다은" status="empty" />;

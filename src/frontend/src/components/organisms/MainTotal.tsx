@@ -1,33 +1,25 @@
 import styled from "styled-components";
 import useInput from "../../hooks/common/useInput";
-import useTabStore from "../../store/useTabStore";
+import useMainStore from "../../store/useMainStore";
 import DefaultButton from "../atoms/Button/DefaultButton";
+import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
 import FriendBox from "../molecules/Div/FriendBox";
-import SearchInput from "../molecules/Input/SearchInput";
 import LabelText from "../molecules/Text/LabelText";
 
 const MainTotal = () => {
-  const { setMainStatus } = useTabStore(({ setMainStatus }) => ({ setMainStatus }));
+  const { setMainStatus } = useMainStore(({ setMainStatus }) => ({ setMainStatus }));
   const num = 0;
   const [value, onChangeValue] = useInput();
   return (
     <MainTotalContainer>
       {num > 0 ? (
         <>
-          <SearchInputContainer>
-            <SearchInput size="m" value={value} onChange={onChangeValue} />
-          </SearchInputContainer>
+          <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"모든 친구"} num={num} />
-          <div>
-            <FriendBox username="nno3onn" />
-            <FriendBox username="nno3onn" />
-            <FriendBox username="nno3onn" />
-            <FriendBox username="nno3onn" />
-            <FriendBox username="nno3onn" />
-            <FriendBox username="nno3onn" />
-            <FriendBox username="nno3onn" />
-          </div>
+          {new Array(num).fill(null).map((v, idx) => (
+            <FriendBox id={idx} username="nno3onn" />
+          ))}
         </>
       ) : (
         <>

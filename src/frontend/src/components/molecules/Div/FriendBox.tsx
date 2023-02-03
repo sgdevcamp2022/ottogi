@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
 import CancelIcon from "../../atoms/Icons/CancelIcon";
@@ -8,13 +9,20 @@ import RoundButton from "../Button/RoundButton";
 import UserState32 from "./UserState32";
 
 interface FriendBoxProps {
+  id: number;
   username: string;
   status?: "온라인" | "오프라인" | "자리 비움" | "다른 용무 중" | "보낸 친구 요청";
 }
 
-const FriendBox = ({ username, status = "온라인" }: FriendBoxProps) => {
+const FriendBox = ({ id, username, status = "온라인" }: FriendBoxProps) => {
+  const navigate = useNavigate();
+
+  const goChatRoom = () => {
+    navigate(`/${id}`);
+  };
+
   return (
-    <ButtonWrapper onClick={() => null}>
+    <ButtonWrapper onClick={goChatRoom}>
       <FriendBoxContainer>
         <UserContainer>
           <UserState32 />
