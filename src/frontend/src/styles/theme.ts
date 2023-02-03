@@ -65,7 +65,6 @@ interface FontSize {
 interface BackgroundColor {
   trans: string;
   white: string;
-  msg: string;
   primary: string;
   blocked: string;
   active: string;
@@ -91,6 +90,7 @@ interface BackgroundColor {
 interface Color {
   inherit: string;
   white: string;
+  msg: string;
   icon: string;
   "msg-placeholder": string;
   "auth-label": string;

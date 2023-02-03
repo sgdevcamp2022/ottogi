@@ -1,37 +1,57 @@
 import styled from "styled-components";
 import LogoImage from "../../atoms/Div/LogoImage";
-import SpanText from "../../atoms/Text/SpanText";
-import Text from "../../atoms/Text/Text";
+import MessageText from "../../atoms/Div/MessageText";
+import MessageHoverButtons from "../Button/MessageHoverButtons";
+import MessageUserDate from "./MessageUserDate";
 
-const MessageLog = () => {
+interface MessageLogProps {
+  hasImage?: boolean;
+  imageUrl?: string;
+  username?: string;
+  createdAt: Date;
+  text: string;
+}
+
+const MessageLog = ({ text, hasImage = true, createdAt }: MessageLogProps) => {
   return (
     <MessageLogContainer>
-      <LogoImage onClick={() => null} />
+      <MessageHoverButtons />
+      {hasImage && (
+        <LogoImageContainer>
+          <LogoImage onClick={() => null} />
+        </LogoImageContainer>
+      )}
       <TextContainer>
-        <TextHeader>
-          <SpanText text="junho" color="white" mr={8} />
-          <SpanText text="2023.01.26. 오후 9:52" color="msg-timestamp" fontSize="xs" />
-        </TextHeader>
-        <Text text="안녕하세요" color="msg" />
+        {hasImage && <MessageUserDate username="nno3onn" createdAt={new Date()} />}
+        <MessageText text={text} hasDate={!hasImage} />
       </TextContainer>
     </MessageLogContainer>
   );
 };
 
 const MessageLogContainer = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor.tab3}; // test
+  height: 100%;
+  width: 100%;
+  padding: 2px 48px 2px 72px;
   display: flex;
   flex-direction: row;
+  &:hover {
+    background-color: ${({ theme }) => theme.backgroundColor["msg-hover"]};
+    .msg-hover,
+    .msg-date {
+      visibility: visible;
+    }
+  }
+`;
+
+const LogoImageContainer = styled.div`
+  margin-left: -16px;
+  margin-right: 16px;
 `;
 
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 0.75rem;
-`;
-
-const TextHeader = styled.div`
-  margin-bottom: 0.5rem;
 `;
 
 export default MessageLog;

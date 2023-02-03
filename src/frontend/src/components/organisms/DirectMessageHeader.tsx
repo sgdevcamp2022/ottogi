@@ -41,7 +41,6 @@ const DirectMessageHeader = ({ username, status }: DirectMessageHeaderProps) => 
 };
 
 const DirectMessageHeaderContainer = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor.tab3}; // test
   display: flex;
   flex-direction: row;
   justify-content: space-between;

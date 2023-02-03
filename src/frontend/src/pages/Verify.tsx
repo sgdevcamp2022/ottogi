@@ -1,15 +1,13 @@
-import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import DefaultButton from "../components/atoms/Button/DefaultButton";
+import HeaderHelmet from "../components/atoms/Helmet";
 import Text from "../components/atoms/Text/Text";
 import DefaultModal from "../components/organisms/DefaultModal";
 
 const Verify = () => {
   return (
     <LoginContainer>
-      <Helmet>
-        <title>로그인 | Discord</title>
-      </Helmet>
+      <HeaderHelmet title="로그인 | Discord" />
       <DefaultModal width={480}>
         <>
           <TextContainer>

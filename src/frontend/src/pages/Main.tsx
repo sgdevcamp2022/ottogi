@@ -1,12 +1,10 @@
-import { Helmet } from "react-helmet-async";
+import HeaderHelmet from "../components/atoms/Helmet";
 import MainPage from "../components/templates/MainPage";
 
 const Main = () => {
   return (
     <>
-      <Helmet>
-        <title>• Discord | 친구</title>
-      </Helmet>
+      <HeaderHelmet title="• Discord | 친구" />
       <MainPage />
     </>
   );

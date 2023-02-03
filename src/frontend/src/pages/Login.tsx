@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultButton from "../components/atoms/Button/DefaultButton";
@@ -7,8 +6,9 @@ import Span from "../components/atoms/Text/SpanText";
 import Text from "../components/atoms/Text/Text";
 import LoginText from "../components/molecules/Text/LoginText";
 import DefaultModal from "../components/organisms/DefaultModal";
-import LoginForm from "../components/organisms/LoginForm";
+import LoginForm from "../components/molecules/Form/AuthForm";
 import useInput from "../hooks/common/useInput";
+import HeaderHelmet from "../components/atoms/Helmet";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,9 +25,7 @@ const Login = () => {
 
   return (
     <LoginContainer>
-      <Helmet>
-        <title>로그인 | Discord</title>
-      </Helmet>
+      <HeaderHelmet title="로그인 | Discord" />
       <DefaultModal width={480}>
         <>
           <LoginText />

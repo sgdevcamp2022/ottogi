@@ -11,9 +11,9 @@ interface UserInfoBarProps {
   username: string;
 }
 
-const UserInfoBar = ({ username }: UserInfoBarProps) => {
+const Tab2Footer = ({ username }: UserInfoBarProps) => {
   return (
-    <UserInfoBarContainer>
+    <Tab2FooterContainer>
       <InfoContainer>
         <UserInfoButton username={username} />
       </InfoContainer>
@@ -22,11 +22,12 @@ const UserInfoBar = ({ username }: UserInfoBarProps) => {
         <UserOnOffButton OnIcon={<HeadsetIcon />} OffIcon={<HeadsetOffIcon />} onClick={() => {}} />
         <UserOnOffButton OnIcon={<SettingsIcon />} OffIcon={<SettingsIcon />} onClick={() => {}} />
       </ButtonContainer>
-    </UserInfoBarContainer>
+    </Tab2FooterContainer>
   );
 };
 
-const UserInfoBarContainer = styled.div`
+const Tab2FooterContainer = styled.div`
+  background-color: ${({ theme }) => theme.backgroundColor["user-tab"]};
   height: 52px;
   margin-bottom: 1px;
   padding: 0 8px;
@@ -47,4 +48,4 @@ const ButtonContainer = styled.div`
   color: ${({ theme }) => theme.color.icon};
 `;
 
-export default UserInfoBar;
+export default Tab2Footer;

@@ -12,6 +12,7 @@ interface DefaultButtonProps {
   color?: ColorType;
   backgroundColor?: BackgroundColorType;
   disabled?: boolean;
+  mb?: number;
 }
 
 const DefaultButton = ({
@@ -24,6 +25,7 @@ const DefaultButton = ({
   color = "white",
   backgroundColor = "primary",
   disabled = false,
+  mb = 0,
 }: DefaultButtonProps) => {
   return (
     <DefaultButtonContainer
@@ -35,6 +37,7 @@ const DefaultButton = ({
       fontWeight={fontWeight}
       color={color}
       backgroundColor={backgroundColor}
+      mb={mb}
     >
       {text}
     </DefaultButtonContainer>
@@ -48,6 +51,7 @@ interface DefaultButtonContainerProps {
   backgroundColor: BackgroundColorType;
   fontSize: FontSizeType;
   fontWeight: "normal" | "bold";
+  mb: number;
 }
 
 const DefaultButtonContainer = styled.button<DefaultButtonContainerProps>`
@@ -61,6 +65,7 @@ const DefaultButtonContainer = styled.button<DefaultButtonContainerProps>`
   font-weight: ${({ fontWeight }) => fontWeight};
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
+  margin-bottom: ${({ mb }) => mb}px;
   &:hover {
     opacity: 0.7;
   }
