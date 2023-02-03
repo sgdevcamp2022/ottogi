@@ -1,14 +1,12 @@
 import styled from "styled-components";
 import useInput from "../../hooks/common/useInput";
-import { flexCenter } from "../../styles/flexCenter";
-import Text from "../atoms/Text/Text";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
 import FriendBox from "../molecules/Div/FriendBox";
 import SearchInput from "../molecules/Input/SearchInput";
 import LabelText from "../molecules/Text/LabelText";
 
 const MainOnline = () => {
-  const num = 0;
+  const num = 10;
   const [value, onChangeValue] = useInput();
   return (
     <MainOnlineContainer>

@@ -1,31 +1,19 @@
 import styled from "styled-components";
-import TextButton from "../atoms/Button/TextButton";
 import DividerVertical from "../atoms/Div/DividerVertical";
 import FriendHeaderLeft from "../atoms/Div/FriendHeaderLeft";
+import MainTabButton from "../atoms/Div/MainTabButton";
 
-type ActiveType = "온라인" | "모두" | "대기중" | "차단목록" | "친구추가";
-interface FriendHeaderProps {
-  active?: ActiveType;
-}
-
-const FriendHeader = ({ active = "온라인" }: FriendHeaderProps) => {
+const FriendHeader = () => {
   return (
     <FriendHeaderContainer>
       <FriendHeaderLeft />
       <DividerVertical mv={8} />
       <RightContainer>
-        <TextButton text="온라인" color="tab3-header" hoverColor="icon" hoverBackgroundColor="hover" onClick={() => null} />
-        <TextButton text="모두" color="tab3-header" hoverColor="icon" hoverBackgroundColor="hover" onClick={() => null} />
-        <TextButton text="대기 중" color="tab3-header" hoverColor="icon" hoverBackgroundColor="hover" onClick={() => null} />
-        <TextButton text="차단 목록" color="tab3-header" hoverColor="icon" hoverBackgroundColor="hover" onClick={() => null} />
-        <TextButton
-          text="친구 추가하기"
-          color="white"
-          hoverColor="invite-success"
-          backgroundColor="add-friend"
-          hoverBackgroundColor="trans"
-          onClick={() => null}
-        />
+        <MainTabButton status={"온라인"} />
+        <MainTabButton status={"모두"} />
+        <MainTabButton status={"대기 중"} />
+        <MainTabButton status={"친구 추가하기"} />
+        {/* <MainTabButton status={"차단"} /> */}
       </RightContainer>
     </FriendHeaderContainer>
   );

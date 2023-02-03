@@ -1,12 +1,12 @@
-import { ReactElement } from "react";
 import styled from "styled-components";
+import SearchButton from "../molecules/Button/SearchButton";
 
-interface Tab2HeaderProps {
-  children: ReactElement;
-}
-
-const Tab2Header = ({ children }: Tab2HeaderProps) => {
-  return <Tab2HeaderContainer>{children}</Tab2HeaderContainer>;
+const Tab2Header = () => {
+  return (
+    <Tab2HeaderContainer>
+      <SearchButton />
+    </Tab2HeaderContainer>
+  );
 };
 
 const Tab2HeaderContainer = styled.div`

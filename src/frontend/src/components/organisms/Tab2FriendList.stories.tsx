@@ -1,4 +1,4 @@
-import Tab2FriendListDiv from "./Tab2FriendList";
+import Tab2FriendListDiv from "../molecules/Div/FriendList";
 
 export default {
   title: "organisms",

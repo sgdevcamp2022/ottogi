@@ -1,12 +1,14 @@
-import { ReactElement } from "react";
 import styled from "styled-components";
+import ChatAddIcon from "../atoms/Icons/ChatAddIcon";
+import FriendHeader from "./FriendHeader";
 
-interface Tab3HeaderProps {
-  children: ReactElement;
-}
-
-const Tab3Header = ({ children }: Tab3HeaderProps) => {
-  return <Tab3HeaderContainer>{children}</Tab3HeaderContainer>;
+const Tab3Header = () => {
+  return (
+    <Tab3HeaderContainer>
+      <FriendHeader />
+      <ChatAddIcon />
+    </Tab3HeaderContainer>
+  );
 };
 
 const Tab3HeaderContainer = styled.div`

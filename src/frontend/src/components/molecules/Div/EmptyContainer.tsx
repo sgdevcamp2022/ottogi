@@ -17,10 +17,10 @@ const EmptyContainer = ({ text, image }: EmptyContainerProps) => {
 };
 
 const Empty = styled.div`
+  height: 100%;
   ${flexCenter}
   flex-direction: column;
   gap: 2.5rem;
-  flex: 1;
 `;
 
 export default EmptyContainer;

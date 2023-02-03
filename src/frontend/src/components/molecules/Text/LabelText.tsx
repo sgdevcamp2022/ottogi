@@ -15,7 +15,7 @@ const LabelText = ({ label = "온라인", num }: LabelTextProps) => {
 };
 
 const MainOnlineContainer = styled.div`
-  padding: 1rem 1.25rem 0.5rem 0.5rem;
+  padding: 1rem 1.25rem 0.5rem 0.75rem;
 `;
 
 export default LabelText;

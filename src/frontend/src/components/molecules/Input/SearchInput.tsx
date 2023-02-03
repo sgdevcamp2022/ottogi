@@ -20,14 +20,14 @@ const SearchInput = ({ size, value, onChange }: SearchInputProps) => {
 };
 
 const SearchInputContainer = styled.label<{ size: SizeType }>`
-  border-radius: 4px;
-  min-width: 9rem;
+  border-radius: 0.25rem;
+  min-width: 144px;
   width: 100%;
-  height: ${({ size }) => (size === "s" ? 1.5 : 1.875)}rem;
+  height: ${({ size }) => (size === "s" ? 1.5 : 2.125)}rem;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0 2px;
+  padding: 0 0.125rem;
   background-color: ${({ theme }) => theme.backgroundColor.tab1};
   svg {
     font-size: ${({ theme, size }) => theme.fontSize[size === "s" ? "lg" : "xxl"]};

@@ -20,7 +20,7 @@ const DirectMessageHeader = ({ username, status }: DirectMessageHeaderProps) => 
     <DirectMessageHeaderContainer>
       <RightContainer>
         <AtIconWrapper>
-          <AtIcon />{" "}
+          <AtIcon />
         </AtIconWrapper>
         <Text text={username} color="white" />
         <Status status={status} fontSize="14px" />

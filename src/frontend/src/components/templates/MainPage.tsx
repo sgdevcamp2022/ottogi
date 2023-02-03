@@ -1,54 +1,41 @@
-import PageContainer from "../atoms/Div/PageContainer";
-import Tab2Body from "../atoms/Div/Tab2Body";
-import Tab2Container from "../atoms/Div/Tab2Container";
-import Tab2Header from "../atoms/Div/Tab2Header";
-import Tab3Body from "../atoms/Div/Tab3Body";
-import Tab3Container from "../atoms/Div/Tab3Container";
-import Tab3Header from "../atoms/Div/Tab3Header";
+import styled from "styled-components";
 import TabDivider from "../atoms/Div/TabDivider";
-import ChatAddIcon from "../atoms/Icons/ChatAddIcon";
-import FriendButton from "../molecules/Button/FriendButton";
-import SearchButton from "../molecules/Button/SearchButton";
-import FriendHeader from "../organisms/FriendHeader";
-import FriendList from "../organisms/Tab2FriendList";
+import MainBody from "../organisms/MainBody";
+import Tab2Body from "../organisms/Tab2Body";
 import Tab2Footer from "../organisms/Tab2Footer";
+import Tab2Header from "../organisms/Tab2Header";
+import Tab3Header from "../organisms/Tab3Header";
 
 const MainPage = () => {
   return (
-    <PageContainer>
-      <>
-        <Tab2Container>
-          <>
-            <Tab2Header>
-              <SearchButton />
-            </Tab2Header>
-            <TabDivider />
-            <Tab2Body>
-              <>
-                <FriendButton />
-                <FriendList />
-              </>
-            </Tab2Body>
-            <Tab2Footer username="nno3onn" />
-          </>
-        </Tab2Container>
-        <Tab3Container>
-          <>
-            <Tab3Header>
-              <>
-                <FriendHeader />
-                <ChatAddIcon />
-              </>
-            </Tab3Header>
-            <TabDivider />
-            <Tab3Body>
-              <>d</>
-            </Tab3Body>
-          </>
-        </Tab3Container>
-      </>
-    </PageContainer>
+    <>
+      <Tab2Container>
+        <Tab2Header />
+        <TabDivider />
+        <Tab2Body />
+        <Tab2Footer username="nno3onn" />
+      </Tab2Container>
+      <Tab3Container>
+        <Tab3Header />
+        <TabDivider />
+        <MainBody />
+      </Tab3Container>
+    </>
   );
 };
+
+const Tab2Container = styled.div`
+  background-color: ${({ theme }) => theme.backgroundColor.tab2};
+  width: 15rem;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Tab3Container = styled.div`
+  background-color: ${({ theme }) => theme.backgroundColor.tab3};
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
 
 export default MainPage;

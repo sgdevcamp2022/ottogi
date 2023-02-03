@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import DirectButton from "../molecules/Button/DirectButton";
-import DirectMessage from "../molecules/Div/DirectMessage";
+import DirectButton from "../Button/DirectButton";
+import DirectMessage from "./DirectMessage";
 
-const Tab2FriendList = () => {
+const FriendList = () => {
   return (
     <FriendListContainer>
       <DirectMessage />
@@ -30,4 +30,4 @@ const ListContainer = styled.div`
   gap: 2px;
 `;
 
-export default Tab2FriendList;
+export default FriendList;
