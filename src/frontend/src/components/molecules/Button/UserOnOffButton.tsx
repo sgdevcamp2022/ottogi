@@ -1,5 +1,6 @@
 import { MouseEventHandler, ReactElement } from "react";
 import styled from "styled-components";
+import { flexCenter } from "../../../styles/flexCenter";
 
 interface MicButtonProps {
   OnIcon: ReactElement;
@@ -17,9 +18,7 @@ const UserOnOffButton = ({ OnIcon, OffIcon, on = false, onClick }: MicButtonProp
 };
 
 const UserOnOffButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${flexCenter}
   width: 32px;
   height: 32px;
   border-radius: 4px;

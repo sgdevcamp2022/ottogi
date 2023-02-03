@@ -4,7 +4,7 @@ import styled from "styled-components";
 const StateOnIcon = styled(CircleIcon)``;
 
 interface StateIconProps {
-  fontSize: number;
+  fontSize: string;
   padding?: number;
 }
 

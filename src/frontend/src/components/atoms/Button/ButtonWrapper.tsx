@@ -1,12 +1,12 @@
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, ReactElement } from "react";
 import styled from "styled-components";
 import { BackgroundColorType, ColorType } from "../../../styles/theme";
 
 interface ButtonWrapperProps {
-  children: React.ReactElement;
+  children: ReactElement;
   onClick: MouseEventHandler<HTMLDivElement>;
-  width?: number | null;
-  height?: number | null;
+  width?: number | string;
+  height?: number | string;
   ph?: number;
   active?: boolean;
   blur?: boolean;
@@ -17,8 +17,8 @@ const ButtonWrapper = ({
   children,
   onClick,
   active = false,
-  width = null,
-  height = null,
+  width = "100%",
+  height = "100%",
   ph = 8,
   blur = false,
   hoverBackgroundColor = "hover",
@@ -40,8 +40,8 @@ const ButtonWrapper = ({
 };
 
 interface ButtonWrapperContainerProps {
-  width: number | null;
-  height: number | null;
+  width: number | string;
+  height: number | string;
   color: ColorType;
   backgroundColor: BackgroundColorType;
   hoverBackgroundColor: BackgroundColorType;
@@ -52,8 +52,8 @@ interface ButtonWrapperContainerProps {
 const ButtonWrapperContainer = styled.div<ButtonWrapperContainerProps>`
   display: flex;
   align-items: center;
-  width: ${({ width }) => (width === null ? "100%" : `${width}px`)};
-  height: ${({ height }) => (height === null ? "100%" : `${height}px`)};
+  width: ${({ width }) => (width === "100%" ? "100%" : `${width}px`)};
+  height: ${({ height }) => (height === "100%" ? "100%" : `${height}px`)};
   color: ${({ theme, color }) => theme.color[color]};
   background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
   opacity: ${({ blur }) => (blur ? 30 : 100)}%;

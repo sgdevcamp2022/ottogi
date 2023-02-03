@@ -4,7 +4,7 @@ import styled from "styled-components";
 const StateOffIcon = styled(TripOriginIcon)``;
 
 interface StateIconProps {
-  fontSize: number;
+  fontSize: string;
   padding?: number;
 }
 

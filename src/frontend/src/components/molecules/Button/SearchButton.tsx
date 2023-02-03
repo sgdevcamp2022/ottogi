@@ -10,6 +10,8 @@ const SearchButton = () => {
 };
 
 const SearchButtonContainer = styled.div`
+  width: 100%;
+  height: 1.75rem;
   input {
     cursor: pointer;
   }

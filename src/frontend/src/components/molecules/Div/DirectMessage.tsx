@@ -5,7 +5,7 @@ import Text from "../../atoms/Text/Text";
 const DirectMessage = () => {
   return (
     <DirectMessageContainer>
-      <Text text="다이렉트 메시지" fontSize="sm" />
+      <Text text="다이렉트 메시지" fontSize="xs" fontWeight="bold" />
       <PlusButtonContainer>
         <AddIcon />
       </PlusButtonContainer>
@@ -18,7 +18,9 @@ const DirectMessageContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1.125rem 0.5rem 0.25rem 1.125rem;
+  align-items: center;
+  padding-top: 18px;
+  padding-bottom: 4px;
   color: ${({ theme }) => theme.color.inactive};
   &:hover {
     color: ${({ theme }) => theme.color.white};

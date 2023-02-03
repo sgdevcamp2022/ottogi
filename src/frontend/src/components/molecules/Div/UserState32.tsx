@@ -1,31 +1,22 @@
 import styled from "styled-components";
-import { StatusColorType } from "../../../styles/theme";
 import LogoImage from "../../atoms/Div/LogoImage";
-import StateDisturbIcon from "../../atoms/Icons/StateDisturbIcon";
-import StateEmptyIcon from "../../atoms/Icons/StateEmptyIcon";
-import StateMobileIcon from "../../atoms/Icons/StateMobileIcon";
-import StateOffIcon from "../../atoms/Icons/StateOffIcon";
-import StateOnIcon from "../../atoms/Icons/StateOnIcon";
+import Status from "../../atoms/Div/Status";
 
 export type StateType = "on" | "off" | "disturb" | "mobile" | "empty";
 
 interface UserStateProps {
   status?: StateType;
-  fontSize?: number;
+  fontSize?: string;
 }
 
-const UserState32 = ({ status = "on", fontSize = 16 }: UserStateProps) => {
+const UserState32 = ({ status = "on", fontSize = "16px" }: UserStateProps) => {
   return (
     <UserStateContainer>
       <Mask>
         <LogoImage onClick={() => null} />
       </Mask>
-      <IconWrapper status={status}>
-        {status === "on" && <StateOnIcon fontSize={fontSize} />}
-        {status === "off" && <StateOffIcon fontSize={fontSize} />}
-        {status === "disturb" && <StateDisturbIcon fontSize={fontSize} />}
-        {status === "mobile" && <StateMobileIcon fontSize={fontSize} />}
-        {status === "empty" && <StateEmptyIcon fontSize={fontSize} />}
+      <IconWrapper>
+        <Status status={status} fontSize={fontSize} />
       </IconWrapper>
     </UserStateContainer>
   );
@@ -43,11 +34,10 @@ const Mask = styled.div`
   mask-repeat: no-repeat;
 `;
 
-const IconWrapper = styled.div<{ status: StatusColorType }>`
+const IconWrapper = styled.div`
   position: absolute;
   transform: translate(120%, -70%);
   border-radius: 25px;
-  color: ${({ theme, status }) => theme.statusColor[status]};
 `;
 
 export default UserState32;

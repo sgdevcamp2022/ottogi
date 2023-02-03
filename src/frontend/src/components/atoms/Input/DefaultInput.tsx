@@ -6,8 +6,8 @@ interface DefaultInputProps {
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
   maxLength?: number;
-  width?: number | null;
-  height?: number | null;
+  width?: number | string;
+  height?: number | string;
   placeholder?: string;
   color?: ColorType;
   placeholderColor?: ColorType;
@@ -19,8 +19,8 @@ const DefaultInput = ({
   value,
   onChange,
   maxLength = 524288,
-  width = null,
-  height = null,
+  width = "100%",
+  height = "100%",
   placeholder = "",
   placeholderColor = "tab2-placeholder",
   fontSize = "sm",
@@ -44,8 +44,8 @@ const DefaultInput = ({
 };
 
 interface DefaultInputContainerProps {
-  width: number | null;
-  height: number | null;
+  width: number | string;
+  height: number | string;
   placeholderColor: ColorType;
   fontSize: FontSizeType;
   color: ColorType;
@@ -53,8 +53,8 @@ interface DefaultInputContainerProps {
 }
 
 const DefaultInputContainer = styled.input<DefaultInputContainerProps>`
-  width: ${({ width }) => (width === null ? "100%" : `${width}px`)};
-  height: ${({ height }) => (height === null ? "100%" : `${height}px`)};
+  width: ${({ width }) => (width === "100%" ? "100%" : `${width}px`)};
+  height: ${({ height }) => (height === "100%" ? "100%" : `${height}px`)};
   padding: 0.625rem;
   border: none;
   border-radius: 4px;
@@ -62,11 +62,11 @@ const DefaultInputContainer = styled.input<DefaultInputContainerProps>`
   font-weight: 500;
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
   background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
-  &:focus {
-    outline: none;
-  }
   ::placeholder {
     color: ${({ theme, placeholderColor }) => theme.color[placeholderColor]};
+  }
+  &:focus {
+    outline: none;
   }
 `;
 

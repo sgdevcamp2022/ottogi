@@ -10,6 +10,7 @@ export type BackgroundColorType =
   | "setting"
   | "msg-input"
   | "hover"
+  | "modal"
   | "tab3"
   | "tab2"
   | "user-tab"
@@ -26,6 +27,7 @@ export type BackgroundColorType =
 export type ColorType =
   | "inherit"
   | "white"
+  | "msg"
   | "icon"
   | "msg-placeholder"
   | "auth-label"
@@ -63,6 +65,7 @@ interface FontSize {
 interface BackgroundColor {
   trans: string;
   white: string;
+  msg: string;
   primary: string;
   blocked: string;
   active: string;
@@ -70,6 +73,7 @@ interface BackgroundColor {
   setting: string;
   "msg-input": string;
   hover: string;
+  modal: string;
   tab3: string;
   tab2: string;
   "user-tab": string;
@@ -151,6 +155,7 @@ const theme: ThemeType = {
     setting: "#4F545C",
     "msg-input": "#40444B",
     hover: "#3C3F44",
+    modal: "#39363f",
     tab3: "#36393F",
     tab2: "#2F3136",
     "user-tab": "#292B2F",
@@ -167,18 +172,19 @@ const theme: ThemeType = {
   color: {
     inherit: "inherit",
     white: "#FFFFFF",
-    icon: "#F6F6F7",
+    msg: "#DCDDDE",
+    icon: "#b9bbbe",
+    "tab3-header": "#B9BBBE",
+    "msg-hover": "#B9BBBE",
+    "setting-tab": "#B9BBBE",
     "msg-placeholder": "#72767D",
-    "auth-label": "#A3A6AA91",
-    "auth-desc": "#A3A6AA92",
-    "tab2-placeholder": "#A3A6AA93",
-    "msg-timestamp": "#A3A6AA94",
-    "tab3-header": "#B9BBBE91",
-    "msg-hover": "#B9BBBE92",
-    "setting-tab": "#B9BBBE93",
-    inactive: "#96989D91",
-    "hangup-log": "#96989D92",
-    "setting-header": "#96989D93",
+    "auth-label": "#A3A6AA",
+    "auth-desc": "#A3A6AA",
+    "tab2-placeholder": "#A3A6AA",
+    "msg-timestamp": "#A3A6AA",
+    inactive: "#96989D",
+    "hangup-log": "#96989D",
+    "setting-header": "#96989D",
     "tab1-plus": "#3BA55D",
     "voice-modal": "#18191C",
     red: "#ED4245",

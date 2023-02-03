@@ -9,7 +9,7 @@ interface FriendButtonProps {
 
 const FriendButton = ({ active = false }: FriendButtonProps) => {
   return (
-    <ButtonWrapper active={active} onClick={() => {}}>
+    <ButtonWrapper active={active} onClick={() => {}} height={42}>
       <FriendButtonContainer>
         <PersonIcon />
         <Text text="친구" />
@@ -19,7 +19,6 @@ const FriendButton = ({ active = false }: FriendButtonProps) => {
 };
 
 const FriendButtonContainer = styled.div`
-  height: 2.625rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;

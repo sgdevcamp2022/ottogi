@@ -36,12 +36,15 @@ const UserInfoBarContainer = styled.div`
 `;
 
 const InfoContainer = styled.div`
+  flex: 1;
   margin-right: 8px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
+  font-size: 20px;
+  color: ${({ theme }) => theme.color.icon};
 `;
 
 export default UserInfoBar;

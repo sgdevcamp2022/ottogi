@@ -29,7 +29,7 @@ interface TextContainerProps {
 const TextContainer = styled.p<TextContainerProps>`
   color: ${({ theme, color }) => theme.color[color]};
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
-  font-weight: ${({ fontWeight }) => fontWeight};
+  font-weight: ${({ fontWeight }) => (fontWeight === "bold" ? 500 : fontWeight)};
   margin-top: 0px;
   margin-left: 0px;
   margin-bottom: ${({ mb }) => mb}px;

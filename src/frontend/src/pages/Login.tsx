@@ -36,7 +36,7 @@ const Login = () => {
               text={
                 <>
                   이메일 또는 전화번호
-                  <Span text=" *" />
+                  <Span text=" *" color="red" />
                 </>
               }
               value={email}
@@ -48,7 +48,7 @@ const Login = () => {
               text={
                 <>
                   비밀번호
-                  <Span text=" *" />
+                  <Span text=" *" color="red" />
                 </>
               }
               value={password}
@@ -68,7 +68,7 @@ const Login = () => {
                 <LinkText text="가입하기" onClick={onLoadRegister} />
               </>
             }
-            color="grey-3"
+            color="auth-desc"
             fontSize="sm"
           />
         </>

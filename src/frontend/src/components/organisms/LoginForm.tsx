@@ -11,7 +11,7 @@ interface LoginFormProps {
 const LoginForm = ({ text, value, onChange }: LoginFormProps) => {
   return (
     <>
-      <Text text={text} color="grey-3" fontWeight="bold" fontSize="xs" mb={8} />
+      <Text text={text} color="auth-label" fontWeight="bold" fontSize="xs" mb={8} />
       <DefaultInput value={value} onChange={onChange} />
     </>
   );
