@@ -21,9 +21,43 @@ const friendApi = {
   },
 
   request: async ({ email, accessToken }: FriendParams) => {
-    console.log("post", email, accessToken);
     return await clientApi.post(
       "/user/member/addfriend",
+      { email },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+  },
+
+  accept: async ({ email, accessToken }: FriendParams) => {
+    return await clientApi.post(
+      "/user/member/acceptfriend",
+      { email },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+  },
+
+  reject: async ({ email, accessToken }: FriendParams) => {
+    return await clientApi.post(
+      "/user/member/rejectfriend",
+      { email },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+  },
+  cancel: async ({ email, accessToken }: FriendParams) => {
+    return await clientApi.post(
+      "/user/member/cancelfriend",
       { email },
       {
         headers: {

@@ -1,48 +1,33 @@
+import { MouseEventHandler, ReactElement } from "react";
 import styled from "styled-components";
-import useMainStore from "../../../store/useMainStore";
 import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
-import CancelIcon from "../../atoms/Icons/CancelIcon";
-import ChatIcon from "../../atoms/Icons/ChatIcon";
-import MoreIcon from "../../atoms/Icons/MoreIcon";
 import Text from "../../atoms/Text/Text";
-import RoundButton from "../Button/RoundButton";
 import UserState32 from "./UserState32";
 
 interface FriendBoxProps {
-  id: number;
   name: string;
-  status?: "온라인" | "오프라인" | "자리 비움" | "다른 용무 중" | "보낸 친구 요청";
+  status: string;
+  onClick: MouseEventHandler<HTMLDivElement>;
+  Buttons: ReactElement;
 }
 
-const FriendBox = ({ id, name, status = "온라인" }: FriendBoxProps) => {
-  const { setMainTab } = useMainStore(({ setMainTab }) => ({ setMainTab }));
-
+const FriendBox = ({ name, status, onClick, Buttons }: FriendBoxProps) => {
   return (
-    <ButtonWrapper onClick={() => setMainTab(id.toString())}>
-      <FriendBoxContainer>
+    <ButtonWrapper onClick={onClick}>
+      <FriendDefaultBoxContainer>
         <UserContainer>
           <UserState32 />
           <UserText>
-            <Text text={name} color="white" fontWeight="bold" />
+            <Text text={name} color="white" fontWeight="bold" mb={3} />
             <Text text={status} fontSize="sm" color="auth-desc" />
           </UserText>
         </UserContainer>
-        <Buttons>
-          {status === "보낸 친구 요청" ? (
-            <RoundButton Icon={<CancelIcon />} />
-          ) : (
-            <>
-              <RoundButton Icon={<ChatIcon />} />
-              <RoundButton Icon={<MoreIcon />} />
-            </>
-          )}
-        </Buttons>
-      </FriendBoxContainer>
+        <ButtonsWrapper>{Buttons}</ButtonsWrapper>
+      </FriendDefaultBoxContainer>
     </ButtonWrapper>
   );
 };
-
-const FriendBoxContainer = styled.div`
+const FriendDefaultBoxContainer = styled.div`
   width: 100%;
   height: 61px;
   border-top: 1px solid ${({ theme }) => theme.backgroundColor.divider};
@@ -63,7 +48,7 @@ const UserText = styled.div`
   margin-left: 0.75rem;
 `;
 
-const Buttons = styled.div`
+const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap: 5px;

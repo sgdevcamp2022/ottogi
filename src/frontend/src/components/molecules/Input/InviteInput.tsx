@@ -58,7 +58,7 @@ const InviteInputContainer = styled.label<{ borderColor: any }>`
   padding: 0 0.75rem 0 0.125rem;
   margin-bottom: 0.5rem;
   &:has(input:focus) {
-    border-color: ${({ theme, borderColor }) => (borderColor === "default" ? theme.borderColor.focus : borderColor.color[borderColor])};
+    border-color: ${({ theme, borderColor }) => (borderColor === "default" ? theme.borderColor.focus : borderColor.borderColor[borderColor])};
   }
 `;
 

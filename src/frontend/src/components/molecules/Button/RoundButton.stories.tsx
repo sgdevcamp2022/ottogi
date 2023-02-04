@@ -6,4 +6,4 @@ export default {
   component: RoundButton,
 };
 
-export const Round = () => <RoundButton Icon={<ChatIcon />} />;
+export const Round = () => <RoundButton onClick={() => null} Icon={<ChatIcon />} />;

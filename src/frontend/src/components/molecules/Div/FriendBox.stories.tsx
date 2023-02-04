@@ -1,4 +1,4 @@
-import FriendBoxDiv from "./FriendBox";
+import FriendBoxDiv from "./FriendDefaultBox";
 
 export default {
   title: "molecules/Div",

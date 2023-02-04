@@ -7,25 +7,29 @@ import { useUserStore } from "../../store/useUserStore";
 import DefaultButton from "../atoms/Button/DefaultButton";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
-import FriendBox from "../molecules/Div/FriendBox";
+import FriendDefaultBox from "../molecules/Div/FriendDefaultBox";
 import LabelText from "../molecules/Text/LabelText";
 
 const MainTotal = () => {
   const { setMainStatus } = useMainStore(({ setMainStatus }) => ({ setMainStatus }));
   const { userInfo } = useUserStore();
-  const { data } = useQuery(["friend", { email: userInfo?.email, accessToken: userInfo?.accessToken }], friendApi.getAll);
-  console.log(data);
+  const { data, isSuccess } = useQuery(["friend", { email: userInfo?.email, accessToken: userInfo?.accessToken }], friendApi.getAll);
 
   const num = 0;
   const [value, onChangeValue] = useInput();
+
+  if (!isSuccess) return;
+
+  const friendList: FriendListType[] = data.data;
+
   return (
     <MainTotalContainer>
       {num > 0 ? (
         <>
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"모든 친구"} num={num} />
-          {new Array(num).fill(null).map((v, idx) => (
-            <FriendBox id={idx} name="nno3onn" />
+          {friendList.map((friend, idx) => (
+            <FriendDefaultBox id={idx} name={friend.receiver} />
           ))}
         </>
       ) : (
