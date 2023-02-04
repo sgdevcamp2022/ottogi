@@ -6,7 +6,7 @@ const StateEmptyIcon = styled(DarkModeIcon)`
 `;
 
 interface StateIconProps {
-  fontSize: number;
+  fontSize: string;
   padding?: number;
 }
 

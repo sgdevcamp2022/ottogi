@@ -1,4 +1,4 @@
-import UserInfoBarButton from "./UserInfoBar";
+import UserInfoBarButton from "./Tab2Footer";
 
 export default {
   title: "organisms",

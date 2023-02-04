@@ -1,65 +1,44 @@
 import { ChangeEventHandler, MouseEventHandler } from "react";
 import styled from "styled-components";
 import { BorderColorType } from "../../../styles/theme";
-import { DefaultButtonContainer } from "../../atoms/Button/DefaultButton";
+import DefaultButton from "../../atoms/Button/DefaultButton";
+import DefaultInput from "../../atoms/Input/DefaultInput";
+
+export type InviteStatusType = "default" | "success" | "danger";
 
 interface InviteInputType {
+  status?: InviteStatusType;
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
   onClick: MouseEventHandler<HTMLButtonElement>;
   borderColor?: BorderColorType;
 }
 
-const InviteInput = ({ value, onChange, onClick, borderColor = "default" }: InviteInputType) => {
+const InviteInput = ({ status = "default", value, onChange, onClick }: InviteInputType) => {
   return (
-    <InviteInputContainer borderColor={borderColor}>
-      <input maxLength={37} value={value} onChange={onChange} placeholder="사용자 이메일 입력" />
-      <InviteButton disabled={value === ""} onClick={onClick} fontWeight="normal" color="white" backgroundColor="primary">
-        친구 요청 보내기
-      </InviteButton>
+    <InviteInputContainer status={status}>
+      <DefaultInput maxLength={37} placeholder="사용자 이메일 입력" value={value} onChange={onChange} fontSize="base" />
+      <DefaultButton disabled={value === "" ? true : false} text="친구 요청 보내기" onClick={onClick} height={32} width={130} fontSize="sm" />
     </InviteInputContainer>
   );
 };
 
-const InviteInputContainer = styled.label<{ borderColor: BorderColorType }>`
+interface InviteInputContainerProps {
+  status: BorderColorType;
+}
+const InviteInputContainer = styled.label<InviteInputContainerProps>`
   width: 100%;
-  height: 3rem;
+  height: 3.125rem;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  border-radius: 4px;
-  margin: 16px 0;
-  padding: 0 12px;
-  border: 2px solid ${({ theme, borderColor }) => theme.borderColor[borderColor]};
-  background-color: ${({ theme }) => theme.backgroundColor["black-1"]};
-  transition: transform 1s ease-out;
+  background-color: ${({ theme }) => theme.backgroundColor.tab1};
+  border-radius: 8px;
+  border: 2px solid ${({ theme, status }) => theme.borderColor[status]};
+  padding: 0 12px 0 2px;
   &:has(input:focus) {
     border-color: ${({ theme }) => theme.borderColor.focus};
   }
-
-  input {
-    line-height: 40px;
-    flex: 1;
-    border: none;
-    background-color: ${({ theme }) => theme.backgroundColor["transparent"]};
-    color: ${({ theme }) => theme.color.white};
-    &:focus {
-      outline: none;
-    }
-    ::placeholder {
-      color: ${({ theme }) => theme.color.placeholder};
-    }
-  }
-`;
-
-const InviteButton = styled(DefaultButtonContainer)`
-  font-size: 0.875rem;
-  width: fit-content;
-  height: 2rem;
-  padding: 2px 16px;
-  font-weight: ${({ fontWeight }) => fontWeight};
-  color: ${({ theme, color }) => theme.color[color]};
-  background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "cursor")};
 `;
 
 export default InviteInput;

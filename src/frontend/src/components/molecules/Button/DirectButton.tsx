@@ -1,19 +1,27 @@
 import styled from "styled-components";
+import useMainStore from "../../../store/useMainStore";
 import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
 import Text from "../../atoms/Text/Text";
 import UserState, { StateType } from "../Div/UserState32";
 
 interface DirectButtonProps {
-  active?: boolean;
+  id: number;
   username: string;
-  state?: StateType;
+  active?: boolean;
+  status?: StateType;
 }
 
-const DirectButton = ({ active = false, username, state = "on" }: DirectButtonProps) => {
+const DirectButton = ({ id, username, active = false, status = "on" }: DirectButtonProps) => {
+  const { mainTab, setMainTab } = useMainStore(({ mainTab, setMainTab }) => ({ mainTab, setMainTab }));
+
+  const goChatRoom = () => {
+    setMainTab(id.toString());
+  };
+
   return (
-    <ButtonWrapper active={active} onClick={() => {}}>
+    <ButtonWrapper active={Number(mainTab) === id} onClick={goChatRoom} height={42}>
       <DirectButtonContainer>
-        <UserState state={state} />
+        <UserState status={status} />
         <Text text={username} />
       </DirectButtonContainer>
     </ButtonWrapper>
@@ -21,11 +29,9 @@ const DirectButton = ({ active = false, username, state = "on" }: DirectButtonPr
 };
 
 const DirectButtonContainer = styled.div`
-  height: 2.625rem;
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 0.75rem;
-  padding: 0 0.5rem;
 `;
 
 export default DirectButton;

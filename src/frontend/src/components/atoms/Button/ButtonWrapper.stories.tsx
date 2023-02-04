@@ -7,6 +7,6 @@ export default {
 
 export const Wrapper = () => (
   <ButtonWrapper onClick={() => console.log(1)}>
-    <></>
+    <>test text</>
   </ButtonWrapper>
 );

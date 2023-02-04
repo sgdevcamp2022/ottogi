@@ -4,7 +4,7 @@ import styled from "styled-components";
 const StateDisturbIcon = styled(DoDisturbOnRoundedIcon)``;
 
 interface StateIconProps {
-  fontSize: number;
+  fontSize: string;
   padding?: number;
 }
 
