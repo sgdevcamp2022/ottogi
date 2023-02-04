@@ -20,9 +20,9 @@ const MessageBox = ({ value, nickname, onChange, onClick }: MessageInputProps) =
     }
   };
 
-  const handleChange = (value: string) => {
+  const handleChange = (v: string) => {
+    onChange(v);
     resizeTextAreaHeight();
-    onChange(value);
   };
 
   return (
@@ -35,7 +35,7 @@ const MessageBox = ({ value, nickname, onChange, onClick }: MessageInputProps) =
         placeholder={`@${nickname}에 메시지 보내기`}
         rows={1}
         value={value}
-        onChange={({ target: { value } }) => handleChange(value)}
+        onChange={({ target: { value: v } }) => handleChange(v)}
       />
     </MessageInputContainer>
   );

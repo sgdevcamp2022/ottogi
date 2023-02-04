@@ -14,6 +14,7 @@ const Page = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 `;
 
 export default PageContainer;

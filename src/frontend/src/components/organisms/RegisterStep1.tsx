@@ -1,15 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import useInput from "../../hooks/common/useInput";
 import { useRegisterStore } from "../../store/useRegisterStore";
 import validateEmail from "../../utils/validateEmail";
 import DefaultButton from "../atoms/Button/DefaultButton";
 import LinkText from "../atoms/Text/LinkText";
-import Text from "../atoms/Text/Text";
 import AuthForm from "../molecules/Form/AuthForm";
 import AuthHeader from "../molecules/Text/AuthHeader";
 
-const ReigsterStep1 = () => {
+const RegisterStep1 = () => {
   const { setStep, setEmail, setUsername, setPassword } = useRegisterStore();
   const navigate = useNavigate();
   const [email, changeEmail] = useInput();
@@ -42,4 +40,4 @@ const ReigsterStep1 = () => {
   );
 };
 
-export default ReigsterStep1;
+export default RegisterStep1;

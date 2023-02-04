@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import useMainStore, { MainStatusType } from "../../store/useMainStore";
 import MainAddFriend from "./MainAddFriend";
+import MainDirectBody from "./MainDirectBody";
 import MainOnline from "./MainOnline";
 import MainTotal from "./MainTotal";
 import MainWaiting from "./MainWaiting";
@@ -21,12 +22,12 @@ const MainBody = () => {
   const { mainTab, mainStatus } = useMainStore(({ mainTab, mainStatus }) => ({ mainTab, mainStatus }));
 
   if (mainTab === "친구") {
-    return <MainBodyContainer>{getBodyByStatus(mainStatus)}</MainBodyContainer>;
+    return <MainFreindBody>{getBodyByStatus(mainStatus)}</MainFreindBody>;
   }
-  return <>dd</>;
+  return <MainDirectBody />;
 };
 
-const MainBodyContainer = styled.div`
+const MainFreindBody = styled.div`
   flex: 1;
   padding: 0 1.25rem;
 `;

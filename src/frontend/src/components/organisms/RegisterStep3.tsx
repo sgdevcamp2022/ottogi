@@ -5,12 +5,13 @@ import DefaultButton from "../atoms/Button/DefaultButton";
 import AuthHeader from "../molecules/Text/AuthHeader";
 
 const RegisterStep3 = () => {
-  const { resetStep } = useRegisterStore(({ resetStep }) => ({ resetStep }));
+  const { resetStep, resetInputs } = useRegisterStore(({ resetStep, resetInputs }) => ({ resetStep, resetInputs }));
   const navigate = useNavigate();
 
   const goLogin = () => {
     resetStep();
     navigate("/login");
+    resetInputs();
   };
   return (
     <>

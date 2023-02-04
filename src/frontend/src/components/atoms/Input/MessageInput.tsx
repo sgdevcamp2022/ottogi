@@ -14,6 +14,7 @@ const MessageInput = forwardRef(({ messageRef, value, onChange, placeholder = ""
 });
 
 const TextArea = styled.textarea`
+  line-height: 22px;
   vertical-align: middle;
   flex: 1;
   border: none;

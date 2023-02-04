@@ -14,6 +14,7 @@ interface RegisterAction {
   setUsername: (username: string) => void;
   setPassword: (password: string) => void;
   resetStep: () => void;
+  resetInputs: () => void;
 }
 
 export const useRegisterStore = create<RegisterState & RegisterAction>()(
@@ -28,5 +29,6 @@ export const useRegisterStore = create<RegisterState & RegisterAction>()(
     setUsername: (username: string) => set({ username }),
     setPassword: (password: string) => set({ password }),
     resetStep: () => set({ step: 1 }),
+    resetInputs: () => set({ email: "", username: "", password: "" }),
   }))
 );

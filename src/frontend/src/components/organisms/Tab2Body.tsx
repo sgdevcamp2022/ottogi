@@ -12,8 +12,6 @@ const Tab2Body = () => {
 };
 
 const Tab2BodyContainer = styled.div`
-  padding-left: 8px;
-  padding-right: 8px;
   flex: 1;
 `;
 

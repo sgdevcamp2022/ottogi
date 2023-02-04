@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { flexCenter } from "../../../styles/flexCenter";
 import DeleteIcon from "../../atoms/Icons/DeleteIcon";
 import EditIcon from "../../atoms/Icons/EditIcon";
 
@@ -18,22 +19,22 @@ const MessageHoverButtons = () => {
 const MessageHoverButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  border-radius: 4px;
-  border-color: ${({ theme }) => theme.backgroundColor.tab2};
-  background-color: ${({ theme }) => theme.backgroundColor.tab3};
-  position: absolute;
-  right: 1.875rem;
+  position: fixed;
+  z-index: 2;
+  right: 1rem;
   height: 32px;
-  margin-left: 32px;
-  margin-right: 14px;
   visibility: hidden;
   margin-top: -16px;
+  border-radius: 4px;
+  border: 2px solid ${({ theme }) => theme.backgroundColor.tab2};
+  background-color: ${({ theme }) => theme.backgroundColor.tab3};
   &:hover {
     box-shadow: 0px 1.5px 2px ${({ theme }) => theme.backgroundColor.tab2};
   }
 `;
 
 const IconWrapper = styled.div`
+  ${flexCenter}
   border-radius: 4px;
   height: 100%;
   width: 2rem;

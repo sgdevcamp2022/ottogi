@@ -16,6 +16,7 @@ const MessageUserDate = ({ username, createdAt }: MessageUserDateProps) => {
 };
 
 const TextHeader = styled.div`
+  margin-left: 1rem;
   margin-bottom: 0.5rem;
 `;
 

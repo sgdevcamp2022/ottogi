@@ -12,7 +12,7 @@ interface MessageLogProps {
   text: string;
 }
 
-const MessageLog = ({ text, hasImage = true, createdAt }: MessageLogProps) => {
+const MessageLog = ({ text, hasImage = false, createdAt }: MessageLogProps) => {
   return (
     <MessageLogContainer>
       <MessageHoverButtons />
@@ -30,11 +30,11 @@ const MessageLog = ({ text, hasImage = true, createdAt }: MessageLogProps) => {
 };
 
 const MessageLogContainer = styled.div`
-  height: 100%;
-  width: 100%;
-  padding: 2px 48px 2px 72px;
+  position: relative;
+  min-height: 1.375rem;
   display: flex;
   flex-direction: row;
+  align-items: center;
   &:hover {
     background-color: ${({ theme }) => theme.backgroundColor["msg-hover"]};
     .msg-hover,
@@ -45,13 +45,14 @@ const MessageLogContainer = styled.div`
 `;
 
 const LogoImageContainer = styled.div`
-  margin-left: -16px;
-  margin-right: 16px;
+  position: relative;
+  margin-left: 16px;
 `;
 
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 4px;
 `;
 
 export default MessageLog;

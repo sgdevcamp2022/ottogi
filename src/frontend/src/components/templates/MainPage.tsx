@@ -1,23 +1,20 @@
 import styled from "styled-components";
-import TabDivider from "../atoms/Div/TabDivider";
 import MainBody from "../organisms/MainBody";
 import Tab2Body from "../organisms/Tab2Body";
 import Tab2Footer from "../organisms/Tab2Footer";
-import Tab2Header from "../organisms/Tab2Header";
+import Tab2MainHeader from "../organisms/Tab2MainHeader";
 import Tab3Header from "../organisms/Tab3Header";
 
 const MainPage = () => {
   return (
     <>
       <Tab2Container>
-        <Tab2Header />
-        <TabDivider />
+        <Tab2MainHeader />
         <Tab2Body />
         <Tab2Footer username="nno3onn" />
       </Tab2Container>
       <Tab3Container>
         <Tab3Header />
-        <TabDivider />
         <MainBody />
       </Tab3Container>
     </>

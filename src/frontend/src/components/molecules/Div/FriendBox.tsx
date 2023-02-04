@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import useMainStore from "../../../store/useMainStore";
 import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
 import CancelIcon from "../../atoms/Icons/CancelIcon";
 import ChatIcon from "../../atoms/Icons/ChatIcon";
@@ -15,14 +15,10 @@ interface FriendBoxProps {
 }
 
 const FriendBox = ({ id, username, status = "온라인" }: FriendBoxProps) => {
-  const navigate = useNavigate();
-
-  const goChatRoom = () => {
-    navigate(`/${id}`);
-  };
+  const { setMainTab } = useMainStore(({ setMainTab }) => ({ setMainTab }));
 
   return (
-    <ButtonWrapper onClick={goChatRoom}>
+    <ButtonWrapper onClick={() => setMainTab(id.toString())}>
       <FriendBoxContainer>
         <UserContainer>
           <UserState32 />

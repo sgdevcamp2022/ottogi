@@ -14,7 +14,7 @@ const Main = () => {
       return navigate("/");
     }
     return navigate(`/${mainTab}`);
-  }, []);
+  }, [mainTab]);
 
   return (
     <>

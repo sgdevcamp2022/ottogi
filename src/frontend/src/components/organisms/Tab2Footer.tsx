@@ -27,9 +27,11 @@ const Tab2Footer = ({ username }: UserInfoBarProps) => {
 };
 
 const Tab2FooterContainer = styled.div`
+  position: fixed;
+  bottom: 0;
   background-color: ${({ theme }) => theme.backgroundColor["user-tab"]};
   height: 52px;
-  margin-bottom: 1px;
+  width: 240px;
   padding: 0 8px;
   display: flex;
   flex-direction: row;

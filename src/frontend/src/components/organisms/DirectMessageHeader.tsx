@@ -18,14 +18,14 @@ const DirectMessageHeader = ({ username, status }: DirectMessageHeaderProps) => 
 
   return (
     <DirectMessageHeaderContainer>
-      <RightContainer>
+      <LeftContainer>
         <AtIconWrapper>
           <AtIcon />
         </AtIconWrapper>
         <Text text={username} color="white" />
         <Status status={status} fontSize="14px" />
-      </RightContainer>
-      <LeftContainer>
+      </LeftContainer>
+      <RightContainer>
         <ButtonWrapper>
           <CallWifiIcon />
         </ButtonWrapper>
@@ -35,30 +35,33 @@ const DirectMessageHeader = ({ username, status }: DirectMessageHeaderProps) => 
         <ButtonWrapper>
           <SearchInput size="s" value={search} onChange={onChangeSearch} />
         </ButtonWrapper>
-      </LeftContainer>
+      </RightContainer>
     </DirectMessageHeaderContainer>
   );
 };
 
 const DirectMessageHeaderContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding: 0 8px;
 `;
 
 const AtIconWrapper = styled.div`
   color: ${({ theme }) => theme.color.icon};
-  margin-top: -0.3125rem;
+  margin-top: -0.25rem;
 `;
 
-const RightContainer = styled.div`
+const LeftContainer = styled.div`
+  padding-top: 0.5rem;
   display: flex;
   flex-direction: row;
   gap: 0.375rem;
 `;
 
-const LeftContainer = styled.div`
+const RightContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 16px;
