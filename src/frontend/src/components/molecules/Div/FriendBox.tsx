@@ -10,11 +10,11 @@ import UserState32 from "./UserState32";
 
 interface FriendBoxProps {
   id: number;
-  username: string;
+  name: string;
   status?: "온라인" | "오프라인" | "자리 비움" | "다른 용무 중" | "보낸 친구 요청";
 }
 
-const FriendBox = ({ id, username, status = "온라인" }: FriendBoxProps) => {
+const FriendBox = ({ id, name, status = "온라인" }: FriendBoxProps) => {
   const { setMainTab } = useMainStore(({ setMainTab }) => ({ setMainTab }));
 
   return (
@@ -23,7 +23,7 @@ const FriendBox = ({ id, username, status = "온라인" }: FriendBoxProps) => {
         <UserContainer>
           <UserState32 />
           <UserText>
-            <Text text={username} color="white" fontWeight="bold" />
+            <Text text={name} color="white" fontWeight="bold" />
             <Text text={status} fontSize="sm" color="auth-desc" />
           </UserText>
         </UserContainer>

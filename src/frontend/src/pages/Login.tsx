@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 import styled from "styled-components";
 import DefaultButton from "../components/atoms/Button/DefaultButton";
 import LinkText from "../components/atoms/Text/LinkText";
@@ -8,11 +9,31 @@ import useInput from "../hooks/common/useInput";
 import HeaderHelmet from "../components/atoms/Helmet";
 import AuthDesc from "../components/molecules/Text/AuthDesc";
 import LoginForm from "../components/molecules/Form/LoginForm";
+import authApi from "../api/auth";
+import { useUserStore } from "../store/useUserStore";
+
+interface UserDataType {
+  accessToken: string;
+  refreshToken: string;
+}
 
 const Login = () => {
+  const { setUserInfo } = useUserStore();
   const navigate = useNavigate();
   const [email, changeEmail] = useInput();
   const [password, changePassword] = useInput();
+
+  const { mutate: login } = useMutation(authApi.login, {
+    onSuccess: ({
+      data: {
+        data: { accessToken, refreshToken },
+      },
+    }: any) => {
+      console.log(accessToken);
+      setUserInfo({ email, accessToken, refreshToken });
+      navigate("/");
+    },
+  });
 
   const onLoadRegister = () => navigate("/register");
 
@@ -20,6 +41,7 @@ const Login = () => {
     if (!email || !password) {
       return;
     }
+    login({ email, password });
   };
 
   return (

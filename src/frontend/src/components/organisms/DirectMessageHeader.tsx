@@ -9,11 +9,11 @@ import { StateType } from "../molecules/Div/UserState32";
 import SearchInput from "../molecules/Input/SearchInput";
 
 interface DirectMessageHeaderProps {
-  username: string;
+  name: string;
   status: StateType;
 }
 
-const DirectMessageHeader = ({ username, status }: DirectMessageHeaderProps) => {
+const DirectMessageHeader = ({ name, status }: DirectMessageHeaderProps) => {
   const [search, onChangeSearch] = useInput();
 
   return (
@@ -22,7 +22,7 @@ const DirectMessageHeader = ({ username, status }: DirectMessageHeaderProps) => 
         <AtIconWrapper>
           <AtIcon />
         </AtIconWrapper>
-        <Text text={username} color="white" />
+        <Text text={name} color="white" />
         <Status status={status} fontSize="14px" />
       </LeftContainer>
       <RightContainer>

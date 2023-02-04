@@ -8,14 +8,14 @@ import UserInfoButton from "../molecules/Button/UserInfoButton";
 import UserOnOffButton from "../molecules/Button/UserOnOffButton";
 
 interface UserInfoBarProps {
-  username: string;
+  name: string;
 }
 
-const Tab2Footer = ({ username }: UserInfoBarProps) => {
+const Tab2Footer = ({ name }: UserInfoBarProps) => {
   return (
     <Tab2FooterContainer>
       <InfoContainer>
-        <UserInfoButton username={username} />
+        <UserInfoButton name={name} />
       </InfoContainer>
       <ButtonContainer>
         <UserOnOffButton OnIcon={<MicIcon />} OffIcon={<MicOffIcon />} onClick={() => {}} />

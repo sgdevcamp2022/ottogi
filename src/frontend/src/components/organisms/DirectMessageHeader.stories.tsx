@@ -5,4 +5,4 @@ export default {
   component: DirectMessageHeaderDiv,
 };
 
-export const DirectMessageHeader = () => <DirectMessageHeaderDiv username="junho" status="on" />;
+export const DirectMessageHeader = () => <DirectMessageHeaderDiv name="junho" status="on" />;

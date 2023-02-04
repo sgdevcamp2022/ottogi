@@ -11,7 +11,7 @@ const MainPage = () => {
       <Tab2Container>
         <Tab2MainHeader />
         <Tab2Body />
-        <Tab2Footer username="nno3onn" />
+        <Tab2Footer name="nno3onn" />
       </Tab2Container>
       <Tab3Container>
         <Tab3Header />

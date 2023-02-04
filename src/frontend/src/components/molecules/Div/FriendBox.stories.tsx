@@ -5,4 +5,4 @@ export default {
   component: FriendBoxDiv,
 };
 
-export const FriendBox = () => <FriendBoxDiv id={1} username="허다은" />;
+export const FriendBox = () => <FriendBoxDiv id={1} name="허다은" />;

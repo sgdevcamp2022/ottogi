@@ -7,7 +7,7 @@ const ServerInput = () => {
   const [text, setText] = useState("");
   return (
     <ServerInputContainer>
-      <Text text="서버 이름" color="black-2" fontWeight="bold" fontSize="xs" mb={10} />
+      {/* <Text text="서버 이름" color="black-2" fontWeight="bold" fontSize="xs" mb={10} /> */}
       <DefaultInput value={text} onChange={({ target: { value } }) => setText(value)} backgroundColor="grey-6" color="black-1" fontSize="base" />
       {/* <input
         value={text}
@@ -32,7 +32,7 @@ const ServerInputContainer = styled.div`
     font-size: ${({ theme }) => theme.fontSize.base};
     border: none;
     box-sizing: border-box;
-    color: ${({ theme }) => theme.color["black-1"]};
+    /* color: ${({ theme }) => theme.color["black-1"]}; */
     background-color: ${({ theme }) => theme.backgroundColor["grey-6"]};
     &:focus {
       outline: none;

@@ -7,7 +7,7 @@ const ServerLogoUpload = () => {
   return (
     <StyledBorder>
       <CameraIcon />
-      <Text text={"UPLOAD"} color={"grey-1"} fontWeight={"bold"} fontSize={"xs"} />
+      {/* <Text text={"UPLOAD"} color={"grey-1"} fontWeight={"bold"} fontSize={"xs"} /> */}
       <ServerAddIcon />
       <input type="file" tabIndex={0} accept=".jpg,.jpeg,.png,.gif" />
     </StyledBorder>

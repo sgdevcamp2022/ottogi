@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import useInput from "../../hooks/common/useInput";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
@@ -15,7 +16,7 @@ const MainWaiting = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"대기 중"} num={num} />
           {new Array(num).fill(null).map((v, idx) => (
-            <FriendBox id={idx} username="nno3onn" />
+            <FriendBox id={idx} name="nno3onn" />
           ))}
         </>
       ) : (

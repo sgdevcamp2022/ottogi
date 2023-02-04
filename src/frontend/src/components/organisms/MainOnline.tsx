@@ -18,7 +18,7 @@ const MainOnline = () => {
           <ScrollableBox>
             <>
               {new Array(num).fill(null).map((v, idx) => (
-                <FriendBox id={idx} username="nno3onn" />
+                <FriendBox id={idx} name="nno3onn" />
               ))}
             </>
           </ScrollableBox>
