@@ -1,7 +1,7 @@
 import CreateServerForm from "./CreateServerForm";
 
 export default {
-  title: "organisms/Server",
+  title: "Organisms/Server",
   component: CreateServerForm,
 };
 

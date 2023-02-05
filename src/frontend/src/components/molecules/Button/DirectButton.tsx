@@ -6,12 +6,12 @@ import UserState, { StateType } from "../Div/UserState32";
 
 interface DirectButtonProps {
   id: number;
-  username: string;
+  name: string;
   active?: boolean;
   status?: StateType;
 }
 
-const DirectButton = ({ id, username, active = false, status = "on" }: DirectButtonProps) => {
+const DirectButton = ({ id, name, active = false, status = "on" }: DirectButtonProps) => {
   const { mainTab, setMainTab } = useMainStore(({ mainTab, setMainTab }) => ({ mainTab, setMainTab }));
 
   const goChatRoom = () => {
@@ -22,7 +22,7 @@ const DirectButton = ({ id, username, active = false, status = "on" }: DirectBut
     <ButtonWrapper active={Number(mainTab) === id} onClick={goChatRoom} height={42}>
       <DirectButtonContainer>
         <UserState status={status} />
-        <Text text={username} />
+        <Text text={name} />
       </DirectButtonContainer>
     </ButtonWrapper>
   );

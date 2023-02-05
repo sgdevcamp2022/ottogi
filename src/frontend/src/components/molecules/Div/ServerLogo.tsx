@@ -4,7 +4,10 @@ import styled from "styled-components";
 const ServerLogo = () => {
   return (
     <ServerContainer>
-      <ServerImage onMouseover={() => console.log(1)} onClick={() => console.log(1)} />
+      <ServerImage
+        onMouseover={() => console.log(1)}
+        onClick={() => console.log(1)}
+      />
       <Alarm>+999</Alarm>
       {/* 999 이상이면 +999로 띄워주기*/}
     </ServerContainer>

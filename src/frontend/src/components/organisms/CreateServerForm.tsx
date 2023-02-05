@@ -9,6 +9,7 @@ const CreateServerForm = () => {
   return (
     <ServerModal width={440}>
       <ServerContainer>
+        <CreateServerText />
         <ServerLogoUpload />
         <ServerInput />
         <Bottom>

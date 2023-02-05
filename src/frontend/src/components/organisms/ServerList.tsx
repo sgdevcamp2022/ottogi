@@ -5,12 +5,18 @@ import ServerImage from "../atoms/Div/ServerImage";
 const ServerList = () => {
   return (
     <BarContainer>
-      <ServerImage onMouseover={() => console.log(1)} onClick={() => console.log(1)} />
+      <ServerImage
+        onMouseover={() => console.log(1)}
+        onClick={() => console.log(1)}
+      />
       <Divider />
       <ul>
         <li>
           <ClickedWrapper />
-          <ServerImage onMouseover={() => console.log(1)} onClick={() => console.log(1)} />
+          <ServerImage
+            onMouseover={() => console.log(1)}
+            onClick={() => console.log(1)}
+          />
         </li>
       </ul>
     </BarContainer>
@@ -26,7 +32,7 @@ const BarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 0.75rem;
-  background-color: ${({ theme }) => theme.backgroundColor["black-1"]};
+  background-color: ${({ theme }) => theme.backgroundColor.tab1};
   ul {
     padding: 0;
     margin: 0;

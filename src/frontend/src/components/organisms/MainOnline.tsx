@@ -2,7 +2,7 @@ import styled from "styled-components";
 import useInput from "../../hooks/common/useInput";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
-import FriendBox from "../molecules/Div/FriendBox";
+import FriendDefaultBox from "../molecules/Div/FriendDefaultBox";
 import ScrollableBox from "../molecules/Div/scrollableBox";
 import LabelText from "../molecules/Text/LabelText";
 
@@ -18,7 +18,7 @@ const MainOnline = () => {
           <ScrollableBox>
             <>
               {new Array(num).fill(null).map((v, idx) => (
-                <FriendBox id={idx} username="nno3onn" />
+                <FriendDefaultBox id={idx} name="nno3onn" />
               ))}
             </>
           </ScrollableBox>

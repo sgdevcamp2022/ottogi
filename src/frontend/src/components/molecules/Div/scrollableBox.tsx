@@ -10,7 +10,7 @@ const ScrollableBox = ({ children }: ScrollableBoxProps) => {
 };
 
 const ScrollableContainer = styled.div`
-  background-color: red;
+  /* background-color: red; */
   width: 100%;
   overflow-y: auto;
 
@@ -19,11 +19,13 @@ const ScrollableContainer = styled.div`
   }
   ::-webkit-scrollbar-thumb {
     height: 30%; /* 스크롤바의 길이 */
-    background: ${({ theme }) => theme.backgroundColor.tab1}; /* 스크롤바의 색상 */
+    background: ${({ theme }) =>
+      theme.backgroundColor.tab1}; /* 스크롤바의 색상 */
     border-radius: 25px;
   }
   ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.backgroundColor.tab2}; /*스크롤바 뒷 배경 색상*/
+    background: ${({ theme }) =>
+      theme.backgroundColor.tab2}; /*스크롤바 뒷 배경 색상*/
   }
 `;
 

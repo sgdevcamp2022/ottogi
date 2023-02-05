@@ -20,7 +20,13 @@ const SettingButton = ({
   disabled = false,
 }: SettingButtonProps) => {
   return (
-    <SettingButtonContainer disabled={disabled} onClick={onClick} fontWeight={fontWeight} color={color} backgroundColor={backgroundColor}>
+    <SettingButtonContainer
+      disabled={disabled}
+      onClick={onClick}
+      fontWeight={fontWeight}
+      color={color}
+      backgroundColor={backgroundColor}
+    >
       {text}
     </SettingButtonContainer>
   );
@@ -40,14 +46,15 @@ export const SettingButtonContainer = styled.button<{
   padding: 6px;
   box-sizing: border-box;
   color: ${({ theme, color }) => theme.color[color]};
-  background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
+  background-color: ${({ theme, backgroundColor }) =>
+    theme.backgroundColor[backgroundColor]};
   font-weight: ${({ fontWeight }) => fontWeight};
   border-radius: 4px;
   cursor: pointer;
   &:hover {
     opacity: 1;
     color: ${({ theme }) => theme.color["white"]};
-    background-color: ${({ theme }) => theme.backgroundColor["grey-3"]};
+    background-color: ${({ theme }) => theme.backgroundColor["setting"]};
   }
 `;
 

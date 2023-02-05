@@ -1,7 +1,7 @@
 import ServerSettingBar from "./ServerSettingBar";
 
 export default {
-  title: "organisms/ServerSetting",
+  title: "Organisms/ServerSetting",
   component: ServerSettingBar,
 };
 

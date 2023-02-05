@@ -10,7 +10,7 @@ const Tab3Header = () => {
 
   return (
     <Tab3HeaderContainer>
-      <HeaderWrapper>{userId ? <DirectMessageHeader username="허다은" status="on" /> : <FriendHeader />}</HeaderWrapper>
+      <HeaderWrapper>{userId ? <DirectMessageHeader name="허다은" status="on" /> : <FriendHeader />}</HeaderWrapper>
       <TabDivider />
     </Tab3HeaderContainer>
   );

@@ -7,7 +7,7 @@ import MessageUserDate from "./MessageUserDate";
 interface MessageLogProps {
   hasImage?: boolean;
   imageUrl?: string;
-  username?: string;
+  name?: string;
   createdAt: Date;
   text: string;
 }
@@ -22,7 +22,7 @@ const MessageLog = ({ text, hasImage = false, createdAt }: MessageLogProps) => {
         </LogoImageContainer>
       )}
       <TextContainer>
-        {hasImage && <MessageUserDate username="nno3onn" createdAt={new Date()} />}
+        {hasImage && <MessageUserDate name="nno3onn" createdAt={new Date()} />}
         <MessageText text={text} hasDate={!hasImage} />
       </TextContainer>
     </MessageLogContainer>

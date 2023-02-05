@@ -8,11 +8,14 @@ import useInput from "../hooks/common/useInput";
 import HeaderHelmet from "../components/atoms/Helmet";
 import AuthDesc from "../components/molecules/Text/AuthDesc";
 import LoginForm from "../components/molecules/Form/LoginForm";
+import useLogin from "../hooks/query/useLogin";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, changeEmail] = useInput();
   const [password, changePassword] = useInput();
+
+  const { mutate: login } = useLogin(email);
 
   const onLoadRegister = () => navigate("/register");
 
@@ -20,6 +23,7 @@ const Login = () => {
     if (!email || !password) {
       return;
     }
+    login({ email, password });
   };
 
   return (

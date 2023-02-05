@@ -6,7 +6,12 @@ const MessageFooter = () => {
   const [value, onChange] = useInput();
   return (
     <MessageFooterContainer>
-      <MessageBox value={value} onChange={onChange} onClick={() => {}} nickname="허다은" />
+      <MessageBox
+        value={value}
+        onChange={onChange}
+        onClick={() => {}}
+        nickname="허다은"
+      />
     </MessageFooterContainer>
   );
 };
@@ -14,7 +19,7 @@ const MessageFooter = () => {
 const MessageFooterContainer = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor.tab3};
   width: 100%;
-  position: sticky;
+  position: absolute;
   bottom: 0;
   padding: 0 16px 24px 16px;
 `;

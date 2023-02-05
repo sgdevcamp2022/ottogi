@@ -42,17 +42,18 @@ interface TextButtonContainerProps {
 const TextButtonContainer = styled.span<TextButtonContainerProps>`
   display: inline-block;
   color: ${({ theme, color }) => theme.color[color]};
-  background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
-  font-size: ${({ theme }) => theme.fontSize.base};
-  font-weight: 500;
-  border-radius: 0.25rem;
+  background-color: ${({ theme, backgroundColor }) =>
+    theme.backgroundColor[backgroundColor]};
+  font-weight: bold;
+  border-radius: 4px;
   text-align: center;
   margin: 0 0.5rem;
   padding: 0.125rem 0.5rem;
   cursor: pointer;
   &:hover {
     color: ${({ theme, hoverColor }) => theme.color[hoverColor]};
-    background-color: ${({ theme, hoverBackgroundColor }) => theme.backgroundColor[hoverBackgroundColor]};
+    background-color: ${({ theme, hoverBackgroundColor }) =>
+      theme.backgroundColor[hoverBackgroundColor]};
   }
 `;
 

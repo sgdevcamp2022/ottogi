@@ -1,24 +1,38 @@
+import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
+import friendApi from "../../api/friend";
 import useInput from "../../hooks/common/useInput";
+import useGetFriendList from "../../hooks/query/useGetFriendList";
 import useMainStore from "../../store/useMainStore";
+import { useUserStore } from "../../store/useUserStore";
 import DefaultButton from "../atoms/Button/DefaultButton";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
-import FriendBox from "../molecules/Div/FriendBox";
+import FriendDefaultBox from "../molecules/Div/FriendDefaultBox";
 import LabelText from "../molecules/Text/LabelText";
 
 const MainTotal = () => {
   const { setMainStatus } = useMainStore(({ setMainStatus }) => ({ setMainStatus }));
+  const { userInfo } = useUserStore();
+  const { data, isSuccess } = useGetFriendList(userInfo);
+
   const num = 0;
   const [value, onChangeValue] = useInput();
+
+  if (!isSuccess) return;
+
+  //!todo !!!
+  // const friendList: FriendListType[] = data.data;
+  const friendList: any[] = data.data;
+
   return (
     <MainTotalContainer>
       {num > 0 ? (
         <>
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"모든 친구"} num={num} />
-          {new Array(num).fill(null).map((v, idx) => (
-            <FriendBox id={idx} username="nno3onn" />
+          {friendList.map((friend, idx) => (
+            <FriendDefaultBox id={idx} name={friend.receiver} />
           ))}
         </>
       ) : (
@@ -34,10 +48,6 @@ const MainTotal = () => {
 };
 
 const MainTotalContainer = styled.div``;
-
-const SearchInputContainer = styled.div`
-  padding: 0 0.5rem;
-`;
 
 const ButtonWrapper = styled.div`
   margin-top: 20px;
