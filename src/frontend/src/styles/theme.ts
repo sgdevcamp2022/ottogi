@@ -1,4 +1,12 @@
-export type FontSizeType = "xxs" | "xs" | "sm" | "base" | "lg" | "xl" | "xxl" | "xxxl";
+export type FontSizeType =
+  | "xxs"
+  | "xs"
+  | "sm"
+  | "base"
+  | "lg"
+  | "xl"
+  | "xxl"
+  | "xxxl";
 
 export type BackgroundColorType =
   | "trans"
@@ -22,7 +30,11 @@ export type BackgroundColorType =
   | "add-friend"
   | "random-green"
   | "voice-hangup"
-  | "alert";
+  | "alert"
+  | "server-input"
+  | "server-footer"
+  | "server-subtitle"
+  | "black";
 
 export type ColorType =
   | "inherit"
@@ -45,9 +57,16 @@ export type ColorType =
   | "red"
   | "blue"
   | "invite-success"
-  | "invite-danger";
+  | "invite-danger"
+  | "black"
+  | "server-subtitle";
 
-export type BorderColorType = "divider" | "default" | "focus" | "success" | "danger";
+export type BorderColorType =
+  | "divider"
+  | "default"
+  | "focus"
+  | "success"
+  | "danger";
 
 export type StatusColorType = "on" | "off" | "empty" | "mobile" | "disturb";
 
@@ -85,6 +104,10 @@ interface BackgroundColor {
   "random-green": string;
   "voice-hangup": string;
   alert: string;
+  "server-input": string;
+  "server-footer": string;
+  "server-subtitle": string;
+  black: string;
 }
 
 interface Color {
@@ -109,6 +132,8 @@ interface Color {
   blue: string;
   "invite-success": string;
   "invite-danger": string;
+  black: string;
+  "server-subtitle": string;
 }
 
 interface BorderColor {
@@ -136,8 +161,8 @@ interface ThemeType {
 
 const theme: ThemeType = {
   fontSize: {
-    xxs: ".625rem", //10px
-    xs: ".75rem", // 12px
+    xxs: "0.625rem", //10px
+    xs: "0.75rem", //12px
     sm: ".875rem", // 14px
     base: "1rem", // 16px
     lg: "1.125rem", // 18px
@@ -159,7 +184,7 @@ const theme: ThemeType = {
     tab3: "#36393F",
     tab2: "#2F3136",
     "user-tab": "#292B2F",
-    "voice-nobody": "#20222501",
+    "voice-nobody": "#202225",
     "voice-icon": "#2F3136",
     tab1: "#202225",
     "voice-modal": "#18191C",
@@ -168,6 +193,10 @@ const theme: ThemeType = {
     "random-green": "#3DA45C",
     "voice-hangup": "#ED4245",
     alert: "#e4ac56",
+    "server-input": "#E3E5E8",
+    "server-footer": "#F2F3F5",
+    "server-subtitle": "#4F5660",
+    black: "#000",
   },
   color: {
     inherit: "inherit",
@@ -185,12 +214,14 @@ const theme: ThemeType = {
     inactive: "#96989D",
     "hangup-log": "#96989D",
     "setting-header": "#96989D",
+    "server-subtitle": "#4F5660",
     "tab1-plus": "#3BA55D",
     "voice-modal": "#18191C",
     red: "#ED4245",
     blue: "#00AFF4",
     "invite-success": "#46c46e",
     "invite-danger": "#f38688",
+    black: "#000",
   },
   borderColor: {
     divider: "#4F545C7A",

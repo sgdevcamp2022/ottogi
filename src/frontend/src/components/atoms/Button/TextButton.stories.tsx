@@ -5,4 +5,11 @@ export default {
   component: TextButton,
 };
 
-export const Text = () => <TextButton text="온라인" color="white" backgroundColor="hover" onClick={() => console.log(1)} />;
+export const Text = () => (
+  <TextButton
+    text="온라인"
+    color="white"
+    backgroundColor="hover"
+    onClick={() => console.log(1)}
+  />
+);

@@ -1,6 +1,10 @@
 import { ChangeEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType, ColorType, FontSizeType } from "../../../styles/theme";
+import {
+  BackgroundColorType,
+  ColorType,
+  FontSizeType,
+} from "../../../styles/theme";
 
 interface DefaultInputProps {
   value: string;
@@ -61,7 +65,8 @@ const DefaultInputContainer = styled.input<DefaultInputContainerProps>`
   color: ${({ theme, color }) => theme.color[color]};
   font-weight: 500;
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
-  background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
+  background-color: ${({ theme, backgroundColor }) =>
+    theme.backgroundColor[backgroundColor]};
   ::placeholder {
     color: ${({ theme, placeholderColor }) => theme.color[placeholderColor]};
   }
