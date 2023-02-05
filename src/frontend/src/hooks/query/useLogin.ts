@@ -18,7 +18,7 @@ const useLogin = (email: string) => {
     }: any) => {
       setCookie(COOKIE_KEY, refreshToken);
       setUserInfo({ email, accessToken });
-      navigate("/");
+      navigate("/@me");
     },
   });
 };
