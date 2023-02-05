@@ -1,4 +1,12 @@
-export type FontSizeType = "xxs" | "xs" | "sm" | "base" | "lg" | "xl" | "xxl" | "xxxl";
+export type FontSizeType =
+  | "xxs"
+  | "xs"
+  | "sm"
+  | "base"
+  | "lg"
+  | "xl"
+  | "xxl"
+  | "xxxl";
 
 export type BackgroundColorType =
   | "trans"
@@ -20,9 +28,14 @@ export type BackgroundColorType =
   | "msg-hover"
   | "add-friend"
   | "random-green"
-  | "voice-hangup";
+  | "voice-hangup"
+  | "server-input"
+  | "server-footer"
+  | "server-subtitle"
+  | "black";
 export type ColorType =
   | "white"
+  | "icon"
   | "msg-placeholder"
   | "auth-label"
   | "auth-desc"
@@ -37,7 +50,8 @@ export type ColorType =
   | "tab1-plus"
   | "voice-modal"
   | "red"
-  | "blue";
+  | "blue"
+  | "black";
 
 export type BorderColorType = "divider" | "default" | "focus" | "success";
 interface FontSize {
@@ -72,10 +86,15 @@ interface BackgroundColor {
   "add-friend": string;
   "random-green": string;
   "voice-hangup": string;
+  "server-input": string;
+  "server-footer": string;
+  "server-subtitle": string;
+  black: string;
 }
 
 interface Color {
   white: string;
+  icon: string;
   "msg-placeholder": string;
   "auth-label": string;
   "auth-desc": string;
@@ -91,6 +110,7 @@ interface Color {
   "voice-modal": string;
   red: string;
   blue: string;
+  black: string;
 }
 
 interface BorderColor {
@@ -109,14 +129,14 @@ interface ThemeType {
 
 const theme: ThemeType = {
   fontSize: {
-    xxs: "10px", //.625rem
-    xs: "12px", // .75rem
-    sm: ".875rem", // .875rem
-    base: "1rem", // 1rem
-    lg: "1.125rem", // 1.125rem
-    xl: "1.25rem", // 1.25rem
-    xxl: "1.5rem", // 1.5rem
-    xxxl: "2.25rem", // 2.25rem
+    xxs: "0.625rem", //10px
+    xs: "0.75rem", //12px
+    sm: ".875rem", // 14px
+    base: "1rem", // 16px
+    lg: "1.125rem", // 18px
+    xl: "1.25rem", // 20px
+    xxl: "1.5rem", // 24px
+    xxxl: "2.25rem", // 32px
   },
   backgroundColor: {
     trans: "transparent",
@@ -131,7 +151,7 @@ const theme: ThemeType = {
     tab3: "#36393F",
     tab2: "#2F3136",
     "user-tab": "#292B2F",
-    "voice-nobody": "#20222501",
+    "voice-nobody": "#202225",
     "voice-icon": "#2F3136",
     tab1: "#202225",
     "voice-modal": "#18191C",
@@ -139,9 +159,14 @@ const theme: ThemeType = {
     "add-friend": "#2D7D46",
     "random-green": "#3DA45C",
     "voice-hangup": "#ED4245",
+    "server-input": "#E3E5E8",
+    "server-footer": "#F2F3F5",
+    "server-subtitle": "#4F5660",
+    black: "#000",
   },
   color: {
     white: "#FFFFFF",
+    icon: "#F6F6F7",
     "msg-placeholder": "#DCDDDE",
     "auth-label": "#A3A6AA91",
     "auth-desc": "#A3A6AA92",
@@ -157,6 +182,7 @@ const theme: ThemeType = {
     "voice-modal": "#18191C",
     red: "#ED4245",
     blue: "#00AFF4",
+    black: "#000",
   },
   borderColor: {
     divider: "#4F545C7A",
