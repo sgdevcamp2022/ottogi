@@ -21,7 +21,7 @@ const DefaultInput = ({
   placeholder = "",
   fontSize = "base",
   color = "white",
-  backgroundColor = "black-1",
+  backgroundColor = "msg-hover",
 }: DefaultInputProps) => {
   return (
     <DefaultInputContainer

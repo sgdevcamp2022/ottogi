@@ -2,7 +2,7 @@ import { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { BackgroundColorType, ColorType } from "../../../styles/theme";
 
-interface SettingButtonProps {
+interface ButtonProps {
   text: string;
   onClick: MouseEventHandler<HTMLButtonElement>;
   fontWeight?: "normal" | "bold";
@@ -11,16 +11,16 @@ interface SettingButtonProps {
   disabled?: boolean;
 }
 
-const SettingButton = ({
+const FieldButton = ({
   text,
   onClick,
   fontWeight = "normal",
   color = "white",
   backgroundColor = "primary",
   disabled = false,
-}: SettingButtonProps) => {
+}: ButtonProps) => {
   return (
-    <SettingButtonContainer
+    <ButtonContainer
       disabled={disabled}
       onClick={onClick}
       fontWeight={fontWeight}
@@ -28,23 +28,21 @@ const SettingButton = ({
       backgroundColor={backgroundColor}
     >
       {text}
-    </SettingButtonContainer>
+    </ButtonContainer>
   );
 };
 
-export const SettingButtonContainer = styled.button<{
+export const ButtonContainer = styled.button<{
   color: ColorType;
   backgroundColor: BackgroundColorType;
   fontWeight: "normal" | "bold";
 }>`
-  margin-bottom: 4px;
-  text-align: left;
+  text-align: center;
   border: none;
   width: 100%;
   height: 100%;
-  font-size: 16px;
-  padding: 6px;
-  box-sizing: border-box;
+  font-size: 14px;
+  padding: 0.125rem 1rem;
   color: ${({ theme, color }) => theme.color[color]};
   background-color: ${({ theme, backgroundColor }) =>
     theme.backgroundColor[backgroundColor]};
@@ -58,4 +56,4 @@ export const SettingButtonContainer = styled.button<{
   }
 `;
 
-export default SettingButton;
+export default FieldButton;
