@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
 import styled from "styled-components";
 import DefaultButton from "../components/atoms/Button/DefaultButton";
 import LinkText from "../components/atoms/Text/LinkText";
@@ -10,11 +9,6 @@ import HeaderHelmet from "../components/atoms/Helmet";
 import AuthDesc from "../components/molecules/Text/AuthDesc";
 import LoginForm from "../components/molecules/Form/LoginForm";
 import useLogin from "../hooks/query/useLogin";
-
-interface UserDataType {
-  accessToken: string;
-  refreshToken: string;
-}
 
 const Login = () => {
   const navigate = useNavigate();

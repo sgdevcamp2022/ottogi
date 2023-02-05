@@ -1,5 +1,9 @@
 import clientApi from "./axios";
 
+interface ReissueParams {
+  accessToken: string;
+  refreshToken: string;
+}
 interface LoginParams {
   email: string;
   password: string;
@@ -16,8 +20,13 @@ const authApi = {
   register: async ({ email, name, password }: RegisterParams) => {
     return await clientApi.post("/user/auth/register", { email, name, password });
   },
+
   verify: async (userCode: string) => {
     return await clientApi.post("/user/auth/email", { userCode });
+  },
+
+  reissue: async ({ accessToken, refreshToken }: ReissueParams) => {
+    return await clientApi.post("/user/auth/reissue", { accessToken, refreshToken });
   },
 };
 

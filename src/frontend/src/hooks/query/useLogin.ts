@@ -1,9 +1,12 @@
+import { useCookies } from "react-cookie";
 import { useUserStore } from "./../../store/useUserStore";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import authApi from "../../api/auth";
+import { COOKIE_KEY } from "../../configs/cookie";
 
 const useLogin = (email: string) => {
+  const [cookies, setCookie] = useCookies([COOKIE_KEY]);
   const { setUserInfo } = useUserStore();
   const navigate = useNavigate();
 
@@ -13,8 +16,8 @@ const useLogin = (email: string) => {
         data: { accessToken, refreshToken },
       },
     }: any) => {
-      console.log(accessToken);
-      setUserInfo({ email, accessToken, refreshToken });
+      setCookie(COOKIE_KEY, refreshToken);
+      setUserInfo({ email, accessToken });
       navigate("/");
     },
   });
