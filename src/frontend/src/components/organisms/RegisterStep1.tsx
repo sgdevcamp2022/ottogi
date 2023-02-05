@@ -1,7 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import authApi from "../../api/auth";
 import useInput from "../../hooks/common/useInput";
+import useSendEmail from "../../hooks/query/useSendEmail";
 import { useRegisterStore } from "../../store/useRegisterStore";
 import validateEmail from "../../utils/validateEmail";
 import DefaultButton from "../atoms/Button/DefaultButton";
@@ -16,7 +15,7 @@ const RegisterStep1 = () => {
   const [name, changeName] = useInput();
   const [password, changePassword] = useInput();
 
-  const { data, isLoading, isError, isSuccess, mutate: sendEmail } = useMutation(authApi.register);
+  const { mutate: sendEmail } = useSendEmail();
 
   const onLoadLogin = () => navigate("/login");
 

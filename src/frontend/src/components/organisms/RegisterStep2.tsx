@@ -1,7 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
 import styled from "styled-components";
-import authApi from "../../api/auth";
 import useInput from "../../hooks/common/useInput";
+import useRegister from "../../hooks/query/useRegister";
+import useSendUserCode from "../../hooks/query/useSendUserCode";
 import { useRegisterStore } from "../../store/useRegisterStore";
 import DefaultButton from "../atoms/Button/DefaultButton";
 import LinkText from "../atoms/Text/LinkText";
@@ -10,20 +10,10 @@ import AuthDesc from "../molecules/Text/AuthDesc";
 import AuthHeader from "../molecules/Text/AuthHeader";
 
 const RegisterStep2 = () => {
-  const { email, name, password, setStep } = useRegisterStore(({ email, name, password, setStep }) => ({
-    email,
-    name,
-    password,
-    setStep,
-  }));
-  const { mutate: sendEmail } = useMutation(authApi.register, { onSettled: () => {} });
-  const { mutate: sendUserCode } = useMutation(authApi.verify, {
-    onSuccess: () => {
-      console.log("success");
-      setStep(3);
-    },
-  });
+  const { email, name, password } = useRegisterStore();
   const [userCode, onChangeUserCode] = useInput();
+  const { mutate: sendEmail } = useRegister();
+  const { mutate: sendUserCode } = useSendUserCode();
 
   const resendEmail = () => {
     sendEmail({ email, name, password });

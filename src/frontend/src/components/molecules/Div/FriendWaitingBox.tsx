@@ -1,6 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import friendApi from "../../../api/friend";
+import useAcceptFriend from "../../../hooks/query/useAcceptFriend";
+import useCancelFriend from "../../../hooks/query/useCancelFriend";
+import useRejectFriend from "../../../hooks/query/useRejectFriend";
 import { useUserStore } from "../../../store/useUserStore";
 import CancelIcon from "../../atoms/Icons/CancelIcon";
 import CheckIcon from "../../atoms/Icons/CheckIcon";
@@ -16,11 +19,11 @@ interface FriendWaitingBoxProps {
 
 const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
   const { userInfo } = useUserStore();
-  const { mutate: acceptFriend } = useMutation(friendApi.accept);
-  const { mutate: rejectFriend } = useMutation(friendApi.reject);
-  const { mutate: cancelFriend } = useMutation(friendApi.cancel);
+  const { mutate: acceptFriend } = useAcceptFriend();
+  const { mutate: rejectFriend } = useRejectFriend();
+  const { mutate: cancelFriend } = useCancelFriend();
 
-  if (!userInfo) return;
+  if (!userInfo) return <></>;
 
   const params = { email: userInfo.email, accessToken: userInfo.accessToken };
 

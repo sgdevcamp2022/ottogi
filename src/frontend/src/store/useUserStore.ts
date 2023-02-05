@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-type UserInfoType = null | {
+export type UserInfoType = null | {
   email: string;
   accessToken: string;
   refreshToken: string;

@@ -9,8 +9,7 @@ import useInput from "../hooks/common/useInput";
 import HeaderHelmet from "../components/atoms/Helmet";
 import AuthDesc from "../components/molecules/Text/AuthDesc";
 import LoginForm from "../components/molecules/Form/LoginForm";
-import authApi from "../api/auth";
-import { useUserStore } from "../store/useUserStore";
+import useLogin from "../hooks/query/useLogin";
 
 interface UserDataType {
   accessToken: string;
@@ -18,22 +17,11 @@ interface UserDataType {
 }
 
 const Login = () => {
-  const { setUserInfo } = useUserStore();
   const navigate = useNavigate();
   const [email, changeEmail] = useInput();
   const [password, changePassword] = useInput();
 
-  const { mutate: login } = useMutation(authApi.login, {
-    onSuccess: ({
-      data: {
-        data: { accessToken, refreshToken },
-      },
-    }: any) => {
-      console.log(accessToken);
-      setUserInfo({ email, accessToken, refreshToken });
-      navigate("/");
-    },
-  });
+  const { mutate: login } = useLogin(email);
 
   const onLoadRegister = () => navigate("/register");
 

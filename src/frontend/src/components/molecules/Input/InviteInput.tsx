@@ -1,7 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
-import friendApi from "../../../api/friend";
+import useRequestFriend from "../../../hooks/query/useRequestFriend";
 import { useUserStore } from "../../../store/useUserStore";
 import DefaultButton from "../../atoms/Button/DefaultButton";
 import DefaultInput from "../../atoms/Input/DefaultInput";
@@ -11,7 +10,7 @@ const InviteInput = () => {
   const { userInfo } = useUserStore();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("default");
-  const { mutate: requestFriend } = useMutation(friendApi.request, {
+  const { mutate: requestFriend } = useRequestFriend({
     onError: () => {
       setEmail("");
       setStatus("danger");

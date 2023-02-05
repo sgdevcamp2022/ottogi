@@ -1,10 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import useInput from "../../hooks/common/useInput";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
-import FriendWaitingBox from "../molecules/Div/FriendWaitingBox";
 import LabelText from "../molecules/Text/LabelText";
+import FriendWaitingBox from "../molecules/Div/FriendWaitingBox";
 
 const MainWaiting = () => {
   const [value, onChangeValue] = useInput();

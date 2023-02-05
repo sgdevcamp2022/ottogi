@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import friendApi from "../../api/friend";
 import useInput from "../../hooks/common/useInput";
+import useGetFriendList from "../../hooks/query/useGetFriendList";
 import useMainStore from "../../store/useMainStore";
 import { useUserStore } from "../../store/useUserStore";
 import DefaultButton from "../atoms/Button/DefaultButton";
@@ -13,14 +14,16 @@ import LabelText from "../molecules/Text/LabelText";
 const MainTotal = () => {
   const { setMainStatus } = useMainStore(({ setMainStatus }) => ({ setMainStatus }));
   const { userInfo } = useUserStore();
-  const { data, isSuccess } = useQuery(["friend", { email: userInfo?.email, accessToken: userInfo?.accessToken }], friendApi.getAll);
+  const { data, isSuccess } = useGetFriendList(userInfo);
 
   const num = 0;
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return;
 
-  const friendList: FriendListType[] = data.data;
+  //!todo !!!
+  // const friendList: FriendListType[] = data.data;
+  const friendList: any[] = data.data;
 
   return (
     <MainTotalContainer>
