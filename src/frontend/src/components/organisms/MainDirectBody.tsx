@@ -32,6 +32,7 @@ const MainDirectBody = () => {
 };
 
 const MainDirectBodyContainer = styled.div`
+  position: relative;
   height: calc(100% - 68px);
   flex: 1;
   display: flex;

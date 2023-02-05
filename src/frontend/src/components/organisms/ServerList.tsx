@@ -32,7 +32,7 @@ const BarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 0.75rem;
-  background-color: ${({ theme }) => theme.backgroundColor["black"]};
+  background-color: ${({ theme }) => theme.backgroundColor.tab1};
   ul {
     padding: 0;
     margin: 0;

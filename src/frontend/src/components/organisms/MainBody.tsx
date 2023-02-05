@@ -19,7 +19,10 @@ const getBodyByStatus = (status: MainStatusType) => {
 };
 
 const MainBody = () => {
-  const { mainTab, mainStatus } = useMainStore(({ mainTab, mainStatus }) => ({ mainTab, mainStatus }));
+  const { mainTab, mainStatus } = useMainStore(({ mainTab, mainStatus }) => ({
+    mainTab,
+    mainStatus,
+  }));
 
   if (mainTab === "친구") {
     return <MainFreindBody>{getBodyByStatus(mainStatus)}</MainFreindBody>;
