@@ -31,6 +31,7 @@ const MyAccount = () => {
           <FieldButton
             text="비밀번호 변경하기"
             onClick={() => console.log(1)}
+            fontWeight="bold"
           />
         </ButtonWrappper>
         <Divider
@@ -42,6 +43,7 @@ const MyAccount = () => {
             text="계정 삭제하기"
             onClick={() => console.log(1)}
             backgroundColor="voice-hangup"
+            fontWeight="bold"
           />
         </ButtonWrappper2>
       </>
@@ -52,7 +54,7 @@ const MyAccount = () => {
 export default MyAccount;
 
 const ButtonWrappper = styled.div`
-  width: 8.5rem;
+  width: 10em;
   height: 2rem;
 `;
 

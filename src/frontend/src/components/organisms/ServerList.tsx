@@ -12,7 +12,7 @@ const ServerList = () => {
       <Divider />
       <ul>
         <li>
-          <ClickedWrapper />
+          {/* <ClickedWrapper /> */}
           <ServerImage
             onMouseover={() => console.log(1)}
             onClick={() => console.log(1)}
@@ -33,11 +33,13 @@ const BarContainer = styled.div`
   align-items: center;
   padding-top: 0.75rem;
   background-color: ${({ theme }) => theme.backgroundColor.tab1};
+  position: relative;
   ul {
     padding: 0;
     margin: 0;
     list-style: none;
     width: 100%;
+    position: relative;
   }
   li {
     width: 100%;

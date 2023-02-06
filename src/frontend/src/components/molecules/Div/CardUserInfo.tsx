@@ -8,12 +8,6 @@ const CardUserInfo = () => {
       <Logo />
       <NameWrapper>
         <Text text="UserName" fontSize="lg" fontWeight="bold" color="white" />
-        <Text
-          text="UserName"
-          fontSize="lg"
-          fontWeight="bold"
-          color="setting-tab"
-        />
       </NameWrapper>
       <>
         <ButtonWrappper>
