@@ -11,9 +11,9 @@ const Main = () => {
 
   useEffect(() => {
     if (mainTab === "친구") {
-      return navigate("/");
+      return navigate("/@me");
     }
-    return navigate(`/${mainTab}`);
+    return navigate(`/@me/${mainTab}`);
   }, [mainTab]);
 
   return (

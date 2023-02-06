@@ -1,16 +1,63 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Main from "../pages/Main";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Server from "../pages/Server";
+import ProtectAuth from "../components/organisms/ProtectAuth";
+import ProtectPage from "../components/organisms/ProtectHome";
 import NotFound from "../pages/NotFound";
 
 const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<Main />} />
-      <Route path="/:userId" element={<Main />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route
+        path="/@me"
+        element={
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
+        }
+      />
+      <Route
+        path="/@me/:userId"
+        element={
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
+        }
+      />
+      <Route
+        path="/:serverId/"
+        element={
+          <ProtectPage>
+            <Server />
+          </ProtectPage>
+        }
+      />
+      <Route
+        path="/:serverId/:chatroomId"
+        element={
+          <ProtectPage>
+            <Server />
+          </ProtectPage>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <ProtectAuth>
+            <Login />
+          </ProtectAuth>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <ProtectAuth>
+            <Register />
+          </ProtectAuth>
+        }
+      />
       <Route path="/*" element={<NotFound />} />
     </Routes>
   );
