@@ -8,7 +8,7 @@ const ServerSettingBar = () => {
     <BarContainer>
       <Header>
         <Text
-          text="개별 서버 방 이름"
+          text="사용자 설정"
           fontSize="xs"
           color="msg-hover"
           mb={6}
@@ -18,29 +18,36 @@ const ServerSettingBar = () => {
       <ul>
         <li>
           <SettingButton
-            text="일반"
+            text="내 계정"
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
         </li>
         <li>
           <SettingButton
-            text="멤버"
+            text="프로필"
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
         </li>
         <li>
           <SettingButton
-            text="초대"
+            text="알림"
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
         </li>
-        {/* 
+
         <Divider
-          sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 1, mt: 1, mb: 2 }}
-        /> */}
+          sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 1, mt: 1, mb: 1 }}
+        />
+        <li>
+          <SettingButton
+            text="로그아웃"
+            backgroundColor="voice-icon"
+            onClick={() => console.log(1)}
+          />
+        </li>
       </ul>
     </BarContainer>
   );

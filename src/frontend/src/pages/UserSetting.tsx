@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ServerSettingBar from "../components/organisms/ServerSettingBar";
+import ServerSettingBar from "../components/organisms/MyAccountSettingBar";
 import UserProfile from "../components/organisms/UserProfile";
 
 const UserSetting = () => {
