@@ -29,6 +29,12 @@ public class AuthController {
     private String userEmail;
     private MemberRegisterRequestDto userMemberRequestDto;
 
+    @GetMapping("/test")
+    public String test(){
+        return "유저 서버 테스트 성공!";
+    }
+
+
     @PostMapping("/register")
     public CommonResponse<Object> register(@RequestBody MemberRegisterRequestDto memberRequestDto) {
 
