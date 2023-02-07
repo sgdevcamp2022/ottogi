@@ -18,7 +18,7 @@ public class WebSocketConfigurer implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app")// 메세지 핸들러로 라우팅
+        registry.setApplicationDestinationPrefixes("/pub")// 메세지 핸들러로 라우팅
                 .enableStompBrokerRelay("/queue", "/topic") // 구독 및 발행
                 .setRelayHost("localhost")
                 .setVirtualHost("/")

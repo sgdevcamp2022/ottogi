@@ -19,13 +19,14 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.springframework.boot:spring-boot-starter-ampq'
 	implementation 'org.springframework.boot:spring-boot-starter-reactor-netty'
 
+	testImplementation 'org.springframework.amqp:spring-rabbit-test'
 }
 
 tasks.named('test') {

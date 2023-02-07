@@ -17,8 +17,7 @@ public class WebSocketChatEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event){
-        boolean username = event.getMessage().getHeaders().containsKey("username");
-        System.out.println("username = " + username);
+
     }
 
     @EventListener

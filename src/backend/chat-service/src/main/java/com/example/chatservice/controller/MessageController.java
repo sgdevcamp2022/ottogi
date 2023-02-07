@@ -15,8 +15,12 @@ public class MessageController {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     /**
-     * /sub/channel/12345  -구독(channelId:12345)
-     * /pub/hello          - 메시지 발행
+     * - Subscribe
+     *   /topic/channelId
+     *
+     * - Controller (Message Handling)
+     *   /pub/hello_topic
+     *    -> Message Handling & publish message /topic/channelId
      */
 
     // Stomp를 활용하면 message broker 를 거치는 Handler 를 Controller 로 쉽게 구현할 수 있다.
