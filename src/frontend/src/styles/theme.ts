@@ -1,3 +1,5 @@
+import { DefaultTheme } from "styled-components";
+
 export type FontSizeType =
   | "xxs"
   | "xs"
@@ -70,96 +72,7 @@ export type BorderColorType =
 
 export type StatusColorType = "on" | "off" | "empty" | "mobile" | "disturb";
 
-interface FontSize {
-  xxs: string;
-  xs: string;
-  sm: string;
-  base: string;
-  lg: string;
-  xl: string;
-  xxl: string;
-  xxxl: string;
-}
-
-interface BackgroundColor {
-  trans: string;
-  white: string;
-  primary: string;
-  blocked: string;
-  active: string;
-  divider: string;
-  setting: string;
-  "msg-input": string;
-  hover: string;
-  modal: string;
-  tab3: string;
-  tab2: string;
-  "user-tab": string;
-  "voice-nobody": string;
-  "voice-icon": string;
-  tab1: string;
-  "voice-modal": string;
-  "msg-hover": string;
-  "add-friend": string;
-  "random-green": string;
-  "voice-hangup": string;
-  alert: string;
-  "server-input": string;
-  "server-footer": string;
-  "server-subtitle": string;
-  black: string;
-}
-
-interface Color {
-  inherit: string;
-  white: string;
-  msg: string;
-  icon: string;
-  "msg-placeholder": string;
-  "auth-label": string;
-  "auth-desc": string;
-  "tab2-placeholder": string;
-  "msg-timestamp": string;
-  "tab3-header": string;
-  "msg-hover": string;
-  "setting-tab": string;
-  inactive: string;
-  "hangup-log": string;
-  "setting-header": string;
-  "tab1-plus": string;
-  "voice-modal": string;
-  red: string;
-  blue: string;
-  "invite-success": string;
-  "invite-danger": string;
-  black: string;
-  "server-subtitle": string;
-}
-
-interface BorderColor {
-  divider: string;
-  default: string;
-  focus: string;
-  success: string;
-  danger: string;
-}
-
-interface StatusColor {
-  on: string;
-  off: string;
-  empty: string;
-  mobile: string;
-  disturb: string;
-}
-interface ThemeType {
-  fontSize: FontSize;
-  backgroundColor: BackgroundColor;
-  color: Color;
-  borderColor: BorderColor;
-  statusColor: StatusColor;
-}
-
-const theme: ThemeType = {
+const theme: DefaultTheme = {
   fontSize: {
     xxs: "0.625rem", //10px
     xs: "0.75rem", //12px
