@@ -1,5 +1,7 @@
+import { useMatch } from "react-router-dom";
 import styled from "styled-components";
 import useMainStore, { MainStatusType } from "../../store/useMainStore";
+import SideBar from "../atoms/Div/SideBarWrapper";
 import MainAddFriend from "./MainAddFriend";
 import MainDirectBody from "./MainDirectBody";
 import MainOnline from "./MainOnline";
@@ -19,20 +21,34 @@ const getBodyByStatus = (status: MainStatusType) => {
 };
 
 const MainBody = () => {
-  const { mainTab, mainStatus } = useMainStore(({ mainTab, mainStatus }) => ({
-    mainTab,
-    mainStatus,
-  }));
+  const info = useMatch("/@me");
+  const { mainStatus } = useMainStore(({ mainStatus }) => ({ mainStatus }));
 
-  if (mainTab === "친구") {
-    return <MainFreindBody>{getBodyByStatus(mainStatus)}</MainFreindBody>;
-  }
-  return <MainDirectBody />;
+  return (
+    <MainBodyContainer>
+      {info ? (
+        <MainFriendBody>{getBodyByStatus(mainStatus)}</MainFriendBody>
+      ) : (
+        <MainDirectBody />
+      )}
+      <SideBar>
+        <>dd</>
+      </SideBar>
+    </MainBodyContainer>
+  );
 };
 
-const MainFreindBody = styled.div`
-  flex: 1;
-  padding: 0 1.25rem;
+const MainBodyContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const MainFriendBody = styled.div`
+  padding: 0 20px;
+  height: calc(100vh - 55px);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;
 
 export default MainBody;

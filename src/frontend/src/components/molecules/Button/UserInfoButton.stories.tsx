@@ -5,4 +5,4 @@ export default {
   component: UserInfoButton,
 };
 
-export const UserInfo = () => <UserInfoButton name="허다은" />;
+export const UserInfo = () => <UserInfoButton />;

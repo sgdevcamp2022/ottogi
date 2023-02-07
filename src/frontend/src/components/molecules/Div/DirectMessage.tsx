@@ -1,20 +1,32 @@
+import { useState } from "react";
 import styled from "styled-components";
+import Tip from "../../atoms/Div/Tooltip";
 import AddIcon from "../../atoms/Icons/AddIcon";
 import Text from "../../atoms/Text/Text";
+import CreateDirectMessageModal from "../../organisms/CreateDirectMessageModal";
 
 const DirectMessage = () => {
+  const [showDMModal, setShowDMModal] = useState(false);
   return (
-    <DirectMessageContainer>
-      <Text text="다이렉트 메시지" fontSize="xs" fontWeight="bold" />
-      <PlusButtonContainer>
-        <AddIcon />
-      </PlusButtonContainer>
-    </DirectMessageContainer>
+    <>
+      <DirectMessageContainer>
+        <Text text="다이렉트 메시지" fontSize="xs" fontWeight="bold" />
+        <Tip title="DM 생성" place="top">
+          <PlusButtonContainer onClick={() => setShowDMModal(!showDMModal)}>
+            <AddIcon />
+          </PlusButtonContainer>
+        </Tip>
+      </DirectMessageContainer>
+      {showDMModal && (
+        <DMModalWrapper>
+          <CreateDirectMessageModal left={200} />
+        </DMModalWrapper>
+      )}
+    </>
   );
 };
 
 const DirectMessageContainer = styled.div`
-  background-color: transparent;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -33,6 +45,10 @@ const PlusButtonContainer = styled.div`
   &:hover {
     color: ${({ theme }) => theme.color.white};
   }
+`;
+
+const DMModalWrapper = styled.div`
+  position: relative;
 `;
 
 export default DirectMessage;

@@ -6,19 +6,25 @@ interface LoginFormProps {
   text: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  type?: string;
 }
 
-const LoginForm = ({ text, value, onChange }: LoginFormProps) => {
+const LoginForm = ({
+  text,
+  value,
+  onChange,
+  type = "text",
+}: LoginFormProps) => {
   return (
     <>
       <AuthForm
         text={
           <>
             {text}
-            {/* 이메일 또는 전화번호 */}
             <SpanText text=" *" color="red" />
           </>
         }
+        type={type}
         value={value}
         onChange={onChange}
       />

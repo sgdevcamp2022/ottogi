@@ -1,19 +1,29 @@
 import { MouseEventHandler, ReactElement } from "react";
 import styled from "styled-components";
 import { flexCenter } from "../../../styles/flexCenter";
+import Tip from "../../atoms/Div/Tooltip";
 
 interface MicButtonProps {
+  text: string;
   OnIcon: ReactElement;
   OffIcon: ReactElement;
   onClick: MouseEventHandler<HTMLDivElement>;
   on?: boolean;
 }
 
-const UserOnOffButton = ({ OnIcon, OffIcon, on = false, onClick }: MicButtonProps) => {
+const UserOnOffButton = ({
+  text,
+  OnIcon,
+  OffIcon,
+  on = false,
+  onClick,
+}: MicButtonProps) => {
   return (
-    <UserOnOffButtonContainer onClick={onClick}>
-      <IconContainer>{on ? OnIcon : OffIcon}</IconContainer>
-    </UserOnOffButtonContainer>
+    <Tip title={text} place="top">
+      <UserOnOffButtonContainer onClick={onClick}>
+        <IconContainer>{on ? OnIcon : OffIcon}</IconContainer>
+      </UserOnOffButtonContainer>
+    </Tip>
   );
 };
 

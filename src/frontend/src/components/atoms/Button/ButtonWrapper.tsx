@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactElement } from "react";
+import { MouseEventHandler, ReactElement } from "react";
 import styled from "styled-components";
 import { BackgroundColorType, ColorType } from "../../../styles/theme";
 
@@ -55,7 +55,8 @@ const ButtonWrapperContainer = styled.div<ButtonWrapperContainerProps>`
   width: ${({ width }) => (width === "100%" ? "100%" : `${width}px`)};
   height: ${({ height }) => (height === "100%" ? "100%" : `${height}px`)};
   color: ${({ theme, color }) => theme.color[color]};
-  background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
+  background-color: ${({ theme, backgroundColor }) =>
+    theme.backgroundColor[backgroundColor]};
   opacity: ${({ blur }) => (blur ? 30 : 100)}%;
   border-radius: 0.25rem;
   padding: 0 ${({ ph }) => ph}px;
@@ -63,7 +64,8 @@ const ButtonWrapperContainer = styled.div<ButtonWrapperContainerProps>`
   &:hover {
     opacity: 100%;
     color: ${({ theme }) => theme.color.white};
-    background-color: ${({ theme, hoverBackgroundColor }) => theme.backgroundColor[hoverBackgroundColor]};
+    background-color: ${({ theme, hoverBackgroundColor }) =>
+      theme.backgroundColor[hoverBackgroundColor]};
   }
 `;
 

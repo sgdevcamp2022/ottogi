@@ -8,5 +8,11 @@ export default {
 
 export const Default = () => {
   const [text, setText] = useState("");
-  return <DefaultInput value={text} onChange={({ target: { value } }) => setText(value)} />;
+  return (
+    <DefaultInput
+      type="text"
+      value={text}
+      onChange={({ target: { value } }) => setText(value)}
+    />
+  );
 };

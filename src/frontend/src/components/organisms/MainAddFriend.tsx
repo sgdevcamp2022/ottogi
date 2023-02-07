@@ -4,24 +4,28 @@ import EmptyContainer from "../molecules/Div/EmptyContainer";
 
 const MainAddFriend = () => {
   return (
-    <MainAddFriendContainer>
-      <AddFriendContainer>
-        <AddFriend />
-      </AddFriendContainer>
-      <EmptyContainer image="addFriend" text="Ottogi는 친구를 기다리고 있어요." />
-    </MainAddFriendContainer>
+    <>
+      <MainAddFriendContainer>
+        <AddFriendContainer>
+          <AddFriend />
+        </AddFriendContainer>
+        <EmptyContainer
+          image="addFriend"
+          text="Ottogi는 친구를 기다리고 있어요."
+        />
+      </MainAddFriendContainer>
+    </>
   );
 };
 
 const MainAddFriendContainer = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
 `;
 
 const AddFriendContainer = styled.div`
+  border-bottom: 1px solid ${({ theme }) => theme.borderColor.divider};
   padding: 1.25rem 1.875rem;
-  border-bottom: 1px solid ${({ theme }) => theme.backgroundColor.divider};
 `;
 
 export default MainAddFriend;

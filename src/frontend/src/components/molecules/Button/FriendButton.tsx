@@ -1,16 +1,18 @@
+import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import useMainStore from "../../../store/useMainStore";
 import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
 import PersonIcon from "../../atoms/Icons/PersonIcon";
 import Text from "../../atoms/Text/Text";
 
 const FriendButton = () => {
-  const { mainTab, setMainTab } = useMainStore(({ mainTab, setMainTab }) => ({ mainTab, setMainTab }));
+  const info = useMatch("/@me");
+  const navigate = useNavigate();
+
   return (
-    <ButtonWrapper active={mainTab === "친구"} onClick={() => setMainTab("친구")} height={42}>
+    <ButtonWrapper active={!!info} onClick={() => navigate("/@me")} height={42}>
       <FriendButtonContainer>
         <PersonIcon />
-        <Text text="친구" color={mainTab === "친구" ? "white" : "inactive"} />
+        <Text text="친구" color={info ? "white" : "inactive"} />
       </FriendButtonContainer>
     </ButtonWrapper>
   );

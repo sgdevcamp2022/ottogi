@@ -5,4 +5,4 @@ export default {
   component: UserInfoBarButton,
 };
 
-export const UserInfoBar = () => <UserInfoBarButton name="허다은" />;
+export const UserInfoBar = () => <UserInfoBarButton />;

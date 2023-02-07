@@ -1,6 +1,10 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType, ColorType, FontSizeType } from "../../../styles/theme";
+import {
+  BackgroundColorType,
+  ColorType,
+  FontSizeType,
+} from "../../../styles/theme";
 
 interface DefaultButtonProps {
   text: string;
@@ -61,7 +65,8 @@ const DefaultButtonContainer = styled.button<DefaultButtonContainerProps>`
   height: ${({ height }) => (height === null ? "100%" : `${height}px`)};
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
   color: ${({ theme, color }) => theme.color[color]};
-  background-color: ${({ theme, backgroundColor }) => theme.backgroundColor[backgroundColor]};
+  background-color: ${({ theme, backgroundColor }) =>
+    theme.backgroundColor[backgroundColor]};
   font-weight: ${({ fontWeight }) => fontWeight};
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};

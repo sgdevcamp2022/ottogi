@@ -8,13 +8,18 @@ interface LabelTextProps {
 
 const LabelText = ({ label = "온라인", num }: LabelTextProps) => {
   return (
-    <MainOnlineContainer>
-      <Text fontSize="xs" text={`${label} — ${num}명`} color="auth-desc" fontWeight="bold" />
-    </MainOnlineContainer>
+    <LabelTextContainer>
+      <Text
+        fontSize="xs"
+        text={`${label} — ${num}명`}
+        color="auth-desc"
+        fontWeight="bold"
+      />
+    </LabelTextContainer>
   );
 };
 
-const MainOnlineContainer = styled.div`
+const LabelTextContainer = styled.div`
   padding: 1rem 1.25rem 0.5rem 0.75rem;
 `;
 

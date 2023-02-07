@@ -1,7 +1,6 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { BackgroundColorType, ColorType } from "../../../styles/theme";
-
 interface TextButtonProps {
   text: string;
   onClick: MouseEventHandler<HTMLSpanElement>;

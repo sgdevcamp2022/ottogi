@@ -1,13 +1,18 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-export type UserInfoType = null | {
+export type UserInfoType = {
   email: string;
   accessToken: string;
 };
 interface UserState {
   userInfo: UserInfoType;
 }
+
+const initialUserInfo = {
+  email: "",
+  accessToken: "",
+};
 
 interface UserAction {
   setUserInfo: (userInfo: UserInfoType) => void;
@@ -19,7 +24,7 @@ export const useUserStore = create<UserState & UserAction>()(
   devtools(
     persist(
       (set, get) => ({
-        userInfo: null,
+        userInfo: initialUserInfo,
 
         setUserInfo: (userInfo: UserInfoType) => set({ userInfo }),
         setAccessToken: (accessToken: string) => {
@@ -28,7 +33,7 @@ export const useUserStore = create<UserState & UserAction>()(
           newUserInfo.accessToken = accessToken;
           return set({ userInfo: newUserInfo });
         },
-        resetUserInfo: () => set({ userInfo: null }),
+        resetUserInfo: () => set({ userInfo: initialUserInfo }),
       }),
       { name: "user" }
     )

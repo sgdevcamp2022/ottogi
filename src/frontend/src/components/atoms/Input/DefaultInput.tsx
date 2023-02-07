@@ -9,6 +9,7 @@ import {
 interface DefaultInputProps {
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  type: string;
   maxLength?: number;
   width?: number | string;
   height?: number | string;
@@ -22,6 +23,7 @@ interface DefaultInputProps {
 const DefaultInput = ({
   value,
   onChange,
+  type = "text",
   maxLength = 524288,
   width = "100%",
   height = "100%",
@@ -35,6 +37,7 @@ const DefaultInput = ({
     <DefaultInputContainer
       value={value}
       onChange={onChange}
+      type={type}
       maxLength={maxLength}
       width={width}
       height={height}

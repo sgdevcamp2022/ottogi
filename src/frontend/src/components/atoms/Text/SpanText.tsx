@@ -8,7 +8,12 @@ interface SpanProps {
   mr?: number;
 }
 
-const SpanText = ({ text, color = "inherit", fontSize = "base", mr = 0 }: SpanProps) => {
+const SpanText = ({
+  text,
+  color = "inherit",
+  fontSize = "base",
+  mr = 0,
+}: SpanProps) => {
   return (
     <SpanTextContainer color={color} fontSize={fontSize} mr={mr}>
       {text}

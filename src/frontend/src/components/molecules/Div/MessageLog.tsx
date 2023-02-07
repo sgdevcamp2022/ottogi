@@ -14,7 +14,7 @@ interface MessageLogProps {
 
 const MessageLog = ({ text, hasImage = false, createdAt }: MessageLogProps) => {
   return (
-    <MessageLogContainer>
+    <MessageLogContainer hasImage={hasImage}>
       <MessageHoverButtons />
       {hasImage && (
         <LogoImageContainer>
@@ -29,7 +29,8 @@ const MessageLog = ({ text, hasImage = false, createdAt }: MessageLogProps) => {
   );
 };
 
-const MessageLogContainer = styled.div`
+const MessageLogContainer = styled.div<{ hasImage: boolean }>`
+  margin-top: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
   position: relative;
   min-height: 1.375rem;
   display: flex;

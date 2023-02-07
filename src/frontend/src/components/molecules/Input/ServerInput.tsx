@@ -16,6 +16,7 @@ const ServerInput = () => {
       />
       <DefaultInput
         value={text}
+        type="text"
         onChange={({ target: { value } }) => setText(value)}
         backgroundColor="server-input"
         fontSize="base"

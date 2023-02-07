@@ -7,4 +7,11 @@ export default {
   component: UserOnOffButton,
 };
 
-export const UserOnOff = () => <UserOnOffButton OnIcon={<MicIcon />} OffIcon={<MicOffIcon />} onClick={() => {}} />;
+export const UserOnOff = () => (
+  <UserOnOffButton
+    text="음소거"
+    OnIcon={<MicIcon />}
+    OffIcon={<MicOffIcon />}
+    onClick={() => {}}
+  />
+);

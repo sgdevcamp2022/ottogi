@@ -4,7 +4,12 @@ import DefaultInput from "../../atoms/Input/DefaultInput";
 const SearchButton = () => {
   return (
     <SearchButtonContainer>
-      <DefaultInput placeholder="대화 찾기 또는 시작하기" value="" onChange={() => null} />
+      <DefaultInput
+        type="text"
+        placeholder="대화 찾기 또는 시작하기"
+        value=""
+        onChange={() => null}
+      />
     </SearchButtonContainer>
   );
 };

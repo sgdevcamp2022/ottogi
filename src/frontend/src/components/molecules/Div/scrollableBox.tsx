@@ -10,9 +10,10 @@ const ScrollableBox = ({ children }: ScrollableBoxProps) => {
 };
 
 const ScrollableContainer = styled.div`
-  /* background-color: red; */
   width: 100%;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 
   ::-webkit-scrollbar {
     width: 8px; /* 스크롤바의 너비 */

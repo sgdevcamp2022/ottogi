@@ -13,7 +13,13 @@ interface SearchInputProps {
 const SearchInput = ({ size, value, onChange }: SearchInputProps) => {
   return (
     <SearchInputContainer size={size}>
-      <DefaultInput value={value} onChange={onChange} placeholder="검색하기" fontSize={size === "s" ? "sm" : "base"} />
+      <DefaultInput
+        type="text"
+        value={value}
+        onChange={onChange}
+        placeholder="검색하기"
+        fontSize={size === "s" ? "sm" : "base"}
+      />
       <SearchIcon />
     </SearchInputContainer>
   );
@@ -30,7 +36,8 @@ const SearchInputContainer = styled.label<{ size: SizeType }>`
   padding: 0 0.125rem;
   background-color: ${({ theme }) => theme.backgroundColor.tab1};
   svg {
-    font-size: ${({ theme, size }) => theme.fontSize[size === "s" ? "lg" : "xxl"]};
+    font-size: ${({ theme, size }) =>
+      theme.fontSize[size === "s" ? "lg" : "xxl"]};
     color: ${({ theme }) => theme.color.icon};
   }
 `;

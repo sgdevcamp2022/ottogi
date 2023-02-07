@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Main from "../pages/Main";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -11,35 +11,35 @@ const Router = () => {
   return (
     <Routes>
       <Route
-        path="/@me"
+        path={"/@me"}
         element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
         }
       />
       <Route
         path="/@me/:userId"
         element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
         }
       />
       <Route
         path="/:serverId/"
         element={
-          <ProtectPage>
-            <Server />
-          </ProtectPage>
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
         }
       />
       <Route
         path="/:serverId/:chatroomId"
         element={
-          <ProtectPage>
-            <Server />
-          </ProtectPage>
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
         }
       />
       <Route

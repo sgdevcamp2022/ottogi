@@ -6,7 +6,7 @@ export default {
 };
 
 export const Tooltip = () => (
-  <DivTooltip place="bottom" title="test">
+  <DivTooltip place="right" title="test">
     <button>hello</button>
   </DivTooltip>
 );

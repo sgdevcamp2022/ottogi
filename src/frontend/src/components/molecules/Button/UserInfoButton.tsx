@@ -1,29 +1,46 @@
 import styled from "styled-components";
+import { useUserStore } from "../../../store/useUserStore";
 import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
 import Text from "../../atoms/Text/Text";
 import UserState32, { StateType } from "../Div/UserState32";
 
 interface UserInfoButtonProps {
-  name: string;
   status?: StateType;
 }
 
-const UserInfoButton = ({ name, status = "on" }: UserInfoButtonProps) => {
+const UserInfoButton = ({ status = "on" }: UserInfoButtonProps) => {
+  const {
+    userInfo: { email },
+  } = useUserStore();
+
   return (
-    <ButtonWrapper onClick={() => {}} height={39} hoverBackgroundColor="active">
+    <ButtonWrapper
+      onClick={() => {}}
+      height={39}
+      hoverBackgroundColor="active"
+      ph={0}
+    >
       <InfoContainer>
         <UserState32 status={status} />
-        <Text text={name} fontWeight="bold" fontSize="sm" color="white" />
+        <Text text={email} fontWeight="bold" fontSize="sm" color="white" />
       </InfoContainer>
     </ButtonWrapper>
   );
 };
 
 const InfoContainer = styled.div`
+  width: 7.625rem;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
+  p {
+    display: inline-block;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 export default UserInfoButton;
