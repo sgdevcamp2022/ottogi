@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -15,7 +16,7 @@ import javax.persistence.*;
 public class Friend {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "friend_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,6 +29,15 @@ public class Friend {
     private Member receiver;
 
     private FriendState state;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void createdAt(){
+        this.createdAt = LocalDateTime.now();
+    }
+
 
     public Friend (Member sender, Member receiver, FriendState state){
         this.sender = sender;

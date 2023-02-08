@@ -1,2 +1,10 @@
 server:
   port: 3030
+
+  spring:
+    application:
+      name: chat-service
+
+    redis:
+      host: localhost
+      port: 6379
