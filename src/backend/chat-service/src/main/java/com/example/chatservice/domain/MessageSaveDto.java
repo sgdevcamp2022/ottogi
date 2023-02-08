@@ -15,12 +15,9 @@ import static com.example.chatservice.domain.ChatType.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash(value = "channelId")
 public class MessageSaveDto {
 
-    @Id
     private String channelId;
-
     private ChatType type;
     private Long Id;
     private String name;
@@ -36,6 +33,11 @@ public class MessageSaveDto {
                 .name(messageRequestDto.getName())
                 .message(messageRequestDto.getMessage())
                 .build();
+    }
+
+    public void print(){
+        System.out.println("[channelId : " + channelId + "], [ChatType : "  + type + "], [Id : " + Id +
+                "], [name : " + name + "], [message : " + message + "], [created_at : " + created_at + "]");
     }
 
 
