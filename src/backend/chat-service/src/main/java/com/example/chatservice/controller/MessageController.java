@@ -1,7 +1,9 @@
 package com.example.chatservice.controller;
 
 import com.example.chatservice.domain.*;
+import com.example.chatservice.response.CommonResponse;
 import com.example.chatservice.service.ChatRedisService;
+import com.example.chatservice.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 import static com.example.chatservice.domain.ChatType.*;
+import static com.example.chatservice.domain.TextMessages.*;
 
 @Slf4j
 @Controller
@@ -27,6 +30,7 @@ public class MessageController {
 
     private final SimpMessageSendingOperations simpMessageSendingOperations;
     private final ChatRedisService chatRedisService;
+    private final ResponseService responseService;
 
     /**
      *
@@ -69,17 +73,16 @@ public class MessageController {
 
     // 커뮤니티에 가입했을 때 발생되어야 할 메세지
     @PostMapping("/chat_enter")
-    public void chat_enter(@RequestBody ChatEnterDto chatEnterDto){
+    public CommonResponse<Object> chat_enter(@RequestBody ChatEnterDto chatEnterDto){
         MessageRequestDto messageRequestDto = new MessageRequestDto().convertToMessageRequestDto(chatEnterDto);
         message_topic(messageRequestDto);
+        return responseService.getSuccessResponse(WELCOME_MSG_SUCCESS, null);
     }
 
-
-
     @GetMapping("/chats")
-    public void chats(@RequestBody ChatViewDto chatViewDto){
+    public CommonResponse<Object> chats(@RequestBody ChatViewDto chatViewDto){
         // 해당방의 joined_at 뒤의 데이터들을 모두 가져온다.
-
+        return responseService.getSuccessResponse(CHAT_VIEW_SUCCESS, chatRedisService.chats(chatViewDto));
     }
 
 

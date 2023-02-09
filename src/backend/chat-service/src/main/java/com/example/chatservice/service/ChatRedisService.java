@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,8 +45,18 @@ public class ChatRedisService {
         }
     }
 
-    public void chats(ChatViewDto chatViewDto) {
-        
+    public List<MessageSaveDto> chats(ChatViewDto chatViewDto) {
+        Optional<MessageListSaveDto> channelData = repository.findById(chatViewDto.getChannelId());
+        List<MessageSaveDto> messageSaveDtoList = channelData.get().getMessageSaveDtoList();
+
+        List<MessageSaveDto> chatMessages = new ArrayList<>();
+        for (MessageSaveDto messageSaveDto : messageSaveDtoList) {
+            if(messageSaveDto.getCreated_at().isAfter(chatViewDto.getJoined_at())){ //커뮤니티 가입한 이후 채팅이라면 모두 가져옴
+                chatMessages.add(messageSaveDto);
+            }
+        }
+
+        return  chatMessages;
     }
 
     public void quitChat(MessageSaveDto messageDto) {
