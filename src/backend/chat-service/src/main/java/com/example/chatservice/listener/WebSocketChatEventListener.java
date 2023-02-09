@@ -12,17 +12,15 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Component
 public class WebSocketChatEventListener {
 
-    @Autowired
-    private SimpMessageSendingOperations simpMessageSendingOperations;
-
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event){
+        log.info("새로운 소켓 연결");
 
     }
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-
+        log.info("소켓 연결 해제");
     }
 
 }

@@ -4,12 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
-
-import static com.example.chatservice.domain.ChatType.*;
 
 @Getter
 @Builder
@@ -19,7 +15,7 @@ public class MessageSaveDto {
 
     private String channelId;
     private ChatType type;
-    private Long Id;
+    private String communityUserId;
     private String name;
     private String message;
     private LocalDateTime created_at = LocalDateTime.now();
@@ -27,16 +23,16 @@ public class MessageSaveDto {
 
     public MessageSaveDto convertDto(MessageRequestDto messageRequestDto){
         return MessageSaveDto.builder()
-                .type(TALK)
+                .type(messageRequestDto.getType())
                 .channelId(messageRequestDto.getChannelId())
-                .Id(messageRequestDto.getId())
+                .communityUserId(messageRequestDto.getCommunityUserId())
                 .name(messageRequestDto.getName())
                 .message(messageRequestDto.getMessage())
                 .build();
     }
 
-    public void print(){
-        System.out.println("[channelId : " + channelId + "], [ChatType : "  + type + "], [Id : " + Id +
+    public String print(){
+        return ("[channelId : " + channelId + "], [ChatType : "  + type + "], [Id : " + communityUserId +
                 "], [name : " + name + "], [message : " + message + "], [created_at : " + created_at + "]");
     }
 
