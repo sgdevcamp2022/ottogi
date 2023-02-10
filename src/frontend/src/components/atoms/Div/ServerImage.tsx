@@ -4,15 +4,21 @@ import styled from "styled-components";
 import { MouseEventHandler } from "react";
 
 interface ServerImageProps {
-  onMouseover: MouseEventHandler<HTMLButtonElement>;
   onClick: MouseEventHandler<HTMLButtonElement>;
+  id: Number;
 }
 
-const ServerImage = ({ onMouseover, onClick }: ServerImageProps) => {
+const ServerImage = ({ onClick, id }: ServerImageProps) => {
   return (
     <ServerIconBox>
-      <ClickedWrapper />
-      <StyledIconButton onMouseOver={onMouseover} onClick={onClick}>
+      <ClickedWrapper className="side" />
+      <StyledIconButton
+        // onClick={() => {
+        //   onClick();
+
+        // }}
+        onClick={onClick}
+      >
         {/* borderRadius로 이미지 동그란 정도 조절하기 */}
         <Avatar className="avatar"></Avatar>
       </StyledIconButton>
@@ -23,31 +29,23 @@ const ServerImage = ({ onMouseover, onClick }: ServerImageProps) => {
 export default ServerImage;
 
 const ServerIconBox = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
+  /* width: 100%;
+  height: 100%; */
   align-items: center;
-  position: relative;
-  padding: 0;
   &:hover {
     .avatar {
       border-radius: 0.8rem;
       transition: all 0.4s ease-in-out;
     }
-    .ClickedWrapper {
-      height: 30px;
-      transition: all 0.4s ease-in-out;
+    .side {
+      height: 25px;
+      transition: height 0.4s ease-in-out;
     }
   }
 `;
 
 const StyledIconButton = styled(IconButton)`
-  /* &:hover {
-    .avatar {
-      border-radius: 0.8rem;
-      transition: all 0.4s ease-in-out;
-    }
-  } */
   .avatar {
     width: 3rem;
     height: 3rem;
@@ -61,17 +59,14 @@ const StyledIconButton = styled(IconButton)`
 
 const ClickedWrapper = styled.div`
   height: 10px;
-  left: 0px;
   list-style-type: none;
   line-height: 16px;
-  width: 8px;
-  background-color: #000;
+  width: 6px;
+  background-color: #fff;
   border-radius: 0 1rem 1rem 0;
   justify-content: flex-start;
   vertical-align: baseline;
   user-select: none;
-  margin-left: -0.25rem;
-  margin-top: 0.125rem;
   opacity: 1;
-  position: absolute;
+  margin-right: 0.5rem;
 `;

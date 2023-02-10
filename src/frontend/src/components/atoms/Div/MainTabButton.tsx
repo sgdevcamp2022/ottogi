@@ -6,11 +6,13 @@ interface MainTabButtonProps {
 }
 
 const MainTabButton = ({ status }: MainTabButtonProps) => {
-  const { mainStatus, setMainStatus, setMainTab } = useMainStore(({ mainStatus, setMainStatus, setMainTab }) => ({
-    mainStatus,
-    setMainStatus,
-    setMainTab,
-  }));
+  const { mainStatus, setMainStatus, setMainTab } = useMainStore(
+    ({ mainStatus, setMainStatus, setMainTab }) => ({
+      mainStatus,
+      setMainStatus,
+      setMainTab,
+    })
+  );
 
   const getColor = (status: MainStatusType) => {
     if (status === "친구 추가하기") {

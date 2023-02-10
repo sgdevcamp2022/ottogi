@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Text from "../atoms/Text/Text";
-import SettingButton from "../atoms/Button/SettingButton";
+import ServerSettingButton from "../atoms/Button/ServerSettingButton copy";
 import { Divider } from "@mui/material";
 
 const ServerSettingBar = () => {
@@ -17,22 +17,25 @@ const ServerSettingBar = () => {
       </Header>
       <ul>
         <li>
-          <SettingButton
+          <ServerSettingButton
+            status={"일반"}
             text="일반"
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
         </li>
         <li>
-          <SettingButton
+          <ServerSettingButton
             text="멤버"
+            status={"멤버"}
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
         </li>
         <li>
-          <SettingButton
+          <ServerSettingButton
             text="초대"
+            status={"초대"}
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />

@@ -7,5 +7,5 @@ export default {
 };
 
 export const ServerImage = () => (
-  <DivServerImage onMouseover={action("hover")} onClick={action("clicked")} />
+  <DivServerImage id={3} onClick={action("clicked")} />
 );

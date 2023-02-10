@@ -2,8 +2,12 @@ import styled from "styled-components";
 import Text from "../atoms/Text/Text";
 import SettingButton from "../atoms/Button/SettingButton";
 import { Divider } from "@mui/material";
+import { useState } from "react";
+import SetDefaultButton from "../atoms/Button/SetDefaultButton";
 
 const ServerSettingBar = () => {
+  const [number, setNumber] = useState("");
+
   return (
     <BarContainer>
       <Header>
@@ -19,13 +23,17 @@ const ServerSettingBar = () => {
         <li>
           <SettingButton
             text="내 계정"
+            status={"내 계정"}
             backgroundColor="voice-icon"
-            onClick={() => console.log(1)}
+            onClick={() => {
+              console.log(1);
+            }}
           />
         </li>
         <li>
           <SettingButton
             text="프로필"
+            status={"프로필"}
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
@@ -33,6 +41,7 @@ const ServerSettingBar = () => {
         <li>
           <SettingButton
             text="알림"
+            status={"알림"}
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
@@ -42,7 +51,7 @@ const ServerSettingBar = () => {
           sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 1, mt: 1, mb: 1 }}
         />
         <li>
-          <SettingButton
+          <SetDefaultButton
             text="로그아웃"
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}

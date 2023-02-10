@@ -1,9 +1,9 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { BackgroundColorType, ColorType } from "../../../styles/theme";
-import useUserSetStore, {
-  UserSettingType,
-} from "../../../store/useUserSetStore";
+import useServerSetStore, {
+  ServerSettingType,
+} from "../../../store/useServerSetStore";
 
 interface SettingButtonProps {
   text: string;
@@ -12,10 +12,10 @@ interface SettingButtonProps {
   color?: ColorType;
   backgroundColor?: BackgroundColorType;
   disabled?: boolean;
-  status: UserSettingType;
+  status: ServerSettingType;
 }
 
-const SettingButton = ({
+const ServerSettingButton = ({
   text,
   onClick,
   fontWeight = "normal",
@@ -24,30 +24,23 @@ const SettingButton = ({
   disabled = false,
   status,
 }: SettingButtonProps) => {
-  const { userStatus, userSettingStatus } = useUserSetStore(
-    ({ userStatus, userSettingStatus }) => ({
-      userStatus,
-      userSettingStatus,
+  const { setStatus, setSettingStatus } = useServerSetStore(
+    ({ setStatus, setSettingStatus }) => ({
+      setStatus,
+      setSettingStatus,
     })
   );
 
-  const getColor = (status: UserSettingType) => {
-    return status === userStatus ? "white" : "tab3-header";
+  const getColor = (status: ServerSettingType) => {
+    return status === setStatus ? "white" : "tab3-header";
   };
 
-  // const getHoverColor = (status: UserSettingType) => {
-  //   return status === userStatus ? "white" : "icon";
-  // };
-
-  const getBackgroundColor = (status: UserSettingType) => {
-    return status === userStatus ? "active" : "trans";
+  const getBackgroundColor = (status: ServerSettingType) => {
+    return status === setStatus ? "active" : "trans";
   };
 
-  // const getHoverBackgroundColor = () => {
-  //   return "active";
-  // };
-  const changeUserStatus = (mainStatus: UserSettingType) => {
-    userSettingStatus(mainStatus);
+  const changeUserStatus = (mainStatus: ServerSettingType) => {
+    setSettingStatus(mainStatus);
   };
   return (
     <SettingButtonContainer
@@ -87,4 +80,4 @@ export const SettingButtonContainer = styled.button<{
   }
 `;
 
-export default SettingButton;
+export default ServerSettingButton;

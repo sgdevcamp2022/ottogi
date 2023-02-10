@@ -4,6 +4,7 @@ import SettingWrapper from "./SettingWrapper";
 import { Divider } from "@mui/material";
 import FieldButton from "../atoms/Button/fieldButton";
 import styled from "styled-components";
+import LogoImage from "../atoms/Div/LogoImage";
 
 const SeverSettingMember = () => {
   return (
@@ -16,40 +17,14 @@ const SeverSettingMember = () => {
           fontSize="xl"
           mb={20}
         />
-        <Text
-          text={"멤버 관련 설정 자리"}
-          color="white"
-          fontWeight="bold"
-          fontSize="xl"
-          mb={20}
-        />
+        <Text text={"멤버 총 x명"} color="setting-tab" fontSize="sm" mb={20} />
         <Divider
-          sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 9, mt: 5, mb: 5 }}
+          sx={{ borderColor: "#96989D93", opacity: 0.5, mt: 1, mb: 1 }}
         />
-        {/* <Text
-          text="비밀번호"
-          color="white"
-          fontWeight="bold"
-          fontSize="xl"
-          mb={20}
-        />
-        <ButtonWrappper>
-          <FieldButton
-            text="비밀번호 변경하기"
-            onClick={() => console.log(1)}
-          />
-        </ButtonWrappper>
-        <Divider
-          sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 9, mt: 5, mb: 5 }}
-        />
-        <Text text={"계정 삭제하기"} color="setting-tab" fontSize="xs" mb={5} />
-        <ButtonWrappper2>
-          <FieldButton
-            text="계정 삭제하기"
-            onClick={() => console.log(1)}
-            backgroundColor="voice-hangup"
-          />
-        </ButtonWrappper2> */}
+        <Member>
+          <LogoImage onClick={() => console.log(1)} />
+          <Text text={"김현우"} color="white" fontSize="sm" />
+        </Member>
       </>
     </SettingWrapper>
   );
@@ -57,12 +32,18 @@ const SeverSettingMember = () => {
 
 export default SeverSettingMember;
 
-const ButtonWrappper = styled.div`
-  width: 8.5rem;
-  height: 2rem;
+const Member = styled.div`
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid ${({ theme }) => theme.borderColor.divider}; ;
 `;
 
-const ButtonWrappper2 = styled.div`
-  width: 7.5rem;
-  height: 2rem;
+const Mini = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
