@@ -21,6 +21,7 @@ import static devcamp.ottogi.userservice.exception.ErrorCode.*;
 @RequestMapping("/user/auth")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin
 public class AuthController {
     private final AuthService authService;
     private final EmailService emailService;
@@ -37,6 +38,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public CommonResponse<Object> register(@RequestBody MemberRegisterRequestDto memberRequestDto) {
+        log.info("회원가입 요청 : {}",memberRequestDto.getEmail());
 
         userMemberRequestDto = new MemberRegisterRequestDto(memberRequestDto);
         userEmail = memberRequestDto.getEmail();
