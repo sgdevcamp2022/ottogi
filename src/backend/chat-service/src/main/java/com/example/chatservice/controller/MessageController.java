@@ -8,24 +8,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-
-import static com.example.chatservice.domain.ChatType.*;
 import static com.example.chatservice.domain.TextMessages.*;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/chat")
+@CrossOrigin
 public class MessageController {
 
     private final SimpMessageSendingOperations simpMessageSendingOperations;
@@ -56,7 +49,7 @@ public class MessageController {
 
 
         simpMessageSendingOperations.convertAndSend("/topic/"
-                + messageRequestDto.getChannelId(), messageRequestDto.getMessage());
+                + messageRequestDto.getChannelId(), messageRequestDto);
         log.info("채팅 데이터 전송 완료");
     }
 
@@ -72,11 +65,21 @@ public class MessageController {
     }
 
     // 커뮤니티에 가입했을 때 발생되어야 할 메세지
-    @PostMapping("/chat_enter")
-    public CommonResponse<Object> chat_enter(@RequestBody ChatEnterDto chatEnterDto){
+    @PostMapping("/community_enter")
+    public CommonResponse<Object> communityEnter(@RequestBody ChatEnterDto chatEnterDto){
         MessageRequestDto messageRequestDto = new MessageRequestDto().convertToMessageRequestDto(chatEnterDto);
         message_topic(messageRequestDto);
         return responseService.getSuccessResponse(WELCOME_MSG_SUCCESS, null);
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        return "채팅 서버 테스트 성공";
+    }
+
+    @PostMapping("/channel_enter")
+    public CommonResponse<Object> channelEnter() {
+        return responseService.getSuccessResponse(CHANNEL_JOIN_SUCCESS, null);
     }
 
     @GetMapping("/chats")
