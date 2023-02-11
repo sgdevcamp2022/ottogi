@@ -7,6 +7,7 @@ const MessageFooter = () => {
   const { serverId: isServer } = useParams();
 
   const [value, onChange] = useInput();
+  console.log(value);
   return (
     <MessageFooterContainer isServer={!!isServer}>
       <MessageBox

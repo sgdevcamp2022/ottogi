@@ -19,10 +19,7 @@ const DropDown = () => {
         onChange={handleChange}
         sx={{ color: "white", display: "flex", flexDirection: "row" }}
       >
-        <StyledItem value={10}>
-          <Avatar />
-          Ten
-        </StyledItem>
+        <StyledItem value={10}>Ten</StyledItem>
         <StyledItem value={20}>Twenty</StyledItem>
         <StyledItem value={30}>Thirty</StyledItem>
       </Select>

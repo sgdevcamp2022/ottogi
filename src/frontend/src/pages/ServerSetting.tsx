@@ -1,21 +1,21 @@
 import styled from "styled-components";
-import ServerSettingBar from "../components/organisms/MyAccountSettingBar";
-import UserProfile from "../components/organisms/UserProfile";
+import ServerSettingBar from "../components/organisms/ServerSettingBar";
+import SeverSettingMember from "../components/organisms/ServerSettingMember";
 
-const UserSetting = () => {
+const ServerSetting = () => {
   return (
     <SettingBox>
       <Side>
         <ServerSettingBar />
       </Side>
       <Container>
-        <UserProfile />
+        <SeverSettingMember />
       </Container>
     </SettingBox>
   );
 };
 
-export default UserSetting;
+export default ServerSetting;
 
 const SettingBox = styled.div`
   width: 100%;
@@ -35,6 +35,7 @@ const SettingBox = styled.div`
   flex-direction: row;
   background-color: ${({ theme }) => theme.backgroundColor["voice-icon"]};
 `;
+
 const Container = styled.div`
   position: relative;
   display: flex;

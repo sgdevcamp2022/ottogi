@@ -75,7 +75,7 @@ const MainWrapper = styled.div`
 
 const AvatarWrapper = styled.div`
   height: 32px;
-  width: 130px;
+  width: 8.5;
 `;
 
 const CustomButtons = styled.div`

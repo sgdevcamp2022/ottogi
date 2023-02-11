@@ -1,19 +1,16 @@
 import styled from "styled-components";
 import FieldButton from "../../atoms/Button/fieldButton";
 import Text from "../../atoms/Text/Text";
+import UserState80 from "./UserState80";
 
 const CardUserInfo = () => {
   return (
     <InfoContainer>
-      <Logo />
+      <Logo>
+        <UserState80 />
+      </Logo>
       <NameWrapper>
         <Text text="UserName" fontSize="lg" fontWeight="bold" color="white" />
-        <Text
-          text="UserName"
-          fontSize="lg"
-          fontWeight="bold"
-          color="setting-tab"
-        />
       </NameWrapper>
       <>
         <ButtonWrappper>
@@ -32,14 +29,14 @@ export default CardUserInfo;
 const Logo = styled.div`
   width: 80px;
   height: 80px;
-  background-color: yellow;
+  background-color: ${({ theme }) => theme.backgroundColor["voice-nobody"]};
   position: absolute;
-  top: 82px;
-  left: 22px;
+  top: 75px;
+  left: 20px;
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
   border-radius: 3rem;
-  border: 0.125rem solid white;
+  border: 0.25rem solid ${({ theme }) => theme.backgroundColor["voice-nobody"]}; ;
 `;
 
 const InfoContainer = styled.div`

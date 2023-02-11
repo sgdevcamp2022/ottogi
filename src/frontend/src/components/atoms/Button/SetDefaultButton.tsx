@@ -1,9 +1,6 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { BackgroundColorType, ColorType } from "../../../styles/theme";
-import useUserSetStore, {
-  UserSettingType,
-} from "../../../store/useUserSetStore";
 
 interface SettingButtonProps {
   text: string;
@@ -12,49 +9,22 @@ interface SettingButtonProps {
   color?: ColorType;
   backgroundColor?: BackgroundColorType;
   disabled?: boolean;
-  status: UserSettingType;
 }
 
-const SettingButton = ({
+const SetDefaultButton = ({
   text,
   onClick,
   fontWeight = "normal",
   color = "white",
   backgroundColor = "primary",
   disabled = false,
-  status,
 }: SettingButtonProps) => {
-  const { userStatus, userSettingStatus } = useUserSetStore(
-    ({ userStatus, userSettingStatus }) => ({
-      userStatus,
-      userSettingStatus,
-    })
-  );
-
-  const getColor = (status: UserSettingType) => {
-    return status === userStatus ? "white" : "tab3-header";
-  };
-
-  // const getHoverColor = (status: UserSettingType) => {
-  //   return status === userStatus ? "white" : "icon";
-  // };
-
-  const getBackgroundColor = (status: UserSettingType) => {
-    return status === userStatus ? "active" : "trans";
-  };
-
-  // const getHoverBackgroundColor = () => {
-  //   return "active";
-  // };
-  const changeUserStatus = (mainStatus: UserSettingType) => {
-    userSettingStatus(mainStatus);
-  };
   return (
     <SettingButtonContainer
-      onClick={() => changeUserStatus(status)}
+      onClick={() => onClick}
       fontWeight={fontWeight}
-      color={getColor(status)}
-      backgroundColor={getBackgroundColor(status)}
+      color={color}
+      backgroundColor={backgroundColor}
     >
       {text}
     </SettingButtonContainer>
@@ -87,4 +57,4 @@ export const SettingButtonContainer = styled.button<{
   }
 `;
 
-export default SettingButton;
+export default SetDefaultButton;

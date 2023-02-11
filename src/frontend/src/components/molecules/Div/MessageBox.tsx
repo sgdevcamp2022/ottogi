@@ -10,9 +10,13 @@ interface MessageInputProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-const MessageBox = ({ value, nickname, onChange, onClick }: MessageInputProps) => {
+const MessageBox = ({
+  value,
+  nickname,
+  onChange,
+  onClick,
+}: MessageInputProps) => {
   const messageRef = useRef<HTMLTextAreaElement>(null);
-
   const resizeTextAreaHeight = () => {
     if (messageRef.current instanceof HTMLTextAreaElement) {
       messageRef.current.style.height = "auto";
@@ -22,6 +26,7 @@ const MessageBox = ({ value, nickname, onChange, onClick }: MessageInputProps) =
 
   const handleChange = (v: string) => {
     onChange(v);
+    console.log(v);
     resizeTextAreaHeight();
   };
 

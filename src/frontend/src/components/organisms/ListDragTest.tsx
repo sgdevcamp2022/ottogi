@@ -3,17 +3,15 @@ import { Divider } from "../atoms/Div/Divider.stories";
 import ServerImage from "../atoms/Div/ServerImage";
 import { useState } from "react";
 
-const ServerList = () => {
+const ListDragTest = () => {
   const array: Number[] = [1, 2, 3, 4, 5];
   const [isSelect, SetIsSelect] = useState(false);
 
   return (
     <BarContainer>
+      <ServerImage id={1} onClick={() => console.log(1)} />
+      <Divider />
       <ul>
-        <li>
-          <ServerImage id={0} onClick={() => console.log(1)} />
-        </li>
-        <Divider />
         {array &&
           array.map((index) => {
             return (
@@ -27,7 +25,7 @@ const ServerList = () => {
   );
 };
 
-export default ServerList;
+export default ListDragTest;
 
 const BarContainer = styled.div`
   width: 4.5rem;
