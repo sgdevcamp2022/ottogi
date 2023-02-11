@@ -9,10 +9,14 @@ import devcamp.ottogi.userservice.repository.FriendRepository;
 import devcamp.ottogi.userservice.response.CommonResponse;
 import devcamp.ottogi.userservice.service.AuthService;
 import devcamp.ottogi.userservice.service.EmailService;
+import devcamp.ottogi.userservice.service.FileUploadService;
 import devcamp.ottogi.userservice.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static devcamp.ottogi.userservice.domain.SuccessMessages.*;
 import static devcamp.ottogi.userservice.exception.ErrorCode.*;
@@ -26,9 +30,9 @@ public class AuthController {
     private final AuthService authService;
     private final EmailService emailService;
     private final ResponseService responseService;
-    private final FriendRepository friendRepository;
     private String userEmail;
     private MemberRegisterRequestDto userMemberRequestDto;
+    private final FileUploadService fileUploadService;
 
     @GetMapping("/test")
     public String test(){
@@ -91,5 +95,11 @@ public class AuthController {
     @PostMapping("/reissue") //재발급
     public CommonResponse<Object> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         return responseService.getSuccessResponse(REISSUE_SUCCESS, authService.reissue(tokenRequestDto));
+    }
+
+    @PatchMapping("/modifyimage")
+    public CommonResponse<Object> modifyProfileImage(HttpServletRequest request, @RequestPart MultipartFile file) throws Exception{
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(FILE_UPLOAD_SUCCESS, fileUploadService.uploadFile(userId, file));
     }
 }

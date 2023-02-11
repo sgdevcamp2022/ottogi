@@ -1,6 +1,8 @@
 package devcamp.ottogi.userservice.service;
 
 import devcamp.ottogi.userservice.entity.Member;
+import devcamp.ottogi.userservice.exception.ApiException;
+import devcamp.ottogi.userservice.exception.ErrorCode;
 import devcamp.ottogi.userservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+
+import static devcamp.ottogi.userservice.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +52,8 @@ public class EmailService {
     }
 
     public void emailConfirmSuccess(String userEmail) {
-        Member member = memberRepository.findMemberByEmail(userEmail);
+        Member member = memberRepository.findByEmail(userEmail)
+                        .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
         member.setStatus(1);
         memberRepository.save(member);
     }

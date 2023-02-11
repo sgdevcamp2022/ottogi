@@ -23,6 +23,8 @@ public enum SuccessMessages {
     USER_NAME_MODIFY_SUCCESS("이름 변경 성공"),
     USER_PW_MODIFY_SUCCESS("암호 변경 성공"),
 
+    FILE_UPLOAD_SUCCESS("파일 업로드 성공"),
+
     USER_DELETE_SUCCESS("계정 삭제 완료");
 
     private String message;

@@ -7,6 +7,7 @@ import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
 import devcamp.ottogi.userservice.exception.ApiException;
 import devcamp.ottogi.userservice.response.CommonResponse;
 import devcamp.ottogi.userservice.service.AuthService;
+import devcamp.ottogi.userservice.service.FileUploadService;
 import devcamp.ottogi.userservice.service.MemberService;
 //import devcamp.ottogi.userservice.util.SecurityUtil;
 import devcamp.ottogi.userservice.service.ResponseService;
@@ -32,6 +33,7 @@ public class MemberController {
     private final MemberService memberService;
     private final ResponseService responseService;
     private final AuthService authService;
+    private final FileUploadService fileUploadService;
 
     @GetMapping("/info")
     public CommonResponse<Object> findMemberInfoById(HttpServletRequest request) {
@@ -70,18 +72,9 @@ public class MemberController {
     }
 
     @PatchMapping("/modifyimage")
-    public CommonResponse<Object> modifyProfileImage(HttpServletRequest request, @RequestParam MultipartFile file) throws Exception{
-
-        String FILE_SAVE_DIR ="/C:/Users/whipbaek/Projects/ottogi/images/";
-        String userId = (request.getHeader("id"));
-
-        if(file.isEmpty()){
-            String fullPath = FILE_SAVE_DIR + "filename" + userId + ".png";
-            log.info("파일 저장 fullPath={}", fullPath);
-            file.transferTo(new File(fullPath));
-        }
-
-        return null;
+    public CommonResponse<Object> modifyProfileImage(HttpServletRequest request, @RequestPart MultipartFile file) throws Exception{
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(FILE_UPLOAD_SUCCESS, fileUploadService.uploadFile(userId, file));
     }
 
     @PostMapping("/passwordcheck")
@@ -115,6 +108,5 @@ public class MemberController {
         Long userId = Long.parseLong(request.getHeader("id"));
         return responseService.getSuccessResponse(USER_DELETE_SUCCESS, memberService.userDelete(userId));
     }
-
 
 }

@@ -39,8 +39,6 @@ public class Member {
 
    private String profileImagePath;
 
-   private String profileImageName;
-
    @Column(name = "created_at")
    private LocalDateTime createdAt;
    @Column(name = "updated_at")
@@ -70,6 +68,10 @@ public class Member {
 
    public void passwordModify(String newPassword) {
       this.password = newPassword;
+   }
+
+   public void profileImagePathModify(String profileImagePath){
+      this.profileImagePath = profileImagePath;
    }
 
 }

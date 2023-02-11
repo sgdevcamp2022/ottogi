@@ -20,6 +20,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
     @Query("delete from Friend f where f.sender.id = :sender and f.receiver.id = :receiver")
     void deleteFriendRow(@Param("sender") Long sender, @Param(("receiver")) Long receiver);
 
-    @Query("select f from Friend f where f.sender.id = :sender and f.receiver.id = :reciver")
+    @Query("select f from Friend f where f.sender.id = :sender and f.receiver.id = :receiver")
     Optional<Friend> existFriendRow(@Param("sender") Long sender, @Param(("receiver")) Long receiver);
 }
