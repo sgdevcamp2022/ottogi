@@ -13,7 +13,7 @@ public enum ErrorCode {
     EMAIL_INPUT_ERROR(HttpStatus.BAD_REQUEST, "AUTH002", "이메일 인증 번호가 잘못되었습니다."),
     REGISTER_DUPLICATED_EMAIL(HttpStatus.BAD_REQUEST, "AUTH003", "이미 가입되어 있는 유저입니다."),
     LOGIN_INFO_ERROR(HttpStatus.BAD_REQUEST, "AUTH004", "로그인 정보가 일치하지 않습니다."),
-    NO_MEMBER_ERROR(HttpStatus.BAD_REQUEST, "AUTH005", "로그인 유저 정보가 없습니다."),
+    NO_MEMBER_ERROR(HttpStatus.BAD_REQUEST, "AUTH005", "유저 정보가 없습니다."),
 
 
     NO_TOKEN_HEADER(HttpStatus.BAD_REQUEST, "AUTH010", "토큰이 존재하지 않습니다."),
@@ -26,7 +26,10 @@ public enum ErrorCode {
 
 
     // Member Part
-    PW_MATCH_ERROR(HttpStatus.BAD_REQUEST, "MEMBER001", "비밀번호가 일치하지 않습니다.");
+    PW_MATCH_ERROR(HttpStatus.BAD_REQUEST, "MEMBER001", "비밀번호가 일치하지 않습니다."),
+    DUPLICATED_FRIEND(HttpStatus.BAD_REQUEST, "MEMBER002", "이미 친구 요청이 된 관계거나, 친구 사이입니다."),
+    NO_SHOW_FRIENDS(HttpStatus.BAD_REQUEST, "MEMBER003", "친구 목록이 존재하지 않습니다."),
+    NO_FRIEND_REQUEST(HttpStatus.BAD_REQUEST, "MEMBER004", "친구 요청이 존재하지 않습니다");
 
     private HttpStatus status;
     private String code;

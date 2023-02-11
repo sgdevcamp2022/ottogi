@@ -43,11 +43,19 @@ public class MemberService {
     }
 
     public String addFriend(Long userId, String email){
-        Member sender = memberRepository.findMemberById(userId);
-        log.info("user_one id : {}",sender.getId());
+        Member sender = memberRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
 
-        Member receiver = memberRepository.findMemberByEmail(email);
-        log.info("user_two id : {}",receiver.getId());
+        log.info("sender Id : {}",sender.getId());
+
+        Member receiver = memberRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
+
+        log.info("receiver Id : {}",receiver.getId());
+
+        if(friendRepository.existFriendRow(sender.getId(), receiver.getId()).isEmpty()){
+            throw new ApiException(DUPLICATED_FRIEND);
+        }
 
         friendRepository.save(new Friend(sender, receiver, REQUEST));
         friendRepository.save(new Friend(receiver, sender, WAIT));
@@ -56,7 +64,8 @@ public class MemberService {
     }
 
     public List<FriendResponseDto> showFriend(Long userId){
-        List<Friend> friendList = friendRepository.findFriends(userId);
+        List<Friend> friendList = friendRepository.findFriends(userId)
+                .orElseThrow(() -> new ApiException(NO_SHOW_FRIENDS));
 
         List<FriendResponseDto> friendResponseDtoList = new ArrayList<>();
 
@@ -71,10 +80,15 @@ public class MemberService {
     }
 
     public String acceptFriend(Long userId, String email){
-        Member receiver = memberRepository.findMemberByEmail(email);
+        Member receiver = memberRepository.findByEmail(email)
+                        .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
+
         log.info("user Id : {} , receiver Id : {}", userId, receiver.getId());
-        Friend friendRow_one = friendRepository.findFriendRow(userId, receiver.getId());
-        Friend friendRow_two = friendRepository.findFriendRow(receiver.getId(), userId);
+        Friend friendRow_one = friendRepository.findFriendRow(userId, receiver.getId())
+                .orElseThrow(() -> new ApiException(NO_FRIEND_REQUEST));
+
+        Friend friendRow_two = friendRepository.findFriendRow(receiver.getId(), userId)
+                .orElseThrow(() -> new ApiException(NO_FRIEND_REQUEST));
 
         friendRow_one.stateModify(ACCEPTED);
         friendRow_two.stateModify(ACCEPTED);
@@ -83,8 +97,11 @@ public class MemberService {
     }
 
     public String rejectFriend(Long userId, String email){
-        Member receiver = memberRepository.findMemberByEmail(email);
+        Member receiver = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
+
         log.info("user Id : {} , receiver Id : {}", userId, receiver.getId());
+
         friendRepository.deleteFriendRow(userId, receiver.getId());
         friendRepository.deleteFriendRow(receiver.getId(), userId);
 
@@ -97,14 +114,18 @@ public class MemberService {
     }
 
     public String userNameModify(Long userId, String newName){
-        Member member = memberRepository.findMemberById(userId);
+        Member member = memberRepository.findById(userId)
+                        .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
         member.nameModify(newName);
+
         return "OK";
     }
 
     public String userPasswordModify(Long userId, String newPassword){
-        Member member = memberRepository.findMemberById(userId);
+        Member member = memberRepository.findById(userId)
+                        .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
         member.passwordModify(passwordEncoder.encode(newPassword));
+
         return "OK";
     }
 
