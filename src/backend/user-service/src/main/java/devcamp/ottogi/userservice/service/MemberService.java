@@ -130,4 +130,11 @@ public class MemberService {
     }
 
 
+    public String userIntroModify(Long userId, String introduction) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
+
+        member.introductionModify(introduction);
+        return "OK";
+    }
 }

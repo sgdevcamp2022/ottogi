@@ -17,7 +17,6 @@ public class MemberResponseDto {
     private String name;
     private String introduction;
     private String profileImagePath;
-    private String profileImageName;
     private LocalDateTime createdAt;
 
     public static MemberResponseDto of(Member member) {
@@ -26,7 +25,6 @@ public class MemberResponseDto {
                 .name(member.getName())
                 .introduction(member.getIntroduction())
                 .profileImagePath(member.getProfileImagePath())
-                .profileImageName(member.getProfileImageName())
                 .createdAt(member.getCreatedAt())
                 .build();
     }

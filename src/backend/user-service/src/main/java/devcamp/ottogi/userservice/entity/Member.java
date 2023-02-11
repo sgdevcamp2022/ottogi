@@ -74,4 +74,8 @@ public class Member {
       this.profileImagePath = profileImagePath;
    }
 
+   public void introductionModify(String introduction) {
+      this.introduction = introduction;
+   }
+
 }

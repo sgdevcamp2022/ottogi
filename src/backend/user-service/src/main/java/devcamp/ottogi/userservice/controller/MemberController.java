@@ -71,11 +71,19 @@ public class MemberController {
         return responseService.getSuccessResponse(FRIEND_REJECT_SUCCESS, memberService.rejectFriend(userId, friendRequestDto.getEmail()));
     }
 
-    @PatchMapping("/modifyimage")
+    @PatchMapping("/modify/image")
     public CommonResponse<Object> modifyProfileImage(HttpServletRequest request, @RequestPart MultipartFile file) throws Exception{
         Long userId = Long.parseLong(request.getHeader("id"));
         return responseService.getSuccessResponse(FILE_UPLOAD_SUCCESS, fileUploadService.uploadFile(userId, file));
     }
+
+    @PatchMapping("/modify/introduction")
+    public CommonResponse<Object> modifyIntroduction(HttpServletRequest request, @RequestBody MemberModifyRequestDto memberModifyRequestDto) {
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(USER_INTRO_MODIFY_SUCCESS, memberService.userIntroModify(userId, memberModifyRequestDto.getIntroduction()));
+
+    }
+
 
     @PostMapping("/passwordcheck")
     public CommonResponse<Object> passwordCheck(MemberLoginRequestDto memberLoginRequestDto){
@@ -103,7 +111,7 @@ public class MemberController {
         return responseService.getSuccessResponse(USER_PW_MODIFY_SUCCESS, memberService.userPasswordModify(userId, newPassword));
     }
 
-    @DeleteMapping("/userDelete")
+    @DeleteMapping("/userdelete")
     public CommonResponse<Object> userDelete(HttpServletRequest request){
         Long userId = Long.parseLong(request.getHeader("id"));
         return responseService.getSuccessResponse(USER_DELETE_SUCCESS, memberService.userDelete(userId));
