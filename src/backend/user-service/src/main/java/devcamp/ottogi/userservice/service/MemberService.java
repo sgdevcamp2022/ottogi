@@ -5,6 +5,8 @@ import devcamp.ottogi.userservice.dto.response.FriendResponseDto;
 import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
 import devcamp.ottogi.userservice.entity.Friend;
 import devcamp.ottogi.userservice.entity.Member;
+import devcamp.ottogi.userservice.exception.ApiException;
+import devcamp.ottogi.userservice.exception.ErrorCode;
 import devcamp.ottogi.userservice.repository.FriendRepository;
 import devcamp.ottogi.userservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static devcamp.ottogi.userservice.domain.FriendState.*;
+import static devcamp.ottogi.userservice.exception.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = false)
@@ -30,13 +33,13 @@ public class MemberService {
     public MemberResponseDto findMemberInfoById(Long memberId){
         return memberRepository.findById(memberId)
                 .map(MemberResponseDto::of)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
     }
 
     public MemberResponseDto findMemberInfoByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .map(MemberResponseDto::of)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
     }
 
     public String addFriend(Long userId, String email){

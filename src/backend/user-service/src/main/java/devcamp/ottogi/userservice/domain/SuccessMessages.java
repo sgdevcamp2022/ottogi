@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum TextMessages {
+public enum SuccessMessages {
 
     SEND_EMAIL("이메일을 전송하였습니다."),
     SIGNUP_SUCCESS("회원가입이 정상적으로 완료되었습니다."),

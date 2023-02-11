@@ -5,7 +5,6 @@ import devcamp.ottogi.userservice.dto.request.MemberLoginRequestDto;
 import devcamp.ottogi.userservice.dto.request.MemberModifyRequestDto;
 import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
 import devcamp.ottogi.userservice.exception.ApiException;
-import devcamp.ottogi.userservice.exception.ErrorCode;
 import devcamp.ottogi.userservice.response.CommonResponse;
 import devcamp.ottogi.userservice.service.AuthService;
 import devcamp.ottogi.userservice.service.MemberService;
@@ -21,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.io.File;
 
-import static devcamp.ottogi.userservice.domain.TextMessages.*;
+import static devcamp.ottogi.userservice.domain.SuccessMessages.*;
 import static devcamp.ottogi.userservice.exception.ErrorCode.*;
 
 
@@ -87,9 +86,7 @@ public class MemberController {
 
     @PostMapping("/passwordcheck")
     public CommonResponse<Object> passwordCheck(MemberLoginRequestDto memberLoginRequestDto){
-        if(!authService.checkPW(memberLoginRequestDto)){
-            throw new ApiException(PW_MATCH_ERROR);
-        }
+        authService.checkPW(memberLoginRequestDto);
         return responseService.getSuccessResponse(PW_MATCH_SUCCESS, null);
     }
 
@@ -107,7 +104,7 @@ public class MemberController {
         String newPassword = memberModifyRequestDto.getPassword();
 
         if (newPassword.length() < 8) {
-            throw new ApiException(SIGNUP_PW_ERROR);
+            throw new ApiException(REGISTER_PW_LEN_ERROR);
         }
 
         return responseService.getSuccessResponse(USER_PW_MODIFY_SUCCESS, memberService.userPasswordModify(userId, newPassword));

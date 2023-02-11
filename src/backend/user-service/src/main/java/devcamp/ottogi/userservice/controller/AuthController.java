@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import static devcamp.ottogi.userservice.domain.TextMessages.*;
+import static devcamp.ottogi.userservice.domain.SuccessMessages.*;
 import static devcamp.ottogi.userservice.exception.ErrorCode.*;
 
 @RestController
@@ -46,7 +46,7 @@ public class AuthController {
 
         // 로직 검사
         if(password.length() < 8){
-            throw new ApiException(SIGNUP_PW_ERROR);
+            throw new ApiException(REGISTER_PW_LEN_ERROR);
         }
 
         emailService.sendSimpleMessage(memberRequestDto.getEmail());
@@ -63,7 +63,7 @@ public class AuthController {
 
         // 로직 검사
         if(password.length() < 8){
-            throw new ApiException(SIGNUP_PW_ERROR);
+            throw new ApiException(REGISTER_PW_LEN_ERROR);
         }
 
         authService.signup(userMemberRequestDto);

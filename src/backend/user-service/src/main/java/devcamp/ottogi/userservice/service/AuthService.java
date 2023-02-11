@@ -6,6 +6,7 @@ import devcamp.ottogi.userservice.dto.request.MemberRegisterRequestDto;
 import devcamp.ottogi.userservice.dto.request.TokenRequestDto;
 import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
 import devcamp.ottogi.userservice.entity.Member;
+import devcamp.ottogi.userservice.exception.ApiException;
 import devcamp.ottogi.userservice.jwt.TokenProvider;
 import devcamp.ottogi.userservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import static devcamp.ottogi.userservice.exception.ErrorCode.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,7 +37,7 @@ public class AuthService {
     @Transactional
     public MemberResponseDto signup(MemberRegisterRequestDto memberRequestDto) {
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
-            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+            throw new ApiException(REGISTER_DUPLICATED_EMAIL);
         }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
@@ -45,32 +48,36 @@ public class AuthService {
     public TokenDto login(MemberLoginRequestDto memberLoginDto) {
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
-        log.info("authenticationToken Principal : {}", authenticationToken.getPrincipal());
 
         // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        try {
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
-
-
-        // 4. RefreshToken 저장 (key, value, timout, time 단위(ms))
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
+            // 3. 인증 정보를 기반으로 JWT 토큰 생성
+            TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
 
-        return tokenDto;
+            // 4. RefreshToken 저장 (key, value, timout, time 단위(ms))
+            redisTemplate.opsForValue()
+                    .set("RT:" + authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
+
+            return tokenDto;
+
+        } catch (Exception e){
+            throw new ApiException(LOGIN_INFO_ERROR);
+        }
+
+
     }
 
     @Transactional
-    public boolean checkPW(MemberLoginRequestDto memberLoginRequestDto){
+    public void checkPW(MemberLoginRequestDto memberLoginRequestDto){
         try{
             UsernamePasswordAuthenticationToken authenticationToken = memberLoginRequestDto.toAuthentication();
             // 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
             authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            return true;
         } catch (Exception e){
-            return false;
+            throw new ApiException(PW_MATCH_ERROR);
         }
 
     }
@@ -79,9 +86,7 @@ public class AuthService {
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
         // 1. Refresh Token 검증
-        if(!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())){
-            throw new RuntimeException("Refresh token 이 유효하지 않습니다.");
-        }
+        tokenProvider.validateToken(tokenRequestDto.getRefreshToken());
 
         // 2. Access Token 에서 Member ID 가져오기
         Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
@@ -91,8 +96,7 @@ public class AuthService {
 
         // 4. 유효한지 검사
         if(ObjectUtils.isEmpty(refreshToken)) {
-            log.info("해당 Token이 존재하지 않습니다.");
-            return null;
+            throw new ApiException(NO_RT_IN_DB);
         }
 
         // 5. 새로운 토큰 생성
