@@ -31,7 +31,6 @@ public class MemberRegisterRequestDto {
                 .name(name)
                 .status(1)
                 .introduction("")
-                .profileImageName("")
                 .profileImagePath("")
                 .authority(ROLE_USER)
                 .build();
