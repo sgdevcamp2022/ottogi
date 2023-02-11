@@ -6,6 +6,7 @@ import Server from "../pages/Server";
 import ProtectAuth from "../components/organisms/ProtectAuth";
 import ProtectPage from "../components/organisms/ProtectHome";
 import NotFound from "../pages/NotFound";
+import Chat from "../pages/Chat";
 
 const Router = () => {
   return (
@@ -42,6 +43,7 @@ const Router = () => {
           </ProtectPage>
         }
       />
+      <Route path="chat" element={<Chat />} />
       <Route
         path="/login"
         element={

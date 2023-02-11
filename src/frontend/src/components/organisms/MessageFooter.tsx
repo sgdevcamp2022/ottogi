@@ -4,6 +4,7 @@ import MessageBox from "../molecules/Div/MessageBox";
 
 const MessageFooter = () => {
   const [value, onChange] = useInput();
+  console.log(value);
   return (
     <MessageFooterContainer>
       <MessageBox
