@@ -2,6 +2,7 @@ import { MouseEventHandler } from "react";
 import styled from "styled-components";
 import {
   BackgroundColorType,
+  BorderColorType,
   ColorType,
   FontSizeType,
 } from "../../../styles/theme";
@@ -15,8 +16,12 @@ interface DefaultButtonProps {
   fontWeight?: "normal" | "bold";
   color?: ColorType;
   backgroundColor?: BackgroundColorType;
+  hoverBackgroundColor?: BackgroundColorType;
   disabled?: boolean;
+  borderColor?: BorderColorType;
   mb?: number;
+  ph?: number;
+  pv?: number;
 }
 
 const DefaultButton = ({
@@ -28,8 +33,12 @@ const DefaultButton = ({
   fontWeight = "normal",
   color = "white",
   backgroundColor = "primary",
+  hoverBackgroundColor = "primary",
   disabled = false,
+  borderColor = "trans",
   mb = 0,
+  ph = 0,
+  pv = 0,
 }: DefaultButtonProps) => {
   return (
     <DefaultButtonContainer
@@ -41,7 +50,11 @@ const DefaultButton = ({
       fontWeight={fontWeight}
       color={color}
       backgroundColor={backgroundColor}
+      borderColor={borderColor}
+      hoverBackgroundColor={hoverBackgroundColor}
       mb={mb}
+      ph={ph}
+      pv={pv}
     >
       {text}
     </DefaultButtonContainer>
@@ -53,9 +66,13 @@ interface DefaultButtonContainerProps {
   height: number | null;
   color: ColorType;
   backgroundColor: BackgroundColorType;
+  hoverBackgroundColor: BackgroundColorType;
   fontSize: FontSizeType;
   fontWeight: "normal" | "bold";
+  borderColor: BorderColorType;
   mb: number;
+  ph: number;
+  pv: number;
 }
 
 const DefaultButtonContainer = styled.button<DefaultButtonContainerProps>`
@@ -71,8 +88,13 @@ const DefaultButtonContainer = styled.button<DefaultButtonContainerProps>`
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
   margin-bottom: ${({ mb }) => mb}px;
+  padding: ${({ ph, pv }) => `${pv}px ${ph}px`};
+  border: 1px solid
+    ${({ theme, borderColor }) => theme.borderColor[borderColor]};
   &:hover {
     opacity: 0.7;
+    background-color: ${({ theme, hoverBackgroundColor }) =>
+      theme.backgroundColor[hoverBackgroundColor]};
   }
 `;
 

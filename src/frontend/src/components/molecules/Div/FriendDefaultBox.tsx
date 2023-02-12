@@ -71,6 +71,11 @@ const FriendDefaultBox = ({
 
 const EtcContainer = styled.div`
   position: relative;
+  svg {
+    &:hover {
+      color: ${({ theme }) => theme.backgroundColor["voice-hangup"]};
+    }
+  }
 `;
 
 export default FriendDefaultBox;

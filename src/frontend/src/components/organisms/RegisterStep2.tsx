@@ -12,9 +12,10 @@ import AuthHeader from "../molecules/Text/AuthHeader";
 const RegisterStep2 = () => {
   const { email, name, password } = useRegisterStore();
   const [userCode, onChangeUserCode] = useInput();
-  const { mutate: sendEmail } = useRegister();
-  const { mutate: sendUserCode } = useSendUserCode();
+  const { mutate: sendEmail, isError: error1 } = useRegister();
+  const { mutate: sendUserCode, isError: error2 } = useSendUserCode();
 
+  console.log(error1, error2);
   const resendEmail = () => {
     sendEmail({ email, name, password });
   };
@@ -28,9 +29,17 @@ const RegisterStep2 = () => {
       <AuthHeader text="코드 입력" />
       <AuthDesc text="이메일 확인: 방금 인증 코드를 보냈어요. 해당 코드를 입력하여 본인임을 인증하세요." />
       <AuthForm value={userCode} onChange={onChangeUserCode} text="인증 코드" />
-      <LinkText text="코드를 받지 못했거나 코드가 만료되었나요? 다시 보내세요." onClick={resendEmail} />
+      <LinkText
+        text="코드를 받지 못했거나 코드가 만료되었나요? 다시 보내세요."
+        onClick={resendEmail}
+      />
       <Footer>
-        <DefaultButton text="다음" onClick={verifyEmail} height={44} width={100} />
+        <DefaultButton
+          text="다음"
+          onClick={verifyEmail}
+          height={44}
+          width={100}
+        />
       </Footer>
     </>
   );

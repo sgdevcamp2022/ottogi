@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import styled from "styled-components";
 import useAcceptFriend from "../../../hooks/query/useAcceptFriend";
 import useCancelFriend from "../../../hooks/query/useCancelFriend";
 import useRejectFriend from "../../../hooks/query/useRejectFriend";
@@ -32,7 +33,11 @@ const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
           onClick={() => acceptFriend(params)}
         />
         <RoundButton
-          Icon={<CancelIcon />}
+          Icon={
+            <CancelIconWrapper>
+              <CancelIcon />
+            </CancelIconWrapper>
+          }
           onClick={() => rejectFriend(params)}
         />
       </>
@@ -52,5 +57,11 @@ const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
     />
   );
 };
+
+const CancelIconWrapper = styled.div`
+  &:hover {
+    color: ${({ theme }) => theme.backgroundColor["voice-hangup"]};
+  }
+`;
 
 export default FriendWaitingBox;

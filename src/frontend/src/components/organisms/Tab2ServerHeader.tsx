@@ -1,22 +1,29 @@
+import { useState } from "react";
 import styled from "styled-components";
 import TabDivider from "../atoms/Div/TabDivider";
 import ArrowBottomIcon from "../atoms/Icons/ArrowBottomIcon";
 import Text from "../atoms/Text/Text";
+import ServerModal from "../molecules/Div/ServerModal";
 
 const Tab2ServerHeader = () => {
+  const [showModal, setShowModal] = useState(false);
   const serverName = "test";
   return (
     <>
-      <Tab2HeaderContainer>
+      <Tab2HeaderContainer
+        showModal={showModal}
+        onClick={() => setShowModal(!showModal)}
+      >
         <Text text={serverName} color="white" />
         <ArrowBottomIcon />
       </Tab2HeaderContainer>
+      {showModal && <ServerModal />}
       <TabDivider />
     </>
   );
 };
 
-const Tab2HeaderContainer = styled.div`
+const Tab2HeaderContainer = styled.div<{ showModal: boolean }>`
   position: sticky;
   top: 0;
   padding: 0.75rem 1rem;
@@ -25,6 +32,8 @@ const Tab2HeaderContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+  background-color: ${({ theme, showModal }) =>
+    theme.backgroundColor[showModal ? "hover" : "trans"]};
   svg {
     color: ${({ theme }) => theme.color.icon};
   }

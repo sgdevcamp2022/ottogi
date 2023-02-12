@@ -4,6 +4,7 @@ import PersonAddIcon from "../../atoms/Icons/PersonAddIcon";
 import TagIcon from "../../atoms/Icons/TagIcon";
 import VolumeIcon from "../../atoms/Icons/VolumeIcon";
 import Text from "../../atoms/Text/Text";
+import useModalStore from "../../../store/useModalStore";
 
 interface ServerRoomButtonProps {
   type: "chat" | "voice";
@@ -11,6 +12,7 @@ interface ServerRoomButtonProps {
 }
 
 const ServerRoomButton = ({ type, text }: ServerRoomButtonProps) => {
+  const { setInviteFriendModal } = useModalStore();
   return (
     <ButtonContainer>
       <ButtonWrapper ph={6} onClick={() => null} height={34}>
@@ -19,7 +21,10 @@ const ServerRoomButton = ({ type, text }: ServerRoomButtonProps) => {
             {type === "chat" ? <TagIcon /> : <VolumeIcon />}
             <Text text={text} />
           </LeftContainer>
-          <div className="right-icon">
+          <div
+            className="right-icon"
+            onClick={() => setInviteFriendModal(true)}
+          >
             <PersonAddIcon />
           </div>
         </ServerRoomButtonContainer>

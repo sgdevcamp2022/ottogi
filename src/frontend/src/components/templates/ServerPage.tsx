@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import useModalStore from "../../store/useModalStore";
+import InviteFriendModal from "../organisms/InviteFriendModal";
 import ServerList from "../organisms/ServerList";
 import Tab2Footer from "../organisms/Tab2Footer";
 import Tab2ServerBody from "../organisms/Tab2ServerBody";
@@ -7,6 +9,7 @@ import Tab3ServerBody from "../organisms/Tab3ServerBody";
 import Tab3ServerHeader from "../organisms/Tab3ServerHeader";
 
 const ServerPage = () => {
+  const { inviteFriendModal } = useModalStore();
   return (
     <>
       <ServerList />
@@ -19,6 +22,7 @@ const ServerPage = () => {
         <Tab3ServerHeader />
         <Tab3ServerBody />
       </Tab3Container>
+      {inviteFriendModal && <InviteFriendModal />}
     </>
   );
 };

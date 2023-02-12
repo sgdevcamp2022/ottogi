@@ -41,6 +41,8 @@ export type BackgroundColorType =
 export type ColorType =
   | "inherit"
   | "white"
+  | "primary"
+  | "invite"
   | "msg"
   | "icon"
   | "msg-placeholder"
@@ -64,6 +66,7 @@ export type ColorType =
   | "server-subtitle";
 
 export type BorderColorType =
+  | "trans"
   | "divider"
   | "default"
   | "focus"
@@ -114,6 +117,8 @@ const theme: DefaultTheme = {
   color: {
     inherit: "inherit",
     white: "#FFFFFF",
+    primary: "#5865F2",
+    invite: "#949cf7",
     msg: "#DCDDDE",
     icon: "#b9bbbe",
     "tab3-header": "#B9BBBE",
@@ -137,6 +142,7 @@ const theme: DefaultTheme = {
     black: "#000",
   },
   borderColor: {
+    trans: "transparent",
     divider: "#4F545C7A",
     default: "#16181a",
     success: "#3ba55c",

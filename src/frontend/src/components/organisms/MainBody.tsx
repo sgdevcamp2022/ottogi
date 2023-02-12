@@ -32,13 +32,14 @@ const MainBody = () => {
         <MainDirectBody />
       )}
       <SideBar>
-        <>dd</>
+        <>friend list</>
       </SideBar>
     </MainBodyContainer>
   );
 };
 
 const MainBodyContainer = styled.div`
+  margin-top: 4px;
   display: flex;
   flex-direction: row;
 `;

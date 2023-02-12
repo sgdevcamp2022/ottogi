@@ -1,40 +1,42 @@
+import { useState } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/common/useInput";
 import TabDivider from "../atoms/Div/TabDivider";
 import NotificationsIcon from "../atoms/Icons/NotificationsIcon";
 import TagIcon from "../atoms/Icons/TagIcon";
 import Text from "../atoms/Text/Text";
+import NotificationModal from "../molecules/Div/NotificationModal";
 import SearchInput from "../molecules/Input/SearchInput";
 
 const Tab3ServerHeader = () => {
   const chatroomName = "test";
   const [value, onChange] = useInput();
-
+  const [showNotiModal, setShowNotiModal] = useState(false);
   return (
-    <Tab3ServerHeaderContainer>
-      <HeaderWrapper>
+    <>
+      <Tab3ServerHeaderContainer>
         <HeaderLeftWrapper>
           <TagIcon />
           <Text text={chatroomName} color="white" />
         </HeaderLeftWrapper>
         <HeaderRightWrapper>
-          <NotificationsIcon />
+          <div onClick={() => setShowNotiModal(!showNotiModal)}>
+            <NotificationsIcon />
+          </div>
+          {showNotiModal && <NotificationModal />}
           <SearchInputWrapper>
             <SearchInput size="s" value={value} onChange={onChange} />
           </SearchInputWrapper>
         </HeaderRightWrapper>
-      </HeaderWrapper>
+      </Tab3ServerHeaderContainer>
       <TabDivider />
-    </Tab3ServerHeaderContainer>
+    </>
   );
 };
 
 const Tab3ServerHeaderContainer = styled.div`
   position: sticky;
   top: 0;
-`;
-
-const HeaderWrapper = styled.div`
   width: 100%;
   z-index: 99;
   height: 48px;

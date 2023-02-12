@@ -5,7 +5,7 @@ interface ModalProps {
   width: number;
 }
 
-const ServerModal = ({ children, width }: ModalProps) => {
+const WhiteModal = ({ children, width }: ModalProps) => {
   return (
     <Background>
       <ModalContainer width={width}>{children}</ModalContainer>
@@ -31,4 +31,4 @@ const ModalContainer = styled.div<ModalProps>`
   justify-content: center;
 `;
 
-export default ServerModal;
+export default WhiteModal;

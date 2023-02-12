@@ -8,16 +8,22 @@ interface SearchInputProps {
   size: SizeType;
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  placeholder?: string;
 }
 
-const SearchInput = ({ size, value, onChange }: SearchInputProps) => {
+const SearchInput = ({
+  size,
+  value,
+  onChange,
+  placeholder = "검색하기",
+}: SearchInputProps) => {
   return (
     <SearchInputContainer size={size}>
       <DefaultInput
         type="text"
         value={value}
         onChange={onChange}
-        placeholder="검색하기"
+        placeholder={placeholder}
         fontSize={size === "s" ? "sm" : "base"}
       />
       <SearchIcon />
