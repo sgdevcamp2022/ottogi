@@ -5,8 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -62,19 +60,19 @@ public class Member {
       ROLE_USER, ROLE_ADMIN
    }
 
-   public void nameModify(String newName){
+   public void modifyName(String newName){
       this.name = newName;
    }
 
-   public void passwordModify(String newPassword) {
+   public void modifyPassword(String newPassword) {
       this.password = newPassword;
    }
 
-   public void profileImagePathModify(String profileImagePath){
+   public void modifyProfileImagePath(String profileImagePath){
       this.profileImagePath = profileImagePath;
    }
 
-   public void introductionModify(String introduction) {
+   public void modifyIntroduction(String introduction) {
       this.introduction = introduction;
    }
 

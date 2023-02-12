@@ -1,12 +1,10 @@
 package devcamp.ottogi.userservice.service;
 
-import devcamp.ottogi.userservice.dto.request.MemberModifyRequestDto;
 import devcamp.ottogi.userservice.dto.response.FriendResponseDto;
 import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
 import devcamp.ottogi.userservice.entity.Friend;
 import devcamp.ottogi.userservice.entity.Member;
 import devcamp.ottogi.userservice.exception.ApiException;
-import devcamp.ottogi.userservice.exception.ErrorCode;
 import devcamp.ottogi.userservice.repository.FriendRepository;
 import devcamp.ottogi.userservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -116,7 +114,7 @@ public class MemberService {
     public String userNameModify(Long userId, String newName){
         Member member = memberRepository.findById(userId)
                         .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
-        member.nameModify(newName);
+        member.modifyName(newName);
 
         return "OK";
     }
@@ -124,7 +122,7 @@ public class MemberService {
     public String userPasswordModify(Long userId, String newPassword){
         Member member = memberRepository.findById(userId)
                         .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
-        member.passwordModify(passwordEncoder.encode(newPassword));
+        member.modifyPassword(passwordEncoder.encode(newPassword));
 
         return "OK";
     }
@@ -134,7 +132,7 @@ public class MemberService {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
 
-        member.introductionModify(introduction);
+        member.modifyIntroduction(introduction);
         return "OK";
     }
 }

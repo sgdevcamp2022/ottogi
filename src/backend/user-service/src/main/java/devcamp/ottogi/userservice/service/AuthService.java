@@ -35,7 +35,7 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
-    public MemberResponseDto signup(MemberRegisterRequestDto memberRequestDto) {
+    public MemberResponseDto register(MemberRegisterRequestDto memberRequestDto) {
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
             throw new ApiException(REGISTER_DUPLICATED_EMAIL);
         }

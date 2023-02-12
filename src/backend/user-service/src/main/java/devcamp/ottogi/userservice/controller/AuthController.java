@@ -5,7 +5,6 @@ import devcamp.ottogi.userservice.dto.request.MemberRegisterRequestDto;
 import devcamp.ottogi.userservice.dto.request.TokenRequestDto;
 import devcamp.ottogi.userservice.dto.request.EmailCodeRequestDto;
 import devcamp.ottogi.userservice.exception.ApiException;
-import devcamp.ottogi.userservice.repository.FriendRepository;
 import devcamp.ottogi.userservice.response.CommonResponse;
 import devcamp.ottogi.userservice.service.AuthService;
 import devcamp.ottogi.userservice.service.EmailService;
@@ -70,7 +69,7 @@ public class AuthController {
             throw new ApiException(REGISTER_PW_LEN_ERROR);
         }
 
-        authService.signup(userMemberRequestDto);
+        authService.register(userMemberRequestDto);
         return responseService.getSuccessResponse(SIGNUP_SUCCESS, null);
     }
 
@@ -83,7 +82,7 @@ public class AuthController {
             throw new ApiException(EMAIL_INPUT_ERROR);
         }
 
-        authService.signup(userMemberRequestDto);
+        authService.register(userMemberRequestDto);
         return responseService.getSuccessResponse(SIGNUP_SUCCESS, userEmail);
     }
 

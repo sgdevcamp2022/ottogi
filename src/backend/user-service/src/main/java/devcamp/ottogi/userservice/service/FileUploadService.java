@@ -6,7 +6,6 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import devcamp.ottogi.userservice.entity.Member;
 import devcamp.ottogi.userservice.exception.ApiException;
-import devcamp.ottogi.userservice.exception.ErrorCode;
 import devcamp.ottogi.userservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,7 +50,7 @@ public class FileUploadService {
 
         String imageUrl = "https://" + bucket + ".s3." +  region + ".amazonaws.com/" + fileName;
 
-        member.profileImagePathModify(imageUrl);
+        member.modifyProfileImagePath(imageUrl);
 
         return imageUrl;
     }
