@@ -2,23 +2,26 @@ import styled from "styled-components";
 import { Divider } from "../atoms/Div/Divider.stories";
 import ServerImage from "../atoms/Div/ServerImage";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ServerList = () => {
   const array: Number[] = [1, 2, 3, 4, 5];
-  const [isSelect, SetIsSelect] = useState(false);
-
+  const navigate = useNavigate();
+  const onMain = () => {
+    navigate("/@me");
+  };
   return (
     <BarContainer>
       <ul>
-        <li>
-          <ServerImage id={0} onClick={() => console.log(1)} />
+        <li onClick={onMain}>
+          <ServerImage name="메인" id={0} />
         </li>
         <Divider />
         {array &&
-          array.map((index) => {
+          array.map((v, index) => {
             return (
               <li>
-                <ServerImage id={index} onClick={() => console.log(1)} />
+                <ServerImage name="서버1" id={v} />
               </li>
             );
           })}

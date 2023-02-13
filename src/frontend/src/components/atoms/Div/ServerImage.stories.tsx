@@ -6,6 +6,4 @@ export default {
   component: DivServerImage,
 };
 
-export const ServerImage = () => (
-  <DivServerImage id={3} onClick={action("clicked")} />
-);
+export const ServerImage = () => <DivServerImage id={3} name="서버1" />;

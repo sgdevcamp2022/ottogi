@@ -9,14 +9,14 @@ const ListDragTest = () => {
 
   return (
     <BarContainer>
-      <ServerImage id={1} onClick={() => console.log(1)} />
+      <ServerImage id={1} name="서버1" />
       <Divider />
       <ul>
         {array &&
           array.map((index) => {
             return (
               <li>
-                <ServerImage id={index} onClick={() => console.log(1)} />
+                <ServerImage id={index} name="서버1" />
               </li>
             );
           })}

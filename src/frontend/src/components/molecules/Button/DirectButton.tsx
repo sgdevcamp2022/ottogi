@@ -11,15 +11,27 @@ interface DirectButtonProps {
   status?: StateType;
 }
 
-const DirectButton = ({ id, name, active = false, status = "on" }: DirectButtonProps) => {
-  const { mainTab, setMainTab } = useMainStore(({ mainTab, setMainTab }) => ({ mainTab, setMainTab }));
+const DirectButton = ({
+  id,
+  name,
+  active = false,
+  status = "on",
+}: DirectButtonProps) => {
+  const { mainTab, setMainTab } = useMainStore(({ mainTab, setMainTab }) => ({
+    mainTab,
+    setMainTab,
+  }));
 
   const goChatRoom = () => {
     setMainTab(id.toString());
   };
 
   return (
-    <ButtonWrapper active={Number(mainTab) === id} onClick={goChatRoom} height={42}>
+    <ButtonWrapper
+      active={Number(mainTab) === id}
+      onClick={goChatRoom}
+      height={42}
+    >
       <DirectButtonContainer>
         <UserState status={status} />
         <Text text={name} />

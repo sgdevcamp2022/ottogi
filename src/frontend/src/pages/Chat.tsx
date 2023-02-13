@@ -16,7 +16,8 @@ const Chat = () => {
   const subscribe = () => {
     if (client != null) {
       // subscribe에 url파라미터로 제공해줘야 함.
-      client.subscribe("/topic/ottogi_channel", (data: any) => {
+      client.subscribe("/topic/ottogi_channel3", (data: any) => {
+        console.log("data:" + data);
         console.log(data);
         const newMessage: string = JSON.parse(data.body).message as string;
         addContent(newMessage);
@@ -37,7 +38,7 @@ const Chat = () => {
   const connect = () => {
     client = new Client({
       // 해당 부분도 파라미터로 넣어두기
-      brokerURL: "ws://172.20.6.236:64419/ws",
+      brokerURL: "ws://192.168.0.168:64420/ws",
       debug: function (str) {
         console.log(str);
       },
@@ -82,7 +83,7 @@ const Chat = () => {
     <>
       <DefaultButton
         text="test"
-        onClick={() => handler("ottogi_channel", "12121", "asdadad", "test1")}
+        onClick={() => handler("ottogi_channel3", "12121", "asdadad", "test1")}
       />
     </>
   );
