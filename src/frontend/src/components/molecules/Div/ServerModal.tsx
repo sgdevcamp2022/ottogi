@@ -8,27 +8,25 @@ import DarkModalButton from "../Button/DarkModalButton";
 const ServerModal = () => {
   return (
     <DarkModal width={220} top={55} left={80}>
-      <>
-        <DarkModalButton
-          text="초대하기"
-          color="invite"
-          onClick={() => null}
-          Icon={<PersonAddIcon />}
-        />
-        <DarkModalButton
-          text="서버 프로필 편집"
-          onClick={() => null}
-          Icon={<EditIcon />}
-        />
-        <Divider />
-        <DarkModalButton
-          text="서버 나가기"
-          color="red"
-          hoverBackgroundColor="voice-hangup"
-          onClick={() => null}
-          Icon={<LogoutIcon />}
-        />
-      </>
+      <DarkModalButton
+        text="초대하기"
+        color="invite"
+        onClick={() => null}
+        Icon={<PersonAddIcon />}
+      />
+      <DarkModalButton
+        text="서버 프로필 편집"
+        onClick={() => null}
+        Icon={<EditIcon />}
+      />
+      <Divider />
+      <DarkModalButton
+        text="서버 나가기"
+        color="red"
+        hoverBackgroundColor="voice-hangup"
+        onClick={() => null}
+        Icon={<LogoutIcon />}
+      />
     </DarkModal>
   );
 };

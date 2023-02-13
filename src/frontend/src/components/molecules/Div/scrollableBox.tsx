@@ -1,15 +1,6 @@
-import { ReactElement } from "react";
 import styled from "styled-components";
 
-interface ScrollableBoxProps {
-  children: ReactElement;
-}
-
-const ScrollableBox = ({ children }: ScrollableBoxProps) => {
-  return <ScrollableContainer>{children}</ScrollableContainer>;
-};
-
-const ScrollableContainer = styled.div`
+const ScrollableBox = styled.div`
   width: 100%;
   overflow-y: auto;
   display: flex;

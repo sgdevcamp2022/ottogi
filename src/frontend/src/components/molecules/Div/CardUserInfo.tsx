@@ -12,14 +12,9 @@ const CardUserInfo = () => {
       <NameWrapper>
         <Text text="UserName" fontSize="lg" fontWeight="bold" color="white" />
       </NameWrapper>
-      <>
-        <ButtonWrappper>
-          <FieldButton
-            text="사용자 프로필 편집"
-            onClick={() => console.log(1)}
-          />
-        </ButtonWrappper>
-      </>
+      <ButtonWrappper>
+        <FieldButton text="사용자 프로필 편집" onClick={() => console.log(1)} />
+      </ButtonWrappper>
     </InfoContainer>
   );
 };

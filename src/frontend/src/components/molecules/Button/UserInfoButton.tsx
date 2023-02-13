@@ -15,7 +15,7 @@ const UserInfoButton = ({ status = "on" }: UserInfoButtonProps) => {
 
   return (
     <ButtonWrapper
-      onClick={() => {}}
+      onClick={() => null}
       height={39}
       hoverBackgroundColor="active"
       ph={0}

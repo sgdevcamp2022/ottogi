@@ -34,22 +34,10 @@ const MainWaiting = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"대기 중"} num={num} />
           <ScrollableBox>
-            <>
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-            </>
+            {friendList.map(({ receiver, friendState }: FriendListType) => (
+              <FriendWaitingBox name={receiver} status={friendState} />
+            ))}
           </ScrollableBox>
-          {/* {friendList.map(({ receiver, friendState }: FriendListType) => (
-            <FriendWaitingBox name={receiver} status={friendState} />
-          ))} */}
         </>
       ) : (
         <EmptyContainer

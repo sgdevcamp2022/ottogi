@@ -26,7 +26,6 @@ const MessageBox = ({
 
   const handleChange = (v: string) => {
     onChange(v);
-    console.log(v);
     resizeTextAreaHeight();
   };
 

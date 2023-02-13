@@ -12,10 +12,9 @@ import AuthHeader from "../molecules/Text/AuthHeader";
 const RegisterStep2 = () => {
   const { email, name, password } = useRegisterStore();
   const [userCode, onChangeUserCode] = useInput();
-  const { mutate: sendEmail, isError: error1 } = useRegister();
-  const { mutate: sendUserCode, isError: error2 } = useSendUserCode();
+  const { mutate: sendEmail } = useRegister();
+  const { mutate: sendUserCode } = useSendUserCode();
 
-  console.log(error1, error2);
   const resendEmail = () => {
     sendEmail({ email, name, password });
   };

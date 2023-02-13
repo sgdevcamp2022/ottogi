@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import useInput from "../../hooks/common/useInput";
 import useGetFriendList from "../../hooks/query/useGetFriendList";
 import { useUserStore } from "../../store/useUserStore";
@@ -10,16 +9,15 @@ import LabelText from "../molecules/Text/LabelText";
 
 const MainOnline = () => {
   const { userInfo } = useUserStore();
-  // const { data, isSuccess } = useGetFriendList(userInfo);
+  const { data, isSuccess } = useGetFriendList(userInfo);
   const [value, onChangeValue] = useInput();
 
-  // if (!isSuccess) return <></>;
+  if (!isSuccess) return <></>;
 
-  // const friendList: FriendListType[] = data.data.data.filter(
-  //   (friend: FriendStateType) => friend.friendState === "ACCEPTED"
-  // );
-  // const num = friendList.length;
-  const num = 1;
+  const friendList: FriendListType[] = data.data.data.filter(
+    (friend: FriendListType) => friend.friendState === "ACCEPTED"
+  );
+  const num = friendList.length;
 
   return (
     <>
@@ -28,33 +26,9 @@ const MainOnline = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"온라인"} num={num} />
           <ScrollableBox>
-            <>
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              <FriendDefaultBox id={1} name="nno3onn" />
-              {/* {friendList.map((v, idx) => (
-                <FriendDefaultBox id={idx} name="nno3onn" />
-              ))} */}
-            </>
+            {friendList.map((v, idx) => (
+              <FriendDefaultBox id={idx} name="nno3onn" />
+            ))}
           </ScrollableBox>
         </>
       ) : (

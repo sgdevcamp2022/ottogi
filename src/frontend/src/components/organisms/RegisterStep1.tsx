@@ -36,6 +36,7 @@ const RegisterStep1 = () => {
     sendEmail({ email, name, password });
     setStep(2);
   };
+
   return (
     <>
       <AuthHeader text="계정 만들기" />{" "}

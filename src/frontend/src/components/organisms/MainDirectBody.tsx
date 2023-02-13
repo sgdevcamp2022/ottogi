@@ -9,36 +9,34 @@ const MainDirectBody = () => {
     <>
       <MainDirectBodyContainer>
         <ScrollableBox>
-          <>
-            <CallDirectMessage
-              name="nno3onn"
-              type="missed"
-              minute={2}
-              createdAt={new Date()}
-            />
-            <CallDirectMessage
-              name="nno3onn"
-              type="called"
-              minute={2}
-              createdAt={new Date()}
-            />
-            <MessageLog text="ㅇㅇ" hasImage createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" hasImage createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-            <MessageLog text="dd" createdAt={new Date()} />
-          </>
+          <CallDirectMessage
+            name="nno3onn"
+            type="missed"
+            minute={2}
+            createdAt={new Date()}
+          />
+          <CallDirectMessage
+            name="nno3onn"
+            type="called"
+            minute={2}
+            createdAt={new Date()}
+          />
+          <MessageLog text="ㅇㅇ" hasImage createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" hasImage createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
+          <MessageLog text="dd" createdAt={new Date()} />
         </ScrollableBox>
       </MainDirectBodyContainer>
       <MessageFooter />

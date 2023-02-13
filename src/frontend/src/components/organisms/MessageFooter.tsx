@@ -1,19 +1,19 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import useInput from "../../hooks/common/useInput";
 import MessageBox from "../molecules/Div/MessageBox";
 
 const MessageFooter = () => {
   const { serverId: isServer } = useParams();
+  const [value, setValue] = useState("");
+  const onChange = (v: string) => setValue(v);
 
-  const [value, onChange] = useInput();
-  console.log(value);
   return (
     <MessageFooterContainer isServer={!!isServer}>
       <MessageBox
         value={value}
         onChange={onChange}
-        onClick={() => {}}
+        onClick={() => null}
         nickname="허다은"
       />
     </MessageFooterContainer>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import DefaultButton from "../components/atoms/Button/DefaultButton";
 import LinkText from "../components/atoms/Text/LinkText";
 import Text from "../components/atoms/Text/Text";
-import DefaultModal from "../components/organisms/AuthModal";
+import AuthModal from "../components/organisms/AuthModal";
 import useInput from "../hooks/common/useInput";
 import HeaderHelmet from "../components/atoms/Helmet";
 import AuthDesc from "../components/molecules/Text/AuthDesc";
@@ -36,7 +36,7 @@ const Login = () => {
   return (
     <LoginContainer>
       <HeaderHelmet title="로그인 | Discord" />
-      <DefaultModal width={480}>
+      <AuthModal width={480}>
         <>
           <Text
             text="돌아오신 것을 환영해요!"
@@ -83,7 +83,7 @@ const Login = () => {
             fontSize="sm"
           />
         </>
-      </DefaultModal>
+      </AuthModal>
     </LoginContainer>
   );
 };

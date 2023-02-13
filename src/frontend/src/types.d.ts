@@ -1,6 +1,6 @@
-declare type FriendStateType = "REQUEST" | "WAIT" | "ACCEPTED";
+type FriendStateType = "REQUEST" | "WAIT" | "ACCEPTED";
 
-declare interface FriendListType {
+interface FriendListType {
   receiver: string;
   friendState: FriendStateType;
 }
