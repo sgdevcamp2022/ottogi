@@ -44,16 +44,8 @@ module.exports = {
     //채널 삭제 명령
     delete: (channelId) => {
         let sql = `DELETE FROM channel WHERE id = ${channelId}`;
-        let sql2 = `DELETE FROM channelmember WHERE channel_id = ${channelId}`
         db.query(sql);
-        db.query(sql2);
     },
-
-    //의존성 삭제
-    dependenciesDelete: (categoryId) => {
-      let sql = `DELETE FROM channel WHERE category_id = ${categoryId}`;
-      db.query(sql);
-  },
 
   load: async(categoryId)=>{
     let list = [];

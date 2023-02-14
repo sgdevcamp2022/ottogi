@@ -3,6 +3,10 @@ const cors = require('cors')
 const app = express();
 const routes = require('./routes/routes')
 const bodyParser = require('body-parser');
+
+// const eurekaHelper = require('./eureka-helper');
+// eurekaHelper.registerWithEureka('community_server', PORT);
+
 app.use(bodyParser.json());
 
 app.use(cors());

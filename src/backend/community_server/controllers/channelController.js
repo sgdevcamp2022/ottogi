@@ -6,7 +6,7 @@ const { isAdmin } = require('../utils/ulits');
 module.exports = {
     //채널 생성 (권한 제외)
     channelCreate: (req, res) => {
-        const {channelName, categoryId} = req.query;
+        const {channelName, categoryId} = req.body;
         if (!categoryName) {
             res
                 .status(400)
@@ -19,7 +19,7 @@ module.exports = {
 
     //채널 정보 변경(이름)
     channelRename: async(req, res) => {
-        const {channelName, categoryId, userId} = req.query;
+        const {channelName, categoryId, userId} = req.body;
         if (!channelName || !categoryId || !userId) {
             res
                 .status(400)
@@ -29,14 +29,14 @@ module.exports = {
                 const response = channel.rename(channelName, categoryId);
                 res
                     .status(200)
-                    .send(`community ID : ${categoryId} Rename to ${channelName}`);
+                    .send(`channel ID : ${categoryId} Rename to ${channelName}`);
             }
         }
     },
 
     //채널 삭제
     channelDelete: (req, res) => {
-        const {channelId} = req.query;
+        const {channelId} = req.body;
         if (!channelId) {
             res
                 .status(400)
@@ -45,12 +45,12 @@ module.exports = {
             const response = channel.delete(channelId);
             res
                 .status(200)
-                .send(`community ID : ${channelId} deleted`);
+                .send(`channel ID : ${channelId} deleted`);
         }
     },
     //채널 참가
     channelJoin: (req, res)=>{
-        const {channelId, userId} = req.query;
+        const {channelId, userId} = req.body;
         if(!channelId || !userId){
             res
                 .status(400)
@@ -64,7 +64,7 @@ module.exports = {
     },
 
     loadList: async(req, res)=>{
-        const{categoryId} = req.query;
+        const{categoryId} = req.body;
         if(!categoryId){
             res
                 .status(400)

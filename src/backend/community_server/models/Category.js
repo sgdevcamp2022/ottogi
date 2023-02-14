@@ -59,20 +59,6 @@ module.exports = {
     delete: (categoryId) => {
         let sql = `DELETE FROM category WHERE id = ${categoryId}`;
         db.query(sql);
-        channel.dependenciesDelete(categoryId)
-    },
-
-    //의존성 삭제
-    dependenciesDelete: (communityId, categoryId) => {
-      let sql = `DELETE FROM category WHERE community_id = ${communityId}`;
-      db.query(sql);
-      const response = findChannelId(categoryId);
-      channel.dependenciesDelete(categoryId);
-      response.then(result => {
-        for(let data of result){
-          channel.delete(data);
-        }
-    }).catch(err => console.log(`의존성 채널id 받아오기 실패`));
     },
 
     load: async(communityId)=>{

@@ -165,15 +165,7 @@ module.exports = {
     //커뮤니티 삭제 명령
     delete: (communityId) => {
         let sql = `DELETE FROM list WHERE id = ${communityId}`;
-        let sql2 = `DELETE FROM member WHERE community_id = ${communityId}`;
         db.query(sql);
-        db.query(sql2);
-        const response = findCategoryId(communityId);
-        response.then(result => {
-            for(let data of result){
-                category.dependenciesDelete(communityId, data);
-            }
-        }).catch(err => console.log(`의존성 카테고리id 값 못받아옴`));
     },
 
     profile : (communityId, userId, profile) => {
