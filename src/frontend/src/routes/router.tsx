@@ -14,58 +14,58 @@ const Router = () => {
       <Route
         path={"/"}
         element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
         }
       />
       <Route
         path={"/@me"}
         element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
         }
       />
       <Route
         path="/@me/:userId"
         element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
         }
       />
       <Route
-        path="/:serverId/"
+        path="/:serverId"
         element={
-          <ProtectPage>
-            <Server />
-          </ProtectPage>
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
         }
       />
       <Route
         path="/:serverId/:chatroomId"
         element={
-          <ProtectPage>
-            <Server />
-          </ProtectPage>
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
         }
       />
       <Route path="chat" element={<Chat />} />
       <Route
         path="/login"
         element={
-          <ProtectAuth>
-            <Login />
-          </ProtectAuth>
+          // <ProtectAuth>
+          <Login />
+          // </ProtectAuth>
         }
       />
       <Route
         path="/register"
         element={
-          <ProtectAuth>
-            <Register />
-          </ProtectAuth>
+          // <ProtectAuth>
+          <Register />
+          // </ProtectAuth>
         }
       />
       <Route path="/*" element={<NotFound />} />
