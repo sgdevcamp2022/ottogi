@@ -26,28 +26,30 @@ function Modal({
 }
 
 const ModalContainer = styled.div`
-  width: 100%;
+  width: 440px;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
+  position: absolute;
 `;
 
 const DialogBox = styled.dialog`
-  width: 800px;
-  height: 400px;
+  width: auto;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   border: none;
   border-radius: 3px;
-  box-shadow: 0 0 30px rgba(30, 30, 30, 0.185);
+  /* box-shadow: 0 0 30px rgba(30, 30, 30, 0.185); */
   box-sizing: border-box;
-  background-color: white;
+  background-color: ${({ theme }) => theme.backgroundColor["setting"]};
   z-index: 10000;
   top: 0;
   left: 0;
+  padding: 0;
+  text-align: center;
 `;
 
 const Backdrop = styled.div`
@@ -57,7 +59,8 @@ const Backdrop = styled.div`
   top: 0;
   left: 0;
   z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.484);
+  backdrop-filter: blur(5px);
 `;
 
 export default Modal;

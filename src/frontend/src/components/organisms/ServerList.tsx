@@ -10,6 +10,9 @@ const ServerList = () => {
   const onMain = () => {
     navigate("/@me");
   };
+  const onServer = (v: Number) => {
+    navigate("/" + v);
+  };
   return (
     <BarContainer>
       <ul>
@@ -20,11 +23,14 @@ const ServerList = () => {
         {array &&
           array.map((v, index) => {
             return (
-              <li>
+              <li onClick={() => onServer(v)}>
                 <ServerImage name="서버1" id={v} />
               </li>
             );
           })}
+        <li onClick={onMain}>
+          <ServerImage name="서버 추가" id={array.length + 1} />
+        </li>
       </ul>
     </BarContainer>
   );
