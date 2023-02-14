@@ -1,8 +1,8 @@
+import useInput from "@hooks/common/useInput";
+import useRegister from "@hooks/query/useRegister";
+import useSendUserCode from "@hooks/query/useSendUserCode";
+import { useRegisterStore } from "@store/useRegisterStore";
 import styled from "styled-components";
-import useInput from "../../hooks/common/useInput";
-import useRegister from "../../hooks/query/useRegister";
-import useSendUserCode from "../../hooks/query/useSendUserCode";
-import { useRegisterStore } from "../../store/useRegisterStore";
 import DefaultButton from "../atoms/Button/DefaultButton";
 import LinkText from "../atoms/Text/LinkText";
 import AuthForm from "../molecules/Form/AuthForm";

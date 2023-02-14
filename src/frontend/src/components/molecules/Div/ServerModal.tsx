@@ -1,8 +1,8 @@
+import DarkModal from "@components/atoms/Div/DarkModal";
+import EditIcon from "@components/atoms/Icons/EditIcon";
+import LogoutIcon from "@components/atoms/Icons/LogoutIcon";
+import PersonAddIcon from "@components/atoms/Icons/PersonAddIcon";
 import styled from "styled-components";
-import DarkModal from "../../atoms/Div/DarkModal";
-import EditIcon from "../../atoms/Icons/EditIcon";
-import LogoutIcon from "../../atoms/Icons/LogoutIcon";
-import PersonAddIcon from "../../atoms/Icons/PersonAddIcon";
 import DarkModalButton from "../Button/DarkModalButton";
 
 const ServerModal = () => {

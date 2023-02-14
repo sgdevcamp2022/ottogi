@@ -1,9 +1,9 @@
+import useInput from "@hooks/common/useInput";
+import useSendEmail from "@hooks/query/useSendEmail";
+import { useRegisterStore } from "@store/useRegisterStore";
+import validateEmail from "@utils/validateEmail";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useInput from "../../hooks/common/useInput";
-import useSendEmail from "../../hooks/query/useSendEmail";
-import { useRegisterStore } from "../../store/useRegisterStore";
-import validateEmail from "../../utils/validateEmail";
 import DefaultButton from "../atoms/Button/DefaultButton";
 import LinkText from "../atoms/Text/LinkText";
 import Text from "../atoms/Text/Text";

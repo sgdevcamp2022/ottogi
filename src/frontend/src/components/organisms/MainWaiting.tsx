@@ -1,13 +1,11 @@
-import styled from "styled-components";
-import useInput from "../../hooks/common/useInput";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
 import LabelText from "../molecules/Text/LabelText";
 import FriendWaitingBox from "../molecules/Div/FriendWaitingBox";
-import useGetFriendList from "../../hooks/query/useGetFriendList";
-import { useUserStore } from "../../store/useUserStore";
-import FriendDefaultBox from "../molecules/Div/FriendDefaultBox";
 import ScrollableBox from "../molecules/Div/scrollableBox";
+import { useUserStore } from "@store/useUserStore";
+import useGetFriendList from "@hooks/query/useGetFriendList";
+import useInput from "@hooks/common/useInput";
 
 interface FriendState {
   receiver: string;
@@ -21,7 +19,7 @@ const MainWaiting = () => {
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendListType[] = data.data.data.filter(
+  const friendList: FriendType[] = data.data.data.filter(
     (friend: FriendState) =>
       friend.friendState === "REQUEST" || friend.friendState === "WAIT"
   );
@@ -34,7 +32,7 @@ const MainWaiting = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"대기 중"} num={num} />
           <ScrollableBox>
-            {friendList.map(({ receiver, friendState }: FriendListType) => (
+            {friendList.map(({ receiver, friendState }: FriendType) => (
               <FriendWaitingBox name={receiver} status={friendState} />
             ))}
           </ScrollableBox>

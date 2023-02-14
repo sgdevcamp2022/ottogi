@@ -5,7 +5,7 @@ import {
   BorderColorType,
   ColorType,
   FontSizeType,
-} from "../../../styles/theme";
+} from "@styles/theme";
 
 interface DefaultButtonProps {
   text: string;
@@ -61,21 +61,9 @@ const DefaultButton = ({
   );
 };
 
-interface DefaultButtonContainerProps {
-  width: number | null;
-  height: number | null;
-  color: ColorType;
-  backgroundColor: BackgroundColorType;
-  hoverBackgroundColor: BackgroundColorType;
-  fontSize: FontSizeType;
-  fontWeight: "normal" | "bold";
-  borderColor: BorderColorType;
-  mb: number;
-  ph: number;
-  pv: number;
-}
-
-const DefaultButtonContainer = styled.button<DefaultButtonContainerProps>`
+const DefaultButtonContainer = styled.button<
+  Omit<DefaultButtonProps, "text" | "onClick">
+>`
   border: none;
   border-radius: 4px;
   width: ${({ width }) => (width === null ? "100%" : `${width}px`)};

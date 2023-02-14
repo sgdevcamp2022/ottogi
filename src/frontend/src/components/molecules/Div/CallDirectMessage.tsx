@@ -1,15 +1,14 @@
+import CallIcon from "@components/atoms/Icons/CallIcon";
+import MissedCallIcon from "@components/atoms/Icons/MissedCallIcon";
+import LinkText from "@components/atoms/Text/LinkText";
+import Text from "@components/atoms/Text/Text";
 import styled from "styled-components";
-import MessageText from "../../atoms/Div/MessageText";
-import CallIcon from "../../atoms/Icons/CallIcon";
-import MissedCallIcon from "../../atoms/Icons/MissedCallIcon";
-import LinkText from "../../atoms/Text/LinkText";
-import Text from "../../atoms/Text/Text";
-import MessageUserDate from "./MessageUserDate";
 
+type CallDirectMessageType = "missed" | "called";
 interface CallDirectMessageProps {
   name: string;
   minute: number;
-  type: "missed" | "called";
+  type: CallDirectMessageType;
   createdAt: Date;
 }
 
@@ -49,7 +48,7 @@ const CallDirectMessageContainer = styled.div`
   }
 `;
 
-const CallImageContainer = styled.div<{ type: "missed" | "called" }>`
+const CallImageContainer = styled.div<{ type: CallDirectMessageType }>`
   position: relative;
   margin-left: 28px;
   color: ${({ theme, type }) =>

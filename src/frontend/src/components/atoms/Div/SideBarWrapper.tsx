@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import styled from "styled-components";
-import useGetFriendList from "../../../hooks/query/useGetFriendList";
-import { useUserStore } from "../../../store/useUserStore";
+import useGetFriendList from "@hooks/query/useGetFriendList";
+import { useUserStore } from "@store/useUserStore";
 import Text from "../Text/Text";
 import NobodyActive from "./NobodyActive";
 
@@ -13,7 +13,7 @@ const SideBar = ({ children }: SideBarProps) => {
   const { userInfo } = useUserStore();
   const { data, isSuccess } = useGetFriendList(userInfo);
 
-  let friendList: null | FriendListType[];
+  let friendList: null | FriendType[];
   friendList = data?.data.data;
 
   return (

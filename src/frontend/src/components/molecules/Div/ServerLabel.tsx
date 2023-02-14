@@ -1,6 +1,6 @@
+import ArrowBottomIcon from "@components/atoms/Icons/ArrowBottomIcon";
+import Text from "@components/atoms/Text/Text";
 import styled from "styled-components";
-import ArrowBottomIcon from "../../atoms/Icons/ArrowBottomIcon";
-import Text from "../../atoms/Text/Text";
 
 interface ServerLabelProps {
   text: string;

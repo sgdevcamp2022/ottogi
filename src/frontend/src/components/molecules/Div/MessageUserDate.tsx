@@ -1,5 +1,5 @@
+import SpanText from "@components/atoms/Text/SpanText";
 import styled from "styled-components";
-import SpanText from "../../atoms/Text/SpanText";
 
 interface MessageUserDateProps {
   name: string;
@@ -10,7 +10,11 @@ const MessageUserDate = ({ name, createdAt }: MessageUserDateProps) => {
   return (
     <TextHeader>
       <SpanText text={name} color="white" mr={8} />
-      <SpanText text="2023.01.26. 오후 9:52" color="msg-timestamp" fontSize="xs" />
+      <SpanText
+        text="2023.01.26. 오후 9:52"
+        color="msg-timestamp"
+        fontSize="xs"
+      />
     </TextHeader>
   );
 };

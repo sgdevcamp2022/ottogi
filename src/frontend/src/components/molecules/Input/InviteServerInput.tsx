@@ -1,7 +1,7 @@
+import DefaultButton from "@components/atoms/Button/DefaultButton";
+import DefaultInput from "@components/atoms/Input/DefaultInput";
+import { flexCenter } from "@styles/flexCenter";
 import styled from "styled-components";
-import { flexCenter } from "../../../styles/flexCenter";
-import DefaultButton from "../../atoms/Button/DefaultButton";
-import DefaultInput from "../../atoms/Input/DefaultInput";
 
 interface InviteServerInput {
   url: string;

@@ -1,4 +1,4 @@
-import ChatIcon from "../../atoms/Icons/ChatIcon";
+import ChatIcon from "@components/atoms/Icons/ChatIcon";
 import RoundButton from "./RoundButton";
 
 export default {
@@ -6,4 +6,6 @@ export default {
   component: RoundButton,
 };
 
-export const Round = () => <RoundButton onClick={() => null} Icon={<ChatIcon />} />;
+export const Round = () => (
+  <RoundButton onClick={() => null} Icon={<ChatIcon />} />
+);

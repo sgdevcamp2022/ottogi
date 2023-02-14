@@ -1,7 +1,7 @@
+import useInput from "@hooks/common/useInput";
+import useGetFriendList from "@hooks/query/useGetFriendList";
+import { useUserStore } from "@store/useUserStore";
 import styled from "styled-components";
-import useInput from "../../hooks/common/useInput";
-import useGetFriendList from "../../hooks/query/useGetFriendList";
-import { useUserStore } from "../../store/useUserStore";
 import DefaultModal from "../atoms/Div/DefaultModal";
 import Text from "../atoms/Text/Text";
 import CreateDirectMesssageHeader from "../molecules/Div/CreateDirectMessageHeader";
@@ -27,7 +27,7 @@ const CreateDirectMessageModal = ({
 
   // if (!isSuccess) return <></>;
 
-  // const friendList: FriendListType[] = data.data.data;
+  // const friendList: FriendType[] = data.data.data;
   // const num = friendList.length;
   const num = 0;
 
@@ -48,7 +48,7 @@ const CreateDirectMessageModal = ({
               <SelectFriend />
               <SelectFriend check />
               {/* {friendList.map((friend) => (
-                <SelectFriend />
+                <SelectFriend check={check} />
               ))} */}
             </ScrollableBox>
           ) : (

@@ -1,8 +1,8 @@
-import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
-import Text from "../../atoms/Text/Text";
-import UserState, { StateType } from "../Div/UserState32";
+import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
+import Text from "@components/atoms/Text/Text";
+import { useNavigate, useParams } from "react-router-dom";
+import UserState32, { StateType } from "../Div/UserState32";
 
 interface DirectButtonProps {
   id: number;
@@ -25,9 +25,10 @@ const DirectButton = ({ id, name, status = "on" }: DirectButtonProps) => {
       onClick={goChatRoom}
       height={42}
       ph={8}
+      color="inactive"
     >
       <DirectButtonContainer>
-        <UserState status={status} />
+        <UserState32 status={status} />
         <Text text={name} />
       </DirectButtonContainer>
     </ButtonWrapper>

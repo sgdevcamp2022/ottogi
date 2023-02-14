@@ -1,5 +1,5 @@
-import MicIcon from "../../atoms/Icons/MicIcon";
-import MicOffIcon from "../../atoms/Icons/MicOffIcon";
+import MicIcon from "@components/atoms/Icons/MicIcon";
+import MicOffIcon from "@components/atoms/Icons/MicOffIcon";
 import UserOnOffButton from "./UserOnOffButton";
 
 export default {

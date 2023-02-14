@@ -12,13 +12,7 @@ const ServerImage = ({ onClick, id }: ServerImageProps) => {
   return (
     <ServerIconBox>
       <ClickedWrapper className="side" />
-      <StyledIconButton
-        // onClick={() => {
-        //   onClick();
-
-        // }}
-        onClick={onClick}
-      >
+      <StyledIconButton onClick={onClick}>
         {/* borderRadius로 이미지 동그란 정도 조절하기 */}
         <Avatar className="avatar"></Avatar>
       </StyledIconButton>

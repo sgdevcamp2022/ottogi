@@ -1,6 +1,6 @@
 type FriendStateType = "REQUEST" | "WAIT" | "ACCEPTED";
 
-interface FriendListType {
+interface FriendType {
   receiver: string;
   friendState: FriendStateType;
 }

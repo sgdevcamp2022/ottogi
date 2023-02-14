@@ -1,5 +1,5 @@
+import DefaultInput from "@components/atoms/Input/DefaultInput";
 import styled from "styled-components";
-import DefaultInput from "../../atoms/Input/DefaultInput";
 
 const SearchButton = () => {
   return (

@@ -1,6 +1,6 @@
+import { flexCenter } from "@styles/flexCenter";
 import { ReactElement } from "react";
 import styled from "styled-components";
-import { flexCenter } from "../../styles/flexCenter";
 import DefaultModal from "../atoms/Div/DefaultModal";
 
 interface BackgroundModalProps {

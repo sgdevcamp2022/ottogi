@@ -1,11 +1,11 @@
+import DefaultButton from "@components/atoms/Button/DefaultButton";
+import DefaultInput from "@components/atoms/Input/DefaultInput";
+import Text from "@components/atoms/Text/Text";
+import useRequestFriend from "@hooks/query/useRequestFriend";
+import { useUserStore } from "@store/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
-import useRequestFriend from "../../../hooks/query/useRequestFriend";
-import { useUserStore } from "../../../store/useUserStore";
-import DefaultButton from "../../atoms/Button/DefaultButton";
-import DefaultInput from "../../atoms/Input/DefaultInput";
-import Text from "../../atoms/Text/Text";
 
 const InviteInput = () => {
   const queryClient = useQueryClient();

@@ -1,9 +1,7 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType, ColorType } from "../../../styles/theme";
-import useUserSetStore, {
-  UserSettingType,
-} from "../../../store/useUserSetStore";
+import { BackgroundColorType, ColorType } from "@styles/theme";
+import useUserSetStore, { UserSettingType } from "@store/useUserSetStore";
 
 interface SettingButtonProps {
   text: string;
@@ -19,8 +17,6 @@ const SettingButton = ({
   text,
   onClick,
   fontWeight = "normal",
-  color = "white",
-  backgroundColor = "primary",
   disabled = false,
   status,
 }: SettingButtonProps) => {
@@ -46,6 +42,7 @@ const SettingButton = ({
   // const getHoverBackgroundColor = () => {
   //   return "active";
   // };
+
   const changeUserStatus = (mainStatus: UserSettingType) => {
     userSettingStatus(mainStatus);
   };
@@ -61,11 +58,9 @@ const SettingButton = ({
   );
 };
 
-export const SettingButtonContainer = styled.button<{
-  color: ColorType;
-  backgroundColor: BackgroundColorType;
-  fontWeight: "normal" | "bold";
-}>`
+export const SettingButtonContainer = styled.button<
+  Pick<SettingButtonProps, "color" | "backgroundColor" | "fontWeight">
+>`
   margin-bottom: 4px;
   text-align: left;
   border: none;

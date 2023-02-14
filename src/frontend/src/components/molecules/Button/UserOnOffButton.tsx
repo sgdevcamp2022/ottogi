@@ -1,7 +1,7 @@
 import { MouseEventHandler, ReactElement } from "react";
 import styled from "styled-components";
-import { flexCenter } from "../../../styles/flexCenter";
-import Tip from "../../atoms/Div/Tooltip";
+import { flexCenter } from "@styles/flexCenter";
+import Tip from "@components/atoms/Div/Tooltip";
 
 interface MicButtonProps {
   text: string;

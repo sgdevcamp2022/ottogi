@@ -1,7 +1,7 @@
+import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
+import Text from "@components/atoms/Text/Text";
+import { useUserStore } from "@store/useUserStore";
 import styled from "styled-components";
-import { useUserStore } from "../../../store/useUserStore";
-import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
-import Text from "../../atoms/Text/Text";
 import UserState32, { StateType } from "../Div/UserState32";
 
 interface UserInfoButtonProps {

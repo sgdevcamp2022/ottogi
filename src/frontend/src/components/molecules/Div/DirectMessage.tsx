@@ -1,9 +1,9 @@
+import Tip from "@components/atoms/Div/Tooltip";
+import AddIcon from "@components/atoms/Icons/AddIcon";
+import Text from "@components/atoms/Text/Text";
+import CreateDirectMessageModal from "@components/organisms/CreateDirectMessageModal";
 import { useState } from "react";
 import styled from "styled-components";
-import Tip from "../../atoms/Div/Tooltip";
-import AddIcon from "../../atoms/Icons/AddIcon";
-import Text from "../../atoms/Text/Text";
-import CreateDirectMessageModal from "../../organisms/CreateDirectMessageModal";
 
 const DirectMessage = () => {
   const [showDMModal, setShowDMModal] = useState(false);

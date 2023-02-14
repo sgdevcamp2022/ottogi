@@ -1,6 +1,6 @@
+import Text from "@components/atoms/Text/Text";
+import { flexCenter } from "@styles/flexCenter";
 import styled from "styled-components";
-import { flexCenter } from "../../../styles/flexCenter";
-import Text from "../../atoms/Text/Text";
 
 interface EmptyContainerProps {
   text: string;
@@ -10,7 +10,7 @@ interface EmptyContainerProps {
 const EmptyContainer = ({ text, image }: EmptyContainerProps) => {
   return (
     <Empty>
-      <img src={`${image}.svg`} alt="" />
+      <img src={`@assets/images/${image}.svg`} alt="" />
       <Text text={text} color="auth-desc" />
     </Empty>
   );

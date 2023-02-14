@@ -1,8 +1,8 @@
+import FieldButton from "@components/atoms/Button/fieldButton";
+import Text from "@components/atoms/Text/Text";
+import Modal from "@components/organisms/Modal";
 import { useCallback, useState } from "react";
 import styled from "styled-components";
-import FieldButton from "../../atoms/Button/fieldButton";
-import Text from "../../atoms/Text/Text";
-import Modal from "../../organisms/Modal";
 
 const FieldList = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);

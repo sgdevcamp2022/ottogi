@@ -1,9 +1,8 @@
+import { COOKIE_KEY } from "@configs/cookie";
+import { useUserStore } from "@store/useUserStore";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { COOKIE_KEY } from "../../configs/cookie";
-import { useUserStore } from "../../store/useUserStore";
-import Tip from "../atoms/Div/Tooltip";
 import HeadsetIcon from "../atoms/Icons/HeadsetIcon";
 import HeadsetOffIcon from "../atoms/Icons/HeadsetOffIcon";
 import MicIcon from "../atoms/Icons/MicIcon";

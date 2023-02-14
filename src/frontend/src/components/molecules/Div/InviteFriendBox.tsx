@@ -1,7 +1,7 @@
+import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
+import DefaultButton from "@components/atoms/Button/DefaultButton";
+import Text from "@components/atoms/Text/Text";
 import styled from "styled-components";
-import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
-import DefaultButton from "../../atoms/Button/DefaultButton";
-import Text from "../../atoms/Text/Text";
 
 const InviteFriendBox = () => {
   const name = "nno3onn";

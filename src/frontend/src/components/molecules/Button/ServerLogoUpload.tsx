@@ -1,7 +1,7 @@
+import CameraIcon from "@components/atoms/Icons/CameraIcon";
+import ServerAddIcon from "@components/atoms/Icons/ServerAddIcon";
+import Text from "@components/atoms/Text/Text";
 import styled from "styled-components";
-import ServerAddIcon from "../../atoms/Icons/ServerAddIcon";
-import CameraIcon from "../../atoms/Icons/CameraIcon";
-import Text from "../../atoms/Text/Text";
 
 const ServerLogoUpload = () => {
   return (

@@ -1,9 +1,9 @@
 import { useCookies } from "react-cookie";
-import { useUserStore } from "./../../store/useUserStore";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import authApi from "../../api/auth";
-import { COOKIE_KEY } from "../../configs/cookie";
+import { COOKIE_KEY } from "@configs/cookie";
+import { useUserStore } from "@store/useUserStore";
+import authApi from "src/api/auth";
 
 const useLogin = (email: string) => {
   const [cookies, setCookie] = useCookies([COOKIE_KEY]);

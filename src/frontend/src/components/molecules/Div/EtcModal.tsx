@@ -1,4 +1,4 @@
-import DarkModal from "../../atoms/Div/DarkModal";
+import DarkModal from "@components/atoms/Div/DarkModal";
 import DarkModalButton from "../Button/DarkModalButton";
 
 const EtcModal = () => {

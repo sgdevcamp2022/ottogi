@@ -1,7 +1,7 @@
+import DefaultInput from "@components/atoms/Input/DefaultInput";
+import Text from "@components/atoms/Text/Text";
 import { ChangeEvent } from "react";
 import styled from "styled-components";
-import DefaultInput from "../../atoms/Input/DefaultInput";
-import Text from "../../atoms/Text/Text";
 
 interface AuthFormProps {
   text: string | React.ReactElement;

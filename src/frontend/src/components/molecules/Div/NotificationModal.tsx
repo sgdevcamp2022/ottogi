@@ -1,7 +1,7 @@
+import DarkModal from "@components/atoms/Div/DarkModal";
+import RadioButtonUncheckedIcon from "@components/atoms/Icons/RadioButtonUncheckedIcon";
 import { RadioButtonChecked } from "@mui/icons-material";
 import { useState } from "react";
-import DarkModal from "../../atoms/Div/DarkModal";
-import RadioButtonUncheckedIcon from "../../atoms/Icons/RadioButtonUncheckedIcon";
 import DarkModalButton from "../Button/DarkModalButton";
 
 const NotificationModal = () => {

@@ -1,5 +1,5 @@
+import SpanText from "@components/atoms/Text/SpanText";
 import { ChangeEvent } from "react";
-import SpanText from "../../atoms/Text/SpanText";
 import AuthForm from "./AuthForm";
 
 interface LoginFormProps {

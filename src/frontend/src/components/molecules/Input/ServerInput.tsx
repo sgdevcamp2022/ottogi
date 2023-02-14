@@ -1,7 +1,7 @@
-import Text from "../../atoms/Text/Text";
-import DefaultInput from "../../atoms/Input/DefaultInput";
 import styled from "styled-components";
 import { useState } from "react";
+import Text from "@components/atoms/Text/Text";
+import DefaultInput from "@components/atoms/Input/DefaultInput";
 
 const ServerInput = () => {
   const [text, setText] = useState("");

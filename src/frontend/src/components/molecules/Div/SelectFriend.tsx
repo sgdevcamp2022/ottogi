@@ -1,8 +1,8 @@
+import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
+import CheckboxOffIcon from "@components/atoms/Icons/CheckboxOffIcon";
+import CheckboxOnIcon from "@components/atoms/Icons/CheckboxOnIcon";
+import Text from "@components/atoms/Text/Text";
 import styled from "styled-components";
-import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
-import CheckboxOffIcon from "../../atoms/Icons/CheckboxOffIcon";
-import CheckboxOnIcon from "../../atoms/Icons/CheckboxOnIcon";
-import Text from "../../atoms/Text/Text";
 import UserState32 from "./UserState32";
 
 interface SelectFriendProps {

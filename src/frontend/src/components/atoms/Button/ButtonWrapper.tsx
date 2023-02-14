@@ -1,6 +1,6 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType } from "../../../styles/theme";
+import { BackgroundColorType } from "@styles/theme";
 
 interface ButtonWrapperProps {
   onClick: MouseEventHandler<HTMLDivElement>;

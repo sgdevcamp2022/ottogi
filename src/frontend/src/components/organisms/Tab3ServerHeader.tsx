@@ -1,6 +1,6 @@
+import useInput from "@hooks/common/useInput";
 import { useState } from "react";
 import styled from "styled-components";
-import useInput from "../../hooks/common/useInput";
 import TabDivider from "../atoms/Div/TabDivider";
 import NotificationsIcon from "../atoms/Icons/NotificationsIcon";
 import TagIcon from "../atoms/Icons/TagIcon";

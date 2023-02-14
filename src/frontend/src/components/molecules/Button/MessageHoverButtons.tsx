@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { flexCenter } from "../../../styles/flexCenter";
-import DeleteIcon from "../../atoms/Icons/DeleteIcon";
-import EditIcon from "../../atoms/Icons/EditIcon";
+import { flexCenter } from "@styles/flexCenter";
+import EditIcon from "@components/atoms/Icons/EditIcon";
+import DeleteIcon from "@components/atoms/Icons/DeleteIcon";
 
 const MessageHoverButtons = () => {
   const { serverId } = useParams();

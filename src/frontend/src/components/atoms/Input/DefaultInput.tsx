@@ -1,10 +1,6 @@
 import { ChangeEventHandler } from "react";
 import styled from "styled-components";
-import {
-  BackgroundColorType,
-  ColorType,
-  FontSizeType,
-} from "../../../styles/theme";
+import { BackgroundColorType, ColorType, FontSizeType } from "@styles/theme";
 
 interface DefaultInputProps {
   value: string;
@@ -50,16 +46,17 @@ const DefaultInput = ({
   );
 };
 
-interface DefaultInputContainerProps {
-  width: number | string;
-  height: number | string;
-  placeholderColor: ColorType;
-  fontSize: FontSizeType;
-  color: ColorType;
-  backgroundColor: BackgroundColorType;
-}
-
-const DefaultInputContainer = styled.input<DefaultInputContainerProps>`
+const DefaultInputContainer = styled.input<
+  Pick<
+    DefaultInputProps,
+    | "width"
+    | "height"
+    | "placeholderColor"
+    | "fontSize"
+    | "color"
+    | "backgroundColor"
+  >
+>`
   width: ${({ width }) => (width === "100%" ? "100%" : `${width}px`)};
   height: ${({ height }) => (height === "100%" ? "100%" : `${height}px`)};
   padding: 0.625rem;

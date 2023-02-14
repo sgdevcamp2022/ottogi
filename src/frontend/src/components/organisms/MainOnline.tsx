@@ -1,6 +1,6 @@
-import useInput from "../../hooks/common/useInput";
-import useGetFriendList from "../../hooks/query/useGetFriendList";
-import { useUserStore } from "../../store/useUserStore";
+import useInput from "@hooks/common/useInput";
+import useGetFriendList from "@hooks/query/useGetFriendList";
+import { useUserStore } from "@store/useUserStore";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
 import FriendDefaultBox from "../molecules/Div/FriendDefaultBox";
@@ -14,8 +14,8 @@ const MainOnline = () => {
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendListType[] = data.data.data.filter(
-    (friend: FriendListType) => friend.friendState === "ACCEPTED"
+  const friendList: FriendType[] = data.data.data.filter(
+    (friend: FriendType) => friend.friendState === "ACCEPTED"
   );
   const num = friendList.length;
 

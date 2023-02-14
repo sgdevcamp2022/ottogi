@@ -1,8 +1,8 @@
+import useInput from "@hooks/common/useInput";
+import useGetFriendList from "@hooks/query/useGetFriendList";
+import useMainStore from "@store/useMainStore";
+import { useUserStore } from "@store/useUserStore";
 import styled from "styled-components";
-import useInput from "../../hooks/common/useInput";
-import useGetFriendList from "../../hooks/query/useGetFriendList";
-import useMainStore from "../../store/useMainStore";
-import { useUserStore } from "../../store/useUserStore";
 import DefaultButton from "../atoms/Button/DefaultButton";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
@@ -20,7 +20,7 @@ const MainTotal = () => {
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendListType[] = data.data.data;
+  const friendList: FriendType[] = data.data.data;
   const num = friendList.length;
   return (
     <>

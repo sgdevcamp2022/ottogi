@@ -1,10 +1,10 @@
+import Tip from "@components/atoms/Div/Tooltip";
+import CancelIcon from "@components/atoms/Icons/CancelIcon";
+import ChatIcon from "@components/atoms/Icons/ChatIcon";
+import MoreIcon from "@components/atoms/Icons/MoreIcon";
 import { ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Tip from "../../atoms/Div/Tooltip";
-import CancelIcon from "../../atoms/Icons/CancelIcon";
-import ChatIcon from "../../atoms/Icons/ChatIcon";
-import MoreIcon from "../../atoms/Icons/MoreIcon";
 import RoundButton from "../Button/RoundButton";
 import EtcModal from "./EtcModal";
 import FriendBox from "./FriendBox";

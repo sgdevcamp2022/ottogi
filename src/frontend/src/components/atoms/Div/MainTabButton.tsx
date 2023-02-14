@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import useMainStore, { MainStatusType } from "../../../store/useMainStore";
+import useMainStore, { MainStatusType } from "@store/useMainStore";
 import TextButton from "../Button/TextButton";
 
 interface MainTabButtonProps {

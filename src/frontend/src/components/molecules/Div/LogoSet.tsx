@@ -1,5 +1,5 @@
+import Text from "@components/atoms/Text/Text";
 import ServerLogoUpload from "../Button/ServerLogoUpload";
-import Text from "../../atoms/Text/Text";
 
 const LogoSet = () => {
   <>

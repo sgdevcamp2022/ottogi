@@ -1,5 +1,5 @@
+import useModalStore from "@store/useModalStore";
 import styled from "styled-components";
-import useModalStore from "../../store/useModalStore";
 import InviteFriendModal from "../organisms/InviteFriendModal";
 import ServerList from "../organisms/ServerList";
 import Tab2Footer from "../organisms/Tab2Footer";

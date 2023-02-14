@@ -1,5 +1,5 @@
+import useInput from "@hooks/common/useInput";
 import styled from "styled-components";
-import useInput from "../../hooks/common/useInput";
 import Status from "../atoms/Div/Status";
 import Tip from "../atoms/Div/Tooltip";
 import AtIcon from "../atoms/Icons/AtIcon";

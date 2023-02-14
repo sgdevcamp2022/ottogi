@@ -1,5 +1,5 @@
+import Text from "@components/atoms/Text/Text";
 import styled from "styled-components";
-import Text from "../../atoms/Text/Text";
 
 interface LabelTextProps {
   label?: "온라인" | "모든 친구" | "대기 중" | "대기 중";

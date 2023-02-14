@@ -1,8 +1,8 @@
+import CancelIcon from "@components/atoms/Icons/CancelIcon";
+import TagIcon from "@components/atoms/Icons/TagIcon";
+import Text from "@components/atoms/Text/Text";
+import useModalStore from "@store/useModalStore";
 import styled from "styled-components";
-import useModalStore from "../../../store/useModalStore";
-import CancelIcon from "../../atoms/Icons/CancelIcon";
-import TagIcon from "../../atoms/Icons/TagIcon";
-import Text from "../../atoms/Text/Text";
 
 const InviteFriendModalHeader = () => {
   const { setInviteFriendModal } = useModalStore();

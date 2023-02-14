@@ -1,6 +1,6 @@
+import useMainStore, { MainStatusType } from "@store/useMainStore";
 import { useMatch } from "react-router-dom";
 import styled from "styled-components";
-import useMainStore, { MainStatusType } from "../../store/useMainStore";
 import SideBar from "../atoms/Div/SideBarWrapper";
 import MainAddFriend from "./MainAddFriend";
 import MainDirectBody from "./MainDirectBody";

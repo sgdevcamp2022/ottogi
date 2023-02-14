@@ -1,10 +1,10 @@
+import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
+import PersonAddIcon from "@components/atoms/Icons/PersonAddIcon";
+import TagIcon from "@components/atoms/Icons/TagIcon";
+import VolumeIcon from "@components/atoms/Icons/VolumeIcon";
+import Text from "@components/atoms/Text/Text";
+import useModalStore from "@store/useModalStore";
 import styled from "styled-components";
-import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
-import PersonAddIcon from "../../atoms/Icons/PersonAddIcon";
-import TagIcon from "../../atoms/Icons/TagIcon";
-import VolumeIcon from "../../atoms/Icons/VolumeIcon";
-import Text from "../../atoms/Text/Text";
-import useModalStore from "../../../store/useModalStore";
 
 interface ServerRoomButtonProps {
   type: "chat" | "voice";

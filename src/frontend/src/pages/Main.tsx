@@ -1,6 +1,6 @@
-import PageContainer from "../components/atoms/Div/PageContainer";
-import HeaderHelmet from "../components/atoms/Helmet";
-import MainPage from "../components/templates/MainPage";
+import MainPage from "@components/templates/MainPage";
+import HeaderHelmet from "@components/atoms/Helmet";
+import PageContainer from "@components/atoms/Div/PageContainer";
 
 const Main = () => {
   return (

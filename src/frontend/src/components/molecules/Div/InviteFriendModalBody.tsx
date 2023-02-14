@@ -1,7 +1,7 @@
+import Text from "@components/atoms/Text/Text";
+import useInput from "@hooks/common/useInput";
+import { flexCenter } from "@styles/flexCenter";
 import styled from "styled-components";
-import useInput from "../../../hooks/common/useInput";
-import { flexCenter } from "../../../styles/flexCenter";
-import Text from "../../atoms/Text/Text";
 import SearchInput from "../Input/SearchInput";
 import InviteFriendBox from "./InviteFriendBox";
 import ScrollableBox from "./scrollableBox";
@@ -54,7 +54,6 @@ const SearchInputWrapper = styled.div`
 const Divider = styled.div<{ color: string }>`
   position: sticky;
   left: -1rem;
-  /* margin-top: 1rem; */
   height: 0.0625rem;
   width: 27.5rem;
   background-color: ${({ theme, color }) => theme.backgroundColor[color]};

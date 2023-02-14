@@ -1,10 +1,6 @@
 import { MouseEventHandler, ReactElement } from "react";
 import styled from "styled-components";
-import {
-  BackgroundColorType,
-  ColorType,
-  FontSizeType,
-} from "../../../styles/theme";
+import { BackgroundColorType, ColorType, FontSizeType } from "@styles/theme";
 
 interface DarkModalButtonProps {
   text: string;

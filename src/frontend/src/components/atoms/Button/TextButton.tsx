@@ -1,6 +1,6 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType, ColorType } from "../../../styles/theme";
+import { BackgroundColorType, ColorType } from "@styles/theme";
 interface TextButtonProps {
   text: string;
   onClick: MouseEventHandler<HTMLSpanElement>;
@@ -31,14 +31,9 @@ const TextButton = ({
   );
 };
 
-interface TextButtonContainerProps {
-  color: ColorType;
-  backgroundColor: BackgroundColorType;
-  hoverColor: ColorType;
-  hoverBackgroundColor: BackgroundColorType;
-}
-
-const TextButtonContainer = styled.span<TextButtonContainerProps>`
+const TextButtonContainer = styled.span<
+  Omit<TextButtonProps, "text" | "onClick">
+>`
   display: inline-block;
   color: ${({ theme, color }) => theme.color[color]};
   background-color: ${({ theme, backgroundColor }) =>

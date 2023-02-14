@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ColorType, FontSizeType } from "../../../styles/theme";
+import { ColorType, FontSizeType } from "@styles/theme";
 
 type fontWeightType = "normal" | "bold";
 
@@ -34,16 +34,7 @@ const Text = ({
   </TextContainer>
 );
 
-interface TextContainerProps {
-  fontSize: FontSizeType;
-  fontWeight: fontWeightType;
-  color: ColorType;
-  mb: number;
-  mr: number;
-  center: boolean;
-}
-
-const TextContainer = styled.p<TextContainerProps>`
+const TextContainer = styled.p<Omit<TextProps, "text">>`
   color: ${({ theme, color }) => theme.color[color]};
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
   font-weight: ${({ fontWeight }) =>

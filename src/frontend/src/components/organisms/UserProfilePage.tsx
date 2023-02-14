@@ -2,7 +2,6 @@ import styled from "styled-components";
 import FieldButton from "../atoms/Button/fieldButton";
 import Text from "../atoms/Text/Text";
 import LinkText from "../atoms/Text/LinkText";
-import AccountCard from "./AccountCard";
 import { SketchPicker } from "react-color";
 import { useState } from "react";
 

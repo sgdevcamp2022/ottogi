@@ -1,5 +1,5 @@
+import Text from "@components/atoms/Text/Text";
 import styled from "styled-components";
-import Text from "../../atoms/Text/Text";
 
 const CreateServerText = () => {
   return (

@@ -1,5 +1,5 @@
+import DefaultButton from "@components/atoms/Button/DefaultButton";
 import styled from "styled-components";
-import DefaultButton from "../../atoms/Button/DefaultButton";
 
 const CreateDirectMesssageFooter = () => {
   return (

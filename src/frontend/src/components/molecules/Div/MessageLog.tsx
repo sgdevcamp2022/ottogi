@@ -1,6 +1,6 @@
+import LogoImage from "@components/atoms/Div/LogoImage";
+import MessageText from "@components/atoms/Div/MessageText";
 import styled from "styled-components";
-import LogoImage from "../../atoms/Div/LogoImage";
-import MessageText from "../../atoms/Div/MessageText";
 import MessageHoverButtons from "../Button/MessageHoverButtons";
 import MessageUserDate from "./MessageUserDate";
 

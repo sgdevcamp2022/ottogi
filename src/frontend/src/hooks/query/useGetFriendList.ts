@@ -1,6 +1,6 @@
+import { UserInfoType } from "@store/useUserStore";
 import { useQuery } from "@tanstack/react-query";
-import friendApi from "../../api/friend";
-import { UserInfoType } from "../../store/useUserStore";
+import friendApi from "src/api/friend";
 
 const useGetFriendList = (userInfo: UserInfoType) => {
   return useQuery(

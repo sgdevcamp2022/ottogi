@@ -1,11 +1,11 @@
+import CancelIcon from "@components/atoms/Icons/CancelIcon";
+import CheckIcon from "@components/atoms/Icons/CheckIcon";
+import useAcceptFriend from "@hooks/query/useAcceptFriend";
+import useCancelFriend from "@hooks/query/useCancelFriend";
+import useRejectFriend from "@hooks/query/useRejectFriend";
+import { useUserStore } from "@store/useUserStore";
 import { ReactElement } from "react";
 import styled from "styled-components";
-import useAcceptFriend from "../../../hooks/query/useAcceptFriend";
-import useCancelFriend from "../../../hooks/query/useCancelFriend";
-import useRejectFriend from "../../../hooks/query/useRejectFriend";
-import { useUserStore } from "../../../store/useUserStore";
-import CancelIcon from "../../atoms/Icons/CancelIcon";
-import CheckIcon from "../../atoms/Icons/CheckIcon";
 import RoundButton from "../Button/RoundButton";
 import FriendBox from "./FriendBox";
 
