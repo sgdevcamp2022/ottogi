@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import friendApi from "src/api/friend";
+import friendApi from "@api/friend";
 
 const useCancelFriend = () => {
   const queryClient = useQueryClient();

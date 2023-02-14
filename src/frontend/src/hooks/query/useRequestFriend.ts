@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import friendApi from "src/api/friend";
+import friendApi from "@api/friend";
 
 //todo: options 타입 지정
 const useRequestFriend = (options?: any) => {
