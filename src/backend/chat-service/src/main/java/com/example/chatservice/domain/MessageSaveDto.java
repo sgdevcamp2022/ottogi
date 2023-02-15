@@ -32,7 +32,7 @@ public class MessageSaveDto {
     }
 
     public String print(){
-        return ("[channelId : " + channelId + "], [ChatType : "  + type + "], [Id : " + communityUserId +
+        return ("[channelId : " + channelId + "], [ChatType : "  + type + "], [communityUserId : " + communityUserId +
                 "], [name : " + name + "], [message : " + message + "], [created_at : " + created_at + "]");
     }
 
