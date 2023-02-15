@@ -27,18 +27,18 @@ public class ChatRedisService {
 
     public void chatSave(Optional<MessageListSaveDto> channelData, MessageSaveDto messageSaveDto){
         if(channelData.isPresent()){
-            log.info("채팅방 데이터가 존재합니다, 채팅방 이름 : {}", messageSaveDto.getChannelId());
+//            log.info("채팅방 데이터가 존재합니다, 채팅방 이름 : {}", messageSaveDto.getChannelId());
 
             MessageListSaveDto messageListSaveDto = channelData.get();
 
             List<MessageSaveDto> messageSaveDtoList = messageListSaveDto.getMessageSaveDtoList();
-            for (MessageSaveDto saveDto : messageSaveDtoList) {
-                log.info("{}", saveDto.print());
-            }
+//            for (MessageSaveDto saveDto : messageSaveDtoList) {
+//                log.info("{}", saveDto.print());
+//            }
             messageListSaveDto.saveNewMessage(messageSaveDto);
             repository.save(messageListSaveDto);
         } else{
-            log.info("채팅방 데이터가 없습니다. 채팅방 이름 : {}", messageSaveDto.getChannelId());
+//            log.info("채팅방 데이터가 없습니다. 채팅방 이름 : {}", messageSaveDto.getChannelId());
 
             MessageListSaveDto messageListSaveDto = new MessageListSaveDto(messageSaveDto);
             repository.save(messageListSaveDto);
@@ -48,14 +48,10 @@ public class ChatRedisService {
     public List<MessageSaveDto> chats(ChatViewDto chatViewDto) {
         Optional<MessageListSaveDto> channelData = repository.findById(chatViewDto.getChannelId());
         List<MessageSaveDto> messageSaveDtoList = channelData.get().getMessageSaveDtoList();
-
         List<MessageSaveDto> chatMessages = new ArrayList<>();
         for (MessageSaveDto messageSaveDto : messageSaveDtoList) {
-            if(messageSaveDto.getCreated_at().isAfter(chatViewDto.getJoined_at())){ //커뮤니티 가입한 이후 채팅이라면 모두 가져옴
                 chatMessages.add(messageSaveDto);
-            }
         }
-
         return  chatMessages;
     }
 

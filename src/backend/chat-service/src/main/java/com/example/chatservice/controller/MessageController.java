@@ -4,6 +4,7 @@ import com.example.chatservice.domain.*;
 import com.example.chatservice.response.CommonResponse;
 import com.example.chatservice.service.ChatRedisService;
 import com.example.chatservice.service.ResponseService;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,6 +13,10 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.example.chatservice.domain.ChatType.*;
 import static com.example.chatservice.domain.TextMessages.*;
 
 @Slf4j
@@ -87,6 +92,5 @@ public class MessageController {
         // 해당방의 joined_at 뒤의 데이터들을 모두 가져온다.
         return responseService.getSuccessResponse(CHAT_VIEW_SUCCESS, chatRedisService.chats(chatViewDto));
     }
-
 
 }
