@@ -1,4 +1,4 @@
-import ServerImage from "../../atoms/Div/ServerImage";
+import ServerImage from "@components/atoms/Div/ServerImage";
 import styled from "styled-components";
 
 const ServerLogo = () => {

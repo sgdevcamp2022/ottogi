@@ -1,7 +1,7 @@
+import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
+import Text from "@components/atoms/Text/Text";
 import { MouseEventHandler, ReactElement } from "react";
 import styled from "styled-components";
-import ButtonWrapper from "../../atoms/Button/ButtonWrapper";
-import Text from "../../atoms/Text/Text";
 import UserState32 from "./UserState32";
 
 interface FriendBoxProps {

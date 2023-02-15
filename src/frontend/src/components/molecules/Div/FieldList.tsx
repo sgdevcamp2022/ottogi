@@ -1,8 +1,8 @@
+import FieldButton from "@components/atoms/Button/fieldButton";
+import Text from "@components/atoms/Text/Text";
+import Modal from "@components/organisms/Modal";
 import { useCallback, useState } from "react";
 import styled from "styled-components";
-import FieldButton from "../../atoms/Button/fieldButton";
-import Text from "../../atoms/Text/Text";
-import Modal from "../../organisms/Modal";
 import DefaultButton from "../../atoms/Button/DefaultButton";
 import DefaultInput from "../../atoms/Input/DefaultInput";
 const FieldList = () => {
@@ -47,6 +47,7 @@ const FieldList = () => {
               backgroundColor="voice-modal"
               fontSize="base"
               color="white"
+              type="text"
             />
           </Wrapper>
 
@@ -64,6 +65,7 @@ const FieldList = () => {
               backgroundColor="voice-modal"
               fontSize="base"
               color="white"
+              type="text"
             />
           </Wrapper>
         </TopWrapper>

@@ -1,6 +1,6 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType, ColorType } from "../../../styles/theme";
+import { BackgroundColorType, ColorType } from "@styles/theme";
 
 interface SettingButtonProps {
   text: string;
@@ -31,11 +31,9 @@ const SetDefaultButton = ({
   );
 };
 
-export const SettingButtonContainer = styled.button<{
-  color: ColorType;
-  backgroundColor: BackgroundColorType;
-  fontWeight: "normal" | "bold";
-}>`
+export const SettingButtonContainer = styled.button<
+  Pick<SettingButtonProps, "color" | "backgroundColor" | "fontWeight">
+>`
   margin-bottom: 4px;
   text-align: left;
   border: none;

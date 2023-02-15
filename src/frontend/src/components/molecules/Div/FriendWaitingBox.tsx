@@ -1,20 +1,17 @@
-import { useMutation } from "@tanstack/react-query";
+import CancelIcon from "@components/atoms/Icons/CancelIcon";
+import CheckIcon from "@components/atoms/Icons/CheckIcon";
+import useAcceptFriend from "@hooks/query/useAcceptFriend";
+import useCancelFriend from "@hooks/query/useCancelFriend";
+import useRejectFriend from "@hooks/query/useRejectFriend";
+import { useUserStore } from "@store/useUserStore";
 import { ReactElement } from "react";
-import friendApi from "../../../api/friend";
-import useAcceptFriend from "../../../hooks/query/useAcceptFriend";
-import useCancelFriend from "../../../hooks/query/useCancelFriend";
-import useRejectFriend from "../../../hooks/query/useRejectFriend";
-import { useUserStore } from "../../../store/useUserStore";
-import CancelIcon from "../../atoms/Icons/CancelIcon";
-import CheckIcon from "../../atoms/Icons/CheckIcon";
+import styled from "styled-components";
 import RoundButton from "../Button/RoundButton";
 import FriendBox from "./FriendBox";
 
-type WaitingStatusType = "REQUEST" | "WAIT";
-
 interface FriendWaitingBoxProps {
   name: string;
-  status: WaitingStatusType;
+  status: FriendStateType;
 }
 
 const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
@@ -25,21 +22,46 @@ const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
 
   if (!userInfo) return <></>;
 
-  const params = { email: userInfo.email, accessToken: userInfo.accessToken };
+  const params = { email: name, accessToken: userInfo.accessToken };
 
   let Buttons: ReactElement;
   if (status === "REQUEST") {
     Buttons = (
       <>
-        <RoundButton Icon={<CheckIcon />} onClick={() => acceptFriend(params)} />
-        <RoundButton Icon={<CancelIcon />} onClick={() => rejectFriend(params)} />
+        <RoundButton
+          Icon={<CheckIcon />}
+          onClick={() => acceptFriend(params)}
+        />
+        <RoundButton
+          Icon={
+            <CancelIconWrapper>
+              <CancelIcon />
+            </CancelIconWrapper>
+          }
+          onClick={() => rejectFriend(params)}
+        />
       </>
     );
   } else {
-    Buttons = <RoundButton Icon={<CancelIcon />} onClick={() => cancelFriend(params)} />;
+    Buttons = (
+      <RoundButton Icon={<CancelIcon />} onClick={() => cancelFriend(params)} />
+    );
   }
 
-  return <FriendBox name={name} status={`${status === "REQUEST" ? "받은" : "보낸"} 친구 요청`} onClick={() => null} Buttons={Buttons} />;
+  return (
+    <FriendBox
+      name={name}
+      status={`${status === "REQUEST" ? "받은" : "보낸"} 친구 요청`}
+      onClick={() => null}
+      Buttons={Buttons}
+    />
+  );
 };
+
+const CancelIconWrapper = styled.div`
+  &:hover {
+    color: ${({ theme }) => theme.backgroundColor["voice-hangup"]};
+  }
+`;
 
 export default FriendWaitingBox;

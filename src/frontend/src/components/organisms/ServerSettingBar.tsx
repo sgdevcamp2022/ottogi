@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Text from "../atoms/Text/Text";
 import ServerSettingButton from "../atoms/Button/ServerSettingButton copy";
-import { Divider } from "@mui/material";
 
 const ServerSettingBar = () => {
   return (

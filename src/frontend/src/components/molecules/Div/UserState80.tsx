@@ -1,6 +1,5 @@
+import Status from "@components/atoms/Div/Status";
 import styled from "styled-components";
-import LogoImage from "../../atoms/Div/LogoImage";
-import Status from "../../atoms/Div/Status";
 
 export type StateType = "on" | "off" | "disturb" | "mobile" | "empty";
 

@@ -1,6 +1,6 @@
+import FieldButton from "@components/atoms/Button/fieldButton";
+import Text from "@components/atoms/Text/Text";
 import styled from "styled-components";
-import FieldButton from "../../atoms/Button/fieldButton";
-import Text from "../../atoms/Text/Text";
 import UserState80 from "./UserState80";
 
 const CardUserInfo = () => {
@@ -12,14 +12,9 @@ const CardUserInfo = () => {
       <NameWrapper>
         <Text text="UserName" fontSize="lg" fontWeight="bold" color="white" />
       </NameWrapper>
-      <>
-        <ButtonWrappper>
-          <FieldButton
-            text="사용자 프로필 편집"
-            onClick={() => console.log(1)}
-          />
-        </ButtonWrappper>
-      </>
+      <ButtonWrapper>
+        <FieldButton text="사용자 프로필 편집" onClick={() => console.log(1)} />
+      </ButtonWrapper>
     </InfoContainer>
   );
 };
@@ -52,7 +47,7 @@ const InfoContainer = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor["voice-nobody"]};
 `;
 
-const ButtonWrappper = styled.div`
+const ButtonWrapper = styled.div`
   width: auto;
   height: 2rem;
 `;

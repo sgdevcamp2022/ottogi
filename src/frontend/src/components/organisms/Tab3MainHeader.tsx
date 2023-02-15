@@ -4,19 +4,24 @@ import TabDivider from "../atoms/Div/TabDivider";
 import DirectMessageHeader from "./DirectMessageHeader";
 import FriendHeader from "./FriendHeader";
 
-const Tab3Header = () => {
+const Tab3MainHeader = () => {
   const { userId } = useParams();
-  console.log(userId);
 
   return (
-    <Tab3HeaderContainer>
-      <HeaderWrapper>{userId ? <DirectMessageHeader name="허다은" status="on" /> : <FriendHeader />}</HeaderWrapper>
+    <Tab3MainHeaderContainer>
+      <HeaderWrapper>
+        {userId ? (
+          <DirectMessageHeader name="허다은" status="on" />
+        ) : (
+          <FriendHeader />
+        )}
+      </HeaderWrapper>
       <TabDivider />
-    </Tab3HeaderContainer>
+    </Tab3MainHeaderContainer>
   );
 };
 
-const Tab3HeaderContainer = styled.div`
+const Tab3MainHeaderContainer = styled.div`
   position: sticky;
   top: 0;
 `;
@@ -31,4 +36,4 @@ const HeaderWrapper = styled.div`
   padding: 0 0.5rem;
 `;
 
-export default Tab3Header;
+export default Tab3MainHeader;

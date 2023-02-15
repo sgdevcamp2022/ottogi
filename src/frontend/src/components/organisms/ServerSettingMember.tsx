@@ -1,31 +1,25 @@
 import Text from "../atoms/Text/Text";
-import AccountCard from "./AccountCard";
 import SettingWrapper from "./SettingWrapper";
 import { Divider } from "@mui/material";
-import FieldButton from "../atoms/Button/fieldButton";
 import styled from "styled-components";
 import LogoImage from "../atoms/Div/LogoImage";
 
 const SeverSettingMember = () => {
   return (
     <SettingWrapper>
-      <>
-        <Text
-          text={"서버 멤버"}
-          color="white"
-          fontWeight="bold"
-          fontSize="xl"
-          mb={20}
-        />
-        <Text text={"멤버 총 x명"} color="setting-tab" fontSize="sm" mb={20} />
-        <Divider
-          sx={{ borderColor: "#96989D93", opacity: 0.5, mt: 1, mb: 1 }}
-        />
-        <Member>
-          <LogoImage onClick={() => console.log(1)} />
-          <Text text={"김현우"} color="white" fontSize="sm" />
-        </Member>
-      </>
+      <Text
+        text={"서버 멤버"}
+        color="white"
+        fontWeight="bold"
+        fontSize="xl"
+        mb={20}
+      />
+      <Text text={"멤버 총 x명"} color="setting-tab" fontSize="sm" mb={20} />
+      <Divider sx={{ borderColor: "#96989D93", opacity: 0.5, mt: 1, mb: 1 }} />
+      <Member>
+        <LogoImage onClick={() => console.log(1)} />
+        <Text text={"김현우"} color="white" fontSize="sm" />
+      </Member>
     </SettingWrapper>
   );
 };

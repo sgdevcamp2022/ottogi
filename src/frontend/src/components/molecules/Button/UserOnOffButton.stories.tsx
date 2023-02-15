@@ -1,5 +1,5 @@
-import MicIcon from "../../atoms/Icons/MicIcon";
-import MicOffIcon from "../../atoms/Icons/MicOffIcon";
+import MicIcon from "@components/atoms/Icons/MicIcon";
+import MicOffIcon from "@components/atoms/Icons/MicOffIcon";
 import UserOnOffButton from "./UserOnOffButton";
 
 export default {
@@ -7,4 +7,11 @@ export default {
   component: UserOnOffButton,
 };
 
-export const UserOnOff = () => <UserOnOffButton OnIcon={<MicIcon />} OffIcon={<MicOffIcon />} onClick={() => {}} />;
+export const UserOnOff = () => (
+  <UserOnOffButton
+    text="음소거"
+    OnIcon={<MicIcon />}
+    OffIcon={<MicOffIcon />}
+    onClick={() => {}}
+  />
+);

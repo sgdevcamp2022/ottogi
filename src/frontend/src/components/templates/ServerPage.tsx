@@ -1,26 +1,31 @@
+import useModalStore from "@store/useModalStore";
 import styled from "styled-components";
-import MainBody from "../organisms/MainBody";
+import InviteFriendModal from "../organisms/InviteFriendModal";
 import ServerList from "../organisms/ServerList";
-import Tab2Body from "../organisms/Tab2Body";
 import Tab2Footer from "../organisms/Tab2Footer";
-import Tab2MainHeader from "../organisms/Tab2MainHeader";
-import Tab3Header from "../organisms/Tab3Header";
+import Tab2ServerBody from "../organisms/Tab2ServerBody";
+import Tab2ServerHeader from "../organisms/Tab2ServerHeader";
+import Tab3ServerBody from "../organisms/Tab3ServerBody";
+import Tab3ServerHeader from "../organisms/Tab3ServerHeader";
 
 const ServerPage = () => {
+  const { inviteFriendModal } = useModalStore();
   return (
     <>
-      <Tab1Container>
-        <ServerList />
-      </Tab1Container>
+      <ServerList />
       <Tab2Container>
-        <Tab2Footer name="nno3onn" />
+        <Tab2ServerHeader />
+        <Tab2ServerBody />
+        <Tab2Footer />
       </Tab2Container>
-      <Tab3Container></Tab3Container>
+      <Tab3Container>
+        <Tab3ServerHeader />
+        <Tab3ServerBody />
+      </Tab3Container>
+      {inviteFriendModal && <InviteFriendModal />}
     </>
   );
 };
-
-const Tab1Container = styled.div``;
 
 const Tab2Container = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor.tab2};

@@ -1,8 +1,6 @@
 import Text from "../atoms/Text/Text";
-import AccountCard from "./AccountCard";
 import SettingWrapper from "./SettingWrapper";
 import { Divider } from "@mui/material";
-import FieldButton from "../atoms/Button/fieldButton";
 import styled from "styled-components";
 import LogoImage from "../atoms/Div/LogoImage";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";

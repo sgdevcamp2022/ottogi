@@ -1,7 +1,7 @@
-import Text from "../../atoms/Text/Text";
-import DefaultInput from "../../atoms/Input/DefaultInput";
 import styled from "styled-components";
 import { useState } from "react";
+import Text from "@components/atoms/Text/Text";
+import DefaultInput from "@components/atoms/Input/DefaultInput";
 
 const ServerInput = () => {
   const [text, setText] = useState("");
@@ -16,6 +16,7 @@ const ServerInput = () => {
       />
       <DefaultInput
         value={text}
+        type="text"
         onChange={({ target: { value } }) => setText(value)}
         backgroundColor="server-input"
         fontSize="base"

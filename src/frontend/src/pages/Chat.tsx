@@ -1,12 +1,12 @@
 // import SockJs from "sockjs-client";
 // import StompJs from "@stomp/stompjs";
-// //stomp와 sockjs 패키지로 깔고 임포트!!
+// stomp와 sockjs 패키지로 깔고 임포트!!
 // https://okky.kr/articles/1152048
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
-// 버전 별로 불러와줘야 되는 부분이 다른 것 같음.
 import DefaultButton from "../components/atoms/Button/DefaultButton";
+// 버전 별로 불러와줘야 되는 부분이 다른 것 같음.
 
 var client: Client | null = null;
 
@@ -38,7 +38,7 @@ const Chat = () => {
   const connect = () => {
     client = new Client({
       // 해당 부분도 파라미터로 넣어두기
-      brokerURL: "ws://192.168.0.168:64420/ws",
+      brokerURL: "ws://172.20.6.236:64419/ws",
       debug: function (str) {
         console.log(str);
       },
@@ -83,7 +83,7 @@ const Chat = () => {
     <>
       <DefaultButton
         text="test"
-        onClick={() => handler("ottogi_channel3", "12121", "asdadad", "test1")}
+        onClick={() => handler("ottogi_channel", "12121", "asdadad", "test1")}
       />
     </>
   );

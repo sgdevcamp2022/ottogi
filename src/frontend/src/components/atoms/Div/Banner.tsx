@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BackgroundColorType } from "../../../styles/theme";
+import { BackgroundColorType } from "@styles/theme";
 interface BannerProps {
   backgroundColor?: BackgroundColorType;
 }
@@ -7,8 +7,6 @@ interface BannerProps {
 const Banner = ({ backgroundColor = "primary" }: BannerProps) => {
   return <Box backgroundColor={backgroundColor} />;
 };
-
-export default Banner;
 
 const Box = styled.div<{ backgroundColor: BackgroundColorType }>`
   width: 41.25rem;
@@ -18,3 +16,5 @@ const Box = styled.div<{ backgroundColor: BackgroundColorType }>`
   background-color: ${({ theme, backgroundColor }) =>
     theme.backgroundColor[backgroundColor]};
 `;
+
+export default Banner;

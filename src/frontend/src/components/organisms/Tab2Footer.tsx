@@ -1,3 +1,7 @@
+import { COOKIE_KEY } from "@configs/cookie";
+import { useUserStore } from "@store/useUserStore";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeadsetIcon from "../atoms/Icons/HeadsetIcon";
 import HeadsetOffIcon from "../atoms/Icons/HeadsetOffIcon";
@@ -7,20 +11,43 @@ import SettingsIcon from "../atoms/Icons/SettingsIcon";
 import UserInfoButton from "../molecules/Button/UserInfoButton";
 import UserOnOffButton from "../molecules/Button/UserOnOffButton";
 
-interface UserInfoBarProps {
-  name: string;
-}
+const Tab2Footer = () => {
+  const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies([COOKIE_KEY]);
+  const { resetUserInfo } = useUserStore();
 
-const Tab2Footer = ({ name }: UserInfoBarProps) => {
+  const logout = () => {
+    removeCookie(COOKIE_KEY);
+    resetUserInfo();
+    navigate("/login");
+  };
+
   return (
     <Tab2FooterContainer>
       <InfoContainer>
-        <UserInfoButton name={name} />
+        <UserInfoButton />
       </InfoContainer>
       <ButtonContainer>
-        <UserOnOffButton OnIcon={<MicIcon />} OffIcon={<MicOffIcon />} onClick={() => {}} />
-        <UserOnOffButton OnIcon={<HeadsetIcon />} OffIcon={<HeadsetOffIcon />} onClick={() => {}} />
-        <UserOnOffButton OnIcon={<SettingsIcon />} OffIcon={<SettingsIcon />} onClick={() => {}} />
+        <UserOnOffButton
+          text="음소거"
+          OnIcon={<MicIcon />}
+          OffIcon={<MicOffIcon />}
+          onClick={() => {
+            logout();
+          }}
+        />
+        <UserOnOffButton
+          text="헤드셋 음소거"
+          OnIcon={<HeadsetIcon />}
+          OffIcon={<HeadsetOffIcon />}
+          onClick={() => null}
+        />
+        <UserOnOffButton
+          text="사용자 설정"
+          OnIcon={<SettingsIcon />}
+          OffIcon={<SettingsIcon />}
+          onClick={() => null}
+        />
       </ButtonContainer>
     </Tab2FooterContainer>
   );

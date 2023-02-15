@@ -1,11 +1,13 @@
+import { useRegisterStore } from "@store/useRegisterStore";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useRegisterStore } from "../../store/useRegisterStore";
 import DefaultButton from "../atoms/Button/DefaultButton";
 import AuthHeader from "../molecules/Text/AuthHeader";
 
 const RegisterStep3 = () => {
-  const { resetStep, resetInputs } = useRegisterStore(({ resetStep, resetInputs }) => ({ resetStep, resetInputs }));
+  const { resetStep, resetInputs } = useRegisterStore(
+    ({ resetStep, resetInputs }) => ({ resetStep, resetInputs })
+  );
   const navigate = useNavigate();
 
   const goLogin = () => {

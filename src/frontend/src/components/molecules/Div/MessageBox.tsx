@@ -1,7 +1,7 @@
+import AddCircleIcon from "@components/atoms/Icons/AddCircleIcon";
+import MessageInput from "@components/atoms/Input/MessageInput";
 import { MouseEventHandler, useRef } from "react";
 import styled from "styled-components";
-import AddCircleIcon from "../../atoms/Icons/AddCircleIcon";
-import MessageInput from "../../atoms/Input/MessageInput";
 
 interface MessageInputProps {
   value: string;
@@ -26,7 +26,6 @@ const MessageBox = ({
 
   const handleChange = (v: string) => {
     onChange(v);
-    console.log(v);
     resizeTextAreaHeight();
   };
 
