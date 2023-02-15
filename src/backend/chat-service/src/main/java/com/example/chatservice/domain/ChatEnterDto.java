@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class ChatEnterDto {
-    private String communityUserId;
+    private String userId;
     private String name;
     private String channelId;
 }

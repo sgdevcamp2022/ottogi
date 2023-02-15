@@ -14,7 +14,7 @@ import static com.example.chatservice.domain.ChatType.*;
 public class MessageRequestDto {
 
     private String channelId;
-    private String communityUserId;
+    private String userId;
     private String name;
     private String message;
     private ChatType type;
@@ -23,7 +23,7 @@ public class MessageRequestDto {
     public MessageRequestDto convertToMessageRequestDto(ChatEnterDto chatEnterDto){
         return MessageRequestDto.builder()
                 .channelId(chatEnterDto.getChannelId())
-                .communityUserId(chatEnterDto.getCommunityUserId())
+                .userId(chatEnterDto.getUserId())
                 .name(chatEnterDto.getName())
                 .type(ENTER)
                 .message(chatEnterDto.getName() + " 님이 커뮤니티에 함께 합니다!")

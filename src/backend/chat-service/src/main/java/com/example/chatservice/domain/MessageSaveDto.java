@@ -15,7 +15,7 @@ public class MessageSaveDto {
 
     private String channelId;
     private ChatType type;
-    private String communityUserId;
+    private String userId;
     private String name;
     private String message;
     private LocalDateTime created_at = LocalDateTime.now();
@@ -25,14 +25,14 @@ public class MessageSaveDto {
         return MessageSaveDto.builder()
                 .type(messageRequestDto.getType())
                 .channelId(messageRequestDto.getChannelId())
-                .communityUserId(messageRequestDto.getCommunityUserId())
+                .userId(messageRequestDto.getUserId())
                 .name(messageRequestDto.getName())
                 .message(messageRequestDto.getMessage())
                 .build();
     }
 
     public String print(){
-        return ("[channelId : " + channelId + "], [ChatType : "  + type + "], [communityUserId : " + communityUserId +
+        return ("[channelId : " + channelId + "], [ChatType : "  + type + "], [communityUserId : " + userId +
                 "], [name : " + name + "], [message : " + message + "], [created_at : " + created_at + "]");
     }
 
