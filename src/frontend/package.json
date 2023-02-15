@@ -95,6 +95,7 @@
     "chromatic": "^6.15.0",
     "craco-alias": "^3.0.1",
     "prop-types": "^15.8.1",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
     "webpack": "^5.75.0"
   }
 }
