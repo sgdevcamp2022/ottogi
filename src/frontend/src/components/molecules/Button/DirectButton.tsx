@@ -7,7 +7,6 @@ import UserState32, { StateType } from "../Div/UserState32";
 interface DirectButtonProps {
   id: number;
   name: string;
-  active?: boolean;
   status?: StateType;
 }
 
