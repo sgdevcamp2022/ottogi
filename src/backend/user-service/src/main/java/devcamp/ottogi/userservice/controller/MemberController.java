@@ -79,28 +79,31 @@ public class MemberController {
 
     @PatchMapping("/modify/introduction")
     public CommonResponse<Object> modifyIntroduction(HttpServletRequest request, @RequestBody MemberModifyRequestDto memberModifyRequestDto) {
+
+
         Long userId = Long.parseLong(request.getHeader("id"));
         return responseService.getSuccessResponse(USER_INTRO_MODIFY_SUCCESS, memberService.userIntroModify(userId, memberModifyRequestDto.getIntroduction()));
 
     }
 
-
-    @PostMapping("/passwordcheck")
-    public CommonResponse<Object> passwordCheck(MemberLoginRequestDto memberLoginRequestDto){
-        authService.checkPW(memberLoginRequestDto);
-        return responseService.getSuccessResponse(PW_MATCH_SUCCESS, null);
-    }
-
     @PatchMapping("/modify/name")
     public CommonResponse<Object> userNameModify(HttpServletRequest request, MemberModifyRequestDto memberModifyRequestDto){
+
+        //비밀번호 검증
+        authService.checkPW(new MemberLoginRequestDto(memberModifyRequestDto.getEmail(), memberModifyRequestDto.getOriginalPassword()));
+
         Long userId = Long.parseLong(request.getHeader("id"));
-        String newName = memberModifyRequestDto.getPassword();
+        String newName = memberModifyRequestDto.getName();
 
         return responseService.getSuccessResponse(USER_NAME_MODIFY_SUCCESS, memberService.userNameModify(userId, newName));
     }
 
     @PatchMapping("/modify/password")
     public CommonResponse<Object> userPasswordModify(HttpServletRequest request, MemberModifyRequestDto memberModifyRequestDto){
+
+        // 비밀번호 검증
+        authService.checkPW(new MemberLoginRequestDto(memberModifyRequestDto.getEmail(), memberModifyRequestDto.getOriginalPassword()));
+
         Long userId = Long.parseLong(request.getHeader("id"));
         String newPassword = memberModifyRequestDto.getPassword();
 
