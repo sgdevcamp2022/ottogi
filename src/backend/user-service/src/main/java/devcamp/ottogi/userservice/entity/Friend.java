@@ -2,7 +2,6 @@ package devcamp.ottogi.userservice.entity;
 
 import devcamp.ottogi.userservice.domain.FriendState;
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -30,22 +29,24 @@ public class Friend {
 
     private FriendState state;
 
+    private String channelId;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @PrePersist
-    public void createdAt(){
-        this.createdAt = LocalDateTime.now();
-    }
-
-
-    public Friend (Member sender, Member receiver, FriendState state){
+    public Friend (Member sender, Member receiver, FriendState state, String channelId){
         this.sender = sender;
         this.receiver = receiver;
         this.state = state;
+        this.channelId = channelId;
     }
 
-    public void stateModify(FriendState friendState) {
+    public void modifyState(FriendState friendState) {
         this.state = friendState;
     }
+
+    public void modifyCreatedAt(){
+        this.createdAt = LocalDateTime.now();
+    }
+
 }

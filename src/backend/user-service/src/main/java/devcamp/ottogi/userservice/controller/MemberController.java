@@ -1,7 +1,7 @@
 package devcamp.ottogi.userservice.controller;
 
 import devcamp.ottogi.userservice.dto.request.FriendRequestDto;
-import devcamp.ottogi.userservice.dto.request.MemberLoginRequestDto;
+import devcamp.ottogi.userservice.dto.request.InvitationProcessDto;
 import devcamp.ottogi.userservice.dto.request.MemberModifyRequestDto;
 import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
 import devcamp.ottogi.userservice.exception.ApiException;
@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-
-import java.io.File;
 
 import static devcamp.ottogi.userservice.domain.SuccessMessages.*;
 import static devcamp.ottogi.userservice.exception.ErrorCode.*;
@@ -87,24 +85,25 @@ public class MemberController {
     }
 
     @PatchMapping("/modify/name")
-    public CommonResponse<Object> userNameModify(HttpServletRequest request, MemberModifyRequestDto memberModifyRequestDto){
+    public CommonResponse<Object> userNameModify(HttpServletRequest request, @RequestBody MemberModifyRequestDto memberModifyRequestDto){
+        Long userId = Long.parseLong(request.getHeader("id"));
 
         //비밀번호 검증
-        authService.checkPW(new MemberLoginRequestDto(memberModifyRequestDto.getEmail(), memberModifyRequestDto.getOriginalPassword()));
+        authService.checkPW(userId, memberModifyRequestDto.getOriginalPassword());
 
-        Long userId = Long.parseLong(request.getHeader("id"));
         String newName = memberModifyRequestDto.getName();
 
         return responseService.getSuccessResponse(USER_NAME_MODIFY_SUCCESS, memberService.userNameModify(userId, newName));
     }
 
     @PatchMapping("/modify/password")
-    public CommonResponse<Object> userPasswordModify(HttpServletRequest request, MemberModifyRequestDto memberModifyRequestDto){
-
-        // 비밀번호 검증
-        authService.checkPW(new MemberLoginRequestDto(memberModifyRequestDto.getEmail(), memberModifyRequestDto.getOriginalPassword()));
+    public CommonResponse<Object> userPasswordModify(HttpServletRequest request, @RequestBody  MemberModifyRequestDto memberModifyRequestDto){
 
         Long userId = Long.parseLong(request.getHeader("id"));
+
+        // 비밀번호 검증
+        authService.checkPW(userId, memberModifyRequestDto.getOriginalPassword());
+
         String newPassword = memberModifyRequestDto.getPassword();
 
         if (newPassword.length() < 8) {
@@ -118,6 +117,17 @@ public class MemberController {
     public CommonResponse<Object> userDelete(HttpServletRequest request){
         Long userId = Long.parseLong(request.getHeader("id"));
         return responseService.getSuccessResponse(USER_DELETE_SUCCESS, memberService.userDelete(userId));
+    }
+
+    @GetMapping("/invitation")
+    public CommonResponse<Object> loadInvitation(HttpServletRequest request) {
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(INVITATION_VIEW_SUCCESS, memberService.loadInvitation(userId));
+    }
+
+    @DeleteMapping("/invitation")
+    public CommonResponse<Object> acceptOrRejectInvitation(@RequestBody InvitationProcessDto invitationProcessDto) {
+        return responseService.getSuccessResponse(INVITATION_VIEW_SUCCESS, memberService.acceptOrRejectInvitation(Long.parseLong(invitationProcessDto.getInvitation_Id())));
     }
 
 }

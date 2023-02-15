@@ -3,9 +3,11 @@ package devcamp.ottogi.userservice.service;
 import devcamp.ottogi.userservice.dto.response.FriendResponseDto;
 import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
 import devcamp.ottogi.userservice.entity.Friend;
+import devcamp.ottogi.userservice.entity.Invitation;
 import devcamp.ottogi.userservice.entity.Member;
 import devcamp.ottogi.userservice.exception.ApiException;
 import devcamp.ottogi.userservice.repository.FriendRepository;
+import devcamp.ottogi.userservice.repository.InvitationRepository;
 import devcamp.ottogi.userservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +28,10 @@ import static devcamp.ottogi.userservice.exception.ErrorCode.*;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
+    private final InvitationRepository invitationRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public MemberResponseDto findMemberInfoById(Long memberId){
+    public MemberResponseDto findMemberInfoById(Long memberId) {
         return memberRepository.findById(memberId)
                 .map(MemberResponseDto::of)
                 .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
@@ -40,28 +43,29 @@ public class MemberService {
                 .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
     }
 
-    public String addFriend(Long userId, String email){
+    public String addFriend(Long userId, String email) {
         Member sender = memberRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
 
-        log.info("sender Id : {}",sender.getId());
+        log.info("sender Id : {}", sender.getId());
 
-        Member receiver = memberRepository.findById(userId)
+        Member receiver = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
 
-        log.info("receiver Id : {}",receiver.getId());
+        log.info("receiver Id : {}", receiver.getId());
 
-        if(friendRepository.existFriendRow(sender.getId(), receiver.getId()).isEmpty()){
+        if (friendRepository.existFriendRow(sender.getId(), receiver.getId()).isPresent()) {
             throw new ApiException(DUPLICATED_FRIEND);
         }
+        String channelId = sender.getName() + receiver.getName();
 
-        friendRepository.save(new Friend(sender, receiver, REQUEST));
-        friendRepository.save(new Friend(receiver, sender, WAIT));
+        friendRepository.save(new Friend(sender, receiver, REQUEST, channelId));
+        friendRepository.save(new Friend(receiver, sender, WAIT, channelId));
 
         return "OK";
     }
 
-    public List<FriendResponseDto> showFriend(Long userId){
+    public List<FriendResponseDto> showFriend(Long userId) {
         List<Friend> friendList = friendRepository.findFriends(userId)
                 .orElseThrow(() -> new ApiException(NO_SHOW_FRIENDS));
 
@@ -69,17 +73,21 @@ public class MemberService {
 
         for (Friend friend : friendList) {
             friendResponseDtoList.add(new FriendResponseDto().builder()
-                    .receiver(friend.getReceiver().getEmail())
+                    .name(friend.getReceiver().getName())
+                    .userId(friend.getReceiver().getId())
+                    .email(friend.getReceiver().getEmail())
                     .friendState(friend.getState())
+                    .channelId(friend.getChannelId())
+                    .createdAt(friend.getCreatedAt())
                     .build());
         }
 
         return friendResponseDtoList;
     }
 
-    public String acceptFriend(Long userId, String email){
+    public String acceptFriend(Long userId, String email) {
         Member receiver = memberRepository.findByEmail(email)
-                        .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
 
         log.info("user Id : {} , receiver Id : {}", userId, receiver.getId());
         Friend friendRow_one = friendRepository.findFriendRow(userId, receiver.getId())
@@ -88,13 +96,16 @@ public class MemberService {
         Friend friendRow_two = friendRepository.findFriendRow(receiver.getId(), userId)
                 .orElseThrow(() -> new ApiException(NO_FRIEND_REQUEST));
 
-        friendRow_one.stateModify(ACCEPTED);
-        friendRow_two.stateModify(ACCEPTED);
+        friendRow_one.modifyState(ACCEPTED);
+        friendRow_two.modifyState(ACCEPTED);
+
+        friendRow_one.modifyCreatedAt();
+        friendRow_two.modifyCreatedAt();
 
         return "OK";
     }
 
-    public String rejectFriend(Long userId, String email){
+    public String rejectFriend(Long userId, String email) {
         Member receiver = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
 
@@ -111,17 +122,17 @@ public class MemberService {
         return "OK";
     }
 
-    public String userNameModify(Long userId, String newName){
+    public String userNameModify(Long userId, String newName) {
         Member member = memberRepository.findById(userId)
-                        .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
         member.modifyName(newName);
 
         return "OK";
     }
 
-    public String userPasswordModify(Long userId, String newPassword){
+    public String userPasswordModify(Long userId, String newPassword) {
         Member member = memberRepository.findById(userId)
-                        .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
         member.modifyPassword(passwordEncoder.encode(newPassword));
 
         return "OK";
@@ -134,5 +145,18 @@ public class MemberService {
 
         member.modifyIntroduction(introduction);
         return "OK";
+    }
+
+    public List<Invitation> loadInvitation(Long receiver_id) {
+        return invitationRepository.findAllByReceiver(receiver_id)
+                .orElseThrow(() -> new ApiException(NO_INVITATION_LINK));
+
+    }
+
+    public String acceptOrRejectInvitation(Long invitationId) {
+        invitationRepository.deleteById(invitationId);
+
+
+        return "해당 요청을 삭제 완료했습니다.";
     }
 }

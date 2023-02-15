@@ -31,7 +31,8 @@ public enum ErrorCode {
     NO_SHOW_FRIENDS(HttpStatus.BAD_REQUEST, "MEMBER003", "친구 목록이 존재하지 않습니다."),
     NO_FRIEND_REQUEST(HttpStatus.BAD_REQUEST, "MEMBER004", "친구 요청이 존재하지 않습니다"),
     FILE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "MEMBER005", "파일 업로드에 실패하였습니다."),
-    FILE_TYPE_ERROR(HttpStatus.BAD_REQUEST, "MEMBER006", "잘못된 형식의 파일입니다.");
+    FILE_TYPE_ERROR(HttpStatus.BAD_REQUEST, "MEMBER006", "잘못된 형식의 파일입니다."),
+    NO_INVITATION_LINK(HttpStatus.BAD_REQUEST, "MEMBER007","커뮤니티 초대 링크가 없습니다");
 
     private HttpStatus status;
     private String code;

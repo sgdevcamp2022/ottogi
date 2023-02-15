@@ -25,6 +25,7 @@ public enum SuccessMessages {
     USER_INTRO_MODIFY_SUCCESS("자기 소개 변경 성공"),
 
     FILE_UPLOAD_SUCCESS("파일 업로드 성공"),
+    INVITATION_VIEW_SUCCESS("초대장 조회 성공"),
 
     USER_DELETE_SUCCESS("계정 삭제 완료");
 

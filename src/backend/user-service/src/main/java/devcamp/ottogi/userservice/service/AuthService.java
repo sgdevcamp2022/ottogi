@@ -11,6 +11,7 @@ import devcamp.ottogi.userservice.jwt.TokenProvider;
 import devcamp.ottogi.userservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,6 +29,10 @@ import static devcamp.ottogi.userservice.exception.ErrorCode.*;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
+    @Value("${default_image}")
+    private String imagePath;
+
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -40,7 +45,7 @@ public class AuthService {
             throw new ApiException(REGISTER_DUPLICATED_EMAIL);
         }
 
-        Member member = memberRequestDto.toMember(passwordEncoder);
+        Member member = memberRequestDto.toMember(passwordEncoder, imagePath);
         return MemberResponseDto.of(memberRepository.save(member));
     }
 
@@ -71,15 +76,13 @@ public class AuthService {
     }
 
     @Transactional
-    public void checkPW(MemberLoginRequestDto memberLoginRequestDto){
-        try{
-            UsernamePasswordAuthenticationToken authenticationToken = memberLoginRequestDto.toAuthentication();
-            // 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
-            authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        } catch (Exception e){
+    public void checkPW(Long userId, String password) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(NO_MEMBER_ERROR));
+
+        if(!passwordEncoder.matches(password, member.getPassword())){
             throw new ApiException(PW_MATCH_ERROR);
         }
-
     }
 
 
