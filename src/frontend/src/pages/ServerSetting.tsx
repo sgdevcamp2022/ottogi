@@ -1,15 +1,39 @@
 import styled from "styled-components";
 import ServerSettingBar from "../components/organisms/ServerSettingBar";
-import SeverSettingMember from "../components/organisms/ServerSettingMember";
+import ServerSettingMember from "../components/organisms/ServerSettingMember";
+import useServerSetStore, {
+  ServerSettingType,
+} from "../store/useServerSetStore";
+import ServerSettingDefault from "../components/organisms/ServerSettingDefault";
+import ServerSettingInvite from "../components/organisms/ServerSettingInvite";
+
+const serverComponent = {
+  일반: ServerSettingDefault,
+  멤버: ServerSettingMember,
+  초대: ServerSettingInvite,
+};
+
+const getStatus = (status: ServerSettingType) => {
+  const Component = serverComponent[status];
+  return <Component />;
+};
 
 const ServerSetting = () => {
+  const { setStatus, setSettingStatus } = useServerSetStore(
+    ({ setStatus, setSettingStatus }) => ({
+      setStatus,
+      setSettingStatus,
+    })
+  );
   return (
     <SettingBox>
       <Side>
         <ServerSettingBar />
       </Side>
       <Container>
-        <SeverSettingMember />
+        {/* <SeverSettingMember />
+         */}
+        {getStatus(setStatus)}
       </Container>
     </SettingBox>
   );

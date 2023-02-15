@@ -2,17 +2,36 @@ import { Avatar } from "@mui/material";
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { MouseEventHandler } from "react";
+import useServerStore from "../../../store/useServerStore";
 
 interface ServerImageProps {
-  onClick: MouseEventHandler<HTMLButtonElement>;
+  // onClick: MouseEventHandler<HTMLButtonElement>;
   id: Number;
+  name: string;
+  active?: boolean;
 }
 
-const ServerImage = ({ onClick, id }: ServerImageProps) => {
+const ServerImage = ({ id, name, active = false }: ServerImageProps) => {
+  const { server, setServer } = useServerStore(({ server, setServer }) => ({
+    server,
+    setServer,
+  }));
+  active = Number(server) === id;
+
+  const selectServer = () => {
+    setServer(id.toString());
+  };
+
   return (
-    <ServerIconBox>
+    <ServerIconBox borderRadius={active ? 0.8 : 5} height={active ? 35 : 10}>
       <ClickedWrapper className="side" />
-      <StyledIconButton onClick={onClick}>
+      <StyledIconButton
+        // onClick={() => {
+        //   onClick();
+
+        // }}
+        onClick={selectServer}
+      >
         {/* borderRadius로 이미지 동그란 정도 조절하기 */}
         <Avatar className="avatar"></Avatar>
       </StyledIconButton>
@@ -22,18 +41,28 @@ const ServerImage = ({ onClick, id }: ServerImageProps) => {
 
 export default ServerImage;
 
-const ServerIconBox = styled.div`
+interface ServerIconBoxProps {
+  borderRadius: number | string;
+  height: number | string;
+}
+
+const ServerIconBox = styled.div<ServerIconBoxProps>`
   display: flex;
-  /* width: 100%;
-  height: 100%; */
+  margin-bottom: 0.5rem;
   align-items: center;
+  .avatar {
+    border-radius: ${({ borderRadius }) => `${borderRadius}rem`};
+  }
+  .side {
+    height: ${({ height }) => `${height}px`};
+  }
   &:hover {
     .avatar {
       border-radius: 0.8rem;
       transition: all 0.4s ease-in-out;
     }
     .side {
-      height: 25px;
+      height: ${({ height }) => (height === 35 ? "35px" : "25px")};
       transition: height 0.4s ease-in-out;
     }
   }

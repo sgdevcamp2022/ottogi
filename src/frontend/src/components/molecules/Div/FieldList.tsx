@@ -3,7 +3,8 @@ import Text from "@components/atoms/Text/Text";
 import Modal from "@components/organisms/Modal";
 import { useCallback, useState } from "react";
 import styled from "styled-components";
-
+import DefaultButton from "../../atoms/Button/DefaultButton";
+import DefaultInput from "../../atoms/Input/DefaultInput";
 const FieldList = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
 
@@ -11,11 +12,75 @@ const FieldList = () => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
 
+  const [text, setText] = useState("");
+
+  const NameChange = () => {
+    return (
+      <>
+        <TopWrapper>
+          <TextWrapper>
+            <Text
+              text="사용자명 변경하기"
+              fontSize="xxl"
+              fontWeight="bold"
+              mb={12}
+              color="white"
+            />
+            <Text
+              text="새 사용자명과 기존 비밀번호를 입력하세요."
+              fontSize="base"
+              color="setting-tab"
+              mb={20}
+            />
+          </TextWrapper>
+          <Wrapper>
+            <Text
+              text="사용자 명"
+              color="setting-tab"
+              fontSize="xs"
+              mb={10}
+              fontWeight="bold"
+            />
+            <DefaultInput
+              value={text}
+              onChange={({ target: { value } }) => setText(value)}
+              backgroundColor="voice-modal"
+              fontSize="base"
+              color="white"
+              type="text"
+            />
+          </Wrapper>
+
+          <Wrapper>
+            <Text
+              text="현재 비밀번호"
+              color="setting-tab"
+              fontSize="xs"
+              mb={10}
+              fontWeight="bold"
+            />
+            <DefaultInput
+              value={text}
+              onChange={({ target: { value } }) => setText(value)}
+              backgroundColor="voice-modal"
+              fontSize="base"
+              color="white"
+              type="text"
+            />
+          </Wrapper>
+        </TopWrapper>
+        <Bottom>
+          <DefaultButton text="완료" onClick={() => console.log(1)} />
+        </Bottom>
+      </>
+    );
+  };
+
   return (
     <ListWrapper>
       {isOpenModal && (
         <Modal onClickToggleModal={onClickToggleModal}>
-          이곳에 children이 들어갑니다.
+          <NameChange />
         </Modal>
       )}
       <FieldContinaer>
@@ -40,7 +105,7 @@ const FieldList = () => {
           <FieldButton
             text="확인"
             backgroundColor="setting"
-            onClick={() => console.log(1)}
+            onClick={onClickToggleModal}
           />
         </ButtonWrappper>
       </FieldContinaer>
@@ -50,11 +115,7 @@ const FieldList = () => {
           <Text text="010-xxxx-xxxx" fontSize="base" color="white" />
         </LeftRow>
         <ButtonWrappper>
-          <FieldButton
-            text="추가하기"
-            backgroundColor="setting"
-            onClick={() => console.log(1)}
-          />
+          <FieldButton text="추가하기" onClick={onClickToggleModal} />
         </ButtonWrappper>
       </FieldContinaer>
     </ListWrapper>
@@ -86,3 +147,26 @@ const ButtonWrappper = styled.div`
 `;
 
 const ListWrapper = styled.div``;
+
+const Wrapper = styled.div`
+  width: 100%;
+  padding: 1rem;
+`;
+
+const TextWrapper = styled.div`
+  text-align: center;
+`;
+
+const TopWrapper = styled.div`
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
+`;
+
+const Bottom = styled.div`
+  width: 100%;
+  height: 4rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: ${({ theme }) => theme.backgroundColor["voice-nobody"]};
+`;

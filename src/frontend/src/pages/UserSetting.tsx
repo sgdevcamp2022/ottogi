@@ -1,15 +1,31 @@
 import styled from "styled-components";
 import ServerSettingBar from "../components/organisms/MyAccountSettingBar";
 import UserProfile from "../components/organisms/UserProfile";
+import MyAccount from "../components/organisms/MyAccount";
+import useUserSetStore, { UserSettingType } from "../store/useUserSetStore";
+const userComponent = {
+  "내 계정": MyAccount,
+  프로필: UserProfile,
+  알림: UserProfile,
+};
+
+const getStatus = (status: UserSettingType) => {
+  const Component = userComponent[status];
+  return <Component />;
+};
 
 const UserSetting = () => {
+  const { userStatus } = useUserSetStore(({ userStatus }) => ({
+    userStatus,
+  }));
   return (
     <SettingBox>
       <Side>
         <ServerSettingBar />
       </Side>
       <Container>
-        <UserProfile />
+        {/* <UserProfile /> */}
+        {getStatus(userStatus)}
       </Container>
     </SettingBox>
   );

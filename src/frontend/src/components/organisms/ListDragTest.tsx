@@ -2,30 +2,86 @@ import styled from "styled-components";
 import { Divider } from "../atoms/Div/Divider.stories";
 import ServerImage from "../atoms/Div/ServerImage";
 import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const ListDragTest = () => {
-  const array: Number[] = [1, 2, 3, 4, 5];
-  const [isSelect, SetIsSelect] = useState(false);
+const ServerList = () => {
+  const [array, setArray] = useState([
+    { id: "1", title: "공부" },
+    { id: "2", title: "헬스" },
+    { id: "3", title: "독서" },
+    { id: "4", title: "산책" },
+    { id: "5", title: "요리" },
+  ]);
+  // const array = [
+  //   { id: "1", title: "공부" },
+  //   { id: "2", title: "헬스" },
+  //   { id: "3", title: "독서" },
+  //   { id: "4", title: "산책" },
+  //   { id: "5", title: "요리" },
+  // ];
+
+  // const navigate = useNavigate();
+  // const onMain = () => {
+  //   navigate("/@me");
+  // };
+  // const onServer = (v: Number) => {
+  //   navigate("/:" + v);
+  // };
+
+  const handleChange = (result: any) => {
+    if (!result.destination) return;
+    console.log(result);
+    const items = [...array];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setArray(items);
+  };
 
   return (
     <BarContainer>
-      <ServerImage id={1} onClick={() => console.log(1)} />
-      <Divider />
-      <ul>
-        {array &&
-          array.map((index) => {
-            return (
-              <li>
-                <ServerImage id={index} onClick={() => console.log(1)} />
+      <DragDropContext onDragEnd={handleChange}>
+        <Droppable droppableId="servers">
+          {(provided) => (
+            <ul
+              className="servers"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              <li onClick={() => console.log(1)}>
+                <ServerImage name="메인" id={-1} />
               </li>
-            );
-          })}
-      </ul>
+              <Divider />
+              {array &&
+                array.map(({ id, title }, index) => {
+                  return (
+                    <Draggable key={id} draggableId={id} index={index}>
+                      {(provided) => (
+                        <li
+                          ref={provided.innerRef}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                          onClick={() => console.log({ index })}
+                        >
+                          <ServerImage name="서버1" id={index} />
+                        </li>
+                      )}
+                    </Draggable>
+                  );
+                })}
+              {provided.placeholder}
+              <li onClick={() => console.log(array.length)}>
+                <ServerImage name="서버 추가" id={array.length} />
+              </li>
+            </ul>
+          )}
+        </Droppable>
+      </DragDropContext>
     </BarContainer>
   );
 };
 
-export default ListDragTest;
+export default ServerList;
 
 const BarContainer = styled.div`
   width: 4.5rem;
