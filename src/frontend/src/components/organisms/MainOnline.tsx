@@ -9,7 +9,7 @@ import LabelText from "../molecules/Text/LabelText";
 
 const MainOnline = () => {
   const { userInfo } = useUserStore();
-  const { data, isSuccess } = useGetFriendList(userInfo);
+  const { data, isSuccess } = useGetFriendList(userInfo.email);
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;

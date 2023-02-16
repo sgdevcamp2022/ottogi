@@ -14,7 +14,7 @@ interface FriendState {
 
 const MainWaiting = () => {
   const { userInfo } = useUserStore();
-  const { data, isSuccess } = useGetFriendList(userInfo);
+  const { data, isSuccess } = useGetFriendList(userInfo.email);
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;

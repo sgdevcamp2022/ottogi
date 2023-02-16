@@ -11,7 +11,7 @@ interface SideBarProps {
 
 const SideBar = ({ children }: SideBarProps) => {
   const { userInfo } = useUserStore();
-  const { data, isSuccess } = useGetFriendList(userInfo);
+  const { data, isSuccess } = useGetFriendList(userInfo.email);
 
   let friendList: null | FriendType[];
   friendList = data?.data.data;

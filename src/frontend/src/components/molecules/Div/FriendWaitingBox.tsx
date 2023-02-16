@@ -5,6 +5,7 @@ import useCancelFriend from "@hooks/query/useCancelFriend";
 import useRejectFriend from "@hooks/query/useRejectFriend";
 import { useUserStore } from "@store/useUserStore";
 import { ReactElement } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import RoundButton from "../Button/RoundButton";
 import FriendBox from "./FriendBox";
@@ -15,12 +16,13 @@ interface FriendWaitingBoxProps {
 }
 
 const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
+  const navigate = useNavigate();
   const { userInfo } = useUserStore();
   const { mutate: acceptFriend } = useAcceptFriend();
   const { mutate: rejectFriend } = useRejectFriend();
   const { mutate: cancelFriend } = useCancelFriend();
 
-  if (!userInfo) return <></>;
+  if (!userInfo) navigate("/login");
 
   const params = { email: name };
 
