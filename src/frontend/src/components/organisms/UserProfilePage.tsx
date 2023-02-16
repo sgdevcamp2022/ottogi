@@ -2,17 +2,38 @@ import styled from "styled-components";
 import FieldButton from "../atoms/Button/fieldButton";
 import Text from "../atoms/Text/Text";
 import LinkText from "../atoms/Text/LinkText";
+import Modal from "@components/organisms/Modal";
 import { SketchPicker } from "react-color";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import ServerLogoUpload from "@components/molecules/Button/ServerLogoUpload";
+
+const ImageChange = () => {
+  console.log(1);
+  return (
+    <Wrapper>
+      <ServerLogoUpload />
+    </Wrapper>
+  );
+};
 
 const UserProfilePage = () => {
-  const [backgroundColor, setBackgroundColor] = useState("#fff");
+  const [isOpenModal, setOpenModal] = useState<boolean>(false);
+  const onClickToggleModal = useCallback(() => {
+    console.log(1);
+    setOpenModal(!isOpenModal);
+  }, [isOpenModal]);
+  // const [backgroundColor, setBackgroundColor] = useState("#fff");
 
-  const handleChangeComplete = (color: any) => {
-    setBackgroundColor(color.hex);
-  };
+  // const handleChangeComplete = (color: any) => {
+  //   setBackgroundColor(color.hex);
+  // };
   return (
     <MainWrapper>
+      {isOpenModal && (
+        <Modal onClickToggleModal={onClickToggleModal}>
+          <ImageChange />
+        </Modal>
+      )}
       <BlockWrapper>
         <Text
           text="아바타"
@@ -23,16 +44,13 @@ const UserProfilePage = () => {
         />
         <CustomButtons>
           <AvatarWrapper>
-            <FieldButton
-              text="아바타 변경하기"
-              onClick={() => console.log(1)}
-            />
+            <FieldButton text="아바타 변경하기" onClick={onClickToggleModal} />
           </AvatarWrapper>
           <LinkWrapper>
             <LinkText text="아바타 제거하기" onClick={() => console.log(1)} />
           </LinkWrapper>
         </CustomButtons>
-        <Text
+        {/* <Text
           text="배너색상"
           fontSize="xs"
           color="setting-tab"
@@ -55,9 +73,9 @@ const UserProfilePage = () => {
           fontSize="sm"
           color="setting-tab"
           mb={16}
-        />
+        /> */}
       </BlockWrapper>
-      <BlockWrapper>{/* <AccountCard /> */}</BlockWrapper>
+      {/* <BlockWrapper><AccountCard /></BlockWrapper> */}
     </MainWrapper>
   );
 };
@@ -66,8 +84,15 @@ export default UserProfilePage;
 
 const MainWrapper = styled.div`
   width: 100%;
-  gap: 35px;
   display: flex;
+  position: relative;
+  background-color: ${({ theme }) => theme.backgroundColor["tab3"]};
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
   position: relative;
   background-color: ${({ theme }) => theme.backgroundColor["tab3"]};
 `;
@@ -75,6 +100,7 @@ const MainWrapper = styled.div`
 const AvatarWrapper = styled.div`
   height: 32px;
   width: 8.5;
+  width: 10rem;
 `;
 
 const CustomButtons = styled.div`
@@ -82,7 +108,6 @@ const CustomButtons = styled.div`
   padding-bottom: 24px;
   display: flex;
   border-bottom: 0.25px solid ${({ theme }) => theme.color["setting-tab"]};
-  width: auto;
 `;
 
 const LinkWrapper = styled.div`
@@ -93,6 +118,6 @@ const LinkWrapper = styled.div`
 const BlockWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  /* width: 50%; */
   text-align: left;
+  width: 100%;
 `;

@@ -6,154 +6,175 @@ import styled from "styled-components";
 import DefaultButton from "../../atoms/Button/DefaultButton";
 import DefaultInput from "../../atoms/Input/DefaultInput";
 import useInput from "@hooks/common/useInput";
+
+const NameChange = () => {
+  const [name, changeName] = useInput();
+  const [newPassword, changeNewPassword] = useInput();
+  const [password, changePassword] = useInput();
+  console.log(1);
+  return (
+    <>
+      <TopWrapper>
+        <TextWrapper>
+          <Text
+            text="사용자명 변경하기"
+            fontSize="xxl"
+            fontWeight="bold"
+            mb={12}
+            color="white"
+          />
+          <Text
+            text="새 사용자명과 기존 비밀번호를 입력하세요."
+            fontSize="base"
+            color="setting-tab"
+            mb={20}
+          />
+        </TextWrapper>
+        <Wrapper>
+          <Text
+            text="사용자 명"
+            color="setting-tab"
+            fontSize="xs"
+            mb={10}
+            fontWeight="bold"
+          />
+          <DefaultInput
+            value={name}
+            onChange={changeName}
+            backgroundColor="voice-modal"
+            fontSize="base"
+            color="white"
+            type="text"
+          />
+        </Wrapper>
+
+        <Wrapper>
+          <Text
+            text="현재 비밀번호"
+            color="setting-tab"
+            fontSize="xs"
+            mb={10}
+            fontWeight="bold"
+          />
+          <DefaultInput
+            value={password}
+            onChange={changePassword}
+            backgroundColor="voice-modal"
+            fontSize="base"
+            color="white"
+            type="text"
+          />
+        </Wrapper>
+      </TopWrapper>
+      <Bottom>
+        <DefaultButton text="완료" onClick={() => console.log(1)} />
+      </Bottom>
+    </>
+  );
+};
+
+const PwChange = () => {
+  const [passwordConfirm, changePasswordConfirm] = useInput();
+  const [newPassword, changeNewPassword] = useInput();
+  const [password, changePassword] = useInput();
+  console.log(1);
+  return (
+    <>
+      <TopWrapper>
+        <TextWrapper>
+          <Text
+            text="비밀번호를 바꿔주세요"
+            fontSize="xxl"
+            fontWeight="bold"
+            mb={12}
+            color="white"
+          />
+          <Text
+            text="현재 비밀번호와 새 비밀번호를 입력하세요."
+            fontSize="base"
+            color="setting-tab"
+            mb={20}
+          />
+        </TextWrapper>
+
+        <Wrapper>
+          <Text
+            text="현재비밀번호"
+            color="setting-tab"
+            fontSize="xs"
+            mb={10}
+            fontWeight="bold"
+          />
+          <DefaultInput
+            value={password}
+            onChange={changePassword}
+            backgroundColor="voice-modal"
+            fontSize="base"
+            color="white"
+            type="text"
+          />
+        </Wrapper>
+        <Wrapper>
+          <Text
+            text="새 비밀번호"
+            color="setting-tab"
+            fontSize="xs"
+            mb={10}
+            fontWeight="bold"
+          />
+          <DefaultInput
+            value={newPassword}
+            onChange={changeNewPassword}
+            backgroundColor="voice-modal"
+            fontSize="base"
+            color="white"
+            type="text"
+          />
+        </Wrapper>
+        <Wrapper>
+          <Text
+            text="새 비밀번호 확인"
+            color="setting-tab"
+            fontSize="xs"
+            mb={10}
+            fontWeight="bold"
+          />
+          <DefaultInput
+            value={passwordConfirm}
+            onChange={changePasswordConfirm}
+            backgroundColor="voice-modal"
+            fontSize="base"
+            color="white"
+            type="text"
+          />
+        </Wrapper>
+      </TopWrapper>
+      <Bottom>
+        <DefaultButton text="완료" onClick={() => console.log(1)} />
+      </Bottom>
+    </>
+  );
+};
+
 const FieldList = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
-
+  const [isOpenModal2, setOpenModal2] = useState<boolean>(false);
   const onClickToggleModal = useCallback(() => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
 
-  const [name, changeName] = useInput();
-  const [newPassword, changeNewPassword] = useInput();
-  const [password, changePassword] = useInput();
-
-  const NameChange = () => {
-    return (
-      <>
-        <TopWrapper>
-          <TextWrapper>
-            <Text
-              text="사용자명 변경하기"
-              fontSize="xxl"
-              fontWeight="bold"
-              mb={12}
-              color="white"
-            />
-            <Text
-              text="새 사용자명과 기존 비밀번호를 입력하세요."
-              fontSize="base"
-              color="setting-tab"
-              mb={20}
-            />
-          </TextWrapper>
-          <Wrapper>
-            <Text
-              text="사용자 명"
-              color="setting-tab"
-              fontSize="xs"
-              mb={10}
-              fontWeight="bold"
-            />
-            <DefaultInput
-              value={name}
-              onChange={changeName}
-              backgroundColor="voice-modal"
-              fontSize="base"
-              color="white"
-              type="text"
-            />
-          </Wrapper>
-
-          <Wrapper>
-            <Text
-              text="현재 비밀번호"
-              color="setting-tab"
-              fontSize="xs"
-              mb={10}
-              fontWeight="bold"
-            />
-            <DefaultInput
-              value={password}
-              onChange={changePassword}
-              backgroundColor="voice-modal"
-              fontSize="base"
-              color="white"
-              type="text"
-            />
-          </Wrapper>
-        </TopWrapper>
-        <Bottom>
-          <DefaultButton text="완료" onClick={() => console.log(1)} />
-        </Bottom>
-      </>
-    );
-  };
-
-  const PwChange = () => {
-    return (
-      <>
-        <TopWrapper>
-          <TextWrapper>
-            <Text
-              text="비밀번호를 바꿔주세요"
-              fontSize="xxl"
-              fontWeight="bold"
-              mb={12}
-              color="white"
-            />
-            <Text
-              text="현재 비밀번호와 새 비밀번호를 입력하세요."
-              fontSize="base"
-              color="setting-tab"
-              mb={20}
-            />
-          </TextWrapper>
-
-          <Wrapper>
-            <Text
-              text="현재비밀번호"
-              color="setting-tab"
-              fontSize="xs"
-              mb={10}
-              fontWeight="bold"
-            />
-            <DefaultInput
-              value={password}
-              onChange={changePassword}
-              backgroundColor="voice-modal"
-              fontSize="base"
-              color="white"
-              type="text"
-            />
-          </Wrapper>
-          <Wrapper>
-            <Text
-              text="새 비밀번호"
-              color="setting-tab"
-              fontSize="xs"
-              mb={10}
-              fontWeight="bold"
-            />
-            <DefaultInput
-              value={newPassword}
-              onChange={changeNewPassword}
-              backgroundColor="voice-modal"
-              fontSize="base"
-              color="white"
-              type="text"
-            />
-          </Wrapper>
-          <Wrapper>
-            <Text
-              text="새 비밀번호 확인"
-              color="setting-tab"
-              fontSize="xs"
-              mb={10}
-              fontWeight="bold"
-            />
-          </Wrapper>
-        </TopWrapper>
-        <Bottom>
-          <DefaultButton text="완료" onClick={() => console.log(1)} />
-        </Bottom>
-      </>
-    );
-  };
-
+  const onClickToggleModal2 = useCallback(() => {
+    setOpenModal2(!isOpenModal2);
+  }, [isOpenModal2]);
   return (
     <ListWrapper>
       {isOpenModal && (
         <Modal onClickToggleModal={onClickToggleModal}>
+          <NameChange />
+        </Modal>
+      )}
+      {isOpenModal2 && (
+        <Modal onClickToggleModal={onClickToggleModal2}>
           <PwChange />
         </Modal>
       )}
@@ -189,7 +210,7 @@ const FieldList = () => {
           <Text text="xxxx" fontSize="base" color="white" />
         </LeftRow>
         <ButtonWrappper>
-          <FieldButton text="변경하기" onClick={onClickToggleModal} />
+          <FieldButton text="변경하기" onClick={onClickToggleModal2} />
         </ButtonWrappper>
       </FieldContinaer>
     </ListWrapper>
@@ -224,11 +245,14 @@ const ListWrapper = styled.div``;
 
 const Wrapper = styled.div`
   width: 100%;
-  padding: 1rem 1rem 0 1rem;
+  padding: 0.8rem 1rem 0 1rem;
 `;
 
 const TextWrapper = styled.div`
   text-align: center;
+  p {
+    text-align: center;
+  }
 `;
 
 const TopWrapper = styled.div`
