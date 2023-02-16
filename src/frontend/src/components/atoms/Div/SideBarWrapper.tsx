@@ -13,8 +13,9 @@ const SideBar = ({ children }: SideBarProps) => {
   const { userInfo } = useUserStore();
   const { data, isSuccess } = useGetFriendList(userInfo);
 
-  let friendList: null | FriendType[];
-  friendList = data?.data.data;
+  if (!data) return <></>;
+
+  const friendList: FriendType[] = data.data.data;
 
   return (
     <SideBarContainer>

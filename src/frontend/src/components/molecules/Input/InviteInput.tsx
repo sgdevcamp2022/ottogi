@@ -5,9 +5,11 @@ import useRequestFriend from "@hooks/query/useRequestFriend";
 import { useUserStore } from "@store/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const InviteInput = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { userInfo } = useUserStore();
   const [email, setEmail] = useState("");
@@ -34,7 +36,7 @@ const InviteInput = () => {
   };
 
   const inviteFriend = () => {
-    if (!userInfo) return;
+    if (!userInfo) navigate("/login");
     requestFriend({ email });
   };
 

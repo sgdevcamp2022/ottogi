@@ -30,7 +30,7 @@ const MainTotal = () => {
           <LabelText label={"모든 친구"} num={num} />
           <ScrollableBox>
             {friendList.map((friend, idx) => (
-              <FriendDefaultBox id={idx} name={friend.receiver} />
+              <FriendDefaultBox id={idx} name={friend.email} />
             ))}
           </ScrollableBox>
         </>

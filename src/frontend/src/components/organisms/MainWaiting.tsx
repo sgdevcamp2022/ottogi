@@ -32,8 +32,8 @@ const MainWaiting = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"대기 중"} num={num} />
           <ScrollableBox>
-            {friendList.map(({ receiver, friendState }: FriendType) => (
-              <FriendWaitingBox name={receiver} status={friendState} />
+            {friendList.map(({ email, friendState }: FriendType) => (
+              <FriendWaitingBox name={email} status={friendState} />
             ))}
           </ScrollableBox>
         </>
