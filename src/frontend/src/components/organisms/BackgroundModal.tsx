@@ -7,11 +7,17 @@ interface BackgroundModalProps {
   children: ReactElement;
   width: number;
   p: number;
+  onClick: () => void;
 }
 
-const BackgroundModal = ({ children, width, p }: BackgroundModalProps) => {
+const BackgroundModal = ({
+  onClick,
+  children,
+  width,
+  p,
+}: BackgroundModalProps) => {
   return (
-    <BackgroundWrapper>
+    <BackgroundWrapper onClick={onClick}>
       <DefaultModal width={width} p={p}>
         {children}
       </DefaultModal>

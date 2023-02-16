@@ -46,7 +46,6 @@ const MessageLogContainer = styled.div<{ hasImage: boolean }>`
 `;
 
 const LogoImageContainer = styled.div`
-  position: relative;
   margin-left: 16px;
 `;
 

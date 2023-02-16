@@ -1,5 +1,6 @@
 import Status from "@components/atoms/Div/Status";
 import styled from "styled-components";
+import mask from "../../../assets/mask/avatar-mask-80.png";
 
 export type StateType = "on" | "off" | "disturb" | "mobile" | "empty";
 
@@ -29,7 +30,7 @@ const UserStateContainer = styled.div`
 const Mask = styled.div`
   width: 80px;
   height: 80px;
-  mask-image: url("avatar-mask-80.png");
+  mask-image: url(${mask});
   mask-size: contain;
   mask-repeat: no-repeat;
 `;

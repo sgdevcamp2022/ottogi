@@ -40,7 +40,7 @@ const RegisterStep1 = () => {
   return (
     <>
       <AuthHeader text="계정 만들기" />{" "}
-      {errorMessage !== "" && (
+      {errorMessage && (
         <Text
           text={errorMessage}
           color="invite-danger"

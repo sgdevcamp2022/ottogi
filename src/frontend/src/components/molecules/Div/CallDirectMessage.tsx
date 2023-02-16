@@ -41,6 +41,7 @@ const CallDirectMessage = ({
 };
 
 const CallDirectMessageContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   svg {
@@ -49,7 +50,6 @@ const CallDirectMessageContainer = styled.div`
 `;
 
 const CallImageContainer = styled.div<{ type: CallDirectMessageType }>`
-  position: relative;
   margin-left: 28px;
   color: ${({ theme, type }) =>
     theme.statusColor[type === "missed" ? "off" : "on"]};

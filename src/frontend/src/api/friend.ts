@@ -1,67 +1,33 @@
 import clientApi from "./axios";
 
-interface HeaderToken {
-  accessToken: string;
-}
-
-interface FriendParams extends HeaderToken {
+interface FriendParams {
   email: string;
 }
 
 const friendApi = {
   getAll: async ({ queryKey }: any) => {
-    const { email, accessToken } = queryKey[1];
+    const { email } = queryKey[1];
     return await clientApi.get(`/user/member/showfriend`, {
       params: { email },
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
     });
   },
 
-  request: async ({ email, accessToken }: FriendParams) => {
-    return await clientApi.post(
-      "/user/member/addfriend",
-      { email },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
-    );
+  request: async ({ email }: FriendParams) => {
+    return await clientApi.post("/user/member/addfriend", { email });
   },
 
-  accept: async ({ email, accessToken }: FriendParams) => {
-    return await clientApi.post(
-      "/user/member/acceptfriend",
-      { email },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
-    );
+  accept: async ({ email }: FriendParams) => {
+    return await clientApi.post("/user/member/acceptfriend", { email });
   },
 
-  reject: async ({ email, accessToken }: FriendParams) => {
+  reject: async ({ email }: FriendParams) => {
     return await clientApi.delete("/user/member/rejectfriend", {
       params: { email },
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
     });
   },
 
-  cancel: async ({ email, accessToken }: FriendParams) => {
-    return await clientApi.post(
-      "/user/member/cancelfriend",
-      { email },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
-    );
+  cancel: async ({ email }: FriendParams) => {
+    return await clientApi.post("/user/member/cancelfriend", { email });
   },
 };
 

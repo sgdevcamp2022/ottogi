@@ -35,9 +35,7 @@ const Tab2Footer = () => {
           text="음소거"
           OnIcon={<MicIcon />}
           OffIcon={<MicOffIcon />}
-          onClick={() => {
-            logout();
-          }}
+          onClick={() => null}
         />
         <UserOnOffButton
           text="헤드셋 음소거"
