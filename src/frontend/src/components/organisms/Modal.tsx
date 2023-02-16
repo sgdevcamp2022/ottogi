@@ -40,16 +40,16 @@ const DialogBox = styled.dialog`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   border: none;
   border-radius: 3px;
   /* box-shadow: 0 0 30px rgba(30, 30, 30, 0.185); */
   box-sizing: border-box;
-  background-color: ${({ theme }) => theme.backgroundColor["setting"]};
+  background-color: ${({ theme }) => theme.backgroundColor["tab3"]};
   z-index: 10000;
   top: 0;
   left: 0;
-  padding: 0;
-  text-align: center;
+  padding: 0.2rem 0 0 0;
 `;
 
 const Backdrop = styled.div`
@@ -59,8 +59,7 @@ const Backdrop = styled.div`
   top: 0;
   left: 0;
   z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.484);
-  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.8);
 `;
 
 export default Modal;

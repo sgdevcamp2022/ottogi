@@ -40,7 +40,7 @@ const Router = () => {
       {/* 테스트 용으로 만들어 둔거. */}
       <Route path="/ServerSetting" element={<ServerSetting />} />
       <Route path="/UserSetting" element={<UserSetting />} />
-      <Route path="/:serverId/" element={<Server />} />
+      {/* <Route path="/:serverId/" element={<Server />} /> */}
       <Route
         path="/:serverId"
         element={

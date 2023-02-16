@@ -9,9 +9,7 @@ interface UserInfoButtonProps {
 }
 
 const UserInfoButton = ({ status = "on" }: UserInfoButtonProps) => {
-  const {
-    userInfo: { email },
-  } = useUserStore();
+  const { userInfo } = useUserStore();
 
   return (
     <ButtonWrapper
@@ -22,7 +20,7 @@ const UserInfoButton = ({ status = "on" }: UserInfoButtonProps) => {
     >
       <InfoContainer>
         <UserState32 status={status} />
-        <Text text={email} fontWeight="bold" fontSize="sm" color="white" />
+        <Text text={" "} fontWeight="bold" fontSize="sm" color="white" />
       </InfoContainer>
     </ButtonWrapper>
   );

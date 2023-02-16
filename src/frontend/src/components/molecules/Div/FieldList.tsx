@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import styled from "styled-components";
 import DefaultButton from "../../atoms/Button/DefaultButton";
 import DefaultInput from "../../atoms/Input/DefaultInput";
+import useInput from "@hooks/common/useInput";
 const FieldList = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
 
@@ -12,7 +13,9 @@ const FieldList = () => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
 
-  const [text, setText] = useState("");
+  const [name, changeName] = useInput();
+  const [newPassword, changeNewPassword] = useInput();
+  const [password, changePassword] = useInput();
 
   const NameChange = () => {
     return (
@@ -42,8 +45,8 @@ const FieldList = () => {
               fontWeight="bold"
             />
             <DefaultInput
-              value={text}
-              onChange={({ target: { value } }) => setText(value)}
+              value={name}
+              onChange={changeName}
               backgroundColor="voice-modal"
               fontSize="base"
               color="white"
@@ -60,8 +63,8 @@ const FieldList = () => {
               fontWeight="bold"
             />
             <DefaultInput
-              value={text}
-              onChange={({ target: { value } }) => setText(value)}
+              value={password}
+              onChange={changePassword}
               backgroundColor="voice-modal"
               fontSize="base"
               color="white"
@@ -76,11 +79,82 @@ const FieldList = () => {
     );
   };
 
+  const PwChange = () => {
+    return (
+      <>
+        <TopWrapper>
+          <TextWrapper>
+            <Text
+              text="비밀번호를 바꿔주세요"
+              fontSize="xxl"
+              fontWeight="bold"
+              mb={12}
+              color="white"
+            />
+            <Text
+              text="현재 비밀번호와 새 비밀번호를 입력하세요."
+              fontSize="base"
+              color="setting-tab"
+              mb={20}
+            />
+          </TextWrapper>
+
+          <Wrapper>
+            <Text
+              text="현재비밀번호"
+              color="setting-tab"
+              fontSize="xs"
+              mb={10}
+              fontWeight="bold"
+            />
+            <DefaultInput
+              value={password}
+              onChange={changePassword}
+              backgroundColor="voice-modal"
+              fontSize="base"
+              color="white"
+              type="text"
+            />
+          </Wrapper>
+          <Wrapper>
+            <Text
+              text="새 비밀번호"
+              color="setting-tab"
+              fontSize="xs"
+              mb={10}
+              fontWeight="bold"
+            />
+            <DefaultInput
+              value={newPassword}
+              onChange={changeNewPassword}
+              backgroundColor="voice-modal"
+              fontSize="base"
+              color="white"
+              type="text"
+            />
+          </Wrapper>
+          <Wrapper>
+            <Text
+              text="새 비밀번호 확인"
+              color="setting-tab"
+              fontSize="xs"
+              mb={10}
+              fontWeight="bold"
+            />
+          </Wrapper>
+        </TopWrapper>
+        <Bottom>
+          <DefaultButton text="완료" onClick={() => console.log(1)} />
+        </Bottom>
+      </>
+    );
+  };
+
   return (
     <ListWrapper>
       {isOpenModal && (
         <Modal onClickToggleModal={onClickToggleModal}>
-          <NameChange />
+          <PwChange />
         </Modal>
       )}
       <FieldContinaer>
@@ -101,21 +175,21 @@ const FieldList = () => {
           <Text text="이메일" fontSize="xs" color="setting-tab" />
           <Text text="내용" fontSize="base" color="white" />
         </LeftRow>
-        <ButtonWrappper>
+        {/* <ButtonWrappper>
           <FieldButton
             text="확인"
             backgroundColor="setting"
             onClick={onClickToggleModal}
           />
-        </ButtonWrappper>
+        </ButtonWrappper> */}
       </FieldContinaer>
       <FieldContinaer>
         <LeftRow>
-          <Text text="전화번호" fontSize="xs" color="setting-tab" />
-          <Text text="010-xxxx-xxxx" fontSize="base" color="white" />
+          <Text text="비밀번호" fontSize="xs" color="setting-tab" />
+          <Text text="xxxx" fontSize="base" color="white" />
         </LeftRow>
         <ButtonWrappper>
-          <FieldButton text="추가하기" onClick={onClickToggleModal} />
+          <FieldButton text="변경하기" onClick={onClickToggleModal} />
         </ButtonWrappper>
       </FieldContinaer>
     </ListWrapper>
@@ -150,7 +224,7 @@ const ListWrapper = styled.div``;
 
 const Wrapper = styled.div`
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 1rem 0 1rem;
 `;
 
 const TextWrapper = styled.div`
@@ -166,7 +240,6 @@ const TopWrapper = styled.div`
 const Bottom = styled.div`
   width: 100%;
   height: 4rem;
-  margin-top: 1rem;
   padding: 1rem;
   background-color: ${({ theme }) => theme.backgroundColor["voice-nobody"]};
 `;

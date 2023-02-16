@@ -20,7 +20,7 @@ const MyAccount = () => {
         <Divider
           sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 9, mt: 5, mb: 5 }}
         />
-        <Text
+        {/* <Text
           text="비밀번호"
           color="white"
           fontWeight="bold"
@@ -36,8 +36,13 @@ const MyAccount = () => {
         </ButtonWrappper>
         <Divider
           sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 9, mt: 5, mb: 5 }}
+        /> */}
+        <Text
+          text={"계정 삭제하기"}
+          color="setting-tab"
+          fontSize="xs"
+          mb={10}
         />
-        <Text text={"계정 삭제하기"} color="setting-tab" fontSize="xs" mb={5} />
         <ButtonWrappper2>
           <FieldButton
             text="계정 삭제하기"
