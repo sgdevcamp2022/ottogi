@@ -1,9 +1,12 @@
 import FieldButton from "@components/atoms/Button/fieldButton";
 import Text from "@components/atoms/Text/Text";
+import { useUserStore } from "@store/useUserStore";
 import styled from "styled-components";
 import UserState80 from "./UserState80";
 
 const CardUserInfo = () => {
+  const { userInfo } = useUserStore();
+  console.log(userInfo);
   return (
     <InfoContainer>
       <Logo>

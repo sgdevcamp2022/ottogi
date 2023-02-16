@@ -1,9 +1,37 @@
 import CameraIcon from "@components/atoms/Icons/CameraIcon";
 import ServerAddIcon from "@components/atoms/Icons/ServerAddIcon";
 import Text from "@components/atoms/Text/Text";
+import axios from "axios";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 
 const ServerLogoUpload = () => {
+  const [file, setFile] = useState<File>();
+  const onSelectFile = async (event: any) => {
+    const junk = event.target.files[0];
+    // setFile(file);
+    console.log(junk);
+    const convertedFile = await convertToBase64(junk);
+    const s3URL = await axios.post("http://localhost:3001/upload", {
+      image: convertedFile,
+      imageName: junk.name,
+    });
+    // const reader = new FileReader();
+    // reader.readAsDataURL(junk);
+    // reader.onloadend = () => {
+    //   setFile(reader.result);
+    // };
+    // Request will be sent from here in the future
+  };
+  const convertToBase64 = (file: Blob) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+    });
+  };
   return (
     <StyledBorder>
       <CameraIcon />
@@ -14,7 +42,12 @@ const ServerLogoUpload = () => {
         fontSize={"xs"}
       />
       <ServerAddIcon />
-      <input type="file" tabIndex={0} accept=".jpg,.jpeg,.png,.gif" />
+      <input
+        type="file"
+        tabIndex={0}
+        onChange={onSelectFile}
+        accept=".jpg,.jpeg,.png,.gif"
+      />
     </StyledBorder>
   );
 };

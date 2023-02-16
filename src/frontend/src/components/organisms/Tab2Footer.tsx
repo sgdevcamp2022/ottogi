@@ -15,6 +15,9 @@ const Tab2Footer = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([COOKIE_KEY]);
   const { resetUserInfo } = useUserStore();
+  const userSetting = () => {
+    navigate("/UserSetting");
+  };
 
   const logout = () => {
     removeCookie(COOKIE_KEY);
@@ -44,7 +47,7 @@ const Tab2Footer = () => {
           text="사용자 설정"
           OnIcon={<SettingsIcon />}
           OffIcon={<SettingsIcon />}
-          onClick={() => null}
+          onClick={() => userSetting()}
         />
       </ButtonContainer>
     </Tab2FooterContainer>
