@@ -16,62 +16,63 @@ const Router = () => {
       <Route
         path={"/"}
         element={
-          // <ProtectPage>
-          <Main />
-          // </ProtectPage>
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
         }
       />
       <Route
         path={"/@me"}
         element={
-          // <ProtectPage>
-          <Main />
-          // </ProtectPage>
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
         }
       />
       <Route
         path="/@me/:userId"
         element={
-          // <ProtectPage>
-          <Main />
-          // </ProtectPage>
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
         }
       />
       {/* 테스트 용으로 만들어 둔거. */}
       <Route path="/ServerSetting" element={<ServerSetting />} />
       <Route path="/UserSetting" element={<UserSetting />} />
-      <Route path="/:serverId/" element={<Server />} />
+      <Route path="/:serverId" element={<Server />} />
+
       <Route
         path="/:serverId"
         element={
-          // <ProtectPage>
-          <Server />
-          // </ProtectPage>
+          <ProtectPage>
+            <Server />
+          </ProtectPage>
         }
       />
       <Route
         path="/:serverId/:chatroomId"
         element={
-          // <ProtectPage>
-          <Server />
-          // </ProtectPage>
+          <ProtectPage>
+            <Server />
+          </ProtectPage>
         }
       />
       <Route path="chat" element={<Chat />} />
       <Route
         path="/login"
         element={
-          // <ProtectAuth>
-          <Login />
-          // </ProtectAuth>
+          <ProtectAuth>
+            <Login />
+          </ProtectAuth>
         }
       />
       <Route
         path="/register"
         element={
-          // <ProtectAuth>
-          <Register />
-          // </ProtectAuth>
+          <ProtectAuth>
+            <Register />
+          </ProtectAuth>
         }
       />
       <Route path="/*" element={<NotFound />} />
