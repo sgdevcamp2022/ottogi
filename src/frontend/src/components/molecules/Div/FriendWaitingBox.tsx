@@ -24,7 +24,7 @@ const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
 
   if (!userInfo) navigate("/login");
 
-  const params = { email: name };
+  const params = { email: name, accessToken: userInfo.accessToken };
 
   let Buttons: ReactElement;
   if (status === "REQUEST") {
