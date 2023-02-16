@@ -2,18 +2,48 @@ import styled from "styled-components";
 import ServerModal from "./WhiteModal";
 import CreateServerText from "../molecules/Text/CreateServerText";
 import ServerLogoUpload from "../molecules/Button/ServerLogoUpload";
-import ServerInput from "../molecules/Input/ServerInput";
 import DefaultButton from "../atoms/Button/DefaultButton";
+import useInput from "@hooks/common/useInput";
+import DefaultInput from "@components/atoms/Input/DefaultInput";
+import { useMutation } from "@tanstack/react-query";
+import serverSettingApi from "@api/serverSetting";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@store/useUserStore";
 
 const CreateServerForm = () => {
+  const { userInfo } = useUserStore();
+  const navigate = useNavigate();
+  const [name, changeName] = useInput();
+  const { mutate: createServer } = useMutation(serverSettingApi.create, {
+    onSuccess: () => {
+      console.log("success");
+      navigate(-1);
+    },
+  });
+
   return (
     <ServerModal width={440}>
       <ServerContainer>
         <CreateServerText />
         <ServerLogoUpload />
-        <ServerInput />
+        <DefaultInput value={name} onChange={changeName} type="text" />
         <Bottom>
-          <DefaultButton text="만들기" onClick={() => console.log(1)} />
+          <DefaultButton
+            text="만들기"
+            onClick={() =>
+              createServer({
+                accessToken: userInfo.accessToken,
+                communityName: name,
+                img: null,
+                userId: userInfo.email,
+                profile: {
+                  userName: "닉네임",
+                  img: null,
+                  한줄소개: "한줄소개",
+                },
+              })
+            }
+          />
         </Bottom>
       </ServerContainer>
     </ServerModal>

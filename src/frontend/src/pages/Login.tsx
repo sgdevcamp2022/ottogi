@@ -57,7 +57,7 @@ const Login = () => {
             />
           )}
           <LoginForm
-            text="이메일 또는 전화번호"
+            text="이메일"
             value={email}
             type="email"
             onChange={changeEmail}

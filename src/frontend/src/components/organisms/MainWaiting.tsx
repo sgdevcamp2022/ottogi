@@ -24,6 +24,7 @@ const MainWaiting = () => {
       friend.friendState === "REQUEST" || friend.friendState === "WAIT"
   );
   const num = friendList.length;
+  console.log(friendList);
 
   return (
     <>

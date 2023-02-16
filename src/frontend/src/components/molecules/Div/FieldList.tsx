@@ -7,12 +7,13 @@ import DefaultButton from "../../atoms/Button/DefaultButton";
 import DefaultInput from "../../atoms/Input/DefaultInput";
 import useInput from "@hooks/common/useInput";
 import useModifyPassword from "@hooks/query/useModifyPassword";
+import { useUserStore } from "@store/useUserStore";
 
 const NameChange = () => {
   const [name, changeName] = useInput();
   const [newPassword, changeNewPassword] = useInput();
   const [password, changePassword] = useInput();
-  console.log(1);
+
   return (
     <>
       <TopWrapper>
@@ -75,9 +76,10 @@ const NameChange = () => {
 };
 
 const PwChange = () => {
+  const { userInfo } = useUserStore();
   const [passwordConfirm, changePasswordConfirm] = useInput();
   const [password, changePassword] = useInput();
-  const [originPassword, changeOriginPassword] = useInput();
+  const [originalPassword, changeOriginalPassword] = useInput();
 
   const { mutate: modifyPassword } = useModifyPassword();
 
@@ -110,8 +112,8 @@ const PwChange = () => {
             fontWeight="bold"
           />
           <DefaultInput
-            value={originPassword}
-            onChange={changeOriginPassword}
+            value={originalPassword}
+            onChange={changeOriginalPassword}
             backgroundColor="voice-modal"
             fontSize="base"
             color="white"
@@ -156,7 +158,13 @@ const PwChange = () => {
       <Bottom>
         <DefaultButton
           text="완료"
-          onClick={() => modifyPassword({ password, originPassword })}
+          onClick={() =>
+            modifyPassword({
+              password,
+              originalPassword,
+              accessToken: userInfo.accessToken,
+            })
+          }
         />
       </Bottom>
     </>

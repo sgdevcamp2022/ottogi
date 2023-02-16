@@ -20,7 +20,12 @@ const UserInfoButton = ({ status = "on" }: UserInfoButtonProps) => {
     >
       <InfoContainer>
         <UserState32 status={status} />
-        <Text text={" "} fontWeight="bold" fontSize="sm" color="white" />
+        <Text
+          text={userInfo.email}
+          fontWeight="bold"
+          fontSize="sm"
+          color="white"
+        />
       </InfoContainer>
     </ButtonWrapper>
   );

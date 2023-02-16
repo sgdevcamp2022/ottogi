@@ -13,11 +13,19 @@ const userSettingApi = {
     });
   },
   // 비밀번호 변경
-  modifyPassword: async ({ password, originPassword }: any) => {
-    return await clientApi.patch("/user/member/modify/password", {
-      password,
-      originPassword,
-    });
+  modifyPassword: async ({ password, originalPassword, accessToken }: any) => {
+    return await clientApi.patch(
+      "/user/member/modify/password",
+      {
+        password,
+        originalPassword,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
   },
   // 계정 삭제하기
   deleteUser: async () => {
