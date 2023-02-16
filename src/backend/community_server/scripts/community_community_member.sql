@@ -16,31 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `list`
+-- Table structure for table `community_member`
 --
 
-DROP TABLE IF EXISTS `list`;
+DROP TABLE IF EXISTS `community_member`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `list` (
+CREATE TABLE `community_member` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) COLLATE utf8mb3_bin NOT NULL,
-  `img` longtext COLLATE utf8mb3_bin,
-  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user_id` int NOT NULL,
+  `community_id` int NOT NULL,
+  `role` int DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `profile` json DEFAULT NULL,
   `status` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+  PRIMARY KEY (`id`),
+  KEY `sever_id_idx` (`community_id`),
+  CONSTRAINT `community_id` FOREIGN KEY (`community_id`) REFERENCES `community` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `list`
+-- Dumping data for table `community_member`
 --
 
-LOCK TABLES `list` WRITE;
-/*!40000 ALTER TABLE `list` DISABLE KEYS */;
-INSERT INTO `list` VALUES (4,'커뮤니티1',NULL,'2023-02-16 14:10:59','2023-02-16 14:10:59',NULL);
-/*!40000 ALTER TABLE `list` ENABLE KEYS */;
+LOCK TABLES `community_member` WRITE;
+/*!40000 ALTER TABLE `community_member` DISABLE KEYS */;
+/*!40000 ALTER TABLE `community_member` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-16 14:37:35
+-- Dump completed on 2023-02-16 15:53:43

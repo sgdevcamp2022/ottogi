@@ -2,7 +2,7 @@ const db = require('../db/index');
 
 const getChannel = (categoryId)=>{
   let channelList = [];
-  let findsql = `SELECT JSON_OBJECT ('channel_id', id, 'name', name, 'type', type) FROM channel WHERE category_id = ${db.escape(categoryId)}`;
+  let findsql = `SELECT JSON_OBJECT ('channel_id', id, 'name', name, 'type', type, 'category_id', ${categoryId}) FROM channel WHERE category_id = ${db.escape(categoryId)}`;
 
   return new Promise((resolve, reject) => {
       db.query(findsql, (err, res) => {
@@ -20,8 +20,8 @@ const getChannel = (categoryId)=>{
 
 module.exports = {
     //채널 생성 디비 명령어? (권한 x)
-    create: (channelName, categoryId) => {
-        let sql = `INSERT INTO channel(name, community_id) VALUES('${channelName}', ${categoryId});`;
+    create: (channelName, categoryId, type) => {
+        let sql = `INSERT INTO channel(name, category_id, type) VALUES('${channelName}', ${categoryId}, ${type});`;
         db.query(sql, async(err,res)=>{
           if(err) console.log(err);
           else {
@@ -36,8 +36,8 @@ module.exports = {
   },
 
     //채널 정보 변경 명령어
-    rename: (channelName, categoryId) => {
-        let sql = `UPDATE channel SET name = ${db.escape(channelName)} WHERE id = ${db.escape(categoryId)}`;
+    rename: (channelName, channelId) => {
+        let sql = `UPDATE channel SET name = ${db.escape(channelName)} WHERE id = ${db.escape(channelId)}`;
         return db.query(sql);
     },
 

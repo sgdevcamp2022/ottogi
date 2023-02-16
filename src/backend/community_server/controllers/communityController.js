@@ -4,14 +4,14 @@ const { isAdmin } = require('../utils/ulits');
 module.exports = {
     //커뮤니티(서버) 생성
     communityCreate: (req, res) => {
-        const {communityName, img, userId} = req.body;
+        const {communityName, img, userId, profile} = req.body;
 
         if (!communityName || !userId) {
             res
                 .status(400)
                 .send('Invalid parmas');
         } else {
-            community.create(communityName, img , userId);
+            community.create(communityName, img , userId, profile);
             res.send('create success');
         }
     },
@@ -64,15 +64,20 @@ module.exports = {
         }
     },
     //커뮤니티 멤버 프로필 변경
-    updateProfile: (req, res)=>{
+    updateProfile: async (req, res)=>{
         const{communityId, userId, profile} = req.body;
         if(!communityId || !userId || !profile){
             res
                 .status(400)
                 .send('Invalid parmas');
         } else {
-            community.profile(communityId, userId, profile);
-            res.status(200).send(`update profile`);
+            const response = await community.profile(communityId, userId, profile);
+            console.log(response);
+            if(response == 'succes'){
+                res.status(200).send(`update profile`)
+            }else {
+                res.status(400).send('ERROR')
+            }
         }
     },
 

@@ -16,27 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `channelmember`
+-- Table structure for table `community`
 --
 
-DROP TABLE IF EXISTS `channelmember`;
+DROP TABLE IF EXISTS `community`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `channelmember` (
+CREATE TABLE `community` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `channel_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `name` varchar(45) COLLATE utf8mb3_bin NOT NULL,
+  `img` longtext COLLATE utf8mb3_bin,
+  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `channelmember`
+-- Dumping data for table `community`
 --
 
-LOCK TABLES `channelmember` WRITE;
-/*!40000 ALTER TABLE `channelmember` DISABLE KEYS */;
-/*!40000 ALTER TABLE `channelmember` ENABLE KEYS */;
+LOCK TABLES `community` WRITE;
+/*!40000 ALTER TABLE `community` DISABLE KEYS */;
+/*!40000 ALTER TABLE `community` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-16 14:37:35
+-- Dump completed on 2023-02-16 15:53:43

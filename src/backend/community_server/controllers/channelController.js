@@ -6,34 +6,33 @@ const { isAdmin } = require('../utils/ulits');
 module.exports = {
     //채널 생성 (권한 제외)
     channelCreate: (req, res) => {
-        const {channelName, categoryId} = req.body;
-        if (!categoryName) {
+        const {channelName, categoryId, type} = req.body;
+        if (!channelName) {
             res
                 .status(400)
                 .send('Invalid parmas');
         } else {
-            channel.create(channelName, categoryId)
+            channel.create(channelName, categoryId, type)
             res.send('create success');
         }
     },
 
     //채널 정보 변경(이름)
     channelRename: async(req, res) => {
-        const {channelName, categoryId, userId} = req.body;
-        if (!channelName || !categoryId || !userId) {
+        const {channelName, communityId, channelId, userId} = req.body;
+        if (!channelName || !channelId || !userId) {
             res
                 .status(400)
                 .send('Invalid parmas');
         } else {
             if(await isAdmin(communityId, userId)){
-                const response = channel.rename(channelName, categoryId);
+                const response = channel.rename(channelName, channelId);
                 res
                     .status(200)
-                    .send(`channel ID : ${categoryId} Rename to ${channelName}`);
+                    .send(`channel ID : ${channelId} Rename to ${channelName}`);
             }
         }
     },
-
     //채널 삭제
     channelDelete: (req, res) => {
         const {channelId} = req.body;
@@ -48,20 +47,21 @@ module.exports = {
                 .send(`channel ID : ${channelId} deleted`);
         }
     },
-    //채널 참가
-    channelJoin: (req, res)=>{
-        const {channelId, userId} = req.body;
-        if(!channelId || !userId){
-            res
-                .status(400)
-                .send('Invalid parmas');
-        } else {
-            channel.join(channelId, userId);
-            res
-                .status(200)
-                .send(`channel ID : ${channelId} joined`);
-        }
-    },
+
+    //채널 참가(보류)
+    // channelJoin: (req, res)=>{
+    //     const {channelId, userId} = req.body;
+    //     if(!channelId || !userId){
+    //         res
+    //             .status(400)
+    //             .send('Invalid parmas');
+    //     } else {
+    //         channel.join(channelId, userId);
+    //         res
+    //             .status(200)
+    //             .send(`channel ID : ${channelId} joined`);
+    //     }
+    // },
 
     loadList: async(req, res)=>{
         const{categoryId} = req.body;

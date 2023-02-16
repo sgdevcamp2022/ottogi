@@ -20,8 +20,8 @@ router.patch('/community/profile', community.updateProfile);
 router.delete('/community/delete', community.communityDelete);
 
 //커뮤니티 하위 카테고리, 채널 조회 -> json 형식으로 보내주기
-router.get('/getlist', community.loadList);
-router.get('/getoption', category.loadList);
+router.get('/community/getlist', community.loadList);
+router.get('/community/getoption', category.loadList);
 
 // 카테고리 생성 
 router.post('/category/create', category.categoryCreate);
@@ -33,7 +33,7 @@ router.delete('/category/delete', category.categoryDelete);
 //채널 생성
 router.post('/channel/create', channel.channelCreate);
 //채널 참가 만들기
-router.post('/channel/join',channel.channelJoin);
+// router.post('/channel/join',channel.channelJoin);
 //채널 정보 변경(이름) 
 router.patch('/channel/update', channel.channelRename);
 //채널 삭제

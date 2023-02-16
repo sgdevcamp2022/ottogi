@@ -31,8 +31,8 @@ CREATE TABLE `category` (
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `server_id_idx` (`community_id`),
-  CONSTRAINT `server_id` FOREIGN KEY (`community_id`) REFERENCES `list` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+  CONSTRAINT `server_id` FOREIGN KEY (`community_id`) REFERENCES `community` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,6 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (7,4,'음성 채널','2023-02-16 14:10:59','2023-02-16 14:10:59',NULL),(8,4,'채팅 채널','2023-02-16 14:10:59','2023-02-16 14:10:59',NULL);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-16 14:37:35
+-- Dump completed on 2023-02-16 15:53:43

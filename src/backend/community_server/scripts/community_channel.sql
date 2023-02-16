@@ -33,7 +33,7 @@ CREATE TABLE `channel` (
   PRIMARY KEY (`id`),
   KEY `category_id_idx` (`category_id`),
   CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,6 @@ CREATE TABLE `channel` (
 
 LOCK TABLES `channel` WRITE;
 /*!40000 ALTER TABLE `channel` DISABLE KEYS */;
-INSERT INTO `channel` VALUES (9,7,'일반','2023-02-16 14:10:59','2023-02-16 14:10:59',1,NULL),(10,8,'일반','2023-02-16 14:10:59','2023-02-16 14:10:59',1,NULL),(11,7,'일반','2023-02-16 14:10:59','2023-02-16 14:10:59',2,NULL),(12,8,'일반','2023-02-16 14:10:59','2023-02-16 14:10:59',2,NULL);
 /*!40000 ALTER TABLE `channel` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-16 14:37:35
+-- Dump completed on 2023-02-16 15:53:43

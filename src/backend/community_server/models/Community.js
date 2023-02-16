@@ -1,9 +1,8 @@
 const db = require('../db/index');
-const category = require('./Category')
 
 const findCommunityId = (communityName)=>{
     let communityId = [];
-    let findsql = `SELECT id FROM list WHERE name = ${db.escape(communityName)}`;
+    let findsql = `SELECT id FROM community WHERE name = ${db.escape(communityName)}`;
 
     return new Promise((resolve, reject) => {
         db.query(findsql, (err, res) => {
@@ -21,7 +20,7 @@ const findCommunityId = (communityName)=>{
 
 const findCommunityList = (communityId)=>{
     let nameList = [];
-    let findsql = `SELECT JSON_OBJECT ('community_id', id, 'name', name, 'img', img) FROM list WHERE id = ${db.escape(communityId)}`;
+    let findsql = `SELECT JSON_OBJECT ('community_id', id, 'name', name, 'img', img) FROM community WHERE id = ${db.escape(communityId)}`;
 
     return new Promise((resolve, reject) => {
         db.query(findsql, (err, res) => {
@@ -38,8 +37,9 @@ const findCommunityList = (communityId)=>{
     })
 }
 
-const insertMember =  (communityId, userId) => {
-    let sql = `INSERT INTO member(user_id, role, community_id) VALUES(${db.escape(userId)}, 1, ${db.escape(communityId)});`;
+const insertMember =  (communityId, userId, profile) => {
+    let getProfile = JSON.stringify(profile);
+    let sql = `INSERT INTO community_member(user_id, role, community_id, profile) VALUES(${db.escape(userId)}, 1, ${db.escape(communityId)}, '${getProfile}');`;
     db.query(sql, (err, res) => {
         if (err) 
             console.log(err);
@@ -123,14 +123,14 @@ const getCommunityId = (userId)=>{
 
 module.exports = {
     //커뮤니티 생성 디비 명령어? (모델)
-    create: (communityName, img, userId) => {
-        let sql = `INSERT INTO list(name, img) VALUES('${communityName}', ${img});`;
+    create: (communityName, img, userId, profile) => {
+        let sql = `INSERT INTO community(name, img) VALUES('${communityName}', '${img}');`;
         db.query(sql, async (err, res) => {
             if (err) {
                 console.log(err);
             } else {
                 const communityId = await findCommunityId(communityName);
-                await insertMember(communityId, userId);
+                await insertMember(communityId, userId, profile);
                 console.log(`생성 성공`);
             }
         });
@@ -139,9 +139,11 @@ module.exports = {
     //커뮤니티 참가 명령어
     join: (communityId, uesrId, profile) => {
         let name = [];
-        let sql = `INSERT INTO member (community_id, user_id, profile) VALUES (${db.escape(communityId)}, ${db.escape(uesrId)}, ${profile})`;
+        let getProfile = JSON.stringify(profile);
+
+        let sql = `INSERT INTO community_member (community_id, user_id, profile) VALUES (${db.escape(communityId)}, ${db.escape(uesrId)}, '${getProfile}')`;
         db.query(sql);
-        let findsql = `SELECT name FROM list WHERE id = ${db.escape(communityId)}`;
+        let findsql = `SELECT name FROM community WHERE id = ${db.escape(communityId)}`;
         return new Promise((resolve, reject) => {
             db.query(findsql, (err, res) => {
                 if (err) {
@@ -158,20 +160,33 @@ module.exports = {
 
     //커뮤니티 정보 변경 명령어
     rename: (communityName, communityId) => {
-        let sql = `UPDATE list SET name = ${db.escape(communityName)} WHERE id = ${db.escape(communityId)}`;
+        let sql = `UPDATE community SET name = ${db.escape(communityName)} WHERE id = ${db.escape(communityId)}`;
         return db.query(sql);
     },
 
     //커뮤니티 삭제 명령
     delete: (communityId) => {
-        let sql = `DELETE FROM list WHERE id = ${communityId}`;
+        let sql = `DELETE FROM community WHERE id = ${communityId}`;
         db.query(sql);
     },
 
+    //프로필 업데이트
     profile : (communityId, userId, profile) => {
-        let sql = `UPDATE member SET profile = ${db.escape(profile)} WHERE id = ${db.escape(communityId)} AND user_id = ${db.escape(userId)}`;
-        return db.query(sql);
+        let getProfile = JSON.stringify(profile);
+        let sql = `UPDATE community_member SET profile = '${getProfile}' WHERE community_id = '${communityId}' AND user_id = '${userId}'`;
+        
+        return new Promise((resolve, reject) => {
+            db.query(sql, (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    console.log(`성공: ${res}`);
+                    resolve(`succes`);
+                }
+            })
+        })
     },
+
     //커뮤니티 조회
     load: async(userId)=>{
         let list = [];
