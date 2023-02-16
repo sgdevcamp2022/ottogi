@@ -48,6 +48,7 @@ const InviteInput = () => {
           type="email"
           onChange={onChange}
           fontSize="base"
+          backgroundColor="trans"
         />
         <DefaultButton
           disabled={email === "" ? true : false}
@@ -86,6 +87,7 @@ const InviteInputContainer = styled.label<{ borderColor: any }>`
     ${({ theme, borderColor }) => theme.borderColor[borderColor]};
   padding: 0 0.75rem 0 0.125rem;
   margin-bottom: 0.5rem;
+
   &:has(input:focus) {
     border-color: ${({ theme, borderColor }) =>
       borderColor === "default"

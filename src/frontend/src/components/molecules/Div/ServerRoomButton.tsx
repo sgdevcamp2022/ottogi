@@ -15,7 +15,7 @@ const ServerRoomButton = ({ type, text }: ServerRoomButtonProps) => {
   const { setInviteFriendModal } = useModalStore();
   return (
     <ButtonContainer>
-      <ButtonWrapper ph={6} onClick={() => null} height={34}>
+      <ButtonWrapper ph={6} onClick={() => null} height={34} color="inactive">
         <ServerRoomButtonContainer>
           <LeftContainer>
             {type === "chat" ? <TagIcon /> : <VolumeIcon />}

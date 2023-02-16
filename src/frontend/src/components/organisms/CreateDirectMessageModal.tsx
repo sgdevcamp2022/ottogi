@@ -32,43 +32,49 @@ const CreateDirectMessageModal = ({
   const num = 0;
 
   return (
-    <CreateDirectMessageModalContainer left={left} right={right} top={top}>
-      <DefaultModal width={440} p={16}>
-        <CreateDirectMesssageHeader
-          value={search}
-          onChange={changeSearch}
-          addFriendNum={1}
-        />
-        <>
-          {num > 0 ? (
-            <ScrollableBox>
-              <SelectFriend />
-              <SelectFriend check />
-              <SelectFriend />
-              <SelectFriend />
-              <SelectFriend check />
-              {/* {friendList.map((friend) => (
+    <CreateDirectMessageModalContainer
+      left={left}
+      right={right}
+      top={top}
+      width={440}
+      p={16}
+    >
+      <CreateDirectMesssageHeader
+        value={search}
+        onChange={changeSearch}
+        addFriendNum={1}
+      />
+      <>
+        {num > 0 ? (
+          <ScrollableBox>
+            <SelectFriend />
+            <SelectFriend check />
+            <SelectFriend />
+            <SelectFriend />
+            <SelectFriend check />
+            {/* {friendList.map((friend) => (
                 <SelectFriend check={check} />
               ))} */}
-            </ScrollableBox>
-          ) : (
-            <SearchContainer>
-              <SearchImage src="/search.svg" alt="" width={85} height={85} />
-              <Text
-                text="개인 메시지에 모든 친구가 포함되어 있어요."
-                color="auth-desc"
-                center
-              />
-            </SearchContainer>
-          )}
-        </>
-        <CreateDirectMesssageFooter />
-      </DefaultModal>
+          </ScrollableBox>
+        ) : (
+          <SearchContainer>
+            <SearchImage src="/search.svg" alt="" width={85} height={85} />
+            <Text
+              text="개인 메시지에 모든 친구가 포함되어 있어요."
+              color="auth-desc"
+              center
+            />
+          </SearchContainer>
+        )}
+      </>
+      <CreateDirectMesssageFooter />
     </CreateDirectMessageModalContainer>
   );
 };
 
-const CreateDirectMessageModalContainer = styled.div<CreateDirectMessageModalProps>`
+const CreateDirectMessageModalContainer = styled(
+  DefaultModal
+)<CreateDirectMessageModalProps>`
   border-radius: 0.25rem;
   position: absolute;
   z-index: 9;
