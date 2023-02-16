@@ -5,15 +5,17 @@ const { isAdmin } = require('../utils/ulits');
 
 module.exports = {
     //채널 생성 (권한 제외)
-    channelCreate: (req, res) => {
-        const {channelName, categoryId, type} = req.body;
+    channelCreate: async (req, res) => {
+        const {channelName, categoryId, type, communityId, userId} = req.body;
         if (!channelName) {
             res
                 .status(400)
                 .send('Invalid parmas');
         } else {
-            channel.create(channelName, categoryId, type)
-            res.send('create success');
+            if(await isAdmin(communityId, userId)){
+                channel.create(channelName, categoryId, type)
+                res.send('create success');
+            }
         }
     },
 
@@ -34,17 +36,19 @@ module.exports = {
         }
     },
     //채널 삭제
-    channelDelete: (req, res) => {
+    channelDelete: async (req, res) => {
         const {channelId} = req.body;
         if (!channelId) {
             res
                 .status(400)
                 .send('Invalid parmas');
         } else {
-            const response = channel.delete(channelId);
-            res
+            if(await isAdmin(communityId, userId)){
+                const response = channel.delete(channelId);
+                res
                 .status(200)
                 .send(`channel ID : ${channelId} deleted`);
+            }
         }
     },
 

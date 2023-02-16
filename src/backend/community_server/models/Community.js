@@ -106,7 +106,7 @@ const publicChannel = (categoryId, type)=>{
 
 const getCommunityId = (userId)=>{
     let communityList = [];
-    let findsql = `SELECT community_id FROM member WHERE user_id = ${db.escape(userId)}`;
+    let findsql = `SELECT community_id FROM community_member WHERE user_id = ${db.escape(userId)}`;
     return new Promise((resolve, reject) => {
         db.query(findsql, (err, res) => {
             if (err) {

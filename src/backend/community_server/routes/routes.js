@@ -13,6 +13,7 @@ router.post('/community/create', community.communityCreate);
 //커뮤니티 참가
 router.post('/community/join', community.communityJoin);
 //커뮤니티 정보 변경(이름)
+
 router.patch('/community/update', community.communityRename);
 //커뮤니티 정보 변경(프로필)
 router.patch('/community/profile', community.updateProfile);
@@ -24,19 +25,19 @@ router.get('/community/getlist', community.loadList);
 router.get('/community/getoption', category.loadList);
 
 // 카테고리 생성 
-router.post('/category/create', category.categoryCreate);
+router.post('/community/category/create', category.categoryCreate);
 // 카테고리 정보 변경(이름) 
-router.patch('/category/update', category.categoryRename);
+router.patch('/community/category/update', category.categoryRename);
 // 카테고리 삭제
-router.delete('/category/delete', category.categoryDelete);
+router.delete('/community/category/delete', category.categoryDelete);
 
 //채널 생성
-router.post('/channel/create', channel.channelCreate);
+router.post('/community/channel/create', channel.channelCreate);
 //채널 참가 만들기
 // router.post('/channel/join',channel.channelJoin);
 //채널 정보 변경(이름) 
-router.patch('/channel/update', channel.channelRename);
+router.patch('/community/channel/update', channel.channelRename);
 //채널 삭제
-router.delete('/channel/delete', channel.channelDelete);
+router.delete('/community/channel/delete', channel.channelDelete);
 
 module.exports = router;

@@ -50,19 +50,22 @@ module.exports = {
     },
 
     //커뮤니티 삭제
-    communityDelete: (req, res) => {
-        const {communityId} = req.body;
+    communityDelete: async (req, res) => {
+        const {communityId, userId} = req.body;
         if (!communityId) {
             res
                 .status(400)
                 .send('Invalid parmas');
         } else {
-            const response = community.delete(communityId);
-            res
+            if(await isAdmin(communityId, userId)){
+                const response = community.delete(communityId);
+                res
                 .status(200)
                 .send(`community ID : ${communityId} deleted`);
+            }
         }
     },
+    
     //커뮤니티 멤버 프로필 변경
     updateProfile: async (req, res)=>{
         const{communityId, userId, profile} = req.body;

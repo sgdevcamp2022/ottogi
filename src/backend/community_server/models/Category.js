@@ -21,7 +21,7 @@ const getCategoryId = (communityId)=>{
 
 const getCategory = (communityId)=>{
   let categoryList = [];
-  let findsql = `SELECT JSON_OBJECT ('categoy_id', id, 'name', name) FROM category WHERE community_id = ${db.escape(communityId)}`;
+  let findsql = `SELECT JSON_OBJECT ('categoy_id', id, 'category_name', name) FROM category WHERE community_id = ${db.escape(communityId)}`;
 
   return new Promise((resolve, reject) => {
       db.query(findsql, (err, res) => {
@@ -50,8 +50,8 @@ module.exports = {
     },
 
     //카테고리 정보 변경 명령어
-    rename: (categoryName, communityId) => {
-        let sql = `UPDATE category SET name = ${db.escape(categoryName)} WHERE id = ${db.escape(communityId)}`;
+    rename: (categoryName, categoryId) => {
+        let sql = `UPDATE category SET name = ${db.escape(categoryName)} WHERE id = ${db.escape(categoryId)}`;
         return db.query(sql);
     },
 
@@ -75,7 +75,7 @@ module.exports = {
         channelList.push(await channel.load(data));
       }
 
-      list.push(`카테고리 : ${categorryList}`,`채널 : ${channelList}`);
+      list.push(`${categorryList}`,`${channelList}`);
       return list;
   },
 };
