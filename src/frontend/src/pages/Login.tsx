@@ -47,7 +47,7 @@ const Login = () => {
             mb={8}
           />
           <AuthDesc text=" 만나다니 너무 반가워요!" />
-          {errorMessage !== "" && (
+          {errorMessage && (
             <Text
               text={errorMessage}
               color="invite-danger"
