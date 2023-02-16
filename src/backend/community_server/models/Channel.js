@@ -2,7 +2,7 @@ const db = require('../db/index');
 
 const getChannel = (categoryId)=>{
   let channelList = [];
-  let findsql = `SELECT JSON_OBJECT ('id', id, 'name', name, 'type', type) FROM channel WHERE category_id = ${db.escape(categoryId)}`;
+  let findsql = `SELECT JSON_OBJECT ('channel_id', id, 'name', name, 'type', type) FROM channel WHERE category_id = ${db.escape(categoryId)}`;
 
   return new Promise((resolve, reject) => {
       db.query(findsql, (err, res) => {

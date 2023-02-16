@@ -3,10 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "bin": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "build": "pkg . --out-path bin"
+  },
+  "pkg": {
+    "scripts": "*.js",
+    "targets": [
+      "node12-win-x64"
+    ]
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +26,7 @@
     "express": "^4.18.2",
     "mysql": "^2.18.1",
     "node-eureka": "^0.0.2",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "pkg": "^5.8.0"
   }
 }

@@ -21,7 +21,7 @@ const findCommunityId = (communityName)=>{
 
 const findCommunityList = (communityId)=>{
     let nameList = [];
-    let findsql = `SELECT JSON_OBJECT ('id', id, 'name', name, 'img', img) FROM list WHERE id = ${db.escape(communityId)}`;
+    let findsql = `SELECT JSON_OBJECT ('community_id', id, 'name', name, 'img', img) FROM list WHERE id = ${db.escape(communityId)}`;
 
     return new Promise((resolve, reject) => {
         db.query(findsql, (err, res) => {
@@ -172,13 +172,16 @@ module.exports = {
         let sql = `UPDATE member SET profile = ${db.escape(profile)} WHERE id = ${db.escape(communityId)} AND user_id = ${db.escape(userId)}`;
         return db.query(sql);
     },
-
+    //커뮤니티 조회
     load: async(userId)=>{
         let list = [];
+        let communityList = [];
+
         const response = await getCommunityId(userId);
         for(let data of response){
-            list.push(await findCommunityList(data));
+            communityList.push(await findCommunityList(data));
         }
+        list.push(`커뮤니티 : ${communityList}`);
         return list;
     },
 };

@@ -1,19 +1,19 @@
 const db = require('../db/index');
 const channel = require('./Channel');
 
-const findChannelId = (categoryId)=>{
-  let channelId = [];
-  let findsql = `SELECT id FROM channel WHERE category_id = ${categoryId};`;
-  
+const getCategoryId = (communityId)=>{
+  let categoryId = [];
+  let findsql = `SELECT id FROM category WHERE community_id = ${db.escape(communityId)}`;
+
   return new Promise((resolve, reject) => {
       db.query(findsql, (err, res) => {
           if (err) {
               reject(err);
           } else {
               for (let data of res) {
-                channelId.push(data.id);
+                categoryId.push(Object.values(data));
               };
-              resolve(channelId);
+              resolve(categoryId);
           }
       })
   })
@@ -21,7 +21,7 @@ const findChannelId = (categoryId)=>{
 
 const getCategory = (communityId)=>{
   let categoryList = [];
-  let findsql = `SELECT JSON_OBJECT ('id', id, 'name', name) FROM category WHERE community_id = ${db.escape(communityId)}`;
+  let findsql = `SELECT JSON_OBJECT ('categoy_id', id, 'name', name) FROM category WHERE community_id = ${db.escape(communityId)}`;
 
   return new Promise((resolve, reject) => {
       db.query(findsql, (err, res) => {
@@ -60,13 +60,22 @@ module.exports = {
         let sql = `DELETE FROM category WHERE id = ${categoryId}`;
         db.query(sql);
     },
-
+    //카테고리, 채널 조회
     load: async(communityId)=>{
       let list = [];
+      let channelList = [];
+      let categorryList = [];
+
       const response = await getCategory(communityId);
       for(let data of response){
-          list.push(data);
+          categorryList.push(data);
       }
+      const getChannel = await getCategoryId(communityId);
+      for(let data of getChannel){
+        channelList.push(await channel.load(data));
+      }
+
+      list.push(`카테고리 : ${categorryList}`,`채널 : ${channelList}`);
       return list;
   },
 };
