@@ -37,7 +37,7 @@ const InviteInput = () => {
 
   const inviteFriend = () => {
     if (!userInfo) navigate("/login");
-    requestFriend({ email });
+    requestFriend({ email, accessToken: userInfo.accessToken });
   };
 
   return (
