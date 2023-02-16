@@ -22,7 +22,7 @@ const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
 
   if (!userInfo) return <></>;
 
-  const params = { email: name, accessToken: userInfo.accessToken };
+  const params = { email: name };
 
   let Buttons: ReactElement;
   if (status === "REQUEST") {
