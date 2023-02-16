@@ -4,10 +4,23 @@ import SettingButton from "../atoms/Button/SettingButton";
 import { Divider } from "@mui/material";
 import { useState } from "react";
 import SetDefaultButton from "../atoms/Button/SetDefaultButton";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useUserStore } from "@store/useUserStore";
+import { COOKIE_KEY } from "@configs/cookie";
 
 const ServerSettingBar = () => {
   const [number, setNumber] = useState("");
+  const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies([COOKIE_KEY]);
+  const { resetUserInfo } = useUserStore();
 
+  const logout = () => {
+    console.log(1);
+    removeCookie(COOKIE_KEY);
+    resetUserInfo();
+    navigate("/login");
+  };
   return (
     <BarContainer>
       <Header>
@@ -58,6 +71,7 @@ const ServerSettingBar = () => {
           />
         </li>
       </ul>
+      <button onClick={logout}>sdasd</button>
     </BarContainer>
   );
 };

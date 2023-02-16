@@ -1,9 +1,5 @@
 import clientApi from "./axios";
 
-interface HeaderToken {
-  accessToken: string;
-}
-
 const serverSettingApi = {
   // 커뮤니티 생성
   create: async ({ communityName, img, userId }: any) => {

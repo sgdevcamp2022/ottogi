@@ -6,47 +6,26 @@ import clientApi from "./axios";
 
 const userSettingApi = {
   // 사용자명 변경
-  modifyName: async ({ name, accessToken, password }: any) => {
-    return await clientApi.patch(
-      "/user/member/modify/name",
-      { name, password },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
-    );
+  modifyName: async ({ name, password }: any) => {
+    return await clientApi.patch("/user/member/modify/name", {
+      name,
+      password,
+    });
   },
   // 비밀번호 변경
-  modifyPassword: async ({ password, originPassword, accessToken }: any) => {
-    return await clientApi.patch(
-      "/user/member/modify/password",
-      {
-        password,
-        originPassword,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
-    );
+  modifyPassword: async ({ password, originPassword }: any) => {
+    return await clientApi.patch("/user/member/modify/password", {
+      password,
+      originPassword,
+    });
   },
   // 계정 삭제하기
-  deleteUser: async ({ accessToken }: any) => {
-    return await clientApi.delete("user/member/userdelete", {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    });
+  deleteUser: async () => {
+    return await clientApi.delete("user/member/userdelete");
   },
   // 유저 이미지 변경
-  modifyImage: async ({ accessToken }: any) => {
-    return await clientApi.patch("user/member/userdelete", {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    });
+  modifyImage: async () => {
+    return await clientApi.patch("user/member/userdelete");
   },
   // 서버 프로필명 이름 변경
   communityUpdate: async ({

@@ -6,6 +6,7 @@ import styled from "styled-components";
 import DefaultButton from "../../atoms/Button/DefaultButton";
 import DefaultInput from "../../atoms/Input/DefaultInput";
 import useInput from "@hooks/common/useInput";
+import useModifyPassword from "@hooks/query/useModifyPassword";
 
 const NameChange = () => {
   const [name, changeName] = useInput();
@@ -75,8 +76,11 @@ const NameChange = () => {
 
 const PwChange = () => {
   const [passwordConfirm, changePasswordConfirm] = useInput();
-  const [newPassword, changeNewPassword] = useInput();
   const [password, changePassword] = useInput();
+  const [originPassword, changeOriginPassword] = useInput();
+
+  const { mutate: modifyPassword } = useModifyPassword();
+
   console.log(1);
   return (
     <>
@@ -106,8 +110,8 @@ const PwChange = () => {
             fontWeight="bold"
           />
           <DefaultInput
-            value={password}
-            onChange={changePassword}
+            value={originPassword}
+            onChange={changeOriginPassword}
             backgroundColor="voice-modal"
             fontSize="base"
             color="white"
@@ -123,8 +127,8 @@ const PwChange = () => {
             fontWeight="bold"
           />
           <DefaultInput
-            value={newPassword}
-            onChange={changeNewPassword}
+            value={password}
+            onChange={changePassword}
             backgroundColor="voice-modal"
             fontSize="base"
             color="white"
@@ -150,7 +154,10 @@ const PwChange = () => {
         </Wrapper>
       </TopWrapper>
       <Bottom>
-        <DefaultButton text="완료" onClick={() => console.log(1)} />
+        <DefaultButton
+          text="완료"
+          onClick={() => modifyPassword({ password, originPassword })}
+        />
       </Bottom>
     </>
   );
