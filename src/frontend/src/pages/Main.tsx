@@ -1,8 +1,19 @@
 import MainPage from "@components/templates/MainPage";
 import HeaderHelmet from "@components/atoms/Helmet";
 import PageContainer from "@components/atoms/Div/PageContainer";
+import { useMatch, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Main = () => {
+  const navigate = useNavigate();
+  const isMain = useMatch("/");
+
+  useEffect(() => {
+    if (isMain) {
+      navigate("/@me");
+    }
+  }, []);
+
   return (
     <>
       <HeaderHelmet title="Discord | 친구" />
