@@ -1,116 +1,160 @@
-export type FontSizeType = "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
+import { DefaultTheme } from "styled-components";
+
+export type FontSizeType =
+  | "xxs"
+  | "xs"
+  | "sm"
+  | "base"
+  | "lg"
+  | "xl"
+  | "xxl"
+  | "xxxl";
+
 export type BackgroundColorType =
+  | "trans"
+  | "white"
   | "primary"
-  | "black-1"
-  | "black-2"
-  | "grey-1"
-  | "grey-2"
-  | "grey-3"
-  | "grey-4"
-  | "green-1"
-  | "green-2"
-  | "orange"
-  | "border"
-  | "transparent";
-export type ColorType = "white" | "black-1" | "black-2" | "grey-1" | "grey-2" | "grey-3" | "grey-4" | "blue" | "red-1" | "red-2";
-export type BorderColorType = "default" | "focus" | "success";
-interface FontSize {
-  xs: string;
-  sm: string;
-  base: string;
-  lg: string;
-  xl: string;
-  "2xl": string;
-  "3xl": string;
-}
+  | "blocked"
+  | "active"
+  | "divider"
+  | "setting"
+  | "msg-input"
+  | "hover"
+  | "modal"
+  | "tab3"
+  | "tab2"
+  | "user-tab"
+  | "voice-nobody"
+  | "voice-icon"
+  | "tab1"
+  | "voice-modal"
+  | "msg-hover"
+  | "add-friend"
+  | "random-green"
+  | "voice-hangup"
+  | "alert"
+  | "server-input"
+  | "server-footer"
+  | "server-subtitle"
+  | "black";
 
-interface BackgroundColor {
-  primary: string;
-  "black-1": string;
-  "black-2": string;
-  "grey-1": string;
-  "grey-2": string;
-  "grey-3": string;
-  "grey-4": string;
-  "grey-5": string;
-  "grey-6": string;
-  "green-1": string;
-  "green-2": string;
-  orange: string;
-  border: string;
-  transparent: string;
-}
+export type ColorType =
+  | "inherit"
+  | "white"
+  | "primary"
+  | "invite"
+  | "msg"
+  | "icon"
+  | "msg-placeholder"
+  | "auth-label"
+  | "auth-desc"
+  | "tab2-placeholder"
+  | "msg-timestamp"
+  | "tab3-header"
+  | "msg-hover"
+  | "setting-tab"
+  | "inactive"
+  | "hangup-log"
+  | "setting-header"
+  | "tab1-plus"
+  | "voice-modal"
+  | "red"
+  | "blue"
+  | "invite-success"
+  | "invite-danger"
+  | "black"
+  | "server-subtitle";
 
-interface Color {
-  white: string;
-  "black-1": string;
-  "black-2": string;
-  "grey-1": string;
-  "grey-2": string;
-  "grey-3": string;
-  "grey-4": string;
-  blue: string;
-  green: string;
-  "red-1": string;
-  "red-2": string;
-}
+export type BorderColorType =
+  | "trans"
+  | "divider"
+  | "default"
+  | "focus"
+  | "success"
+  | "danger";
 
-interface BorderColor {
-  default: string;
-  focus: string;
-  success: string;
-}
+export type StatusColorType = "on" | "off" | "empty" | "mobile" | "disturb";
 
-interface ThemeType {
-  fontSize: FontSize;
-  backgroundColor: BackgroundColor;
-  color: Color;
-  borderColor: BorderColor;
-}
-
-const theme: ThemeType = {
+const theme: DefaultTheme = {
   fontSize: {
-    xs: "0.75rem", // 12px
-    sm: "0.875rem", // 14px
+    xxs: "0.625rem", //10px
+    xs: "0.75rem", //12px
+    sm: ".875rem", // 14px
     base: "1rem", // 16px
     lg: "1.125rem", // 18px
     xl: "1.25rem", // 20px
-    "2xl": "1.5rem", // 24px
-    "3xl": "2rem", // 32px
+    xxl: "1.5rem", // 24px
+    xxxl: "2.25rem", // 36px
   },
   backgroundColor: {
-    primary: "#5a68ea",
-    "black-1": "#202225",
-    "black-2": "#18191c",
-    "grey-1": "#2f3136",
-    "grey-2": "#36393f",
-    "grey-3": "#40444b",
-    "grey-4": "#4f545c",
-    "grey-5": "#747f8d",
-    "grey-6": "#e3e5e8",
-    "green-1": "#447b4c",
-    "green-2": "#3ba55c",
-    orange: "#faa61a",
-    border: "#4f545c7a",
-    transparent: "transparent",
+    trans: "transparent",
+    white: "#FFFFFF",
+    primary: "#5865F2",
+    blocked: "#8E9297",
+    active: "#4F545C99",
+    divider: "#4F545C7A",
+    setting: "#4F545C",
+    "msg-input": "#40444B",
+    hover: "#3C3F44",
+    modal: "#39363f",
+    tab3: "#36393F",
+    tab2: "#2F3136",
+    "user-tab": "#292B2F",
+    "voice-nobody": "#202225",
+    "voice-icon": "#2F3136",
+    tab1: "#202225",
+    "voice-modal": "#18191C",
+    "msg-hover": "#04040512",
+    "add-friend": "#2D7D46",
+    "random-green": "#3DA45C",
+    "voice-hangup": "#ED4245",
+    alert: "#e4ac56",
+    "server-input": "#E3E5E8",
+    "server-footer": "#F2F3F5",
+    "server-subtitle": "#4F5660",
+    black: "#000",
   },
   color: {
-    white: "#fff",
-    "black-1": "#060607",
-    "black-2": "#4f5660",
-    "grey-1": "#96989d",
-    "grey-2": "#a3a6aa",
-    "grey-3": "#b9bbbe",
-    "grey-4": "#dcddde",
-    blue: "#4ca7e5",
-    green: "#6bc076",
-    "red-1": "#ed4245",
-    "red-2": "#c74945",
+    inherit: "inherit",
+    white: "#FFFFFF",
+    primary: "#5865F2",
+    invite: "#949cf7",
+    msg: "#DCDDDE",
+    icon: "#b9bbbe",
+    "tab3-header": "#B9BBBE",
+    "msg-hover": "#B9BBBE",
+    "setting-tab": "#B9BBBE",
+    "msg-placeholder": "#72767D",
+    "auth-label": "#A3A6AA",
+    "auth-desc": "#A3A6AA",
+    "tab2-placeholder": "#A3A6AA",
+    "msg-timestamp": "#A3A6AA",
+    inactive: "#96989D",
+    "hangup-log": "#96989D",
+    "setting-header": "#96989D",
+    "server-subtitle": "#4F5660",
+    "tab1-plus": "#3BA55D",
+    "voice-modal": "#18191C",
+    red: "#ED4245",
+    blue: "#00AFF4",
+    "invite-success": "#46c46e",
+    "invite-danger": "#f38688",
+    black: "#000",
   },
   borderColor: {
+    trans: "transparent",
+    divider: "#4F545C7A",
     default: "#16181a",
+    success: "#3ba55c",
     focus: "#4c9ed8",
-    success: "#496e51",
+    danger: "#ED4245",
+  },
+  statusColor: {
+    on: "#3ba55c",
+    off: "#b9bbbe",
+    empty: "#faa61b",
+    mobile: "#3ba55c",
+    disturb: "#c74945",
   },
 };
 

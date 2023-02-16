@@ -1,3 +1,3 @@
 import MicIcon from "@mui/icons-material/Mic";
 
-export default () => <MicIcon />;
+export default () => <MicIcon fontSize="small" />;

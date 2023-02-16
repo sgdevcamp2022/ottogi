@@ -1,45 +1,50 @@
+import SearchIcon from "@components/atoms/Icons/SearchIcon";
+import DefaultInput from "@components/atoms/Input/DefaultInput";
 import { ChangeEventHandler } from "react";
 import styled from "styled-components";
-import SearchIcon from "../../atoms/Icons/SearchIcon";
 
+type SizeType = "s" | "m";
 interface SearchInputProps {
+  size: SizeType;
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  placeholder?: string;
 }
 
-const SearchInput = ({ value, onChange }: SearchInputProps) => {
+const SearchInput = ({
+  size,
+  value,
+  onChange,
+  placeholder = "검색하기",
+}: SearchInputProps) => {
   return (
-    <SearchInputContainer>
-      <input value={value} onChange={onChange} placeholder="검색하기" />
+    <SearchInputContainer size={size}>
+      <DefaultInput
+        type="text"
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        fontSize={size === "s" ? "sm" : "base"}
+      />
       <SearchIcon />
     </SearchInputContainer>
   );
 };
 
-const SearchInputContainer = styled.label`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  background-color: ${({ theme }) => theme.backgroundColor["black-1"]};
-  color: ${({ theme }) => theme.color["grey-2"]};
+const SearchInputContainer = styled.label<{ size: SizeType }>`
   border-radius: 0.25rem;
-  font-size: 20px;
-  padding-right: 10px;
-
-  input {
-    flex: 1;
-    line-height: 1.875rem;
-    border: none;
-    margin: 0.0625rem;
-    padding: 0 0.5rem;
-    color: ${({ theme }) => theme.color["white"]};
-    background-color: ${({ theme }) => theme.backgroundColor["transparent"]};
-    &:focus {
-      outline: none;
-    }
-    ::placeholder {
-      color: ${({ theme }) => theme.color["grey-2"]};
-    }
+  min-width: 144px;
+  width: 100%;
+  height: ${({ size }) => (size === "s" ? 1.5 : 2.125)}rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 0.125rem;
+  background-color: ${({ theme }) => theme.backgroundColor.tab1};
+  svg {
+    font-size: ${({ theme, size }) =>
+      theme.fontSize[size === "s" ? "lg" : "xxl"]};
+    color: ${({ theme }) => theme.color.icon};
   }
 `;
 

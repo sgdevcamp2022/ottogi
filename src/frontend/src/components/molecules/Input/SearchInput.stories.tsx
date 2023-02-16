@@ -8,5 +8,5 @@ export default {
 
 export const Search = () => {
   const [value, setValue] = useState("");
-  return <SearchInput value={value} onChange={({ target: { value } }) => setValue(value)} />;
+  return <SearchInput size="m" value={value} onChange={({ target: { value } }) => setValue(value)} />;
 };

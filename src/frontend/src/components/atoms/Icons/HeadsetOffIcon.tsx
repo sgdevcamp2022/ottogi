@@ -1,3 +1,3 @@
 import HeadsetOffIcon from "@mui/icons-material/HeadsetOff";
 
-export default () => <HeadsetOffIcon style={{ transform: "scaleX(-1)" }} />;
+export default () => <HeadsetOffIcon fontSize="small" style={{ transform: "scaleX(-1)" }} />;

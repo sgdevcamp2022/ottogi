@@ -1,13 +1,12 @@
+import { Divider } from "@mui/material";
 import styled from "styled-components";
 
-const Divider = () => {
-  return <DividerContainer />;
+// divider 시간 용 만들어 두기
+
+const DefaultDivider = () => {
+  return <StyledDivider variant="inset" />;
 };
 
-const DividerContainer = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: ${({ theme }) => theme.backgroundColor.border};
-`;
+const StyledDivider = styled(Divider)``;
 
-export default Divider;
+export default DefaultDivider;
