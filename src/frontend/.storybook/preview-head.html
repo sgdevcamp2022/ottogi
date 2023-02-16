@@ -1,17 +1,28 @@
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-applesdgothicneo@1.0/all.min.css" />
-<link href="https://webfontworld.github.io/naver/NanumBarunGothic.css" rel="stylesheet" />
+<link
+  rel="stylesheet"
+  href="//cdn.jsdelivr.net/npm/font-applesdgothicneo@1.0/all.min.css"
+/>
+<link
+  href="https://webfontworld.github.io/naver/NanumBarunGothic.css"
+  rel="stylesheet"
+/>
 <style>
   @font-face {
-    font-family: "ggSans";
-    src: url("font/ggsansNormal.ttf") format("truetype");
+    font-family: "ggsans-Normal";
+    src: url("fonts/ggsans-Normal.woff") format("truetype");
     font-style: normal;
   }
-
   @font-face {
-    font-family: "ggSans";
-    src: url("font/ggsansBold.ttf") format("truetype");
+    font-family: "ggsans-Semibold";
+    src: url("fonts/ggsans-Semibold.woff") format("truetype");
+    font-style: 500;
+  }
+  @font-face {
+    font-family: "ggsans-Bold";
+    src: url("fonts/ggsans-Bold.woff") format("truetype");
     font-style: bold;
   }
+
   html,
   body,
   div,
@@ -93,12 +104,20 @@
   mark,
   audio,
   video {
+    font-family: "ggsans-Normal", Apple SD Gothic Neo, NanumBarunGothic,
+      "맑은 고딕", "Malgun Gothic", Gulim, 굴림, Dotum, 돋움, "Noto Sans",
+      "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1rem;
+
     margin: 0;
     padding: 0;
     border: 0;
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
+    box-sizing: border-box;
   }
   /* HTML5 display-role reset for older browsers */
   article,
@@ -136,28 +155,32 @@
     border-collapse: collapse;
     border-spacing: 0;
   }
-  button {
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
-
-  html {
-    font-family: "ggSans", "Apple SD Gothic Neo", NanumBarunGothic, "맑은 고딕", "Malgun Gothic", Gulim, 굴림, Dotum, 돋움, "Noto Sans",
-      "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1rem;
-  }
   * {
     box-sizing: border-box;
   }
+  body {
+    font-family: "ggsans-Normal", Apple SD Gothic Neo, NanumBarunGothic,
+      "맑은 고딕", "Malgun Gothic", Gulim, 굴림, Dotum, 돋움, "Noto Sans",
+      "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
   a {
     text-decoration: none;
-    cursor: pointer;
     color: inherit;
   }
-  input {
+  input,
+  textarea {
+    -moz-user-select: auto;
+    -webkit-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+  }
+  input:focus {
     outline: none;
+  }
+  button {
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
   }
 </style>

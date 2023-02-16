@@ -1,10 +1,23 @@
 import { createGlobalStyle, css } from "styled-components";
 import reset from "styled-reset";
-import ggSansNormal from "../fonts/ggsansNormal.ttf";
-import ggSansBold from "../fonts/ggsansBold.ttf";
 
 const GlobalStyle = createGlobalStyle`${css`
-  ${reset};
+  ${reset}
+  @font-face {
+    font-family: "ggsans-Normal";
+    src: url("fonts/ggsans-Normal.woff") format("truetype");
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "ggsans-Semibold";
+    src: url("fonts/ggsans-Semibold.woff") format("truetype");
+    font-style: 500;
+  }
+  @font-face {
+    font-family: "ggsans-Bold";
+    src: url("fonts/ggsans-Bold.woff") format("truetype");
+    font-style: bold;
+  }
 
   @font-face {
     font-family: "NanumBarunGothic";
@@ -45,38 +58,31 @@ const GlobalStyle = createGlobalStyle`${css`
         format("truetype");
   }
 
-  @font-face {
-    font-family: "ggSans";
-    src: url(${ggSansNormal}) format("truetype");
-    font-style: normal;
-  }
-  /* @font-face {
-    font-family: "ggSans";
-    src: url(${ggSansBold}) format("truetype");
-    font-style: bold;
-  } */
-
-  html {
-    font-family: "ggSans", Apple SD Gothic Neo, NanumBarunGothic, "맑은 고딕",
-      "Malgun Gothic", Gulim, 굴림, Dotum, 돋움, "Noto Sans", "Helvetica Neue",
-      Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1rem;
-  }
   * {
     box-sizing: border-box;
   }
+  body {
+    font-family: "ggsans-Normal", Apple SD Gothic Neo, NanumBarunGothic,
+      "맑은 고딕", "Malgun Gothic", Gulim, 굴림, Dotum, 돋움, "Noto Sans",
+      "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
   a {
     text-decoration: none;
-    cursor: pointer;
     color: inherit;
   }
-  input {
+  input,
+  textarea {
+    -moz-user-select: auto;
+    -webkit-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+  }
+  input:focus {
     outline: none;
   }
   button {
     border: none;
+    background: none;
     padding: 0;
     cursor: pointer;
   }
