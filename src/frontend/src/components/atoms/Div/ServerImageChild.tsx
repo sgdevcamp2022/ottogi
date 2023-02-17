@@ -1,9 +1,8 @@
 import { Avatar } from "@mui/material";
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
-import { MouseEventHandler, ReactElement } from "react";
+import { MouseEventHandler } from "react";
 import useServerStore from "../../../store/useServerStore";
-import { LargeNumberLike } from "crypto";
 
 interface ServerImageProps {
   // onClick: MouseEventHandler<HTMLButtonElement>;
@@ -11,20 +10,9 @@ interface ServerImageProps {
   name: string;
   active?: boolean;
   src?: string;
-  children?: ReactElement;
-  avatarWidth: Number;
-  avatarHeight: Number;
 }
 
-const ServerImage = ({
-  id,
-  name,
-  active = false,
-  src,
-  children,
-  avatarHeight = 3,
-  avatarWidth = 3,
-}: ServerImageProps) => {
+const ServerImage = ({ id, name, active = false, src }: ServerImageProps) => {
   const { server, setServer } = useServerStore(({ server, setServer }) => ({
     server,
     setServer,
@@ -39,8 +27,6 @@ const ServerImage = ({
     <ServerIconBox borderRadius={active ? 0.8 : 5} height={active ? 35 : 10}>
       <ClickedWrapper className="side" />
       <StyledIconButton
-        height={avatarHeight}
-        width={avatarWidth}
         // onClick={() => {
         //   onClick();
 
@@ -48,9 +34,7 @@ const ServerImage = ({
         onClick={selectServer}
       >
         {/* borderRadius로 이미지 동그란 정도 조절하기 */}
-        <Avatar className="avatar" src={src}>
-          {children}
-        </Avatar>
+        <Avatar className="avatar" src={src}></Avatar>
       </StyledIconButton>
     </ServerIconBox>
   );
@@ -85,21 +69,16 @@ const ServerIconBox = styled.div<ServerIconBoxProps>`
   }
 `;
 
-interface ServerIconButtonProps {
-  width: Number;
-  height: Number;
-}
-
-const StyledIconButton = styled(IconButton)<ServerIconButtonProps>`
+const StyledIconButton = styled(IconButton)`
   .avatar {
-    width: 100%;
-    height: 100%;
+    width: 3rem;
+    height: 3rem;
   }
   margin: 0px;
   padding: 0rem !important;
   border-radius: 5rem;
-  width: ${({ width }) => width + "rem"};
-  height: ${({ height }) => height + "rem"}; ;
+  width: 3rem;
+  height: 3rem;
 `;
 
 const ClickedWrapper = styled.div`

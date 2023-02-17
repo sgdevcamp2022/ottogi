@@ -49,7 +49,12 @@ const ServerList = () => {
               ref={provided.innerRef}
             >
               <li onClick={() => console.log(1)}>
-                <ServerImage name="메인" id={-1} />
+                <ServerImage
+                  avatarHeight={3}
+                  avatarWidth={3}
+                  name="메인"
+                  id={-1}
+                />
               </li>
               <Divider />
               {array &&
@@ -63,7 +68,12 @@ const ServerList = () => {
                           {...provided.draggableProps}
                           onClick={() => console.log({ index })}
                         >
-                          <ServerImage name="서버1" id={index} />
+                          <ServerImage
+                            avatarHeight={3}
+                            avatarWidth={3}
+                            name="서버1"
+                            id={index}
+                          />
                         </li>
                       )}
                     </Draggable>
@@ -71,7 +81,12 @@ const ServerList = () => {
                 })}
               {provided.placeholder}
               <li onClick={() => console.log(array.length)}>
-                <ServerImage name="서버 추가" id={array.length} />
+                <ServerImage
+                  avatarHeight={3}
+                  avatarWidth={3}
+                  name="서버 추가"
+                  id={array.length}
+                />
               </li>
             </ul>
           )}
