@@ -7,8 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "dev": "nodemon app.js",
-    "build": "pkg . --out-path bin"
+    "dev": "nodemon app.js"
   },
   "pkg": {
     "scripts": "*.js",
@@ -27,6 +26,6 @@
     "mysql": "^2.18.1",
     "node-eureka": "^0.0.2",
     "nodemon": "^2.0.20",
-    "pkg": "^5.8.0"
+    "path": "^0.12.7"
   }
 }
