@@ -1,6 +1,6 @@
 import AddCircleIcon from "@components/atoms/Icons/AddCircleIcon";
 import MessageInput from "@components/atoms/Input/MessageInput";
-import { MouseEventHandler, useRef } from "react";
+import { ChangeEvent, KeyboardEvent, MouseEventHandler, useRef } from "react";
 import styled from "styled-components";
 
 interface MessageInputProps {
@@ -8,6 +8,7 @@ interface MessageInputProps {
   nickname: string;
   onChange: Function;
   onClick: MouseEventHandler<HTMLButtonElement>;
+  addChatMessage: () => void;
 }
 
 const MessageBox = ({
@@ -15,8 +16,10 @@ const MessageBox = ({
   nickname,
   onChange,
   onClick,
+  addChatMessage,
 }: MessageInputProps) => {
   const messageRef = useRef<HTMLTextAreaElement>(null);
+
   const resizeTextAreaHeight = () => {
     if (messageRef.current instanceof HTMLTextAreaElement) {
       messageRef.current.style.height = "auto";
@@ -24,9 +27,23 @@ const MessageBox = ({
     }
   };
 
-  const handleChange = (v: string) => {
-    onChange(v);
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value === "Enter") {
+      addChatMessage();
+    }
+    onChange(e.target.value);
     resizeTextAreaHeight();
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    console.log(1, e.key);
+
+    if (e.key === "Enter") {
+      addChatMessage();
+    }
+    if (e.key === "Tab") {
+      e.preventDefault();
+    }
   };
 
   return (
@@ -35,11 +52,12 @@ const MessageBox = ({
         <AddCircleIcon />
       </AddButton>
       <MessageInput
-        messageRef={messageRef}
+        ref={messageRef}
         placeholder={`@${nickname}에 메시지 보내기`}
         rows={1}
         value={value}
-        onChange={({ target: { value: v } }) => handleChange(v)}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
       />
     </MessageInputContainer>
   );

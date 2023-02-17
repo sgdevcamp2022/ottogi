@@ -80,12 +80,10 @@ const Chat = () => {
   };
 
   return (
-    <>
-      <DefaultButton
-        text="test"
-        onClick={() => handler("ottogi_channel", "12121", "asdadad", "test1")}
-      />
-    </>
+    <DefaultButton
+      text="test"
+      onClick={() => handler("ottogi_channel", "12121", "asdadad", "test1")}
+    />
   );
 };
 

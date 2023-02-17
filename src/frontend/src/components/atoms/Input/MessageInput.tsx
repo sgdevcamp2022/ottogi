@@ -1,17 +1,44 @@
-import { ChangeEventHandler, ForwardedRef, forwardRef } from "react";
+import { keyboardOptions } from "@testing-library/user-event/dist/keyboard";
+import {
+  ChangeEventHandler,
+  ForwardedRef,
+  forwardRef,
+  KeyboardEvent,
+} from "react";
 import styled from "styled-components";
 
 interface MessageInputProps {
-  messageRef: ForwardedRef<HTMLTextAreaElement>;
+  // messageRef: ForwardedRef<HTMLTextAreaElement>;
   value: string;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
   rows?: number;
 }
 
-const MessageInput = forwardRef(({ messageRef, value, onChange, placeholder = "", rows = 1 }: MessageInputProps) => {
-  return <TextArea ref={messageRef} value={value} onChange={onChange} placeholder={placeholder} rows={rows} />;
-});
+const MessageInput = forwardRef(
+  (
+    {
+      value,
+      onChange,
+      placeholder = "",
+      rows = 1,
+      onKeyDown,
+    }: MessageInputProps,
+    ref: ForwardedRef<HTMLTextAreaElement>
+  ) => {
+    return (
+      <TextArea
+        ref={ref}
+        value={value}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+        placeholder={placeholder}
+        rows={rows}
+      />
+    );
+  }
+);
 
 const TextArea = styled.textarea`
   line-height: 22px;
