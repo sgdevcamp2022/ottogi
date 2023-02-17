@@ -18,25 +18,25 @@ const MessageBox = ({
   onClick,
   addChatMessage,
 }: MessageInputProps) => {
-  const messageRef = useRef<HTMLTextAreaElement>(null);
+  const messageRef = useRef<HTMLInputElement>(null);
 
-  const resizeTextAreaHeight = () => {
-    if (messageRef.current instanceof HTMLTextAreaElement) {
-      messageRef.current.style.height = "auto";
-      messageRef.current.style.height = messageRef.current.scrollHeight + "px";
-    }
-  };
+  // const resizeTextAreaHeight = () => {
+  //   if (messageRef.current instanceof HTMLTextAreaElement) {
+  //     messageRef.current.style.height = "auto";
+  //     messageRef.current.style.height = messageRef.current.scrollHeight + "px";
+  //   }
+  // };
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === "Enter") {
-      addChatMessage();
+      return addChatMessage();
     }
     onChange(e.target.value);
-    resizeTextAreaHeight();
+    // resizeTextAreaHeight();
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    console.log(1, e.key);
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    console.log("Keydown", e.key);
 
     if (e.key === "Enter") {
       addChatMessage();

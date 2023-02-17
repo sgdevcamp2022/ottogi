@@ -25,6 +25,7 @@ const MainDirectBody = () => {
   };
 
   const addChatMessage = () => {
+    setMessage("");
     if (client?.connected) {
       client.publish({
         destination: "/pub/add_topic",
@@ -82,6 +83,7 @@ const MainDirectBody = () => {
           />
           {chatLog.map((chat) => (
             <MessageLog text={chat} createdAt={new Date()} />
+            // 일단은 이렇게까지만 테스트로
           ))}
           {/* <MessageLog text="ㅇㅇ" hasImage createdAt={new Date()} />
           <MessageLog text="ㅇㅇ" createdAt={new Date()} />

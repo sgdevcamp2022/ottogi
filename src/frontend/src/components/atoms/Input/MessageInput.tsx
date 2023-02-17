@@ -1,4 +1,3 @@
-import { keyboardOptions } from "@testing-library/user-event/dist/keyboard";
 import {
   ChangeEventHandler,
   ForwardedRef,
@@ -10,8 +9,8 @@ import styled from "styled-components";
 interface MessageInputProps {
   // messageRef: ForwardedRef<HTMLTextAreaElement>;
   value: string;
-  onChange: ChangeEventHandler<HTMLTextAreaElement>;
-  onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   rows?: number;
 }
@@ -25,7 +24,7 @@ const MessageInput = forwardRef(
       rows = 1,
       onKeyDown,
     }: MessageInputProps,
-    ref: ForwardedRef<HTMLTextAreaElement>
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     return (
       <TextArea
@@ -34,13 +33,12 @@ const MessageInput = forwardRef(
         onChange={onChange}
         onKeyDown={onKeyDown}
         placeholder={placeholder}
-        rows={rows}
       />
     );
   }
 );
 
-const TextArea = styled.textarea`
+const TextArea = styled.input`
   line-height: 22px;
   vertical-align: middle;
   flex: 1;
