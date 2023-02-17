@@ -17,7 +17,7 @@ const SeverSettingMember = () => {
       <Text text={"멤버 총 x명"} color="setting-tab" fontSize="sm" mb={20} />
       <Divider sx={{ borderColor: "#96989D93", opacity: 0.5, mt: 1, mb: 1 }} />
       <Member>
-        <LogoImage onClick={() => console.log(1)} />
+        <LogoImage height={3} width={3} onClick={() => console.log(1)} />
         <Text text={"김현우"} color="white" fontSize="sm" />
       </Member>
     </SettingWrapper>

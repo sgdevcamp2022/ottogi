@@ -18,7 +18,7 @@ const MessageLog = ({ text, hasImage = false, createdAt }: MessageLogProps) => {
       <MessageHoverButtons />
       {hasImage && (
         <LogoImageContainer>
-          <LogoImage onClick={() => null} />
+          <LogoImage height={3} width={3} onClick={() => null} />
         </LogoImageContainer>
       )}
       <TextContainer>

@@ -1,9 +1,8 @@
 import { Avatar } from "@mui/material";
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
-import { MouseEventHandler, ReactElement } from "react";
+import { ReactElement } from "react";
 import useServerStore from "../../../store/useServerStore";
-import { LargeNumberLike } from "crypto";
 
 interface ServerImageProps {
   // onClick: MouseEventHandler<HTMLButtonElement>;

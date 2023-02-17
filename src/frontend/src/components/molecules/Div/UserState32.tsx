@@ -1,4 +1,5 @@
 import LogoImage from "@components/atoms/Div/LogoImage";
+import ServerImage from "@components/atoms/Div/ServerImage";
 import Status from "@components/atoms/Div/Status";
 import styled from "styled-components";
 import mask from "../../../assets/mask/avatar-mask-32.png";
@@ -14,7 +15,7 @@ const UserState32 = ({ status = "on", fontSize = "16px" }: UserStateProps) => {
   return (
     <UserStateContainer>
       <Mask>
-        <LogoImage onClick={() => null} />
+        <LogoImage height={2} width={2} onClick={() => null} />
       </Mask>
       <IconWrapper>
         <Status status={status} fontSize={fontSize} />
