@@ -8,13 +8,25 @@ module.exports = {
     channelCreate: async (req, res) => {
         const {channelName, categoryId, type, communityId, userId} = req.body;
         if (!channelName) {
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             if(await isAdmin(communityId, userId)){
                 channel.create(channelName, categoryId, type)
-                res.send('create success');
+                res.json({
+                    success: true,
+                    message: 'Channel Creation Success',
+                    data: null,
+                });
+            }else {
+                res.json({
+                    success: false,
+                    message: 'ERROR: NOT ADMIN',
+                    data: null,
+                })
             }
         }
     },
@@ -23,15 +35,25 @@ module.exports = {
     channelRename: async(req, res) => {
         const {channelName, communityId, channelId, userId} = req.body;
         if (!channelName || !channelId || !userId) {
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             if(await isAdmin(communityId, userId)){
-                const response = channel.rename(channelName, channelId);
-                res
-                    .status(200)
-                    .send(`channel ID : ${channelId} Rename to ${channelName}`);
+                channel.rename(channelName, channelId);
+                res.json({
+                    success: true,
+                    message: `Channel ID : ${channelId} Rename to: ${channelName}`,
+                    data: null,
+                });
+            }else {
+                res.json({
+                    success: false,
+                    message: 'ERROR: NOT ADMIN',
+                    data: null,
+                })
             }
         }
     },
@@ -39,15 +61,25 @@ module.exports = {
     channelDelete: async (req, res) => {
         const {channelId} = req.body;
         if (!channelId) {
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             if(await isAdmin(communityId, userId)){
                 const response = channel.delete(channelId);
-                res
-                .status(200)
-                .send(`channel ID : ${channelId} deleted`);
+                res.json({
+                    success: true,
+                    message: `Channel ID : ${channelId} Deleted`,
+                    data: null,
+                });
+            }else {
+                res.json({
+                    success: false,
+                    message: 'ERROR: NOT ADMIN',
+                    data: null,
+                })
             }
         }
     },
@@ -70,12 +102,18 @@ module.exports = {
     loadList: async(req, res)=>{
         const{categoryId} = req.body;
         if(!categoryId){
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             const response = await channel.load(categoryId);
-            res.status(200).send(`Channel List: ${response}`);
+            res.json({
+                success: true,
+                message: 'List Call Success',
+                data: response,
+            });
         }
     }
 };

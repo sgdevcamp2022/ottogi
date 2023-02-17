@@ -3,32 +3,43 @@ const { isAdmin } = require('../utils/ulits');
 
 module.exports = {
     //커뮤니티(서버) 생성
-    communityCreate: (req, res) => {
-        const {communityName, img, userId, profile} = req.body;
-
+    communityCreate: async (req, res) => {
+        const {communityName, userId, profile} = req.body;
+        const img = req.file;
+        
         if (!communityName || !userId) {
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
-            community.create(communityName, img , userId, profile);
-            res.send('create success');
+            community.create(communityName, img.location , userId, profile);
+            res.json({
+                success: true,
+                message: 'Community Creation Success',
+                data: null,
+            });
         }
     },
 
     //커뮤니티 참가
-    communityJoin: (req, res) => {
+    communityJoin: async(req, res) => {
         const {communityId, userId, profile} = req.body;
         if (!communityId || !userId) {
-            res
-                .status(400)
-                .send('Invalid parmas');
-        } else {
-            //유저 아이디 유효성 검사 추가 예정
-            const response = community.join(communityId, userId, profile);
-            response.then(result => {
-                res.send(`Community ${result}, joined communityID: ${communityId}`);
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
             })
+        } else {
+            community.join(communityId, userId, profile);
+            const response = await community.checkMember(communityId)
+            res.json({
+                success: true,
+                message: 'Community Join Success',
+                data: response,
+            });
         }
     },
 
@@ -36,15 +47,26 @@ module.exports = {
     communityRename: async(req, res) => {
         const {communityName, communityId, userId} = req.body;
         if (!communityName || !communityId || !userId) {
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             if(await isAdmin(communityId, userId)){
-                const response = community.rename(communityName, communityId);
-                res
-                    .status(200)
-                    .send(`community ID : ${communityId} Rename to ${communityName}`);
+                community.rename(communityName, communityId);
+                res.json({
+                    success: true,
+                    message: `CommuintyId: ${communityId}, Renamed to: ${communityName}` ,
+                    data: null,
+                });
+            }
+            else {
+                res.json({
+                    success: false,
+                    message: 'ERROR: NOT ADMIN',
+                    data: null,
+                })
             }
         }
     },
@@ -53,15 +75,25 @@ module.exports = {
     communityDelete: async (req, res) => {
         const {communityId, userId} = req.body;
         if (!communityId) {
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             if(await isAdmin(communityId, userId)){
-                const response = community.delete(communityId);
-                res
-                .status(200)
-                .send(`community ID : ${communityId} deleted`);
+                community.delete(communityId);
+                res.json({
+                    success: true,
+                    message: `Community ID : ${communityId} Deleted` ,
+                    data: null,
+                });
+            }else {
+                res.json({
+                    success: false,
+                    message: 'ERROR: NOT ADMIN',
+                    data: null,
+                })
             }
         }
     },
@@ -70,16 +102,26 @@ module.exports = {
     updateProfile: async (req, res)=>{
         const{communityId, userId, profile} = req.body;
         if(!communityId || !userId || !profile){
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             const response = await community.profile(communityId, userId, profile);
             console.log(response);
             if(response == 'succes'){
-                res.status(200).send(`update profile`)
+                res.json({
+                    success: true,
+                    message: `Updated Profile` ,
+                    data: null,
+                });
             }else {
-                res.status(400).send('ERROR')
+                res.json({
+                    success: false,
+                    message: 'ERROR: Profile update failed',
+                    data: null,
+                })
             }
         }
     },
@@ -87,13 +129,18 @@ module.exports = {
     loadList: async (req, res)=>{
         const{userId} = req.body;
         if(!userId){
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             const response = await community.load(userId);
-            res.status(200).send(`Community List :  ${response}`);
-            
+            res.json({
+                success: true,
+                message: `List Call Success` ,
+                data: response,
+            });
         }
     },
 };

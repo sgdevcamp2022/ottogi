@@ -28,7 +28,6 @@ const findCommunityList = (communityId)=>{
                 reject(err);
             } else {
                 for (let data of res) {
-                    console.log()
                     nameList.push(Object.values(data));
                 };
                 resolve(nameList);
@@ -37,9 +36,26 @@ const findCommunityList = (communityId)=>{
     })
 }
 
+const findMember = (communityId)=>{
+    let memberList = [];
+    let findsql = `SELECT JSON_OBJECT ('user_id', user_id, 'role', role, 'profile', profile) FROM community_member WHERE community_id = ${db.escape(communityId)}`;
+
+    return new Promise((resolve, reject) => {
+        db.query(findsql, (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                for (let data of res) {
+                    memberList.push(Object.values(data));
+                };
+                resolve(memberList.flat());
+            }
+        })
+    })
+}
+
 const insertMember =  (communityId, userId, profile) => {
-    let getProfile = JSON.stringify(profile);
-    let sql = `INSERT INTO community_member(user_id, role, community_id, profile) VALUES(${db.escape(userId)}, 1, ${db.escape(communityId)}, '${getProfile}');`;
+    let sql = `INSERT INTO community_member(user_id, role, community_id, profile) VALUES(${db.escape(userId)}, 1, ${db.escape(communityId)}, '${profile}');`;
     db.query(sql, (err, res) => {
         if (err) 
             console.log(err);
@@ -124,6 +140,7 @@ const getCommunityId = (userId)=>{
 module.exports = {
     //커뮤니티 생성 디비 명령어? (모델)
     create: (communityName, img, userId, profile) => {
+        
         let sql = `INSERT INTO community(name, img) VALUES('${communityName}', '${img}');`;
         db.query(sql, async (err, res) => {
             if (err) {
@@ -196,7 +213,14 @@ module.exports = {
         for(let data of response){
             communityList.push(await findCommunityList(data));
         }
-        list.push(`커뮤니티 : ${communityList}`);
+        list.push(`${communityList}`);
         return list;
     },
+
+    //커뮤니티 멤버 조회
+    checkMember: async(communityId)=>{
+        const response = await findMember(communityId);
+        return response;
+    },
+
 };

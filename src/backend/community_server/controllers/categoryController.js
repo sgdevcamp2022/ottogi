@@ -8,13 +8,25 @@ module.exports = {
     categoryCreate: async(req, res) => {
         const {categoryName, communityId, userId} = req.body;
         if (!categoryName) {
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             if(await isAdmin(communityId, userId)){
                 category.create(categoryName, communityId);
-                res.send('create success');
+                res.json({
+                    success: true,
+                    message: 'Category Creation Success',
+                    data: null,
+                });
+            }else {
+                res.json({
+                    success: false,
+                    message: 'ERROR: NOT ADMIN',
+                    data: null,
+                })
             }
         }
     },
@@ -23,15 +35,25 @@ module.exports = {
     categoryRename: async(req, res) => {
         const {categoryName, communityId, categoryId, userId} = req.body;
         if (!categoryName || !communityId || !categoryId || !userId) {
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             if(await isAdmin(communityId, userId)){
-                const response = category.rename(categoryName, categoryId);
-                res
-                    .status(200)
-                    .send(`category ID : ${categoryId} Rename to ${categoryName}`);
+                category.rename(categoryName, categoryId);
+                res.json({
+                    success: true,
+                    message: `Category ID : ${categoryId} Rename to: ${categoryName}`,
+                    data: null,
+                });
+            }else {
+                res.json({
+                    success: false,
+                    message: 'ERROR: NOT ADMIN',
+                    data: null,
+                })
             }
         }
     },
@@ -40,15 +62,25 @@ module.exports = {
     categoryDelete: async (req, res) => {
         const {categoryId, userId} = req.body;
         if (!categoryId) {
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             if(await isAdmin(communityId, userId)){
-                const response = category.delete(categoryId);
-                res
-                    .status(200)
-                    .send(`category ID : ${categoryId} deleted`);
+                category.delete(categoryId);
+                res.json({
+                    success: true,
+                    message: `Category ID : ${categoryId} Deleted`,
+                    data: null,
+                });
+            }else {
+                res.json({
+                    success: false,
+                    message: 'ERROR: NOT ADMIN',
+                    data: null,
+                })
             }
         }
     },
@@ -57,12 +89,18 @@ module.exports = {
     loadList: async(req, res)=>{
         const{communityId} = req.body;
         if(!communityId){
-            res
-                .status(400)
-                .send('Invalid parmas');
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
         } else {
             const response = await category.load(communityId);
-            res.status(200).send(`${response}`);
+            res.json({
+                success: true,
+                message: 'List Call Success',
+                data: response,
+            });
         }
     }
 };
