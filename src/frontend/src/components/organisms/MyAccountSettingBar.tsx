@@ -21,6 +21,7 @@ const ServerSettingBar = () => {
     resetUserInfo();
     navigate("/login");
   };
+
   return (
     <BarContainer>
       <Header>
@@ -67,11 +68,10 @@ const ServerSettingBar = () => {
           <SetDefaultButton
             text="로그아웃"
             backgroundColor="voice-icon"
-            onClick={() => console.log(1)}
+            onClick={logout}
           />
         </li>
       </ul>
-      <button onClick={logout}>sdasd</button>
     </BarContainer>
   );
 };

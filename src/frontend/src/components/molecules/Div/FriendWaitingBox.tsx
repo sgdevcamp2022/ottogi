@@ -1,7 +1,6 @@
 import CancelIcon from "@components/atoms/Icons/CancelIcon";
 import CheckIcon from "@components/atoms/Icons/CheckIcon";
 import useAcceptFriend from "@hooks/query/useAcceptFriend";
-import useCancelFriend from "@hooks/query/useCancelFriend";
 import useRejectFriend from "@hooks/query/useRejectFriend";
 import { useUserStore } from "@store/useUserStore";
 import { ReactElement } from "react";
@@ -20,14 +19,13 @@ const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
   const { userInfo } = useUserStore();
   const { mutate: acceptFriend } = useAcceptFriend();
   const { mutate: rejectFriend } = useRejectFriend();
-  const { mutate: cancelFriend } = useCancelFriend();
 
   if (!userInfo) navigate("/login");
 
   const params = { email: name, accessToken: userInfo.accessToken };
 
   let Buttons: ReactElement;
-  if (status === "REQUEST") {
+  if (status === "WAIT") {
     Buttons = (
       <>
         <RoundButton
@@ -46,14 +44,14 @@ const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
     );
   } else {
     Buttons = (
-      <RoundButton Icon={<CancelIcon />} onClick={() => cancelFriend(params)} />
+      <RoundButton Icon={<CancelIcon />} onClick={() => rejectFriend(params)} />
     );
   }
 
   return (
     <FriendBox
       name={name}
-      status={`${status === "REQUEST" ? "받은" : "보낸"} 친구 요청`}
+      status={`${status === "WAIT" ? "받은" : "보낸"} 친구 요청`}
       onClick={() => null}
       Buttons={Buttons}
     />

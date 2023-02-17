@@ -45,7 +45,7 @@ const friendApi = {
 
   reject: async ({ email, accessToken }: FriendParams) => {
     return await clientApi.delete("/user/member/rejectfriend", {
-      params: { email },
+      data: { email },
       headers: {
         Authorization: "Bearer " + accessToken,
       },

@@ -1,11 +1,9 @@
 import styled from "styled-components";
-import { useState } from "react";
 import Text from "@components/atoms/Text/Text";
 import DefaultInput from "@components/atoms/Input/DefaultInput";
 import useInput from "@hooks/common/useInput";
 
 const ServerInput = () => {
-  const [text, setText] = useState("");
   const [name, changeName] = useInput();
   return (
     <ServerInputContainer>
@@ -24,13 +22,10 @@ const ServerInput = () => {
         fontSize="base"
         color="black"
       />
-      {/* <input
-        value={text}
-        onChange={({ target: { value } }) => setText(value)}
-      /> */}
     </ServerInputContainer>
   );
 };
+
 export default ServerInput;
 
 const ServerInputContainer = styled.div`

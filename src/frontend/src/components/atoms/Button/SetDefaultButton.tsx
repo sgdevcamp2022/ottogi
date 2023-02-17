@@ -21,7 +21,7 @@ const SetDefaultButton = ({
 }: SettingButtonProps) => {
   return (
     <SettingButtonContainer
-      onClick={() => onClick}
+      onClick={onClick}
       fontWeight={fontWeight}
       color={color}
       backgroundColor={backgroundColor}
