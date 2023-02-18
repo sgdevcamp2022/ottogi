@@ -127,7 +127,7 @@ module.exports = {
     },
 
     loadList: async (req, res)=>{
-        const{userId} = req.body;
+        const{userId} = req.query;
         if(!userId){
             res.json({
                 success: false,
