@@ -52,14 +52,14 @@ const Router = () => {
           // </ProtectPage>
         }
       />
-      <Route
+      {/* <Route
         path="/:serverId/:chatroomId"
         element={
           // <ProtectPage>
           <Server />
           // </ProtectPage>
         }
-      />
+      /> */}
       <Route path="chat" element={<Chat />} />
       <Route
         path="/login"

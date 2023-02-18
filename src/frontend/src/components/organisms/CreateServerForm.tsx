@@ -9,11 +9,13 @@ import { useMutation } from "@tanstack/react-query";
 import serverSettingApi from "@api/serverSetting";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@store/useUserStore";
+import { useState } from "react";
 
 const CreateServerForm = () => {
   const { userInfo, accessToken } = useUserStore();
   const navigate = useNavigate();
   const [name, changeName] = useInput();
+  const [nickName, setNickName] = useState(userInfo.name);
   const { mutate: createServer } = useMutation(serverSettingApi.create, {
     onSuccess: () => {
       navigate(-1);
@@ -36,7 +38,7 @@ const CreateServerForm = () => {
                 img: null,
                 userId: 4,
                 profile: {
-                  userName: "닉네임",
+                  userName: { nickName },
                   img: null,
                   한줄소개: "한줄소개",
                 },

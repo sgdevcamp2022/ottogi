@@ -7,54 +7,19 @@ import AddIcon from "@components/atoms/Icons/AddIcon";
 import useGetServerList from "@hooks/query/useGetServerList";
 import { useUserStore } from "@store/useUserStore";
 
+interface community {
+  img: string;
+  community_id: Number;
+  name: string;
+}
+
 const ServerList = () => {
-  interface community {
-    img: string;
-    community_id: Number;
-    name: string;
-  }
-  const [userId, setUserId] = useState<Number>();
-  const [data, setData] = useState<community[]>([]);
-
-  const { userInfo, accessToken } = useUserStore();
-
-  // setUserId(userInfo.id);
-  const res = useGetServerList({ userId, accessToken });
-  // setUserId(4);
-  const GetList = () => {
-    console.log(res);
-    console.log("data", JSON.parse(res?.data?.data?.data[0]));
-    setData(JSON.parse(res?.data?.data?.data[0]));
-    // console.log(data?.community_id);
-    return res;
-  };
-
-  const onList = () => {
-    for (let i = 0; i < res?.data?.data?.data.length; i++) {
-      console.log(i + ":" + res?.data?.data?.data[i]);
-      data.push(JSON.parse(res?.data?.data?.data[i]));
-      // setData((data) => {
-      //   console.log(i + ":" + res?.data?.data?.data[i]);
-      // return [...data, JSON.parse(res?.data?.data?.data[i])];
-      //   data.push(JSON.parse(res?.data?.data?.data[i]));
-      // });
-    }
-    setUserId(userInfo.id);
-    // console.log(userInfo);
-    console.log(GetList());
-    console.log(data);
-  };
-  useEffect(() => {
-    console.log(userInfo);
-    setUserId(userInfo.id);
-    console.log(res);
-    for (let i = 0; i < res?.data?.data?.data.length; i++) {
-      console.log(i + ":" + res?.data?.data?.data[i]);
-      data.push(JSON.parse(res?.data?.data?.data[i]));
-    }
-  }, [userInfo.id, data]);
-
+  // const [userId, setUserId] = useState<Number>();
   const navigate = useNavigate();
+  const [data, setData] = useState<community[]>([]);
+  const { userInfo, accessToken } = useUserStore();
+  const res = useGetServerList({ userId: userInfo.id, accessToken });
+
   const onMain = () => {
     navigate("/@me");
   };
@@ -64,6 +29,20 @@ const ServerList = () => {
   const onCreateServer = () => {
     navigate("/CreateServer");
   };
+
+  const List = res?.data?.data.data[0].split("},");
+  useEffect(() => {
+    console.log(res);
+    for (let i = 0; i < List?.length; i++) {
+      if (i !== List.length - 1) {
+        data.push(JSON.parse(List[i] + "}"));
+      } else {
+        data.push(JSON.parse(List[i]));
+      }
+    }
+  }, []);
+
+  if (!res?.data) return <></>;
   return (
     <BarContainer>
       <ul>
@@ -77,35 +56,22 @@ const ServerList = () => {
         </li>
         <Divider />
         {data &&
-          data?.map((v, index) => {
+          data.map((v: any) => {
             return (
               <li onClick={() => onServer(v.community_id)}>
                 <ServerImage
                   avatarHeight={3}
                   avatarWidth={3}
                   name={v.name}
+                  // name="name"
                   id={v.community_id}
+                  // id={1}
                 />
               </li>
             );
           })}
         <li onClick={onCreateServer}>
-          <ServerImage
-            avatarHeight={3}
-            avatarWidth={3}
-            name=""
-            id={data.length + 1}
-          >
-            <AddIcon />
-          </ServerImage>
-        </li>
-        <li onClick={onList}>
-          <ServerImage
-            avatarHeight={3}
-            avatarWidth={3}
-            name=""
-            id={data.length + 2}
-          >
+          <ServerImage avatarHeight={3} avatarWidth={3} name="" id={10001}>
             <AddIcon />
           </ServerImage>
         </li>

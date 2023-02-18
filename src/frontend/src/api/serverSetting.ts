@@ -1,5 +1,7 @@
 import clientApi from "./axios";
 
+let formData = new FormData();
+
 const serverSettingApi = {
   // 커뮤니티 리스트 가져옴
   getList: async ({ queryKey }: any) => {
@@ -14,6 +16,10 @@ const serverSettingApi = {
   // 커뮤니티 생성
   create: async ({ communityName, img, userId, accessToken, profile }: any) => {
     console.log(communityName, img, userId, accessToken, profile);
+    formData.append("communityName", communityName);
+    formData.append("communit", communityName);
+    formData.append("communityName", communityName);
+    formData.append("communityName", communityName);
     return await clientApi.post(
       "/community/create",
       {
