@@ -11,6 +11,7 @@ import LoginForm from "../components/molecules/Form/LoginForm";
 import useLogin from "../hooks/query/useLogin";
 import { useState } from "react";
 import validateEmail from "../utils/validateEmail";
+import backgroundImage from "../assets/images/auth.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -89,7 +90,9 @@ const Login = () => {
 };
 
 const LoginContainer = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor.primary};
+  background-image: url(${backgroundImage});
+  background-size: cover;
+  background-position: center;
 `;
 
 const LinkTextContainer = styled.div`

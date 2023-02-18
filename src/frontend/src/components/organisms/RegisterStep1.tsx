@@ -18,7 +18,14 @@ const RegisterStep1 = () => {
   const [password, changePassword] = useInput();
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { mutate: sendEmail } = useSendEmail();
+  const { mutate: sendEmail } = useSendEmail({
+    onError: () => {
+      console.log("err");
+    },
+    onSuccess: () => {
+      setStep(2);
+    },
+  });
 
   const onLoadLogin = () => navigate("/login");
 
@@ -34,7 +41,6 @@ const RegisterStep1 = () => {
     setName(name);
     setPassword(password);
     sendEmail({ email, name, password });
-    setStep(2);
   };
 
   return (
