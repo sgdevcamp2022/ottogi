@@ -14,7 +14,7 @@ import LoginForm from "@components/molecules/Form/LoginForm";
 const NameChange = () => {
   const [name, changeName] = useInput();
   const [password, changePassword] = useInput();
-  const { userInfo } = useUserStore();
+  const { userInfo, accessToken } = useUserStore();
   const { mutate: modifyName } = useModifyName();
 
   return (
@@ -78,7 +78,7 @@ const NameChange = () => {
             modifyName({
               name,
               password,
-              accessToken: userInfo.accessToken,
+              accessToken: accessToken,
             })
           }
         />

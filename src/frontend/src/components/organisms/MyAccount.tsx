@@ -9,7 +9,7 @@ import { useUserStore } from "@store/useUserStore";
 
 const MyAccount = () => {
   const { mutate: deleteUser } = useDeleteUser();
-  const { userInfo } = useUserStore();
+  const { userInfo, accessToken } = useUserStore();
   return (
     <SettingWrapper>
       <>
@@ -52,7 +52,7 @@ const MyAccount = () => {
             text="계정 삭제하기"
             onClick={() =>
               deleteUser({
-                accessToken: userInfo.accessToken,
+                accessToken: accessToken,
               })
             }
             backgroundColor="voice-hangup"
