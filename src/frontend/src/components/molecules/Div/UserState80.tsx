@@ -8,9 +8,14 @@ export type StateType = "on" | "off" | "disturb" | "mobile" | "empty";
 interface UserStateProps {
   status?: StateType;
   fontSize?: string;
+  src?: string;
 }
 
-const UserState80 = ({ status = "on", fontSize = "24px" }: UserStateProps) => {
+const UserState80 = ({
+  src,
+  status = "on",
+  fontSize = "24px",
+}: UserStateProps) => {
   return (
     <UserStateContainer>
       <Mask>

@@ -10,7 +10,7 @@ interface MessageInputProps {
   // messageRef: ForwardedRef<HTMLTextAreaElement>;
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
-  onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   rows?: number;
 }
@@ -22,7 +22,7 @@ const MessageInput = forwardRef(
       onChange,
       placeholder = "",
       rows = 1,
-      onKeyDown,
+      onKeyPress,
     }: MessageInputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
@@ -31,7 +31,7 @@ const MessageInput = forwardRef(
         ref={ref}
         value={value}
         onChange={onChange}
-        onKeyDown={onKeyDown}
+        onKeyPress={onKeyPress}
         placeholder={placeholder}
       />
     );

@@ -10,12 +10,14 @@ const Tab3ServerBody = () => {
 };
 
 const Tab3ServerBodyContainer = styled.div`
+  padding: 0 20px;
   margin-top: 4px;
   position: relative;
-  height: calc(100vh - 120px);
-  flex: 1;
+  height: calc(100vh - 55px);
+  /* flex: 1; */
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 export default Tab3ServerBody;

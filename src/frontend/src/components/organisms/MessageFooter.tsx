@@ -1,4 +1,5 @@
 import FileUploadModal from "@components/molecules/Div/FileUploadeModal";
+import useSendToStore from "@store/useSendToStore";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -17,6 +18,7 @@ const MessageFooter = ({
 }: MessageFooterProps) => {
   const { serverId } = useParams();
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const { sendTo } = useSendToStore();
 
   const onChange = (v: string) => {
     // enter 누르면 onClick처리
@@ -29,7 +31,7 @@ const MessageFooter = ({
         value={message}
         onChange={onChange}
         onClick={() => setShowUploadModal((prev) => !prev)}
-        nickname="허다은"
+        nickname={sendTo}
         addChatMessage={addChatMessage}
       />
       {showUploadModal && <FileUploadModal />}

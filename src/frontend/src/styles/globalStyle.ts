@@ -62,9 +62,9 @@ const GlobalStyle = createGlobalStyle`${css`
     box-sizing: border-box;
   }
   body {
-    font-family: "ggsans-Normal", Apple SD Gothic Neo, NanumBarunGothic,
-      "맑은 고딕", "Malgun Gothic", Gulim, 굴림, Dotum, 돋움, "Noto Sans",
-      "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Apple SD Gothic Neo, NanumBarunGothic, "맑은 고딕",
+      "Malgun Gothic", Gulim, 굴림, Dotum, 돋움, "Noto Sans", "Helvetica Neue",
+      Helvetica, Arial, sans-serif;
   }
   a {
     text-decoration: none;

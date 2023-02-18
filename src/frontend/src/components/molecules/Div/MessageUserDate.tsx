@@ -3,18 +3,14 @@ import styled from "styled-components";
 
 interface MessageUserDateProps {
   name: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 const MessageUserDate = ({ name, createdAt }: MessageUserDateProps) => {
   return (
     <TextHeader>
-      <SpanText text={name} color="white" mr={8} />
-      <SpanText
-        text="2023.01.26. 오후 9:52"
-        color="msg-timestamp"
-        fontSize="xs"
-      />
+      <SpanText text={name} color="white" mr={8} fontWeight="bold" />
+      <SpanText text={createdAt} color="msg-timestamp" fontSize="xs" />
     </TextHeader>
   );
 };

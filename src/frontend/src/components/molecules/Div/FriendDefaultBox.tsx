@@ -10,7 +10,7 @@ import EtcModal from "./EtcModal";
 import FriendBox from "./FriendBox";
 
 interface FriendDefaultBoxProps {
-  id: number;
+  id: string;
   name: string;
   status?:
     | "온라인"
