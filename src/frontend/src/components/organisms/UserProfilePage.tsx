@@ -3,7 +3,6 @@ import FieldButton from "../atoms/Button/fieldButton";
 import Text from "../atoms/Text/Text";
 import LinkText from "../atoms/Text/LinkText";
 import Modal from "@components/organisms/Modal";
-import { SketchPicker } from "react-color";
 import { useCallback, useState } from "react";
 import ServerLogoUpload from "@components/molecules/Button/ServerLogoUpload";
 
@@ -19,7 +18,6 @@ const ImageChange = () => {
 const UserProfilePage = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const onClickToggleModal = useCallback(() => {
-    console.log(1);
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
   // const [backgroundColor, setBackgroundColor] = useState("#fff");
