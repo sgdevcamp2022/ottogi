@@ -18,21 +18,30 @@ const ServerList = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<community[]>([]);
   const { userInfo, accessToken } = useUserStore();
-  const res = useGetServerList({ userId: userInfo.id, accessToken });
-
+  const { data: res, isLoading } = useGetServerList({
+    userId: userInfo.id,
+    accessToken,
+  });
+  const [num, setNum] = useState<Number>();
   const onMain = () => {
     navigate("/@me");
   };
   const onServer = (v: Number) => {
+    setNum(v);
     navigate("/" + v);
   };
   const onCreateServer = () => {
     navigate("/CreateServer");
   };
 
-  const List = res?.data?.data.data[0].split("},");
-  useEffect(() => {
-    console.log(res);
+  // console.log(res);
+  // console.log(res?.data.data);
+  if (isLoading) {
+    return <></>;
+  }
+  const List = res?.data.data[0].split("},");
+  // console.log(List);
+  if (data.length < List?.length) {
     for (let i = 0; i < List?.length; i++) {
       if (i !== List.length - 1) {
         data.push(JSON.parse(List[i] + "}"));
@@ -40,9 +49,15 @@ const ServerList = () => {
         data.push(JSON.parse(List[i]));
       }
     }
-  }, []);
+  }
+  // useEffect(() => {
+  //   console.log(res);
+  //   console.log("hello");
+
+  // }, [data, List]);
 
   // if (!res?.data) return <></>;
+
   return (
     <BarContainer>
       <ul>
@@ -55,7 +70,7 @@ const ServerList = () => {
           />
         </li>
         <Divider />
-        {data &&
+        {!isLoading &&
           data.map((v: any) => {
             return (
               <li onClick={() => onServer(v.community_id)}>

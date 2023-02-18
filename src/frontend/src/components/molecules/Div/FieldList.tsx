@@ -16,6 +16,7 @@ const NameChange = () => {
   const [password, changePassword] = useInput();
   const { userInfo, accessToken } = useUserStore();
   const { mutate: modifyName } = useModifyName();
+  console.log(accessToken);
 
   return (
     <>
@@ -78,7 +79,7 @@ const NameChange = () => {
             modifyName({
               name,
               password,
-              accessToken: accessToken,
+              accessToken,
             })
           }
         />
@@ -209,7 +210,7 @@ const FieldList = () => {
       <FieldContinaer>
         <LeftRow>
           <Text text="사용자명" fontSize="xs" color="setting-tab" />
-          <Text text="내용" fontSize="base" color="white" />
+          <Text text={userInfo.name} fontSize="base" color="white" />
         </LeftRow>
         <ButtonWrappper>
           <FieldButton
@@ -236,11 +237,6 @@ const FieldList = () => {
         <LeftRow>
           <Text text="비밀번호" fontSize="xs" color="setting-tab" />
           <Text text="xxxx" fontSize="base" color="white" />
-          <LoginForm
-            text="비밀번호"
-            value={password}
-            onChange={changePassword}
-          />
         </LeftRow>
         <ButtonWrappper>
           <FieldButton text="변경하기" onClick={onClickToggleModal2} />

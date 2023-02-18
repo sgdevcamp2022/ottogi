@@ -1,3 +1,4 @@
+import LogoImage from "@components/atoms/Div/LogoImage";
 import Status from "@components/atoms/Div/Status";
 import styled from "styled-components";
 import mask from "../../../assets/mask/avatar-mask-80.png";
@@ -13,8 +14,9 @@ const UserState80 = ({ status = "on", fontSize = "24px" }: UserStateProps) => {
   return (
     <UserStateContainer>
       <Mask>
-        {/* <LogoImage onClick={() => null} /> */}
-        <div style={{ backgroundColor: "black", width: 80, height: 80 }} />
+        <div style={{ backgroundColor: "black", width: 80, height: 80 }}>
+          <LogoImage width={5} height={5} onClick={() => null} />
+        </div>
       </Mask>
       <IconWrapper>
         <Status status={status} fontSize={fontSize} />

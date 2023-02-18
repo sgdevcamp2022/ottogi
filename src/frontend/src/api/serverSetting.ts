@@ -40,12 +40,20 @@ const serverSettingApi = {
     });
   },
   // 커뮤니티 이름 변경
-  update: async ({ communityName, img, userId }: any) => {
-    return await clientApi.patch("/community/update", {
-      communityName,
-      img,
-      userId,
-    });
+  update: async ({ communityName, communityId, userId, accessToken }: any) => {
+    return await clientApi.patch(
+      "/community/update",
+      {
+        communityName,
+        communityId,
+        userId,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
   },
   // 커뮤니티 삭제
   delete: async (communityId: string) => {
