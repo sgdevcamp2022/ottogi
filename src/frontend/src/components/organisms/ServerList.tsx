@@ -36,9 +36,9 @@ const ServerList = () => {
 
   // console.log(res);
   // console.log(res?.data.data);
-  if (isLoading) {
-    return <></>;
-  }
+  // if (isLoading) {
+  //   return <></>;
+  // }
   const List = res?.data.data[0].split("},");
   // console.log(List);
   if (data.length < List?.length) {
