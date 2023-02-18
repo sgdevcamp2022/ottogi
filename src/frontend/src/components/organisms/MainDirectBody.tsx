@@ -25,6 +25,7 @@ const MainDirectBody = () => {
   };
 
   const addChatMessage = () => {
+    console.log("addChatMessage");
     setMessage("");
     if (client?.connected) {
       client.publish({
@@ -69,12 +70,14 @@ const MainDirectBody = () => {
     <>
       <MainDirectBodyContainer>
         <ScrollableBox>
+          {/* 부재중 */}
           <CallDirectMessage
             name="nno3onn"
             type="missed"
             minute={2}
             createdAt={new Date()}
           />
+          {/* 통화 내역 */}
           <CallDirectMessage
             name="nno3onn"
             type="called"

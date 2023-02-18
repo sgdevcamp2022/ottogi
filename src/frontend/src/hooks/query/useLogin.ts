@@ -7,7 +7,7 @@ import authApi from "@api/auth";
 
 const useLogin = (email: string) => {
   const [cookies, setCookie] = useCookies([COOKIE_KEY]);
-  const { setUserInfo } = useUserStore();
+  const { setAccessToken, setUserInfo } = useUserStore();
   const navigate = useNavigate();
 
   return useMutation(authApi.login, {
@@ -16,8 +16,18 @@ const useLogin = (email: string) => {
         data: { accessToken, refreshToken },
       },
     }: any) => {
-      setCookie(COOKIE_KEY, refreshToken);
-      setUserInfo({ email, accessToken });
+      const setTokens = () => {
+        setCookie(COOKIE_KEY, refreshToken);
+        setAccessToken(accessToken);
+      };
+
+      const getUserInfo = async () => {
+        const { data } = await authApi.getUserInfo(accessToken);
+        setUserInfo(data.data);
+      };
+
+      setTokens();
+      getUserInfo();
       navigate("/@me");
     },
   });

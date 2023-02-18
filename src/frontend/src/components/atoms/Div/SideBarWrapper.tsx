@@ -10,8 +10,11 @@ interface SideBarProps {
 }
 
 const SideBar = ({ children }: SideBarProps) => {
-  const { userInfo } = useUserStore();
-  const { data, isSuccess } = useGetFriendList(userInfo);
+  const {
+    accessToken,
+    userInfo: { email },
+  } = useUserStore();
+  const { data, isSuccess } = useGetFriendList({ email, accessToken });
 
   if (!data) return <></>;
 

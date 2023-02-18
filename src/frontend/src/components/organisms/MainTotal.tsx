@@ -14,8 +14,11 @@ const MainTotal = () => {
   const { setMainStatus } = useMainStore(({ setMainStatus }) => ({
     setMainStatus,
   }));
-  const { userInfo } = useUserStore();
-  const { data, isSuccess } = useGetFriendList(userInfo);
+  const {
+    userInfo: { email },
+    accessToken,
+  } = useUserStore();
+  const { data, isSuccess } = useGetFriendList({ email, accessToken });
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;
@@ -29,8 +32,8 @@ const MainTotal = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"모든 친구"} num={num} />
           <ScrollableBox>
-            {friendList.map((friend, idx) => (
-              <FriendDefaultBox id={idx} name={friend.email} />
+            {friendList.map(({ email, name, userId }) => (
+              <FriendDefaultBox key={email} id={userId} name={name} />
             ))}
           </ScrollableBox>
         </>

@@ -16,13 +16,13 @@ interface FriendWaitingBoxProps {
 
 const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
   const navigate = useNavigate();
-  const { userInfo } = useUserStore();
+  const { userInfo, accessToken } = useUserStore();
   const { mutate: acceptFriend } = useAcceptFriend();
   const { mutate: rejectFriend } = useRejectFriend();
 
   if (!userInfo) navigate("/login");
 
-  const params = { email: name, accessToken: userInfo.accessToken };
+  const params = { email: name, accessToken: accessToken };
 
   let Buttons: ReactElement;
   if (status === "WAIT") {

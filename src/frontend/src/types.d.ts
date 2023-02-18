@@ -1,3 +1,14 @@
+type AccessTokenType = string;
+
+interface UserInfoType {
+  id: number;
+  email: string;
+  name: string;
+  introduction: string;
+  profileImagePath: string;
+  createdAt: string;
+}
+
 type FriendStateType = "REQUEST" | "WAIT" | "ACCEPTED";
 
 interface FriendType {

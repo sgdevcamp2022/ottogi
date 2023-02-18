@@ -22,18 +22,16 @@ const ServerList = () => {
         </li>
         <Divider />
         {array &&
-          array.map((v, index) => {
-            return (
-              <li onClick={() => onServer(v)}>
-                <ServerImage
-                  avatarHeight={3}
-                  avatarWidth={3}
-                  name="서버1"
-                  id={v}
-                />
-              </li>
-            );
-          })}
+          array.map((v, index) => (
+            <li onClick={() => onServer(v)}>
+              <ServerImage
+                avatarHeight={3}
+                avatarWidth={3}
+                name="서버1"
+                id={v}
+              />
+            </li>
+          ))}
         <li onClick={onMain}>
           <ServerImage
             avatarHeight={3}

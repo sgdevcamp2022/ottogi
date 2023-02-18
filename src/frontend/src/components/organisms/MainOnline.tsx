@@ -8,8 +8,11 @@ import ScrollableBox from "../molecules/Div/scrollableBox";
 import LabelText from "../molecules/Text/LabelText";
 
 const MainOnline = () => {
-  const { userInfo } = useUserStore();
-  const { data, isSuccess } = useGetFriendList(userInfo);
+  const {
+    userInfo: { email },
+    accessToken,
+  } = useUserStore();
+  const { data, isSuccess } = useGetFriendList({ email, accessToken });
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;
@@ -26,8 +29,8 @@ const MainOnline = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"온라인"} num={num} />
           <ScrollableBox>
-            {friendList.map((v, idx) => (
-              <FriendDefaultBox id={idx} name="nno3onn" />
+            {friendList.map(({ email, name, userId }) => (
+              <FriendDefaultBox key={email} id={userId} name={name} />
             ))}
           </ScrollableBox>
         </>

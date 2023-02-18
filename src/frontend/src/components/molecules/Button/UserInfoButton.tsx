@@ -10,6 +10,7 @@ interface UserInfoButtonProps {
 
 const UserInfoButton = ({ status = "on" }: UserInfoButtonProps) => {
   const { userInfo } = useUserStore();
+  console.log(userInfo);
 
   return (
     <ButtonWrapper

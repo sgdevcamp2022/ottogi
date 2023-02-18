@@ -32,6 +32,7 @@ const Empty = styled.div`
   ${flexCenter}
   flex-direction: column;
   gap: 2.5rem;
+  margin-top: 25vh;
 `;
 
 export default EmptyContainer;

@@ -13,12 +13,12 @@ const ServerSettingBar = () => {
   const [number, setNumber] = useState("");
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([COOKIE_KEY]);
-  const { resetUserInfo } = useUserStore();
+  const { resetUser } = useUserStore();
 
   const logout = () => {
     console.log(1);
     removeCookie(COOKIE_KEY);
-    resetUserInfo();
+    resetUser();
     navigate("/login");
   };
 
