@@ -85,7 +85,7 @@ public class MemberController {
     }
 
     @PatchMapping("/modify/name")
-    public CommonResponse<Object> userNameModify(HttpServletRequest request, @RequestBody MemberModifyRequestDto memberModifyRequestDto){
+    public CommonResponse<Object> modifyUserName(HttpServletRequest request, @RequestBody MemberModifyRequestDto memberModifyRequestDto){
         Long userId = Long.parseLong(request.getHeader("id"));
 
         //비밀번호 검증
@@ -97,8 +97,9 @@ public class MemberController {
     }
 
     @PatchMapping("/modify/password")
-    public CommonResponse<Object> userPasswordModify(HttpServletRequest request, @RequestBody  MemberModifyRequestDto memberModifyRequestDto){
+    public CommonResponse<Object> modifyUserPassword(HttpServletRequest request, @RequestBody MemberModifyRequestDto memberModifyRequestDto){
 
+        log.info("비밀번호 수정 로직");
         Long userId = Long.parseLong(request.getHeader("id"));
 
         // 비밀번호 검증
@@ -114,7 +115,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/userdelete")
-    public CommonResponse<Object> userDelete(HttpServletRequest request){
+    public CommonResponse<Object> deleteUser(HttpServletRequest request){
         Long userId = Long.parseLong(request.getHeader("id"));
         return responseService.getSuccessResponse(USER_DELETE_SUCCESS, memberService.userDelete(userId));
     }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class MemberResponseDto {
+    private Long id;
     private String email;
     private String name;
     private String introduction;
@@ -21,6 +22,7 @@ public class MemberResponseDto {
 
     public static MemberResponseDto of(Member member) {
         return MemberResponseDto.builder()
+                .id(member.getId())
                 .email(member.getEmail())
                 .name(member.getName())
                 .introduction(member.getIntroduction())

@@ -18,5 +18,6 @@ public class FriendResponseDto {
     private String email;
     private FriendState friendState;
     private String channelId;
+    private String profileImagePath;
     private LocalDateTime createdAt;
 }

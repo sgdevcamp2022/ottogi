@@ -76,6 +76,7 @@ public class MemberService {
                     .name(friend.getReceiver().getName())
                     .userId(friend.getReceiver().getId())
                     .email(friend.getReceiver().getEmail())
+                    .profileImagePath(friend.getReceiver().getProfileImagePath())
                     .friendState(friend.getState())
                     .channelId(friend.getChannelId())
                     .createdAt(friend.getCreatedAt())
