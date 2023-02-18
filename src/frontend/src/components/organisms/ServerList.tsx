@@ -99,7 +99,7 @@ export default ServerList;
 
 const BarContainer = styled.div`
   width: 4.5rem;
-  height: 67.5rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding-top: 0.75rem;
