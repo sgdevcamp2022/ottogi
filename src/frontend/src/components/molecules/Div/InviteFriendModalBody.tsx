@@ -1,14 +1,24 @@
 import Text from "@components/atoms/Text/Text";
 import useInput from "@hooks/common/useInput";
+import { useUserStore } from "@store/useUserStore";
 import { flexCenter } from "@styles/flexCenter";
 import styled from "styled-components";
 import SearchInput from "../Input/SearchInput";
 import InviteFriendBox from "./InviteFriendBox";
 import ScrollableBox from "./scrollableBox";
+import useGetFriendList from "@hooks/query/useGetFriendList";
 
 const InviteFriendModalBody = () => {
   const [search, changeSearch] = useInput();
-  const num = 10;
+  const {
+    userInfo: { email },
+    accessToken,
+  } = useUserStore();
+  const { data: friendList } = useGetFriendList({ email, accessToken });
+
+  if (!friendList) return <></>;
+  const num = friendList.data.length;
+
   return (
     <InviteFriendModalBodyContainer>
       <SearchInputWrapper>

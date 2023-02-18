@@ -88,7 +88,7 @@ const NameChange = () => {
 };
 
 const PwChange = () => {
-  const { userInfo } = useUserStore();
+  const { userInfo, accessToken } = useUserStore();
   const [passwordConfirm, changePasswordConfirm] = useInput();
   const [password, changePassword] = useInput();
   const [originalPassword, changeOriginalPassword] = useInput();
@@ -174,7 +174,7 @@ const PwChange = () => {
             modifyPassword({
               password,
               originalPassword,
-              accessToken: userInfo.accessToken,
+              accessToken,
             })
           }
         />

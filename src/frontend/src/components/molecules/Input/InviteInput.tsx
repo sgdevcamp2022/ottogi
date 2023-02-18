@@ -11,7 +11,7 @@ import styled from "styled-components";
 const InviteInput = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { userInfo } = useUserStore();
+  const { userInfo, accessToken } = useUserStore();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("default");
   const { mutate: requestFriend } = useRequestFriend({
@@ -37,7 +37,7 @@ const InviteInput = () => {
 
   const inviteFriend = () => {
     if (!userInfo) navigate("/login");
-    requestFriend({ email, accessToken: userInfo.accessToken });
+    requestFriend({ email, accessToken });
   };
 
   return (

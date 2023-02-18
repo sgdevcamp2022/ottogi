@@ -10,8 +10,9 @@ import { useUserStore } from "@store/useUserStore";
 const ServerList = () => {
   const [userId, setUserId] = useState<Number>();
 
-  const { userInfo } = useUserStore();
-  const res = useGetServerList({ userId, accessToken: userInfo.accessToken });
+  const { userInfo, accessToken } = useUserStore();
+  setUserId(userInfo.id);
+  const res = useGetServerList({ userId, accessToken });
   // setUserId(4);
   const GetList = () => {
     console.log(res);
@@ -19,7 +20,6 @@ const ServerList = () => {
   };
 
   const onList = () => {
-    setUserId(4);
     console.log(GetList());
   };
 

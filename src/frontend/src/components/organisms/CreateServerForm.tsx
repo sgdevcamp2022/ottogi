@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@store/useUserStore";
 
 const CreateServerForm = () => {
-  const { userInfo } = useUserStore();
+  const { userInfo, accessToken } = useUserStore();
   const navigate = useNavigate();
   const [name, changeName] = useInput();
   const { mutate: createServer } = useMutation(serverSettingApi.create, {
@@ -32,7 +32,7 @@ const CreateServerForm = () => {
             text="만들기"
             onClick={() =>
               createServer({
-                accessToken: userInfo.accessToken,
+                accessToken,
                 communityName: name,
                 img: null,
                 userId: 4,

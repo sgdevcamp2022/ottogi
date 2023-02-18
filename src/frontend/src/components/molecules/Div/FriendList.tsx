@@ -1,16 +1,26 @@
+import useGetFriendList from "@hooks/query/useGetFriendList";
+import { useUserStore } from "@store/useUserStore";
 import styled from "styled-components";
 import DirectButton from "../Button/DirectButton";
 import DirectMessage from "./DirectMessage";
 import ScrollableBox from "./scrollableBox";
 
 const FriendList = () => {
+  const {
+    userInfo: { email },
+    accessToken,
+  } = useUserStore();
+  const { data: friendList } = useGetFriendList({ email, accessToken });
+
+  if (!friendList) return <></>;
+
   return (
     <FriendListContainer>
       <DirectMessage />
       <ScrollableBox>
         <ListContainer>
-          {new Array(10).fill(null).map((v, idx) => (
-            <DirectButton name="허다은" id={idx} />
+          {friendList.data.data.map(({ name, userId }: FriendType) => (
+            <DirectButton name={name} id={userId} />
           ))}
         </ListContainer>
       </ScrollableBox>

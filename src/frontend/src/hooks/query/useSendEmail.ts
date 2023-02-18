@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import authApi from "@api/auth";
 
-const useSendEmail = () => {
-  return useMutation(authApi.register);
+const useSendEmail = (options: any) => {
+  return useMutation(authApi.register, options);
 };
 
 export default useSendEmail;
