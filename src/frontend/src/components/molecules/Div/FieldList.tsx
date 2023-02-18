@@ -83,7 +83,6 @@ const PwChange = () => {
 
   const { mutate: modifyPassword } = useModifyPassword();
 
-  console.log(1);
   return (
     <>
       <TopWrapper>

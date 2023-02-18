@@ -37,7 +37,12 @@ const MainWaiting = () => {
           <LabelText label={"대기 중"} num={num} />
           <ScrollableBox>
             {friendList.map(({ email, name, friendState }: FriendType) => (
-              <FriendWaitingBox key={email} name={name} status={friendState} />
+              <FriendWaitingBox
+                key={email}
+                email={email}
+                name={name}
+                status={friendState}
+              />
             ))}
           </ScrollableBox>
         </>
