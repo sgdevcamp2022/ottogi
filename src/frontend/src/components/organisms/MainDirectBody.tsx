@@ -27,9 +27,6 @@ const MainDirectBody = () => {
   const [chatLog, setChatLog] = useState<addChatLogProps[]>([]);
   const [message, setMessage] = useState("");
 
-  const connectName = !!serverId ? "topic" : "queue";
-  console.log(connectName);
-
   const connectChatRoom = () => {
     client = new Client({
       brokerURL: process.env.REACT_APP_BROKER_URL,
@@ -44,7 +41,7 @@ const MainDirectBody = () => {
 
     if (client?.connected) {
       client.publish({
-        destination: `/pub/add_${connectName}`,
+        destination: `/pub/add_topic`,
         body: JSON.stringify({
           channelId, // friend.channelId
           userId: userInfo.id, // userInfo.userId
@@ -68,9 +65,8 @@ const MainDirectBody = () => {
 
   const subscribeChatRoom = () => {
     if (client) {
-      client.subscribe(`/${connectName}/${channelId}`, (data) => {
+      client.subscribe(`/topic/${channelId}`, (data) => {
         const { message, name, createdAt, imagePath } = JSON.parse(data.body);
-        console.log("newMessage", message, name, createdAt, imagePath);
 
         addChatLog({ message, name, createdAt, imagePath });
       });
@@ -91,7 +87,6 @@ const MainDirectBody = () => {
           Authorization: "Bearer " + accessToken,
         },
       });
-      console.log(data);
       setChatLog(data.data.data);
     };
 
