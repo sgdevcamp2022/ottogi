@@ -16,7 +16,6 @@ const CreateServerForm = () => {
   const [name, changeName] = useInput();
   const { mutate: createServer } = useMutation(serverSettingApi.create, {
     onSuccess: () => {
-      console.log("success");
       navigate(-1);
     },
   });

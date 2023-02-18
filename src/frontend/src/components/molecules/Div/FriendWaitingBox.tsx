@@ -11,10 +11,11 @@ import FriendBox from "./FriendBox";
 
 interface FriendWaitingBoxProps {
   name: string;
+  email: string;
   status: FriendStateType;
 }
 
-const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
+const FriendWaitingBox = ({ name, email, status }: FriendWaitingBoxProps) => {
   const navigate = useNavigate();
   const { userInfo, accessToken } = useUserStore();
   const { mutate: acceptFriend } = useAcceptFriend();
@@ -22,7 +23,7 @@ const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
 
   if (!userInfo) navigate("/login");
 
-  const params = { email: name, accessToken: accessToken };
+  const params = { email, accessToken: accessToken };
 
   let Buttons: ReactElement;
   if (status === "WAIT") {
