@@ -31,6 +31,11 @@ const CreateServerForm = () => {
   );
   console.log(formData);
 
+  const MakeServer = () => {
+    createServer({ formData, accessToken });
+    navigate(-1);
+  };
+
   return (
     <ServerModal width={440}>
       <ServerContainer>
@@ -52,7 +57,7 @@ const CreateServerForm = () => {
               //     한줄소개: "한줄소개",
               //   },
               // })
-              createServer({ formData, accessToken })
+              MakeServer()
             }
           />
         </Bottom>
