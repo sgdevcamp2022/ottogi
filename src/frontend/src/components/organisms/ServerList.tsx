@@ -34,14 +34,11 @@ const ServerList = () => {
     navigate("/CreateServer");
   };
 
-  // console.log(res);
-  // console.log(res?.data.data);
-  // if (isLoading) {
-  //   return <></>;
-  // }
+  if (isLoading) return <></>;
+
   const List = res?.data.data[0].split("},");
-  // console.log(List);
-  if (data.length < List?.length) {
+
+  if (List.length > 1 && data.length < List?.length) {
     for (let i = 0; i < List?.length; i++) {
       if (i !== List.length - 1) {
         data.push(JSON.parse(List[i] + "}"));
