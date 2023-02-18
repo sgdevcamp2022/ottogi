@@ -3,7 +3,6 @@ import clientApi from "./axios";
 const serverSettingApi = {
   // 커뮤니티 생성
   create: async ({ communityName, img, userId, accessToken, profile }: any) => {
-    console.log(communityName, img, userId, accessToken, profile);
     return await clientApi.post(
       "/community/create",
       {

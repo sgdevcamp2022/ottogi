@@ -19,7 +19,7 @@ const UserInfoButton = ({ status = "on" }: UserInfoButtonProps) => {
       ph={0}
     >
       <InfoContainer>
-        <UserState32 status={status} />
+        <UserState32 status={status} src={userInfo.profileImagePath} />
         <Text
           text={userInfo.email}
           fontWeight="bold"

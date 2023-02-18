@@ -47,9 +47,9 @@ const MessageLog = ({
 };
 
 const MessageLogContainer = styled.div<{ hasImage: boolean }>`
-  margin-top: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
-  padding-top: ${({ hasImage }) => (hasImage ? 8 : 0)}px;
-  padding-bottom: ${({ hasImage }) => (hasImage ? 8 : 0)}px;
+  margin-top: ${({ hasImage }) => (hasImage ? 16 : 0)}px;
+  padding-top: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
+  padding-bottom: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
   position: relative;
   min-height: 1.375rem;
   display: flex;

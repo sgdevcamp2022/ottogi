@@ -20,7 +20,7 @@ const FriendList = () => {
       <ScrollableBox>
         <ListContainer>
           {friendList.data.data.map(({ name, channelId }: FriendType) => (
-            <DirectButton name={name} id={channelId} />
+            <DirectButton key={name} name={name} id={channelId} />
           ))}
         </ListContainer>
       </ScrollableBox>

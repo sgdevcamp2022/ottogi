@@ -3,6 +3,7 @@ import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
 import Text from "@components/atoms/Text/Text";
 import { useNavigate, useParams } from "react-router-dom";
 import UserState32, { StateType } from "../Div/UserState32";
+import useSendToStore from "@store/useSendToStore";
 
 interface DirectButtonProps {
   id: string;
@@ -11,16 +12,18 @@ interface DirectButtonProps {
 }
 
 const DirectButton = ({ id, name, status = "on" }: DirectButtonProps) => {
-  const { userId } = useParams();
+  const { channelId } = useParams();
   const navigate = useNavigate();
+  const { setSendTo } = useSendToStore();
 
   const goChatRoom = () => {
     navigate(`/@me/${id}`);
+    setSendTo(name);
   };
 
   return (
     <ButtonWrapper
-      active={userId === id.toString()}
+      active={channelId === id}
       onClick={goChatRoom}
       height={42}
       ph={8}

@@ -35,11 +35,11 @@ const MessageBox = ({
     // resizeTextAreaHeight();
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      console.log(value);
       addChatMessage();
-    }
-    if (e.key === "Tab") {
+    } else if (e.key === "Tab") {
       e.preventDefault();
     }
   };
@@ -55,24 +55,24 @@ const MessageBox = ({
         rows={1}
         value={value}
         onChange={handleChange}
-        onKeyDown={handleKeyDown}
+        onKeyPress={handleKeyPress}
       />
     </MessageInputContainer>
   );
 };
 
 const MessageInputContainer = styled.label`
-  border-radius: 0.5rem;
+  border-radius: 8px;
   display: flex;
   flex-direction: row;
   background-color: ${({ theme }) => theme.backgroundColor["msg-input"]};
-  padding: 0 16px;
+  padding: 0 1rem;
 `;
 
 const AddButton = styled.button`
-  height: 2.75rem;
-  padding: 10px 16px;
-  margin-left: -16px;
+  height: 44px;
+  padding: 0.625rem 1rem;
+  margin-left: -1rem;
   color: ${({ theme }) => theme.color.icon};
   background-color: transparent;
   &:hover {

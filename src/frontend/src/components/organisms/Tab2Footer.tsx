@@ -1,6 +1,3 @@
-import { COOKIE_KEY } from "@configs/cookie";
-import { useUserStore } from "@store/useUserStore";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeadsetIcon from "../atoms/Icons/HeadsetIcon";

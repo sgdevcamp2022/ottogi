@@ -1,7 +1,8 @@
+import clientApi from "@api/axios";
 import { Client } from "@stomp/stompjs";
 import { useUserStore } from "@store/useUserStore";
 import getFormatDate from "@utils/getFormatDate";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import CallDirectMessage from "../molecules/Div/CallDirectMessage";
@@ -19,15 +20,20 @@ interface addChatLogProps {
 }
 
 const MainDirectBody = () => {
+  const { accessToken } = useUserStore();
+  const { channelId = "", serverId } = useParams();
+  const scrollRef = useRef<null | HTMLDivElement>(null);
   const { userInfo } = useUserStore();
-  const { channelId } = useParams();
   const [chatLog, setChatLog] = useState<addChatLogProps[]>([]);
   const [message, setMessage] = useState("");
+
+  const connectName = !!serverId ? "topic" : "queue";
+  console.log(connectName);
 
   const connectChatRoom = () => {
     client = new Client({
       brokerURL: process.env.REACT_APP_BROKER_URL,
-      debug: (err) => console.error(err),
+      // debug: (err) => console.error(err),
       onConnect: () => subscribeChatRoom(),
     });
     client.activate();
@@ -38,7 +44,7 @@ const MainDirectBody = () => {
 
     if (client?.connected) {
       client.publish({
-        destination: "/pub/add_queue",
+        destination: `/pub/add_${connectName}`,
         body: JSON.stringify({
           channelId, // friend.channelId
           userId: userInfo.id, // userInfo.userId
@@ -62,7 +68,7 @@ const MainDirectBody = () => {
 
   const subscribeChatRoom = () => {
     if (client) {
-      client.subscribe(`/queue/${channelId}`, (data) => {
+      client.subscribe(`/${connectName}/${channelId}`, (data) => {
         const { message, name, createdAt, imagePath } = JSON.parse(data.body);
         console.log("newMessage", message, name, createdAt, imagePath);
 
@@ -78,43 +84,64 @@ const MainDirectBody = () => {
   };
 
   useEffect(() => {
+    const getChatLogs = async () => {
+      const data = await clientApi.get("/chat/getchats", {
+        params: { channelId },
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+      console.log(data);
+      setChatLog(data.data.data);
+    };
+
+    getChatLogs();
     connectChatRoom();
+
     return () => disconnectChatRoom();
   }, []);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ block: "end", behavior: "auto" });
+  }, [chatLog]);
 
   return (
     <>
       <MainDirectBodyContainer>
         <ScrollableBox>
-          {/* 부재중 */}
-          {/* <CallDirectMessage
+          <div ref={scrollRef}>
+            {/* 부재중 */}
+            {/* <CallDirectMessage
             name="nno3onn"
             type="missed"
             minute={2}
             createdAt={new Date()}
           /> */}
-          {/* 통화 내역 */}
-          {/* <CallDirectMessage
+            {/* 통화 내역 */}
+            {/* <CallDirectMessage
             name="nno3onn"
             type="called"
             minute={2}
             createdAt={new Date()}
           /> */}
-          {chatLog.map(({ message, name, createdAt, imagePath }, idx) => (
-            <>
-              {idx === 0 || chatLog[idx - 1].name !== chatLog[idx].name ? (
-                <MessageLog
-                  text={message}
-                  name={name}
-                  createdAt={getFormatDate(createdAt)}
-                  hasImage
-                  imageUrl={imagePath}
-                />
-              ) : (
-                <MessageLog text={message} createdAt={createdAt} />
-              )}
-            </>
-          ))}
+            {chatLog.map(({ message, name, createdAt, imagePath }, idx) => {
+              return (
+                <>
+                  {idx === 0 || chatLog[idx - 1].name !== chatLog[idx].name ? (
+                    <MessageLog
+                      text={message}
+                      name={name}
+                      createdAt={getFormatDate(createdAt)}
+                      hasImage
+                      imageUrl={imagePath}
+                    />
+                  ) : (
+                    <MessageLog text={message} createdAt={createdAt} />
+                  )}
+                </>
+              );
+            })}
+          </div>
         </ScrollableBox>
       </MainDirectBodyContainer>
       <MessageFooter
@@ -130,6 +157,7 @@ const MainDirectBodyContainer = styled.div`
   margin-top: 4px;
   position: relative;
   height: calc(100vh - 120px);
+  margin-bottom: 60px;
   flex: 1;
   display: flex;
   flex-direction: column;

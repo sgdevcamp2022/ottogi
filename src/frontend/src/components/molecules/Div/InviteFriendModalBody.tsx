@@ -14,10 +14,12 @@ const InviteFriendModalBody = () => {
     userInfo: { email },
     accessToken,
   } = useUserStore();
-  const { data: friendList } = useGetFriendList({ email, accessToken });
+  const { data } = useGetFriendList({ email, accessToken });
 
-  if (!friendList) return <></>;
-  const num = friendList.data.length;
+  if (!data) return <></>;
+  const friendList = data.data.data;
+  console.log(friendList);
+  const num = friendList.length;
 
   return (
     <InviteFriendModalBodyContainer>
@@ -34,7 +36,7 @@ const InviteFriendModalBody = () => {
         <ScrollableBox>
           <FriendListContainer>
             {num > 0 ? (
-              new Array(num).fill(null).map((v) => <InviteFriendBox />)
+              friendList.map((v: FriendType) => <InviteFriendBox />)
             ) : (
               <TextWrapper>
                 <Text
@@ -63,9 +65,8 @@ const SearchInputWrapper = styled.div`
 
 const Divider = styled.div<{ color: string }>`
   position: sticky;
-  left: -1rem;
   height: 0.0625rem;
-  width: 27.5rem;
+  width: 100%;
   background-color: ${({ theme, color }) => theme.backgroundColor[color]};
 `;
 
