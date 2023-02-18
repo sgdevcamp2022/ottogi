@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import UserState32, { StateType } from "../Div/UserState32";
 
 interface DirectButtonProps {
-  id: number;
+  id: string;
   name: string;
   status?: StateType;
 }

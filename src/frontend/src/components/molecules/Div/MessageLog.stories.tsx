@@ -5,4 +5,6 @@ export default {
   component: MessageLogDiv,
 };
 
-export const MessageLog = () => <MessageLogDiv text="안녕하세요" createdAt={new Date()} />;
+export const MessageLog = () => (
+  <MessageLogDiv text="안녕하세요" createdAt="" />
+);

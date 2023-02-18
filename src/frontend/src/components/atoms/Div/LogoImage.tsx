@@ -7,19 +7,22 @@ interface LogoImageProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
   width: Number;
   height: Number;
-  src?: String;
+  src?: string;
   child?: ReactElement;
 }
 
-const LogoImage = ({ onClick, height, width, src, child }: LogoImageProps) => {
+const LogoImage = ({
+  onClick,
+  height,
+  width,
+  src = "",
+  child,
+}: LogoImageProps) => {
   return (
-    // <IconButton sx={{ serverImageSx, m: 0, p: 0 }}>
-    //   {/* borderRadius로 이미지 동그란 정도 조절하기 */}
-    //   <Avatar sx={{}}>H</Avatar>
-    // </IconButton>
     <StyledIconButton width={width} height={height} onClick={onClick}>
-      {/* borderRadius로 이미지 동그란 정도 조절하기 */}
-      <Avatar className="avatar">{child}</Avatar>
+      <Avatar src={src} className="avatar">
+        {child}
+      </Avatar>
     </StyledIconButton>
   );
 };

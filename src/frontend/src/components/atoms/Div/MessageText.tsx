@@ -1,17 +1,23 @@
+import getFormatTime from "@utils/getFormatTime";
 import styled from "styled-components";
 import Text from "../Text/Text";
 
 interface MessageTextProps {
   text: string;
   hasDate: boolean;
+  createdAt: Date;
 }
 
-const MessageText = ({ text, hasDate }: MessageTextProps) => {
+const MessageText = ({ text, hasDate, createdAt }: MessageTextProps) => {
   return (
     <MessageTextContainer>
       {hasDate && (
         <MessageDate className="msg-date">
-          <Text text="오후 9:52" color="auth-label" fontSize="xs" />
+          <Text
+            text={getFormatTime(createdAt)}
+            color="auth-label"
+            fontSize="xs"
+          />
         </MessageDate>
       )}
       <TextContainer>

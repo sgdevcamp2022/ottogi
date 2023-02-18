@@ -36,8 +36,6 @@ const MessageBox = ({
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    console.log("Keydown", e.key);
-
     if (e.key === "Enter") {
       addChatMessage();
     }

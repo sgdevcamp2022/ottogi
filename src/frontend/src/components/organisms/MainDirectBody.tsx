@@ -1,5 +1,6 @@
 import { Client } from "@stomp/stompjs";
 import { useUserStore } from "@store/useUserStore";
+import getFormatDate from "@utils/getFormatDate";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -8,11 +9,19 @@ import MessageLog from "../molecules/Div/MessageLog";
 import ScrollableBox from "../molecules/Div/scrollableBox";
 import MessageFooter from "./MessageFooter";
 
+let client: Client | null = null;
+
+interface addChatLogProps {
+  message: string;
+  name: string;
+  createdAt: string;
+  imagePath: string;
+}
+
 const MainDirectBody = () => {
-  let client: Client | null = null;
   const { userInfo } = useUserStore();
   const { channelId } = useParams();
-  const [chatLog, setChatLog] = useState<string[]>([]);
+  const [chatLog, setChatLog] = useState<addChatLogProps[]>([]);
   const [message, setMessage] = useState("");
 
   const connectChatRoom = () => {
@@ -25,34 +34,39 @@ const MainDirectBody = () => {
   };
 
   const addChatMessage = () => {
-    console.log("addChatMessage");
     setMessage("");
+
     if (client?.connected) {
       client.publish({
         destination: "/pub/add_queue",
         body: JSON.stringify({
           channelId, // friend.channelId
-          userId: "id", // userInfo.userId
-          name: userInfo.email, // userInfo.name
+          userId: userInfo.id, // userInfo.userId
+          name: userInfo.name, // userInfo.name
           message,
-          type: 1,
+          type: 1, // enter(0)-> 누가 들어왔다, talk(1), invite(2)
+          imagePath: userInfo.profileImagePath,
         }),
       });
     }
   };
 
-  const addChatLog = (msg: string) => {
-    setChatLog([...chatLog, msg]);
+  const addChatLog = ({
+    message,
+    name,
+    createdAt,
+    imagePath,
+  }: addChatLogProps) => {
+    setChatLog((prev) => [...prev, { message, name, createdAt, imagePath }]);
   };
 
   const subscribeChatRoom = () => {
     if (client) {
       client.subscribe(`/queue/${channelId}`, (data) => {
-        console.log("data", data);
-        const { message, name } = JSON.parse(data.body);
-        console.log("newMessage", message, name);
+        const { message, name, createdAt, imagePath } = JSON.parse(data.body);
+        console.log("newMessage", message, name, createdAt, imagePath);
 
-        addChatLog(message);
+        addChatLog({ message, name, createdAt, imagePath });
       });
     }
   };
@@ -73,39 +87,34 @@ const MainDirectBody = () => {
       <MainDirectBodyContainer>
         <ScrollableBox>
           {/* 부재중 */}
-          <CallDirectMessage
+          {/* <CallDirectMessage
             name="nno3onn"
             type="missed"
             minute={2}
             createdAt={new Date()}
-          />
+          /> */}
           {/* 통화 내역 */}
-          <CallDirectMessage
+          {/* <CallDirectMessage
             name="nno3onn"
             type="called"
             minute={2}
             createdAt={new Date()}
-          />
-          {chatLog.map((chat) => (
-            <MessageLog text={chat} createdAt={new Date()} />
-            // 일단은 이렇게까지만 테스트로
+          /> */}
+          {chatLog.map(({ message, name, createdAt, imagePath }, idx) => (
+            <>
+              {idx === 0 || chatLog[idx - 1].name !== chatLog[idx].name ? (
+                <MessageLog
+                  text={message}
+                  name={name}
+                  createdAt={getFormatDate(createdAt)}
+                  hasImage
+                  imageUrl={imagePath}
+                />
+              ) : (
+                <MessageLog text={message} createdAt={createdAt} />
+              )}
+            </>
           ))}
-          {/* <MessageLog text="ㅇㅇ" hasImage createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" hasImage createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="ㅇㅇ" createdAt={new Date()} />
-          <MessageLog text="dd" createdAt={new Date()} /> */}
         </ScrollableBox>
       </MainDirectBodyContainer>
       <MessageFooter

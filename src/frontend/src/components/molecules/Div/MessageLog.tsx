@@ -8,22 +8,39 @@ interface MessageLogProps {
   hasImage?: boolean;
   imageUrl?: string;
   name?: string;
-  createdAt: Date;
+  createdAt: string;
   text: string;
 }
 
-const MessageLog = ({ text, hasImage = false, createdAt }: MessageLogProps) => {
+const MessageLog = ({
+  text,
+  name,
+  hasImage = false,
+  imageUrl,
+  createdAt,
+}: MessageLogProps) => {
   return (
     <MessageLogContainer hasImage={hasImage}>
-      <MessageHoverButtons />
+      {/* <MessageHoverButtons /> */}
       {hasImage && (
         <LogoImageContainer>
-          <LogoImage height={3} width={3} onClick={() => null} />
+          <LogoImage
+            src={imageUrl}
+            height={2.5}
+            width={2.5}
+            onClick={() => null}
+          />
         </LogoImageContainer>
       )}
       <TextContainer>
-        {hasImage && <MessageUserDate name="nno3onn" createdAt={new Date()} />}
-        <MessageText text={text} hasDate={!hasImage} />
+        {hasImage && name && (
+          <MessageUserDate name={name} createdAt={createdAt} />
+        )}
+        <MessageText
+          text={text}
+          hasDate={!hasImage}
+          createdAt={new Date(createdAt)}
+        />
       </TextContainer>
     </MessageLogContainer>
   );
@@ -31,6 +48,8 @@ const MessageLog = ({ text, hasImage = false, createdAt }: MessageLogProps) => {
 
 const MessageLogContainer = styled.div<{ hasImage: boolean }>`
   margin-top: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
+  padding-top: ${({ hasImage }) => (hasImage ? 8 : 0)}px;
+  padding-bottom: ${({ hasImage }) => (hasImage ? 8 : 0)}px;
   position: relative;
   min-height: 1.375rem;
   display: flex;
