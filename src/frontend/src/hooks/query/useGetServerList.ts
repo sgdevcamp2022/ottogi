@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import serverSettingApi from "@api/serverSetting";
+import serverSettingApi from "@api/server";
 
 const useGetServerList = ({ userId, accessToken }: any) => {
   return useQuery(

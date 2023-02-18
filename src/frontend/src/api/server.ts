@@ -1,11 +1,21 @@
 import clientApi from "./axios";
 
-const serverSettingApi = {
+const serverApi = {
   // 커뮤니티 리스트 가져옴
   getList: async ({ queryKey }: any) => {
     const { userId, accessToken } = queryKey[1];
     return await clientApi.get(`/community/getlist/`, {
       params: { userId },
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+  },
+  // 커뮤니티의 채널리스트 가져옴
+  getChannel: async ({ queryKey }: any) => {
+    const { communityId, accessToken } = queryKey[1];
+    return await clientApi.get(`/community/getoption/`, {
+      params: { communityId },
       headers: {
         Authorization: "Bearer " + accessToken,
       },
@@ -62,4 +72,4 @@ const serverSettingApi = {
     });
   },
 };
-export default serverSettingApi;
+export default serverApi;

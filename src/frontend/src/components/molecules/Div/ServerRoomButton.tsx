@@ -4,18 +4,39 @@ import TagIcon from "@components/atoms/Icons/TagIcon";
 import VolumeIcon from "@components/atoms/Icons/VolumeIcon";
 import Text from "@components/atoms/Text/Text";
 import useModalStore from "@store/useModalStore";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 interface ServerRoomButtonProps {
   type: "chat" | "voice";
   text: string;
+  serverId: string;
+  channelId: number;
 }
 
-const ServerRoomButton = ({ type, text }: ServerRoomButtonProps) => {
+const ServerRoomButton = ({
+  type,
+  text,
+  serverId,
+  channelId,
+}: ServerRoomButtonProps) => {
+  const { channelId: realChannelId } = useParams();
+  const navigate = useNavigate();
   const { setInviteFriendModal } = useModalStore();
+
+  const onClick = () => {
+    navigate(`/${serverId}/${channelId}`);
+  };
+
   return (
-    <ButtonContainer>
-      <ButtonWrapper ph={6} onClick={() => null} height={34} color="inactive">
+    <ButtonContainer onClick={onClick}>
+      <ButtonWrapper
+        ph={6}
+        onClick={() => null}
+        height={34}
+        color="inactive"
+        active={realChannelId === channelId.toString()}
+      >
         <ServerRoomButtonContainer>
           <LeftContainer>
             {type === "chat" ? <TagIcon /> : <VolumeIcon />}

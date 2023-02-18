@@ -6,7 +6,7 @@ import DefaultButton from "../atoms/Button/DefaultButton";
 import useInput from "@hooks/common/useInput";
 import DefaultInput from "@components/atoms/Input/DefaultInput";
 import { useMutation } from "@tanstack/react-query";
-import serverSettingApi from "@api/serverSetting";
+import serverSettingApi from "@api/server";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@store/useUserStore";
 import { useState } from "react";
