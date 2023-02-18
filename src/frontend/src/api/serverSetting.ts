@@ -1,6 +1,16 @@
 import clientApi from "./axios";
 
 const serverSettingApi = {
+  // 커뮤니티 리스트 가져옴
+  getList: async ({ queryKey }: any) => {
+    const { userId, accessToken } = queryKey[1];
+    return await clientApi.get(`/community/getlist/`, {
+      params: { userId },
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+  },
   // 커뮤니티 생성
   create: async ({ communityName, img, userId, accessToken, profile }: any) => {
     console.log(communityName, img, userId, accessToken, profile);

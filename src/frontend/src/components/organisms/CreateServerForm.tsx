@@ -35,7 +35,7 @@ const CreateServerForm = () => {
                 accessToken: userInfo.accessToken,
                 communityName: name,
                 img: null,
-                userId: userInfo.email,
+                userId: 4,
                 profile: {
                   userName: "닉네임",
                   img: null,

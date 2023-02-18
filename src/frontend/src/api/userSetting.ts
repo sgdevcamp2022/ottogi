@@ -28,8 +28,12 @@ const userSettingApi = {
     );
   },
   // 계정 삭제하기
-  deleteUser: async () => {
-    return await clientApi.delete("user/member/userdelete");
+  deleteUser: async (accessToken: any) => {
+    return await clientApi.delete("user/member/userdelete", {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
   },
   // 유저 이미지 변경
   modifyImage: async () => {

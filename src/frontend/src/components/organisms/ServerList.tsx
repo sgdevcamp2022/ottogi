@@ -4,8 +4,25 @@ import ServerImage from "../atoms/Div/ServerImage";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@components/atoms/Icons/AddIcon";
+import useGetServerList from "@hooks/query/useGetServerList";
+import { useUserStore } from "@store/useUserStore";
 
 const ServerList = () => {
+  const [userId, setUserId] = useState<Number>();
+
+  const { userInfo } = useUserStore();
+  const res = useGetServerList({ userId, accessToken: userInfo.accessToken });
+  // setUserId(4);
+  const GetList = () => {
+    console.log(res);
+    return res;
+  };
+
+  const onList = () => {
+    setUserId(4);
+    console.log(GetList());
+  };
+
   const array: Number[] = [1, 2, 3, 4, 5];
   const navigate = useNavigate();
   const onMain = () => {
@@ -13,6 +30,9 @@ const ServerList = () => {
   };
   const onServer = (v: Number) => {
     navigate("/" + v);
+  };
+  const onCreateServer = () => {
+    navigate("/CreateServer");
   };
   return (
     <BarContainer>
@@ -34,12 +54,22 @@ const ServerList = () => {
               </li>
             );
           })}
-        <li onClick={onMain}>
+        <li onClick={onCreateServer}>
           <ServerImage
             avatarHeight={3}
             avatarWidth={3}
-            name="서버 추가"
+            name=""
             id={array.length + 1}
+          >
+            <AddIcon />
+          </ServerImage>
+        </li>
+        <li onClick={onList}>
+          <ServerImage
+            avatarHeight={3}
+            avatarWidth={3}
+            name=""
+            id={array.length + 2}
           >
             <AddIcon />
           </ServerImage>

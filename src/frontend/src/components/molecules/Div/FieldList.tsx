@@ -8,11 +8,14 @@ import DefaultInput from "../../atoms/Input/DefaultInput";
 import useInput from "@hooks/common/useInput";
 import useModifyPassword from "@hooks/query/useModifyPassword";
 import { useUserStore } from "@store/useUserStore";
+import useModifyName from "@hooks/query/useModifyName";
+import LoginForm from "@components/molecules/Form/LoginForm";
 
 const NameChange = () => {
   const [name, changeName] = useInput();
-  const [newPassword, changeNewPassword] = useInput();
   const [password, changePassword] = useInput();
+  const { userInfo } = useUserStore();
+  const { mutate: modifyName } = useModifyName();
 
   return (
     <>
@@ -69,7 +72,16 @@ const NameChange = () => {
         </Wrapper>
       </TopWrapper>
       <Bottom>
-        <DefaultButton text="완료" onClick={() => console.log(1)} />
+        <DefaultButton
+          text="완료"
+          onClick={() =>
+            modifyName({
+              name,
+              password,
+              accessToken: userInfo.accessToken,
+            })
+          }
+        />
       </Bottom>
     </>
   );
@@ -173,7 +185,9 @@ const PwChange = () => {
 
 const FieldList = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
+  const [password, changePassword] = useInput();
   const [isOpenModal2, setOpenModal2] = useState<boolean>(false);
+  const { userInfo } = useUserStore();
   const onClickToggleModal = useCallback(() => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
@@ -209,7 +223,7 @@ const FieldList = () => {
       <FieldContinaer>
         <LeftRow>
           <Text text="이메일" fontSize="xs" color="setting-tab" />
-          <Text text="내용" fontSize="base" color="white" />
+          <Text text={userInfo.email} fontSize="base" color="white" />
         </LeftRow>
         {/* <ButtonWrappper>
           <FieldButton
@@ -223,6 +237,11 @@ const FieldList = () => {
         <LeftRow>
           <Text text="비밀번호" fontSize="xs" color="setting-tab" />
           <Text text="xxxx" fontSize="base" color="white" />
+          <LoginForm
+            text="비밀번호"
+            value={password}
+            onChange={changePassword}
+          />
         </LeftRow>
         <ButtonWrappper>
           <FieldButton text="변경하기" onClick={onClickToggleModal2} />

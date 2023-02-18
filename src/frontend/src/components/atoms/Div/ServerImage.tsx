@@ -49,6 +49,7 @@ const ServerImage = ({
         {/* borderRadius로 이미지 동그란 정도 조절하기 */}
         <Avatar className="avatar" src={src}>
           {children}
+          {name}
         </Avatar>
       </StyledIconButton>
     </ServerIconBox>
