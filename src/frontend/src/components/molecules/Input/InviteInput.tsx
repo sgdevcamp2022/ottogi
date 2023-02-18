@@ -94,7 +94,7 @@ const InviteInputContainer = styled.label<{ borderColor: any }>`
     border-color: ${({ theme, borderColor }) =>
       borderColor === "default"
         ? theme.borderColor.focus
-        : borderColor.borderColor[borderColor]};
+        : theme.borderColor[borderColor]};
   }
 `;
 

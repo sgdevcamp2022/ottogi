@@ -11,7 +11,7 @@ import MessageFooter from "./MessageFooter";
 const MainDirectBody = () => {
   let client: Client | null = null;
   const { userInfo } = useUserStore();
-  const { serverId, chatroomId } = useParams();
+  const { channelId } = useParams();
   const [chatLog, setChatLog] = useState<string[]>([]);
   const [message, setMessage] = useState("");
 
@@ -29,12 +29,13 @@ const MainDirectBody = () => {
     setMessage("");
     if (client?.connected) {
       client.publish({
-        destination: "/pub/add_topic",
+        destination: "/pub/add_queue",
         body: JSON.stringify({
-          channelId: chatroomId,
-          Id: "id",
-          name: userInfo.email,
+          channelId, // friend.channelId
+          userId: "id", // userInfo.userId
+          name: userInfo.email, // userInfo.name
           message,
+          type: 1,
         }),
       });
     }
@@ -46,11 +47,12 @@ const MainDirectBody = () => {
 
   const subscribeChatRoom = () => {
     if (client) {
-      client.subscribe(`/${serverId}/${chatroomId}`, (data) => {
+      client.subscribe(`/queue/${channelId}`, (data) => {
         console.log("data", data);
-        const newMessage = JSON.parse(data.body).message;
-        console.log("newMessage", newMessage);
-        addChatLog(newMessage);
+        const { message, name } = JSON.parse(data.body);
+        console.log("newMessage", message, name);
+
+        addChatLog(message);
       });
     }
   };
