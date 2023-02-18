@@ -42,7 +42,7 @@ const ServerList = () => {
     }
   }, []);
 
-  if (!res?.data) return <></>;
+  // if (!res?.data) return <></>;
   return (
     <BarContainer>
       <ul>
