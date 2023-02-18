@@ -18,7 +18,8 @@ public class MessageSaveDto {
     private String userId;
     private String name;
     private String message;
-    private LocalDateTime created_at = LocalDateTime.now();
+    private String imagePath;
+    private LocalDateTime createdAt;
 
 
     public MessageSaveDto convertDto(MessageRequestDto messageRequestDto){
@@ -27,13 +28,19 @@ public class MessageSaveDto {
                 .channelId(messageRequestDto.getChannelId())
                 .userId(messageRequestDto.getUserId())
                 .name(messageRequestDto.getName())
+                .imagePath(messageRequestDto.getImagePath())
                 .message(messageRequestDto.getMessage())
+                .createdAt(messageRequestDto.getCreatedAt())
                 .build();
     }
 
     public String print(){
         return ("[channelId : " + channelId + "], [ChatType : "  + type + "], [communityUserId : " + userId +
-                "], [name : " + name + "], [message : " + message + "], [created_at : " + created_at + "]");
+                "], [name : " + name + "], [message : " + message + "], [created_at : " + createdAt + "]");
+    }
+
+    public void setCreatedAt(){
+        this.createdAt = LocalDateTime.now();
     }
 
 

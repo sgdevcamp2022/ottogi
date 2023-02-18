@@ -6,11 +6,15 @@ import com.example.chatservice.service.ChatRedisService;
 import com.example.chatservice.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
+import static com.example.chatservice.domain.ChatType.*;
 import static com.example.chatservice.domain.TextMessages.*;
 
 @Slf4j
@@ -23,6 +27,9 @@ public class MessageController {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
     private final ChatRedisService chatRedisService;
     private final ResponseService responseService;
+
+    @Value("${server_image}")
+    private String SERVER_IMAGE;
 
     /**
      *
@@ -40,26 +47,29 @@ public class MessageController {
     @MessageMapping("/add_topic")
     public void message_topic(@Payload MessageRequestDto messageRequestDto) {
         // Client 에게 채팅을 수신 -> redis 에 데이터 저장
-
+        messageRequestDto.setCreatedAt();
         chatRedisService.addChat(messageRequestDto);
 
         simpMessageSendingOperations.convertAndSend("/topic/"
                 + messageRequestDto.getChannelId(), messageRequestDto);
     }
 
-    @MessageMapping("/add_queue")
-    public void message_queue(@Payload MessageRequestDto messageRequestDto) {
-        // Client 에게 채팅을 수신 -> redis 에 데이터 저장
-        chatRedisService.addChat(messageRequestDto);
-
-        simpMessageSendingOperations.convertAndSend("/queue/"
-                + messageRequestDto.getChannelId(), messageRequestDto);
-    }
+//    @MessageMapping("/add_queue")
+//    public void message_queue(@Payload MessageRequestDto messageRequestDto) {
+//        // Client 에게 채팅을 수신 -> redis 에 데이터 저장
+//        messageRequestDto.setCreatedAt();
+//        chatRedisService.addChat(messageRequestDto);
+//
+//        simpMessageSendingOperations.convertAndSend("/queue/"
+//                + messageRequestDto.getChannelId(), messageRequestDto);
+//    }
 
     // 커뮤니티에 가입했을 때 발생되어야 할 메세지
     @PostMapping("/community_enter")
     public CommonResponse<Object> communityEnter(@RequestBody ChatEnterDto chatEnterDto){
-        MessageRequestDto messageRequestDto = new MessageRequestDto().convertToMessageRequestDto(chatEnterDto);
+        MessageRequestDto messageRequestDto = new MessageRequestDto().convertEnterDto(chatEnterDto);
+        messageRequestDto.modifyImagePath(SERVER_IMAGE);
+        log.info(messageRequestDto.getName());
         message_topic(messageRequestDto);
         return responseService.getSuccessResponse(WELCOME_MSG_SUCCESS, null);
     }
@@ -69,9 +79,23 @@ public class MessageController {
         return "채팅 서버 테스트 성공";
     }
 
-    @GetMapping("/chats")
-    public CommonResponse<Object> chats(@RequestBody ChatViewDto chatViewDto){
+    @GetMapping("/getchats")
+    public CommonResponse<Object> chats(@RequestParam String channelId ){
+        ChatViewDto chatViewDto = new ChatViewDto(channelId);
+        log.info(chatViewDto.getChannelId());
+        log.info("test log");
         return responseService.getSuccessResponse(CHAT_VIEW_SUCCESS, chatRedisService.chats(chatViewDto));
+    }
+
+    @PostMapping("/invite")
+    public CommonResponse<Object> invite(@RequestBody InviteRequestDto inviteRequestDto) {
+
+        MessageRequestDto messageRequestDto = new MessageRequestDto().convertInviteDto(inviteRequestDto);
+        messageRequestDto.modifyImagePath(SERVER_IMAGE);
+        messageRequestDto.setCreatedAt();
+
+        message_topic(messageRequestDto);
+        return responseService.getSuccessResponse(INVITE_MSG_SUCCESS, null);
     }
 
 }

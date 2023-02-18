@@ -4,6 +4,7 @@ import com.example.chatservice.domain.*;
 import com.example.chatservice.repository.MessageSaveDtoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class ChatRedisService {
+
+
 
     private final MessageSaveDtoRepository repository;
 
@@ -37,8 +40,9 @@ public class ChatRedisService {
     }
 
     public List<MessageSaveDto> chats(ChatViewDto chatViewDto) {
-        Optional<MessageListSaveDto> channelData = repository.findById(chatViewDto.getChannelId());
-        List<MessageSaveDto> messageSaveDtoList = channelData.get().getMessageSaveDtoList();
+        MessageListSaveDto channelData = repository.findById(chatViewDto.getChannelId())
+                .orElseThrow(() -> new RuntimeException("채팅 데이터가 존재하지 않습니다."));
+        List<MessageSaveDto> messageSaveDtoList = channelData.getMessageSaveDtoList();
         List<MessageSaveDto> chatMessages = new ArrayList<>();
         for (MessageSaveDto messageSaveDto : messageSaveDtoList) {
                 chatMessages.add(messageSaveDto);
