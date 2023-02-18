@@ -24,7 +24,7 @@ const CreateServerForm = () => {
   });
   formData.append("communityName", name);
   formData.append("img", "");
-  formData.append("userId", "4");
+  formData.append("userId", JSON.stringify(userInfo.id));
   formData.append(
     "profile",
     JSON.stringify({ userName: nickName, img: null, 한줄소개: "한줄소개" })
