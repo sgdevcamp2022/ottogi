@@ -9,16 +9,27 @@ import { useMutation } from "@tanstack/react-query";
 import serverSettingApi from "@api/serverSetting";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@store/useUserStore";
+import { useState } from "react";
 
 const CreateServerForm = () => {
   const { userInfo, accessToken } = useUserStore();
   const navigate = useNavigate();
+  let formData = new FormData();
   const [name, changeName] = useInput();
+  const [nickName, setNickName] = useState(userInfo.name);
   const { mutate: createServer } = useMutation(serverSettingApi.create, {
     onSuccess: () => {
       navigate(-1);
     },
   });
+  formData.append("communityName", name);
+  formData.append("img", "");
+  formData.append("userId", "4");
+  formData.append(
+    "profile",
+    JSON.stringify({ userName: nickName, img: null, 한줄소개: "한줄소개" })
+  );
+  console.log(formData);
 
   return (
     <ServerModal width={440}>
@@ -30,17 +41,18 @@ const CreateServerForm = () => {
           <DefaultButton
             text="만들기"
             onClick={() =>
-              createServer({
-                accessToken,
-                communityName: name,
-                img: null,
-                userId: userInfo.email,
-                profile: {
-                  userName: "닉네임",
-                  img: null,
-                  한줄소개: "한줄소개",
-                },
-              })
+              // createServer({
+              //   accessToken,
+              //   communityName: name,
+              //   img: null,
+              //   userId: 4,
+              //   profile: {
+              //     userName: { nickName },
+              //     img: null,
+              //     한줄소개: "한줄소개",
+              //   },
+              // })
+              createServer({ formData, accessToken })
             }
           />
         </Bottom>

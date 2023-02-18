@@ -6,11 +6,19 @@ import clientApi from "./axios";
 
 const userSettingApi = {
   // 사용자명 변경
-  modifyName: async ({ name, password }: any) => {
-    return await clientApi.patch("/user/member/modify/name", {
-      name,
-      password,
-    });
+  modifyName: async ({ name, password, accessToken }: any) => {
+    return await clientApi.patch(
+      "/user/member/modify/name",
+      {
+        name,
+        originalPassword: password,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
   },
   // 비밀번호 변경
   modifyPassword: async ({ password, originalPassword, accessToken }: any) => {
@@ -28,8 +36,12 @@ const userSettingApi = {
     );
   },
   // 계정 삭제하기
-  deleteUser: async () => {
-    return await clientApi.delete("user/member/userdelete");
+  deleteUser: async (accessToken: any) => {
+    return await clientApi.delete("user/member/userdelete", {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
   },
   // 유저 이미지 변경
   modifyImage: async () => {

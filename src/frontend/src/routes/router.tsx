@@ -16,25 +16,25 @@ const Router = () => {
       <Route
         path={"/"}
         element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
         }
       />
       <Route
         path={"/@me"}
         element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
         }
       />
       <Route
         path="/@me/:channelId"
         element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
         }
       />
 
@@ -46,17 +46,17 @@ const Router = () => {
       <Route
         path="/:serverId"
         element={
-          <ProtectPage>
-            <Server />
-          </ProtectPage>
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
         }
       />
       <Route
         path="/:serverId/:channelId"
         element={
-          <ProtectPage>
-            <Server />
-          </ProtectPage>
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
         }
       />
 

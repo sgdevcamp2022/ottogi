@@ -19,8 +19,9 @@ const UserState80 = ({
   return (
     <UserStateContainer>
       <Mask>
-        <LogoImage src={src} onClick={() => null} width={80} height={80} />
-        <div style={{ backgroundColor: "black", width: 80, height: 80 }} />
+        <div style={{ backgroundColor: "black", width: 80, height: 80 }}>
+          <LogoImage width={5} height={5} onClick={() => null} />
+        </div>
       </Mask>
       <IconWrapper>
         <Status status={status} fontSize={fontSize} />

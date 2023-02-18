@@ -13,7 +13,12 @@ const CardUserInfo = () => {
         <UserState80 />
       </Logo>
       <NameWrapper>
-        <Text text="UserName" fontSize="lg" fontWeight="bold" color="white" />
+        <Text
+          text={userInfo.name}
+          fontSize="lg"
+          fontWeight="bold"
+          color="white"
+        />
       </NameWrapper>
       <ButtonWrapper>
         <FieldButton text="사용자 프로필 편집" onClick={() => console.log(1)} />

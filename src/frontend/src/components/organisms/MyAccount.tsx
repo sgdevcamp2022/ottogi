@@ -5,9 +5,11 @@ import { Divider } from "@mui/material";
 import FieldButton from "../atoms/Button/fieldButton";
 import styled from "styled-components";
 import useDeleteUser from "@hooks/query/useDeleteUser";
+import { useUserStore } from "@store/useUserStore";
 
 const MyAccount = () => {
   const { mutate: deleteUser } = useDeleteUser();
+  const { userInfo, accessToken } = useUserStore();
   return (
     <SettingWrapper>
       <>
@@ -48,7 +50,11 @@ const MyAccount = () => {
         <ButtonWrappper2>
           <FieldButton
             text="계정 삭제하기"
-            onClick={() => deleteUser()}
+            onClick={() =>
+              deleteUser({
+                accessToken: accessToken,
+              })
+            }
             backgroundColor="voice-hangup"
             fontWeight="bold"
           />
