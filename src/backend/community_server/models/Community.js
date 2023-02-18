@@ -223,4 +223,9 @@ module.exports = {
         return response;
     },
 
+    //커뮤니티 나가기
+    out: (userId, communityId) => {
+        let sql = `DELETE FROM community_member WHERE user_id = ${userId} AND community_id = ${communityId}`;
+        db.query(sql);
+    }
 };

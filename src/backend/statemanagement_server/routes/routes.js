@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const management = require('../controllers/stateController')
 
-router.get('/statetest', (req, res) => {
+router.get('/state/test', (req, res) => {
     res.send('good connect!');
 })
 

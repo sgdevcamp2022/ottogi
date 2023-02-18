@@ -7,7 +7,7 @@ module.exports = {
         const {communityName, userId, profile} = req.body;
         const img = req.file ?? '';
         console.log(img);
-        
+        console.log(req);
         if (!communityName || !userId) {
             res.json({
                 success: false,
@@ -15,6 +15,7 @@ module.exports = {
                 data: null,
             })
         } else {
+            console.log('폼데이터')
             community.create(communityName, img.location , userId, profile);
             res.json({
                 success: true,
@@ -127,6 +128,7 @@ module.exports = {
         }
     },
 
+    //커뮤니티 조회
     loadList: async (req, res)=>{
         const{userId} = req.query;
         if(!userId){
@@ -144,4 +146,23 @@ module.exports = {
             });
         }
     },
+
+    //커뮤니티 나가기
+    goOut: (req, res) => {
+        const{userId, communityId} = req.body;
+        if(!userId){
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
+        } else {
+            community.out(userId, communityId);
+            res.json({
+                success: true,
+                message: `Community Out Success` ,
+                data: null,
+            });
+        }
+    }
 };

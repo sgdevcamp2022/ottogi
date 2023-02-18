@@ -23,6 +23,8 @@ router.patch('/community/update', community.communityRename);
 router.patch('/community/profile', community.updateProfile);
 //커뮤니티 삭제 
 router.delete('/community/delete', community.communityDelete);
+//커뮤니티 나가기
+router.post('/community/out', community.goOut);
 
 // 카테고리 생성 
 router.post('/community/category/create', category.categoryCreate);

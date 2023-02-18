@@ -10,6 +10,7 @@ module.exports = {
                 data: null,
             })
         } else {
+            console.log('상태변경성공')
             state.change(channelId, userId, status);
             res.json({
                 success: true,
@@ -29,6 +30,7 @@ module.exports = {
                 data: null,
             })
         } else {
+            console.log('상태조회성공')
             const response = await state.load(userId);
             res.json({
                 success: true,
