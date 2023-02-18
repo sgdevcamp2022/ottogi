@@ -87,7 +87,7 @@ module.exports = {
 
     //카테고리 조회
     loadList: async(req, res)=>{
-        const{communityId} = req.query;
+        const{communityId} = req.body;
         if(!communityId){
             res.json({
                 success: false,

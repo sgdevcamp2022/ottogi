@@ -149,7 +149,7 @@ module.exports = {
                 const communityId = await findCommunityId(communityName);
                 await insertMember(communityId, userId, profile);
                 console.log(`생성 성공`);
-            }
+            }   
         });
     },
 

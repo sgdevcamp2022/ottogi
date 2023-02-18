@@ -5,7 +5,8 @@ module.exports = {
     //커뮤니티(서버) 생성
     communityCreate: async (req, res) => {
         const {communityName, userId, profile} = req.body;
-        const img = req.file;
+        const img = req.file ?? '';
+        console.log(img);
         
         if (!communityName || !userId) {
             res.json({
