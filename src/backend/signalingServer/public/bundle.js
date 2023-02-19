@@ -1,1217 +1,169 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (process,__dirname){(function (){
+const os = require('os');
 module.exports = {
-  socket : undefined,
-  listenIp: '0.0.0.0',
-  listenPort: 3000,
-  cert : process.env.HTTPS_CERT_FULLCHAIN || `${__dirname}/server/certs/cert.pem`, // have to change for get `${__dirname}/server/certs/fullchain.pem`,
-  key  : process.env.HTTPS_CERT_PRIVKEY ||  `${__dirname}/server/certs/key.pem`,   // have to change for get`${__dirname}/server/certs/privkey.pem`,
-  mediasoup: {
-    // Worker settings
-    worker: {
-      rtcMinPort: 10000,
-      rtcMaxPort: 10100,
-      logLevel: 'warn',
-      logTags: [
-        'info',
-        'ice',
-        'dtls',
-        'rtp',
-        'srtp',
-        'rtcp',
-        // 'rtx',
-        // 'bwe',
-        // 'score',
-        // 'simulcast',
-        // 'svc'
-      ],
-    },
-    // Router settings
-    router: {
-      mediaCodecs:
-        [
-          {
-            kind: 'audio',
-            mimeType: 'audio/opus',
-            clockRate: 48000,
-            channels: 2
-          },
-          {
-            kind: 'video',
-            mimeType: 'video/VP8',
-            clockRate: 90000,
-            parameters:
-              {
-                'x-google-start-bitrate': 1000
-              }
-          },
-        ]
-    },
-    // WebRtcTransport settings
-    webRtcTransport: {
-      listenIps: [
-        {
-          ip: '0.0.0.0', // server side ip which have to change
-          announcedIp: '127.0.0.1', // // this is our hostmachine
-        }
-      ],
-      // maxIncomingBitrate: 1500000,
-      // initialAvailableOutgoingBitrate: 1000000,
-      enableUdp : true,
-      enableTcp : true,
-      preferUdp : true,  // have to choose prefer UDP or prefer TCP
-      preferTcp : false, // have to choose prefer TCP or prefer UDP
-    }
-  }
+	domain : process.env.DOMAIN || 'localhost',
+	// Signaling settings (protoo WebSocket server and HTTP API server).
+	https  :
+	{
+		listenIp   : '0.0.0.0',
+		// NOTE: Don't change listenPort (client app assumes 4443).
+		listenPort : process.env.PROTOO_LISTEN_PORT || 4443,
+		// NOTE: Set your own valid certificate files.
+		tls        :
+		{
+      cert : process.env.HTTPS_CERT_FULLCHAIN || `${__dirname}/server/certs/cert.pem`, // have to change for get `${__dirname}/server/certs/fullchain.pem`,
+      key  : process.env.HTTPS_CERT_PRIVKEY ||  `${__dirname}/server/certs/key.pem`,   // have to change for get`${__dirname}/server/certs/privkey.pem`,
+		}
+	},
+  mediasoup :
+	{
+		// Number of mediasoup workers to launch.
+		numWorkers     : Object.keys(os.cpus()).length,
+		// mediasoup WorkerSettings.
+		// See https://mediasoup.org/documentation/v3/mediasoup/api/#WorkerSettings
+		workerSettings :
+		{
+			logLevel : 'warn',
+			logTags  :
+			[
+				'info',
+				'ice',
+				'dtls',
+				'rtp',
+				'srtp',
+				'rtcp',
+				'rtx',
+				'bwe',
+				'score',
+				'simulcast',
+				'svc',
+				'sctp'
+			],
+			rtcMinPort : process.env.MEDIASOUP_MIN_PORT || 40000,
+			rtcMaxPort : process.env.MEDIASOUP_MAX_PORT || 49999
+		},
+		// mediasoup Router options.
+		// See https://mediasoup.org/documentation/v3/mediasoup/api/#RouterOptions
+		routerOptions :
+		{
+			mediaCodecs :
+			[
+				{
+					kind      : 'audio',
+					mimeType  : 'audio/opus',
+					clockRate : 48000,
+					channels  : 2
+				},
+				{
+					kind       : 'video',
+					mimeType   : 'video/VP8',
+					clockRate  : 90000,
+					parameters :
+					{
+						'x-google-start-bitrate' : 1000
+					}
+				},
+				{
+					kind       : 'video',
+					mimeType   : 'video/VP9',
+					clockRate  : 90000,
+					parameters :
+					{
+						'profile-id'             : 2,
+						'x-google-start-bitrate' : 1000
+					}
+				},
+				{
+					kind       : 'video',
+					mimeType   : 'video/h264',
+					clockRate  : 90000,
+					parameters :
+					{
+						'packetization-mode'      : 1,
+						'profile-level-id'        : '4d0032',
+						'level-asymmetry-allowed' : 1,
+						'x-google-start-bitrate'  : 1000
+					}
+				},
+				{
+					kind       : 'video',
+					mimeType   : 'video/h264',
+					clockRate  : 90000,
+					parameters :
+					{
+						'packetization-mode'      : 1,
+						'profile-level-id'        : '42e01f',
+						'level-asymmetry-allowed' : 1,
+						'x-google-start-bitrate'  : 1000
+					}
+				}
+			]
+		},
+		// mediasoup WebRtcServer options for WebRTC endpoints (mediasoup-client,
+		// libmediasoupclient).
+		// See https://mediasoup.org/documentation/v3/mediasoup/api/#WebRtcServerOptions
+		// NOTE: mediasoup-demo/server/lib/Room.js will increase this port for
+		// each mediasoup Worker since each Worker is a separate process.
+		webRtcServerOptions :
+		{
+			listenInfos :
+			[
+				{
+					protocol    : 'udp',
+					ip          : process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
+					announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP,
+					port        : 44444
+				},
+				{
+					protocol    : 'tcp',
+					ip          : process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
+					announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP,
+					port        : 44444
+				}
+			],
+		},
+		// mediasoup WebRtcTransport options for WebRTC endpoints (mediasoup-client,
+		// libmediasoupclient).
+		// See https://mediasoup.org/documentation/v3/mediasoup/api/#WebRtcTransportOptions
+		webRtcTransportOptions :
+		{
+			// listenIps is not needed since webRtcServer is used.
+			// However passing MEDIASOUP_USE_WEBRTC_SERVER=false will change it.
+			listenIps :
+			[
+				{
+					ip          : process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
+					announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP || '127.0.0.1'// || ANNOUNCED IP
+				}
+			],
+			initialAvailableOutgoingBitrate : 1000000,
+			minimumAvailableOutgoingBitrate : 600000,
+			maxSctpMessageSize              : 262144,
+			// Additional options that are not part of WebRtcTransportOptions.
+			maxIncomingBitrate              : 1500000,
+			// enableUdp : true,
+      // enableTcp : true,
+      // preferUdp : true,  // have to choose prefer UDP or prefer TCP
+      // preferTcp : false, // have to choose prefer TCP or prefer UDP
+		},
+		// mediasoup PlainTransport options for legacy RTP endpoints (FFmpeg,
+		// GStreamer).
+		// See https://mediasoup.org/documentation/v3/mediasoup/api/#PlainTransportOptions
+		plainTransportOptions :
+		{
+			listenIp :
+			{
+				ip          : process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
+				announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP
+			},
+			maxSctpMessageSize : 262144
+		}
+	}
 };
 
 }).call(this)}).call(this,require('_process'),"/")
-},{"_process":83}],2:[function(require,module,exports){
-module.exports = after
-
-function after(count, callback, err_cb) {
-    var bail = false
-    err_cb = err_cb || noop
-    proxy.count = count
-
-    return (count === 0) ? callback() : proxy
-
-    function proxy(err, result) {
-        if (proxy.count <= 0) {
-            throw new Error('after called too many times')
-        }
-        --proxy.count
-
-        // after first error, rest are passed to err_cb
-        if (err) {
-            bail = true
-            callback(err)
-            // future error callbacks will go to error handler
-            callback = err_cb
-        } else if (proxy.count === 0 && !bail) {
-            callback(null, result)
-        }
-    }
-}
-
-function noop() {}
-
-},{}],3:[function(require,module,exports){
-/**
- * An abstraction for slicing an arraybuffer even when
- * ArrayBuffer.prototype.slice is not supported
- *
- * @api public
- */
-
-module.exports = function(arraybuffer, start, end) {
-  var bytes = arraybuffer.byteLength;
-  start = start || 0;
-  end = end || bytes;
-
-  if (arraybuffer.slice) { return arraybuffer.slice(start, end); }
-
-  if (start < 0) { start += bytes; }
-  if (end < 0) { end += bytes; }
-  if (end > bytes) { end = bytes; }
-
-  if (start >= bytes || start >= end || bytes === 0) {
-    return new ArrayBuffer(0);
-  }
-
-  var abv = new Uint8Array(arraybuffer);
-  var result = new Uint8Array(end - start);
-  for (var i = start, ii = 0; i < end; i++, ii++) {
-    result[ii] = abv[i];
-  }
-  return result.buffer;
-};
-
-},{}],4:[function(require,module,exports){
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Logger = void 0;
-const debug_1 = __importDefault(require("debug"));
-const LIB_NAME = 'awaitqueue';
-class Logger {
-    constructor(prefix) {
-        if (prefix) {
-            this._debug = (0, debug_1.default)(`${LIB_NAME}:${prefix}`);
-            this._warn = (0, debug_1.default)(`${LIB_NAME}:WARN:${prefix}`);
-            this._error = (0, debug_1.default)(`${LIB_NAME}:ERROR:${prefix}`);
-        }
-        else {
-            this._debug = (0, debug_1.default)(LIB_NAME);
-            this._warn = (0, debug_1.default)(`${LIB_NAME}:WARN`);
-            this._error = (0, debug_1.default)(`${LIB_NAME}:ERROR`);
-        }
-        /* eslint-disable no-console */
-        this._debug.log = console.info.bind(console);
-        this._warn.log = console.warn.bind(console);
-        this._error.log = console.error.bind(console);
-        /* eslint-enable no-console */
-    }
-    get debug() {
-        return this._debug;
-    }
-    get warn() {
-        return this._warn;
-    }
-    get error() {
-        return this._error;
-    }
-}
-exports.Logger = Logger;
-
-},{"debug":6}],5:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AwaitQueue = exports.AwaitQueueRemovedTaskError = exports.AwaitQueueStoppedError = void 0;
-const Logger_1 = require("./Logger");
-const logger = new Logger_1.Logger();
-/**
- * Custom Error derived class used to reject pending tasks once stop() method
- * has been called.
- */
-class AwaitQueueStoppedError extends Error {
-    constructor(message) {
-        super(message !== null && message !== void 0 ? message : 'AwaitQueue stopped');
-        this.name = 'AwaitQueueStoppedError';
-        // @ts-ignore
-        if (typeof Error.captureStackTrace === 'function') {
-            // @ts-ignore
-            Error.captureStackTrace(this, AwaitQueueStoppedError);
-        }
-    }
-}
-exports.AwaitQueueStoppedError = AwaitQueueStoppedError;
-/**
- * Custom Error derived class used to reject pending tasks once removeTask()
- * method has been called.
- */
-class AwaitQueueRemovedTaskError extends Error {
-    constructor(message) {
-        super(message !== null && message !== void 0 ? message : 'AwaitQueue task removed');
-        this.name = 'AwaitQueueRemovedTaskError';
-        // @ts-ignore
-        if (typeof Error.captureStackTrace === 'function') {
-            // @ts-ignore
-            Error.captureStackTrace(this, AwaitQueueRemovedTaskError);
-        }
-    }
-}
-exports.AwaitQueueRemovedTaskError = AwaitQueueRemovedTaskError;
-class AwaitQueue {
-    constructor() {
-        // Queue of pending tasks (map of PendingTasks indexed by id).
-        this.pendingTasks = new Map();
-        // Incrementing PendingTask id.
-        this.nextTaskId = 0;
-        // Whether stop() method is stopping all pending tasks.
-        this.stopping = false;
-    }
-    get size() {
-        return this.pendingTasks.size;
-    }
-    async push(task, name) {
-        name = name !== null && name !== void 0 ? name : task.name;
-        logger.debug(`push() [name:${name}]`);
-        if (typeof task !== 'function') {
-            throw new TypeError('given task is not a function');
-        }
-        if (name) {
-            try {
-                Object.defineProperty(task, 'name', { value: name });
-            }
-            catch (error) { }
-        }
-        return new Promise((resolve, reject) => {
-            const pendingTask = {
-                id: this.nextTaskId++,
-                task: task,
-                name: name,
-                enqueuedAt: Date.now(),
-                executedAt: undefined,
-                completed: false,
-                resolve: (result) => {
-                    // pendingTask.resolve() can only be called in execute() method. Since
-                    // resolve() was called it means that the task successfully completed.
-                    // However the task may have been stopped before it completed (via
-                    // stop() or remove()) so its completed flag was already set. If this
-                    // is the case, abort here since next task (if any) is already being
-                    // executed.
-                    if (pendingTask.completed) {
-                        return;
-                    }
-                    pendingTask.completed = true;
-                    // Remove the task from the queue.
-                    this.pendingTasks.delete(pendingTask.id);
-                    logger.debug(`resolving task [name:${pendingTask.name}]`);
-                    // Resolve the task with the obtained result.
-                    resolve(result);
-                    // Execute the next pending task (if any).
-                    const [nextPendingTask] = this.pendingTasks.values();
-                    // NOTE: During the resolve() callback the user app may have interacted
-                    // with the queue. For instance, the app may have pushed a task while
-                    // the queue was empty so such a task is already being executed. If so,
-                    // don't execute it twice.
-                    if (nextPendingTask && !nextPendingTask.executedAt) {
-                        void this.execute(nextPendingTask);
-                    }
-                },
-                reject: (error) => {
-                    // pendingTask.reject() can be called within execute() method if the
-                    // task completed with error. However it may have also been called in
-                    // stop() or remove() methods (before or while being executed) so its
-                    // completed flag was already set. If so, abort here since next task
-                    // (if any) is already being executed.
-                    if (pendingTask.completed) {
-                        return;
-                    }
-                    pendingTask.completed = true;
-                    // Remove the task from the queue.
-                    this.pendingTasks.delete(pendingTask.id);
-                    logger.debug(`rejecting task [name:${pendingTask.name}]: %s`, String(error));
-                    // Reject the task with the obtained error.
-                    reject(error);
-                    // Execute the next pending task (if any) unless stop() is running.
-                    if (!this.stopping) {
-                        const [nextPendingTask] = this.pendingTasks.values();
-                        // NOTE: During the reject() callback the user app may have interacted
-                        // with the queue. For instance, the app may have pushed a task while
-                        // the queue was empty so such a task is already being executed. If so,
-                        // don't execute it twice.
-                        if (nextPendingTask && !nextPendingTask.executedAt) {
-                            void this.execute(nextPendingTask);
-                        }
-                    }
-                }
-            };
-            // Append task to the queue.
-            this.pendingTasks.set(pendingTask.id, pendingTask);
-            // And execute it if this is the only task in the queue.
-            if (this.pendingTasks.size === 1) {
-                void this.execute(pendingTask);
-            }
-        });
-    }
-    stop() {
-        logger.debug('stop()');
-        this.stopping = true;
-        for (const pendingTask of this.pendingTasks.values()) {
-            logger.debug(`stop() | stopping task [name:${pendingTask.name}]`);
-            pendingTask.reject(new AwaitQueueStoppedError());
-        }
-        this.stopping = false;
-    }
-    remove(taskIdx) {
-        logger.debug(`remove() [taskIdx:${taskIdx}]`);
-        const pendingTask = Array.from(this.pendingTasks.values())[taskIdx];
-        if (!pendingTask) {
-            logger.debug(`stop() | no task with given idx [taskIdx:${taskIdx}]`);
-            return;
-        }
-        pendingTask.reject(new AwaitQueueRemovedTaskError());
-    }
-    dump() {
-        const now = Date.now();
-        let idx = 0;
-        return Array.from(this.pendingTasks.values()).map((pendingTask) => ({
-            idx: idx++,
-            task: pendingTask.task,
-            name: pendingTask.name,
-            enqueuedTime: pendingTask.executedAt
-                ? pendingTask.executedAt - pendingTask.enqueuedAt
-                : now - pendingTask.enqueuedAt,
-            executionTime: pendingTask.executedAt
-                ? now - pendingTask.executedAt
-                : 0
-        }));
-    }
-    async execute(pendingTask) {
-        logger.debug(`execute() [name:${pendingTask.name}]`);
-        if (pendingTask.executedAt) {
-            throw new Error('task already being executed');
-        }
-        pendingTask.executedAt = Date.now();
-        try {
-            const result = await pendingTask.task();
-            // Resolve the task with its resolved result (if any).
-            pendingTask.resolve(result);
-        }
-        catch (error) {
-            // Reject the task with its rejected error.
-            pendingTask.reject(error);
-        }
-    }
-}
-exports.AwaitQueue = AwaitQueue;
-
-},{"./Logger":4}],6:[function(require,module,exports){
-(function (process){(function (){
-/* eslint-env browser */
-
-/**
- * This is the web browser implementation of `debug()`.
- */
-
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = localstorage();
-exports.destroy = (() => {
-	let warned = false;
-
-	return () => {
-		if (!warned) {
-			warned = true;
-			console.warn('Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.');
-		}
-	};
-})();
-
-/**
- * Colors.
- */
-
-exports.colors = [
-	'#0000CC',
-	'#0000FF',
-	'#0033CC',
-	'#0033FF',
-	'#0066CC',
-	'#0066FF',
-	'#0099CC',
-	'#0099FF',
-	'#00CC00',
-	'#00CC33',
-	'#00CC66',
-	'#00CC99',
-	'#00CCCC',
-	'#00CCFF',
-	'#3300CC',
-	'#3300FF',
-	'#3333CC',
-	'#3333FF',
-	'#3366CC',
-	'#3366FF',
-	'#3399CC',
-	'#3399FF',
-	'#33CC00',
-	'#33CC33',
-	'#33CC66',
-	'#33CC99',
-	'#33CCCC',
-	'#33CCFF',
-	'#6600CC',
-	'#6600FF',
-	'#6633CC',
-	'#6633FF',
-	'#66CC00',
-	'#66CC33',
-	'#9900CC',
-	'#9900FF',
-	'#9933CC',
-	'#9933FF',
-	'#99CC00',
-	'#99CC33',
-	'#CC0000',
-	'#CC0033',
-	'#CC0066',
-	'#CC0099',
-	'#CC00CC',
-	'#CC00FF',
-	'#CC3300',
-	'#CC3333',
-	'#CC3366',
-	'#CC3399',
-	'#CC33CC',
-	'#CC33FF',
-	'#CC6600',
-	'#CC6633',
-	'#CC9900',
-	'#CC9933',
-	'#CCCC00',
-	'#CCCC33',
-	'#FF0000',
-	'#FF0033',
-	'#FF0066',
-	'#FF0099',
-	'#FF00CC',
-	'#FF00FF',
-	'#FF3300',
-	'#FF3333',
-	'#FF3366',
-	'#FF3399',
-	'#FF33CC',
-	'#FF33FF',
-	'#FF6600',
-	'#FF6633',
-	'#FF9900',
-	'#FF9933',
-	'#FFCC00',
-	'#FFCC33'
-];
-
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-
-// eslint-disable-next-line complexity
-function useColors() {
-	// NB: In an Electron preload script, document will be defined but not fully
-	// initialized. Since we know we're in Chrome, we'll just detect this case
-	// explicitly
-	if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
-		return true;
-	}
-
-	// Internet Explorer and Edge do not support colors.
-	if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
-		return false;
-	}
-
-	// Is webkit? http://stackoverflow.com/a/16459606/376773
-	// document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-	return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
-		// Is firebug? http://stackoverflow.com/a/398120/376773
-		(typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
-		// Is firefox >= v31?
-		// https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
-		// Double check webkit in userAgent just in case we are in a worker
-		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
-}
-
-/**
- * Colorize log arguments if enabled.
- *
- * @api public
- */
-
-function formatArgs(args) {
-	args[0] = (this.useColors ? '%c' : '') +
-		this.namespace +
-		(this.useColors ? ' %c' : ' ') +
-		args[0] +
-		(this.useColors ? '%c ' : ' ') +
-		'+' + module.exports.humanize(this.diff);
-
-	if (!this.useColors) {
-		return;
-	}
-
-	const c = 'color: ' + this.color;
-	args.splice(1, 0, c, 'color: inherit');
-
-	// The final "%c" is somewhat tricky, because there could be other
-	// arguments passed either before or after the %c, so we need to
-	// figure out the correct index to insert the CSS into
-	let index = 0;
-	let lastC = 0;
-	args[0].replace(/%[a-zA-Z%]/g, match => {
-		if (match === '%%') {
-			return;
-		}
-		index++;
-		if (match === '%c') {
-			// We only are interested in the *last* %c
-			// (the user may have provided their own)
-			lastC = index;
-		}
-	});
-
-	args.splice(lastC, 0, c);
-}
-
-/**
- * Invokes `console.debug()` when available.
- * No-op when `console.debug` is not a "function".
- * If `console.debug` is not available, falls back
- * to `console.log`.
- *
- * @api public
- */
-exports.log = console.debug || console.log || (() => {});
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-function save(namespaces) {
-	try {
-		if (namespaces) {
-			exports.storage.setItem('debug', namespaces);
-		} else {
-			exports.storage.removeItem('debug');
-		}
-	} catch (error) {
-		// Swallow
-		// XXX (@Qix-) should we be logging these?
-	}
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-function load() {
-	let r;
-	try {
-		r = exports.storage.getItem('debug');
-	} catch (error) {
-		// Swallow
-		// XXX (@Qix-) should we be logging these?
-	}
-
-	// If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-	if (!r && typeof process !== 'undefined' && 'env' in process) {
-		r = process.env.DEBUG;
-	}
-
-	return r;
-}
-
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-function localstorage() {
-	try {
-		// TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
-		// The Browser also has localStorage in the global context.
-		return localStorage;
-	} catch (error) {
-		// Swallow
-		// XXX (@Qix-) should we be logging these?
-	}
-}
-
-module.exports = require('./common')(exports);
-
-const {formatters} = module.exports;
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-formatters.j = function (v) {
-	try {
-		return JSON.stringify(v);
-	} catch (error) {
-		return '[UnexpectedJSONParseError]: ' + error.message;
-	}
-};
-
-}).call(this)}).call(this,require('_process'))
-},{"./common":7,"_process":83}],7:[function(require,module,exports){
-
-/**
- * This is the common logic for both the Node.js and web browser
- * implementations of `debug()`.
- */
-
-function setup(env) {
-	createDebug.debug = createDebug;
-	createDebug.default = createDebug;
-	createDebug.coerce = coerce;
-	createDebug.disable = disable;
-	createDebug.enable = enable;
-	createDebug.enabled = enabled;
-	createDebug.humanize = require('ms');
-	createDebug.destroy = destroy;
-
-	Object.keys(env).forEach(key => {
-		createDebug[key] = env[key];
-	});
-
-	/**
-	* The currently active debug mode names, and names to skip.
-	*/
-
-	createDebug.names = [];
-	createDebug.skips = [];
-
-	/**
-	* Map of special "%n" handling functions, for the debug "format" argument.
-	*
-	* Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
-	*/
-	createDebug.formatters = {};
-
-	/**
-	* Selects a color for a debug namespace
-	* @param {String} namespace The namespace string for the debug instance to be colored
-	* @return {Number|String} An ANSI color code for the given namespace
-	* @api private
-	*/
-	function selectColor(namespace) {
-		let hash = 0;
-
-		for (let i = 0; i < namespace.length; i++) {
-			hash = ((hash << 5) - hash) + namespace.charCodeAt(i);
-			hash |= 0; // Convert to 32bit integer
-		}
-
-		return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
-	}
-	createDebug.selectColor = selectColor;
-
-	/**
-	* Create a debugger with the given `namespace`.
-	*
-	* @param {String} namespace
-	* @return {Function}
-	* @api public
-	*/
-	function createDebug(namespace) {
-		let prevTime;
-		let enableOverride = null;
-		let namespacesCache;
-		let enabledCache;
-
-		function debug(...args) {
-			// Disabled?
-			if (!debug.enabled) {
-				return;
-			}
-
-			const self = debug;
-
-			// Set `diff` timestamp
-			const curr = Number(new Date());
-			const ms = curr - (prevTime || curr);
-			self.diff = ms;
-			self.prev = prevTime;
-			self.curr = curr;
-			prevTime = curr;
-
-			args[0] = createDebug.coerce(args[0]);
-
-			if (typeof args[0] !== 'string') {
-				// Anything else let's inspect with %O
-				args.unshift('%O');
-			}
-
-			// Apply any `formatters` transformations
-			let index = 0;
-			args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
-				// If we encounter an escaped % then don't increase the array index
-				if (match === '%%') {
-					return '%';
-				}
-				index++;
-				const formatter = createDebug.formatters[format];
-				if (typeof formatter === 'function') {
-					const val = args[index];
-					match = formatter.call(self, val);
-
-					// Now we need to remove `args[index]` since it's inlined in the `format`
-					args.splice(index, 1);
-					index--;
-				}
-				return match;
-			});
-
-			// Apply env-specific formatting (colors, etc.)
-			createDebug.formatArgs.call(self, args);
-
-			const logFn = self.log || createDebug.log;
-			logFn.apply(self, args);
-		}
-
-		debug.namespace = namespace;
-		debug.useColors = createDebug.useColors();
-		debug.color = createDebug.selectColor(namespace);
-		debug.extend = extend;
-		debug.destroy = createDebug.destroy; // XXX Temporary. Will be removed in the next major release.
-
-		Object.defineProperty(debug, 'enabled', {
-			enumerable: true,
-			configurable: false,
-			get: () => {
-				if (enableOverride !== null) {
-					return enableOverride;
-				}
-				if (namespacesCache !== createDebug.namespaces) {
-					namespacesCache = createDebug.namespaces;
-					enabledCache = createDebug.enabled(namespace);
-				}
-
-				return enabledCache;
-			},
-			set: v => {
-				enableOverride = v;
-			}
-		});
-
-		// Env-specific initialization logic for debug instances
-		if (typeof createDebug.init === 'function') {
-			createDebug.init(debug);
-		}
-
-		return debug;
-	}
-
-	function extend(namespace, delimiter) {
-		const newDebug = createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
-		newDebug.log = this.log;
-		return newDebug;
-	}
-
-	/**
-	* Enables a debug mode by namespaces. This can include modes
-	* separated by a colon and wildcards.
-	*
-	* @param {String} namespaces
-	* @api public
-	*/
-	function enable(namespaces) {
-		createDebug.save(namespaces);
-		createDebug.namespaces = namespaces;
-
-		createDebug.names = [];
-		createDebug.skips = [];
-
-		let i;
-		const split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
-		const len = split.length;
-
-		for (i = 0; i < len; i++) {
-			if (!split[i]) {
-				// ignore empty strings
-				continue;
-			}
-
-			namespaces = split[i].replace(/\*/g, '.*?');
-
-			if (namespaces[0] === '-') {
-				createDebug.skips.push(new RegExp('^' + namespaces.slice(1) + '$'));
-			} else {
-				createDebug.names.push(new RegExp('^' + namespaces + '$'));
-			}
-		}
-	}
-
-	/**
-	* Disable debug output.
-	*
-	* @return {String} namespaces
-	* @api public
-	*/
-	function disable() {
-		const namespaces = [
-			...createDebug.names.map(toNamespace),
-			...createDebug.skips.map(toNamespace).map(namespace => '-' + namespace)
-		].join(',');
-		createDebug.enable('');
-		return namespaces;
-	}
-
-	/**
-	* Returns true if the given mode name is enabled, false otherwise.
-	*
-	* @param {String} name
-	* @return {Boolean}
-	* @api public
-	*/
-	function enabled(name) {
-		if (name[name.length - 1] === '*') {
-			return true;
-		}
-
-		let i;
-		let len;
-
-		for (i = 0, len = createDebug.skips.length; i < len; i++) {
-			if (createDebug.skips[i].test(name)) {
-				return false;
-			}
-		}
-
-		for (i = 0, len = createDebug.names.length; i < len; i++) {
-			if (createDebug.names[i].test(name)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	* Convert regexp to namespace
-	*
-	* @param {RegExp} regxep
-	* @return {String} namespace
-	* @api private
-	*/
-	function toNamespace(regexp) {
-		return regexp.toString()
-			.substring(2, regexp.toString().length - 2)
-			.replace(/\.\*\?$/, '*');
-	}
-
-	/**
-	* Coerce `val`.
-	*
-	* @param {Mixed} val
-	* @return {Mixed}
-	* @api private
-	*/
-	function coerce(val) {
-		if (val instanceof Error) {
-			return val.stack || val.message;
-		}
-		return val;
-	}
-
-	/**
-	* XXX DO NOT USE. This is a temporary stub function.
-	* XXX It WILL be removed in the next major release.
-	*/
-	function destroy() {
-		console.warn('Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.');
-	}
-
-	createDebug.enable(createDebug.load());
-
-	return createDebug;
-}
-
-module.exports = setup;
-
-},{"ms":8}],8:[function(require,module,exports){
-/**
- * Helpers.
- */
-
-var s = 1000;
-var m = s * 60;
-var h = m * 60;
-var d = h * 24;
-var w = d * 7;
-var y = d * 365.25;
-
-/**
- * Parse or format the given `val`.
- *
- * Options:
- *
- *  - `long` verbose formatting [false]
- *
- * @param {String|Number} val
- * @param {Object} [options]
- * @throws {Error} throw an error if val is not a non-empty string or a number
- * @return {String|Number}
- * @api public
- */
-
-module.exports = function(val, options) {
-  options = options || {};
-  var type = typeof val;
-  if (type === 'string' && val.length > 0) {
-    return parse(val);
-  } else if (type === 'number' && isFinite(val)) {
-    return options.long ? fmtLong(val) : fmtShort(val);
-  }
-  throw new Error(
-    'val is not a non-empty string or a valid number. val=' +
-      JSON.stringify(val)
-  );
-};
-
-/**
- * Parse the given `str` and return milliseconds.
- *
- * @param {String} str
- * @return {Number}
- * @api private
- */
-
-function parse(str) {
-  str = String(str);
-  if (str.length > 100) {
-    return;
-  }
-  var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
-    str
-  );
-  if (!match) {
-    return;
-  }
-  var n = parseFloat(match[1]);
-  var type = (match[2] || 'ms').toLowerCase();
-  switch (type) {
-    case 'years':
-    case 'year':
-    case 'yrs':
-    case 'yr':
-    case 'y':
-      return n * y;
-    case 'weeks':
-    case 'week':
-    case 'w':
-      return n * w;
-    case 'days':
-    case 'day':
-    case 'd':
-      return n * d;
-    case 'hours':
-    case 'hour':
-    case 'hrs':
-    case 'hr':
-    case 'h':
-      return n * h;
-    case 'minutes':
-    case 'minute':
-    case 'mins':
-    case 'min':
-    case 'm':
-      return n * m;
-    case 'seconds':
-    case 'second':
-    case 'secs':
-    case 'sec':
-    case 's':
-      return n * s;
-    case 'milliseconds':
-    case 'millisecond':
-    case 'msecs':
-    case 'msec':
-    case 'ms':
-      return n;
-    default:
-      return undefined;
-  }
-}
-
-/**
- * Short format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtShort(ms) {
-  var msAbs = Math.abs(ms);
-  if (msAbs >= d) {
-    return Math.round(ms / d) + 'd';
-  }
-  if (msAbs >= h) {
-    return Math.round(ms / h) + 'h';
-  }
-  if (msAbs >= m) {
-    return Math.round(ms / m) + 'm';
-  }
-  if (msAbs >= s) {
-    return Math.round(ms / s) + 's';
-  }
-  return ms + 'ms';
-}
-
-/**
- * Long format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtLong(ms) {
-  var msAbs = Math.abs(ms);
-  if (msAbs >= d) {
-    return plural(ms, msAbs, d, 'day');
-  }
-  if (msAbs >= h) {
-    return plural(ms, msAbs, h, 'hour');
-  }
-  if (msAbs >= m) {
-    return plural(ms, msAbs, m, 'minute');
-  }
-  if (msAbs >= s) {
-    return plural(ms, msAbs, s, 'second');
-  }
-  return ms + ' ms';
-}
-
-/**
- * Pluralization helper.
- */
-
-function plural(ms, msAbs, n, name) {
-  var isPlural = msAbs >= n * 1.5;
-  return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
-}
-
-},{}],9:[function(require,module,exports){
-
-/**
- * Expose `Backoff`.
- */
-
-module.exports = Backoff;
-
-/**
- * Initialize backoff timer with `opts`.
- *
- * - `min` initial timeout in milliseconds [100]
- * - `max` max timeout [10000]
- * - `jitter` [0]
- * - `factor` [2]
- *
- * @param {Object} opts
- * @api public
- */
-
-function Backoff(opts) {
-  opts = opts || {};
-  this.ms = opts.min || 100;
-  this.max = opts.max || 10000;
-  this.factor = opts.factor || 2;
-  this.jitter = opts.jitter > 0 && opts.jitter <= 1 ? opts.jitter : 0;
-  this.attempts = 0;
-}
-
-/**
- * Return the backoff duration.
- *
- * @return {Number}
- * @api public
- */
-
-Backoff.prototype.duration = function(){
-  var ms = this.ms * Math.pow(this.factor, this.attempts++);
-  if (this.jitter) {
-    var rand =  Math.random();
-    var deviation = Math.floor(rand * this.jitter * ms);
-    ms = (Math.floor(rand * 10) & 1) == 0  ? ms - deviation : ms + deviation;
-  }
-  return Math.min(ms, this.max) | 0;
-};
-
-/**
- * Reset the number of attempts.
- *
- * @api public
- */
-
-Backoff.prototype.reset = function(){
-  this.attempts = 0;
-};
-
-/**
- * Set the minimum duration
- *
- * @api public
- */
-
-Backoff.prototype.setMin = function(min){
-  this.ms = min;
-};
-
-/**
- * Set the maximum duration
- *
- * @api public
- */
-
-Backoff.prototype.setMax = function(max){
-  this.max = max;
-};
-
-/**
- * Set the jitter
- *
- * @api public
- */
-
-Backoff.prototype.setJitter = function(jitter){
-  this.jitter = jitter;
-};
-
-
-},{}],10:[function(require,module,exports){
-/*
- * base64-arraybuffer
- * https://github.com/niklasvh/base64-arraybuffer
- *
- * Copyright (c) 2012 Niklas von Hertzen
- * Licensed under the MIT license.
- */
-(function(chars){
-  "use strict";
-
-  exports.encode = function(arraybuffer) {
-    var bytes = new Uint8Array(arraybuffer),
-    i, len = bytes.length, base64 = "";
-
-    for (i = 0; i < len; i+=3) {
-      base64 += chars[bytes[i] >> 2];
-      base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
-      base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
-      base64 += chars[bytes[i + 2] & 63];
-    }
-
-    if ((len % 3) === 2) {
-      base64 = base64.substring(0, base64.length - 1) + "=";
-    } else if (len % 3 === 1) {
-      base64 = base64.substring(0, base64.length - 2) + "==";
-    }
-
-    return base64;
-  };
-
-  exports.decode =  function(base64) {
-    var bufferLength = base64.length * 0.75,
-    len = base64.length, i, p = 0,
-    encoded1, encoded2, encoded3, encoded4;
-
-    if (base64[base64.length - 1] === "=") {
-      bufferLength--;
-      if (base64[base64.length - 2] === "=") {
-        bufferLength--;
-      }
-    }
-
-    var arraybuffer = new ArrayBuffer(bufferLength),
-    bytes = new Uint8Array(arraybuffer);
-
-    for (i = 0; i < len; i+=4) {
-      encoded1 = chars.indexOf(base64[i]);
-      encoded2 = chars.indexOf(base64[i+1]);
-      encoded3 = chars.indexOf(base64[i+2]);
-      encoded4 = chars.indexOf(base64[i+3]);
-
-      bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
-      bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
-      bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
-    }
-
-    return arraybuffer;
-  };
-})("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
-
-},{}],11:[function(require,module,exports){
+},{"_process":8,"os":7}],2:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -1363,113 +315,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],12:[function(require,module,exports){
-/**
- * Create a blob builder even when vendor prefixes exist
- */
+},{}],3:[function(require,module,exports){
 
-var BlobBuilder = typeof BlobBuilder !== 'undefined' ? BlobBuilder :
-  typeof WebKitBlobBuilder !== 'undefined' ? WebKitBlobBuilder :
-  typeof MSBlobBuilder !== 'undefined' ? MSBlobBuilder :
-  typeof MozBlobBuilder !== 'undefined' ? MozBlobBuilder : 
-  false;
-
-/**
- * Check if Blob constructor is supported
- */
-
-var blobSupported = (function() {
-  try {
-    var a = new Blob(['hi']);
-    return a.size === 2;
-  } catch(e) {
-    return false;
-  }
-})();
-
-/**
- * Check if Blob constructor supports ArrayBufferViews
- * Fails in Safari 6, so we need to map to ArrayBuffers there.
- */
-
-var blobSupportsArrayBufferView = blobSupported && (function() {
-  try {
-    var b = new Blob([new Uint8Array([1,2])]);
-    return b.size === 2;
-  } catch(e) {
-    return false;
-  }
-})();
-
-/**
- * Check if BlobBuilder is supported
- */
-
-var blobBuilderSupported = BlobBuilder
-  && BlobBuilder.prototype.append
-  && BlobBuilder.prototype.getBlob;
-
-/**
- * Helper function that maps ArrayBufferViews to ArrayBuffers
- * Used by BlobBuilder constructor and old browsers that didn't
- * support it in the Blob constructor.
- */
-
-function mapArrayBufferViews(ary) {
-  return ary.map(function(chunk) {
-    if (chunk.buffer instanceof ArrayBuffer) {
-      var buf = chunk.buffer;
-
-      // if this is a subarray, make a copy so we only
-      // include the subarray region from the underlying buffer
-      if (chunk.byteLength !== buf.byteLength) {
-        var copy = new Uint8Array(chunk.byteLength);
-        copy.set(new Uint8Array(buf, chunk.byteOffset, chunk.byteLength));
-        buf = copy.buffer;
-      }
-
-      return buf;
-    }
-
-    return chunk;
-  });
-}
-
-function BlobBuilderConstructor(ary, options) {
-  options = options || {};
-
-  var bb = new BlobBuilder();
-  mapArrayBufferViews(ary).forEach(function(part) {
-    bb.append(part);
-  });
-
-  return (options.type) ? bb.getBlob(options.type) : bb.getBlob();
-};
-
-function BlobConstructor(ary, options) {
-  return new Blob(mapArrayBufferViews(ary), options || {});
-};
-
-if (typeof Blob !== 'undefined') {
-  BlobBuilderConstructor.prototype = Blob.prototype;
-  BlobConstructor.prototype = Blob.prototype;
-}
-
-module.exports = (function() {
-  if (blobSupported) {
-    return blobSupportsArrayBufferView ? Blob : BlobConstructor;
-  } else if (blobBuilderSupported) {
-    return BlobBuilderConstructor;
-  } else {
-    return undefined;
-  }
-})();
-
-},{}],13:[function(require,module,exports){
-!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.bowser=t():e.bowser=t()}(this,(function(){return function(e){var t={};function r(n){if(t[n])return t[n].exports;var i=t[n]={i:n,l:!1,exports:{}};return e[n].call(i.exports,i,i.exports,r),i.l=!0,i.exports}return r.m=e,r.c=t,r.d=function(e,t,n){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:n})},r.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var i in e)r.d(n,i,function(t){return e[t]}.bind(null,i));return n},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p="",r(r.s=90)}({17:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n=r(18),i=function(){function e(){}return e.getFirstMatch=function(e,t){var r=t.match(e);return r&&r.length>0&&r[1]||""},e.getSecondMatch=function(e,t){var r=t.match(e);return r&&r.length>1&&r[2]||""},e.matchAndReturnConst=function(e,t,r){if(e.test(t))return r},e.getWindowsVersionName=function(e){switch(e){case"NT":return"NT";case"XP":return"XP";case"NT 5.0":return"2000";case"NT 5.1":return"XP";case"NT 5.2":return"2003";case"NT 6.0":return"Vista";case"NT 6.1":return"7";case"NT 6.2":return"8";case"NT 6.3":return"8.1";case"NT 10.0":return"10";default:return}},e.getMacOSVersionName=function(e){var t=e.split(".").splice(0,2).map((function(e){return parseInt(e,10)||0}));if(t.push(0),10===t[0])switch(t[1]){case 5:return"Leopard";case 6:return"Snow Leopard";case 7:return"Lion";case 8:return"Mountain Lion";case 9:return"Mavericks";case 10:return"Yosemite";case 11:return"El Capitan";case 12:return"Sierra";case 13:return"High Sierra";case 14:return"Mojave";case 15:return"Catalina";default:return}},e.getAndroidVersionName=function(e){var t=e.split(".").splice(0,2).map((function(e){return parseInt(e,10)||0}));if(t.push(0),!(1===t[0]&&t[1]<5))return 1===t[0]&&t[1]<6?"Cupcake":1===t[0]&&t[1]>=6?"Donut":2===t[0]&&t[1]<2?"Eclair":2===t[0]&&2===t[1]?"Froyo":2===t[0]&&t[1]>2?"Gingerbread":3===t[0]?"Honeycomb":4===t[0]&&t[1]<1?"Ice Cream Sandwich":4===t[0]&&t[1]<4?"Jelly Bean":4===t[0]&&t[1]>=4?"KitKat":5===t[0]?"Lollipop":6===t[0]?"Marshmallow":7===t[0]?"Nougat":8===t[0]?"Oreo":9===t[0]?"Pie":void 0},e.getVersionPrecision=function(e){return e.split(".").length},e.compareVersions=function(t,r,n){void 0===n&&(n=!1);var i=e.getVersionPrecision(t),s=e.getVersionPrecision(r),a=Math.max(i,s),o=0,u=e.map([t,r],(function(t){var r=a-e.getVersionPrecision(t),n=t+new Array(r+1).join(".0");return e.map(n.split("."),(function(e){return new Array(20-e.length).join("0")+e})).reverse()}));for(n&&(o=a-Math.min(i,s)),a-=1;a>=o;){if(u[0][a]>u[1][a])return 1;if(u[0][a]===u[1][a]){if(a===o)return 0;a-=1}else if(u[0][a]<u[1][a])return-1}},e.map=function(e,t){var r,n=[];if(Array.prototype.map)return Array.prototype.map.call(e,t);for(r=0;r<e.length;r+=1)n.push(t(e[r]));return n},e.find=function(e,t){var r,n;if(Array.prototype.find)return Array.prototype.find.call(e,t);for(r=0,n=e.length;r<n;r+=1){var i=e[r];if(t(i,r))return i}},e.assign=function(e){for(var t,r,n=e,i=arguments.length,s=new Array(i>1?i-1:0),a=1;a<i;a++)s[a-1]=arguments[a];if(Object.assign)return Object.assign.apply(Object,[e].concat(s));var o=function(){var e=s[t];"object"==typeof e&&null!==e&&Object.keys(e).forEach((function(t){n[t]=e[t]}))};for(t=0,r=s.length;t<r;t+=1)o();return e},e.getBrowserAlias=function(e){return n.BROWSER_ALIASES_MAP[e]},e.getBrowserTypeByAlias=function(e){return n.BROWSER_MAP[e]||""},e}();t.default=i,e.exports=t.default},18:function(e,t,r){"use strict";t.__esModule=!0,t.ENGINE_MAP=t.OS_MAP=t.PLATFORMS_MAP=t.BROWSER_MAP=t.BROWSER_ALIASES_MAP=void 0;t.BROWSER_ALIASES_MAP={"Amazon Silk":"amazon_silk","Android Browser":"android",Bada:"bada",BlackBerry:"blackberry",Chrome:"chrome",Chromium:"chromium",Electron:"electron",Epiphany:"epiphany",Firefox:"firefox",Focus:"focus",Generic:"generic","Google Search":"google_search",Googlebot:"googlebot","Internet Explorer":"ie","K-Meleon":"k_meleon",Maxthon:"maxthon","Microsoft Edge":"edge","MZ Browser":"mz","NAVER Whale Browser":"naver",Opera:"opera","Opera Coast":"opera_coast",PhantomJS:"phantomjs",Puffin:"puffin",QupZilla:"qupzilla",QQ:"qq",QQLite:"qqlite",Safari:"safari",Sailfish:"sailfish","Samsung Internet for Android":"samsung_internet",SeaMonkey:"seamonkey",Sleipnir:"sleipnir",Swing:"swing",Tizen:"tizen","UC Browser":"uc",Vivaldi:"vivaldi","WebOS Browser":"webos",WeChat:"wechat","Yandex Browser":"yandex",Roku:"roku"};t.BROWSER_MAP={amazon_silk:"Amazon Silk",android:"Android Browser",bada:"Bada",blackberry:"BlackBerry",chrome:"Chrome",chromium:"Chromium",electron:"Electron",epiphany:"Epiphany",firefox:"Firefox",focus:"Focus",generic:"Generic",googlebot:"Googlebot",google_search:"Google Search",ie:"Internet Explorer",k_meleon:"K-Meleon",maxthon:"Maxthon",edge:"Microsoft Edge",mz:"MZ Browser",naver:"NAVER Whale Browser",opera:"Opera",opera_coast:"Opera Coast",phantomjs:"PhantomJS",puffin:"Puffin",qupzilla:"QupZilla",qq:"QQ Browser",qqlite:"QQ Browser Lite",safari:"Safari",sailfish:"Sailfish",samsung_internet:"Samsung Internet for Android",seamonkey:"SeaMonkey",sleipnir:"Sleipnir",swing:"Swing",tizen:"Tizen",uc:"UC Browser",vivaldi:"Vivaldi",webos:"WebOS Browser",wechat:"WeChat",yandex:"Yandex Browser"};t.PLATFORMS_MAP={tablet:"tablet",mobile:"mobile",desktop:"desktop",tv:"tv"};t.OS_MAP={WindowsPhone:"Windows Phone",Windows:"Windows",MacOS:"macOS",iOS:"iOS",Android:"Android",WebOS:"WebOS",BlackBerry:"BlackBerry",Bada:"Bada",Tizen:"Tizen",Linux:"Linux",ChromeOS:"Chrome OS",PlayStation4:"PlayStation 4",Roku:"Roku"};t.ENGINE_MAP={EdgeHTML:"EdgeHTML",Blink:"Blink",Trident:"Trident",Presto:"Presto",Gecko:"Gecko",WebKit:"WebKit"}},90:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(91))&&n.__esModule?n:{default:n},s=r(18);function a(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}var o=function(){function e(){}var t,r,n;return e.getParser=function(e,t){if(void 0===t&&(t=!1),"string"!=typeof e)throw new Error("UserAgent should be a string");return new i.default(e,t)},e.parse=function(e){return new i.default(e).getResult()},t=e,n=[{key:"BROWSER_MAP",get:function(){return s.BROWSER_MAP}},{key:"ENGINE_MAP",get:function(){return s.ENGINE_MAP}},{key:"OS_MAP",get:function(){return s.OS_MAP}},{key:"PLATFORMS_MAP",get:function(){return s.PLATFORMS_MAP}}],(r=null)&&a(t.prototype,r),n&&a(t,n),e}();t.default=o,e.exports=t.default},91:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n=u(r(92)),i=u(r(93)),s=u(r(94)),a=u(r(95)),o=u(r(17));function u(e){return e&&e.__esModule?e:{default:e}}var d=function(){function e(e,t){if(void 0===t&&(t=!1),null==e||""===e)throw new Error("UserAgent parameter can't be empty");this._ua=e,this.parsedResult={},!0!==t&&this.parse()}var t=e.prototype;return t.getUA=function(){return this._ua},t.test=function(e){return e.test(this._ua)},t.parseBrowser=function(){var e=this;this.parsedResult.browser={};var t=o.default.find(n.default,(function(t){if("function"==typeof t.test)return t.test(e);if(t.test instanceof Array)return t.test.some((function(t){return e.test(t)}));throw new Error("Browser's test function is not valid")}));return t&&(this.parsedResult.browser=t.describe(this.getUA())),this.parsedResult.browser},t.getBrowser=function(){return this.parsedResult.browser?this.parsedResult.browser:this.parseBrowser()},t.getBrowserName=function(e){return e?String(this.getBrowser().name).toLowerCase()||"":this.getBrowser().name||""},t.getBrowserVersion=function(){return this.getBrowser().version},t.getOS=function(){return this.parsedResult.os?this.parsedResult.os:this.parseOS()},t.parseOS=function(){var e=this;this.parsedResult.os={};var t=o.default.find(i.default,(function(t){if("function"==typeof t.test)return t.test(e);if(t.test instanceof Array)return t.test.some((function(t){return e.test(t)}));throw new Error("Browser's test function is not valid")}));return t&&(this.parsedResult.os=t.describe(this.getUA())),this.parsedResult.os},t.getOSName=function(e){var t=this.getOS().name;return e?String(t).toLowerCase()||"":t||""},t.getOSVersion=function(){return this.getOS().version},t.getPlatform=function(){return this.parsedResult.platform?this.parsedResult.platform:this.parsePlatform()},t.getPlatformType=function(e){void 0===e&&(e=!1);var t=this.getPlatform().type;return e?String(t).toLowerCase()||"":t||""},t.parsePlatform=function(){var e=this;this.parsedResult.platform={};var t=o.default.find(s.default,(function(t){if("function"==typeof t.test)return t.test(e);if(t.test instanceof Array)return t.test.some((function(t){return e.test(t)}));throw new Error("Browser's test function is not valid")}));return t&&(this.parsedResult.platform=t.describe(this.getUA())),this.parsedResult.platform},t.getEngine=function(){return this.parsedResult.engine?this.parsedResult.engine:this.parseEngine()},t.getEngineName=function(e){return e?String(this.getEngine().name).toLowerCase()||"":this.getEngine().name||""},t.parseEngine=function(){var e=this;this.parsedResult.engine={};var t=o.default.find(a.default,(function(t){if("function"==typeof t.test)return t.test(e);if(t.test instanceof Array)return t.test.some((function(t){return e.test(t)}));throw new Error("Browser's test function is not valid")}));return t&&(this.parsedResult.engine=t.describe(this.getUA())),this.parsedResult.engine},t.parse=function(){return this.parseBrowser(),this.parseOS(),this.parsePlatform(),this.parseEngine(),this},t.getResult=function(){return o.default.assign({},this.parsedResult)},t.satisfies=function(e){var t=this,r={},n=0,i={},s=0;if(Object.keys(e).forEach((function(t){var a=e[t];"string"==typeof a?(i[t]=a,s+=1):"object"==typeof a&&(r[t]=a,n+=1)})),n>0){var a=Object.keys(r),u=o.default.find(a,(function(e){return t.isOS(e)}));if(u){var d=this.satisfies(r[u]);if(void 0!==d)return d}var c=o.default.find(a,(function(e){return t.isPlatform(e)}));if(c){var f=this.satisfies(r[c]);if(void 0!==f)return f}}if(s>0){var l=Object.keys(i),h=o.default.find(l,(function(e){return t.isBrowser(e,!0)}));if(void 0!==h)return this.compareVersion(i[h])}},t.isBrowser=function(e,t){void 0===t&&(t=!1);var r=this.getBrowserName().toLowerCase(),n=e.toLowerCase(),i=o.default.getBrowserTypeByAlias(n);return t&&i&&(n=i.toLowerCase()),n===r},t.compareVersion=function(e){var t=[0],r=e,n=!1,i=this.getBrowserVersion();if("string"==typeof i)return">"===e[0]||"<"===e[0]?(r=e.substr(1),"="===e[1]?(n=!0,r=e.substr(2)):t=[],">"===e[0]?t.push(1):t.push(-1)):"="===e[0]?r=e.substr(1):"~"===e[0]&&(n=!0,r=e.substr(1)),t.indexOf(o.default.compareVersions(i,r,n))>-1},t.isOS=function(e){return this.getOSName(!0)===String(e).toLowerCase()},t.isPlatform=function(e){return this.getPlatformType(!0)===String(e).toLowerCase()},t.isEngine=function(e){return this.getEngineName(!0)===String(e).toLowerCase()},t.is=function(e,t){return void 0===t&&(t=!1),this.isBrowser(e,t)||this.isOS(e)||this.isPlatform(e)},t.some=function(e){var t=this;return void 0===e&&(e=[]),e.some((function(e){return t.is(e)}))},e}();t.default=d,e.exports=t.default},92:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(17))&&n.__esModule?n:{default:n};var s=/version\/(\d+(\.?_?\d+)+)/i,a=[{test:[/googlebot/i],describe:function(e){var t={name:"Googlebot"},r=i.default.getFirstMatch(/googlebot\/(\d+(\.\d+))/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/opera/i],describe:function(e){var t={name:"Opera"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:opera)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/opr\/|opios/i],describe:function(e){var t={name:"Opera"},r=i.default.getFirstMatch(/(?:opr|opios)[\s/](\S+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/SamsungBrowser/i],describe:function(e){var t={name:"Samsung Internet for Android"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:SamsungBrowser)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/Whale/i],describe:function(e){var t={name:"NAVER Whale Browser"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:whale)[\s/](\d+(?:\.\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/MZBrowser/i],describe:function(e){var t={name:"MZ Browser"},r=i.default.getFirstMatch(/(?:MZBrowser)[\s/](\d+(?:\.\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/focus/i],describe:function(e){var t={name:"Focus"},r=i.default.getFirstMatch(/(?:focus)[\s/](\d+(?:\.\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/swing/i],describe:function(e){var t={name:"Swing"},r=i.default.getFirstMatch(/(?:swing)[\s/](\d+(?:\.\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/coast/i],describe:function(e){var t={name:"Opera Coast"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:coast)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/opt\/\d+(?:.?_?\d+)+/i],describe:function(e){var t={name:"Opera Touch"},r=i.default.getFirstMatch(/(?:opt)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/yabrowser/i],describe:function(e){var t={name:"Yandex Browser"},r=i.default.getFirstMatch(/(?:yabrowser)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/ucbrowser/i],describe:function(e){var t={name:"UC Browser"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:ucbrowser)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/Maxthon|mxios/i],describe:function(e){var t={name:"Maxthon"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:Maxthon|mxios)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/epiphany/i],describe:function(e){var t={name:"Epiphany"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:epiphany)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/puffin/i],describe:function(e){var t={name:"Puffin"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:puffin)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/sleipnir/i],describe:function(e){var t={name:"Sleipnir"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:sleipnir)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/k-meleon/i],describe:function(e){var t={name:"K-Meleon"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:k-meleon)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/micromessenger/i],describe:function(e){var t={name:"WeChat"},r=i.default.getFirstMatch(/(?:micromessenger)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/qqbrowser/i],describe:function(e){var t={name:/qqbrowserlite/i.test(e)?"QQ Browser Lite":"QQ Browser"},r=i.default.getFirstMatch(/(?:qqbrowserlite|qqbrowser)[/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/msie|trident/i],describe:function(e){var t={name:"Internet Explorer"},r=i.default.getFirstMatch(/(?:msie |rv:)(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/\sedg\//i],describe:function(e){var t={name:"Microsoft Edge"},r=i.default.getFirstMatch(/\sedg\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/edg([ea]|ios)/i],describe:function(e){var t={name:"Microsoft Edge"},r=i.default.getSecondMatch(/edg([ea]|ios)\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/vivaldi/i],describe:function(e){var t={name:"Vivaldi"},r=i.default.getFirstMatch(/vivaldi\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/seamonkey/i],describe:function(e){var t={name:"SeaMonkey"},r=i.default.getFirstMatch(/seamonkey\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/sailfish/i],describe:function(e){var t={name:"Sailfish"},r=i.default.getFirstMatch(/sailfish\s?browser\/(\d+(\.\d+)?)/i,e);return r&&(t.version=r),t}},{test:[/silk/i],describe:function(e){var t={name:"Amazon Silk"},r=i.default.getFirstMatch(/silk\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/phantom/i],describe:function(e){var t={name:"PhantomJS"},r=i.default.getFirstMatch(/phantomjs\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/slimerjs/i],describe:function(e){var t={name:"SlimerJS"},r=i.default.getFirstMatch(/slimerjs\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/blackberry|\bbb\d+/i,/rim\stablet/i],describe:function(e){var t={name:"BlackBerry"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/blackberry[\d]+\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/(web|hpw)[o0]s/i],describe:function(e){var t={name:"WebOS Browser"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/w(?:eb)?[o0]sbrowser\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/bada/i],describe:function(e){var t={name:"Bada"},r=i.default.getFirstMatch(/dolfin\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/tizen/i],describe:function(e){var t={name:"Tizen"},r=i.default.getFirstMatch(/(?:tizen\s?)?browser\/(\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/qupzilla/i],describe:function(e){var t={name:"QupZilla"},r=i.default.getFirstMatch(/(?:qupzilla)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/firefox|iceweasel|fxios/i],describe:function(e){var t={name:"Firefox"},r=i.default.getFirstMatch(/(?:firefox|iceweasel|fxios)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/electron/i],describe:function(e){var t={name:"Electron"},r=i.default.getFirstMatch(/(?:electron)\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/MiuiBrowser/i],describe:function(e){var t={name:"Miui"},r=i.default.getFirstMatch(/(?:MiuiBrowser)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/chromium/i],describe:function(e){var t={name:"Chromium"},r=i.default.getFirstMatch(/(?:chromium)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/chrome|crios|crmo/i],describe:function(e){var t={name:"Chrome"},r=i.default.getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/GSA/i],describe:function(e){var t={name:"Google Search"},r=i.default.getFirstMatch(/(?:GSA)\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:function(e){var t=!e.test(/like android/i),r=e.test(/android/i);return t&&r},describe:function(e){var t={name:"Android Browser"},r=i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/playstation 4/i],describe:function(e){var t={name:"PlayStation 4"},r=i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/safari|applewebkit/i],describe:function(e){var t={name:"Safari"},r=i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/.*/i],describe:function(e){var t=-1!==e.search("\\(")?/^(.*)\/(.*)[ \t]\((.*)/:/^(.*)\/(.*) /;return{name:i.default.getFirstMatch(t,e),version:i.default.getSecondMatch(t,e)}}}];t.default=a,e.exports=t.default},93:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(17))&&n.__esModule?n:{default:n},s=r(18);var a=[{test:[/Roku\/DVP/],describe:function(e){var t=i.default.getFirstMatch(/Roku\/DVP-(\d+\.\d+)/i,e);return{name:s.OS_MAP.Roku,version:t}}},{test:[/windows phone/i],describe:function(e){var t=i.default.getFirstMatch(/windows phone (?:os)?\s?(\d+(\.\d+)*)/i,e);return{name:s.OS_MAP.WindowsPhone,version:t}}},{test:[/windows /i],describe:function(e){var t=i.default.getFirstMatch(/Windows ((NT|XP)( \d\d?.\d)?)/i,e),r=i.default.getWindowsVersionName(t);return{name:s.OS_MAP.Windows,version:t,versionName:r}}},{test:[/Macintosh(.*?) FxiOS(.*?)\//],describe:function(e){var t={name:s.OS_MAP.iOS},r=i.default.getSecondMatch(/(Version\/)(\d[\d.]+)/,e);return r&&(t.version=r),t}},{test:[/macintosh/i],describe:function(e){var t=i.default.getFirstMatch(/mac os x (\d+(\.?_?\d+)+)/i,e).replace(/[_\s]/g,"."),r=i.default.getMacOSVersionName(t),n={name:s.OS_MAP.MacOS,version:t};return r&&(n.versionName=r),n}},{test:[/(ipod|iphone|ipad)/i],describe:function(e){var t=i.default.getFirstMatch(/os (\d+([_\s]\d+)*) like mac os x/i,e).replace(/[_\s]/g,".");return{name:s.OS_MAP.iOS,version:t}}},{test:function(e){var t=!e.test(/like android/i),r=e.test(/android/i);return t&&r},describe:function(e){var t=i.default.getFirstMatch(/android[\s/-](\d+(\.\d+)*)/i,e),r=i.default.getAndroidVersionName(t),n={name:s.OS_MAP.Android,version:t};return r&&(n.versionName=r),n}},{test:[/(web|hpw)[o0]s/i],describe:function(e){var t=i.default.getFirstMatch(/(?:web|hpw)[o0]s\/(\d+(\.\d+)*)/i,e),r={name:s.OS_MAP.WebOS};return t&&t.length&&(r.version=t),r}},{test:[/blackberry|\bbb\d+/i,/rim\stablet/i],describe:function(e){var t=i.default.getFirstMatch(/rim\stablet\sos\s(\d+(\.\d+)*)/i,e)||i.default.getFirstMatch(/blackberry\d+\/(\d+([_\s]\d+)*)/i,e)||i.default.getFirstMatch(/\bbb(\d+)/i,e);return{name:s.OS_MAP.BlackBerry,version:t}}},{test:[/bada/i],describe:function(e){var t=i.default.getFirstMatch(/bada\/(\d+(\.\d+)*)/i,e);return{name:s.OS_MAP.Bada,version:t}}},{test:[/tizen/i],describe:function(e){var t=i.default.getFirstMatch(/tizen[/\s](\d+(\.\d+)*)/i,e);return{name:s.OS_MAP.Tizen,version:t}}},{test:[/linux/i],describe:function(){return{name:s.OS_MAP.Linux}}},{test:[/CrOS/],describe:function(){return{name:s.OS_MAP.ChromeOS}}},{test:[/PlayStation 4/],describe:function(e){var t=i.default.getFirstMatch(/PlayStation 4[/\s](\d+(\.\d+)*)/i,e);return{name:s.OS_MAP.PlayStation4,version:t}}}];t.default=a,e.exports=t.default},94:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(17))&&n.__esModule?n:{default:n},s=r(18);var a=[{test:[/googlebot/i],describe:function(){return{type:"bot",vendor:"Google"}}},{test:[/huawei/i],describe:function(e){var t=i.default.getFirstMatch(/(can-l01)/i,e)&&"Nova",r={type:s.PLATFORMS_MAP.mobile,vendor:"Huawei"};return t&&(r.model=t),r}},{test:[/nexus\s*(?:7|8|9|10).*/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Nexus"}}},{test:[/ipad/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Apple",model:"iPad"}}},{test:[/Macintosh(.*?) FxiOS(.*?)\//],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Apple",model:"iPad"}}},{test:[/kftt build/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Amazon",model:"Kindle Fire HD 7"}}},{test:[/silk/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Amazon"}}},{test:[/tablet(?! pc)/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet}}},{test:function(e){var t=e.test(/ipod|iphone/i),r=e.test(/like (ipod|iphone)/i);return t&&!r},describe:function(e){var t=i.default.getFirstMatch(/(ipod|iphone)/i,e);return{type:s.PLATFORMS_MAP.mobile,vendor:"Apple",model:t}}},{test:[/nexus\s*[0-6].*/i,/galaxy nexus/i],describe:function(){return{type:s.PLATFORMS_MAP.mobile,vendor:"Nexus"}}},{test:[/[^-]mobi/i],describe:function(){return{type:s.PLATFORMS_MAP.mobile}}},{test:function(e){return"blackberry"===e.getBrowserName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.mobile,vendor:"BlackBerry"}}},{test:function(e){return"bada"===e.getBrowserName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.mobile}}},{test:function(e){return"windows phone"===e.getBrowserName()},describe:function(){return{type:s.PLATFORMS_MAP.mobile,vendor:"Microsoft"}}},{test:function(e){var t=Number(String(e.getOSVersion()).split(".")[0]);return"android"===e.getOSName(!0)&&t>=3},describe:function(){return{type:s.PLATFORMS_MAP.tablet}}},{test:function(e){return"android"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.mobile}}},{test:function(e){return"macos"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.desktop,vendor:"Apple"}}},{test:function(e){return"windows"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.desktop}}},{test:function(e){return"linux"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.desktop}}},{test:function(e){return"playstation 4"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.tv}}},{test:function(e){return"roku"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.tv}}}];t.default=a,e.exports=t.default},95:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(17))&&n.__esModule?n:{default:n},s=r(18);var a=[{test:function(e){return"microsoft edge"===e.getBrowserName(!0)},describe:function(e){if(/\sedg\//i.test(e))return{name:s.ENGINE_MAP.Blink};var t=i.default.getFirstMatch(/edge\/(\d+(\.?_?\d+)+)/i,e);return{name:s.ENGINE_MAP.EdgeHTML,version:t}}},{test:[/trident/i],describe:function(e){var t={name:s.ENGINE_MAP.Trident},r=i.default.getFirstMatch(/trident\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:function(e){return e.test(/presto/i)},describe:function(e){var t={name:s.ENGINE_MAP.Presto},r=i.default.getFirstMatch(/presto\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:function(e){var t=e.test(/gecko/i),r=e.test(/like gecko/i);return t&&!r},describe:function(e){var t={name:s.ENGINE_MAP.Gecko},r=i.default.getFirstMatch(/gecko\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/(apple)?webkit\/537\.36/i],describe:function(){return{name:s.ENGINE_MAP.Blink}}},{test:[/(apple)?webkit/i],describe:function(e){var t={name:s.ENGINE_MAP.WebKit},r=i.default.getFirstMatch(/webkit\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}}];t.default=a,e.exports=t.default}})}));
-},{}],14:[function(require,module,exports){
-
-},{}],15:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -3250,7 +2098,1866 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":11,"buffer":15,"ieee754":41}],16:[function(require,module,exports){
+},{"base64-js":2,"buffer":4,"ieee754":6}],5:[function(require,module,exports){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+'use strict';
+
+var R = typeof Reflect === 'object' ? Reflect : null
+var ReflectApply = R && typeof R.apply === 'function'
+  ? R.apply
+  : function ReflectApply(target, receiver, args) {
+    return Function.prototype.apply.call(target, receiver, args);
+  }
+
+var ReflectOwnKeys
+if (R && typeof R.ownKeys === 'function') {
+  ReflectOwnKeys = R.ownKeys
+} else if (Object.getOwnPropertySymbols) {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target)
+      .concat(Object.getOwnPropertySymbols(target));
+  };
+} else {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target);
+  };
+}
+
+function ProcessEmitWarning(warning) {
+  if (console && console.warn) console.warn(warning);
+}
+
+var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
+  return value !== value;
+}
+
+function EventEmitter() {
+  EventEmitter.init.call(this);
+}
+module.exports = EventEmitter;
+module.exports.once = once;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._eventsCount = 0;
+EventEmitter.prototype._maxListeners = undefined;
+
+// By default EventEmitters will print a warning if more than 10 listeners are
+// added to it. This is a useful default which helps finding memory leaks.
+var defaultMaxListeners = 10;
+
+function checkListener(listener) {
+  if (typeof listener !== 'function') {
+    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
+  }
+}
+
+Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
+  enumerable: true,
+  get: function() {
+    return defaultMaxListeners;
+  },
+  set: function(arg) {
+    if (typeof arg !== 'number' || arg < 0 || NumberIsNaN(arg)) {
+      throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
+    }
+    defaultMaxListeners = arg;
+  }
+});
+
+EventEmitter.init = function() {
+
+  if (this._events === undefined ||
+      this._events === Object.getPrototypeOf(this)._events) {
+    this._events = Object.create(null);
+    this._eventsCount = 0;
+  }
+
+  this._maxListeners = this._maxListeners || undefined;
+};
+
+// Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
+  if (typeof n !== 'number' || n < 0 || NumberIsNaN(n)) {
+    throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + n + '.');
+  }
+  this._maxListeners = n;
+  return this;
+};
+
+function _getMaxListeners(that) {
+  if (that._maxListeners === undefined)
+    return EventEmitter.defaultMaxListeners;
+  return that._maxListeners;
+}
+
+EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
+  return _getMaxListeners(this);
+};
+
+EventEmitter.prototype.emit = function emit(type) {
+  var args = [];
+  for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
+  var doError = (type === 'error');
+
+  var events = this._events;
+  if (events !== undefined)
+    doError = (doError && events.error === undefined);
+  else if (!doError)
+    return false;
+
+  // If there is no 'error' event listener then throw.
+  if (doError) {
+    var er;
+    if (args.length > 0)
+      er = args[0];
+    if (er instanceof Error) {
+      // Note: The comments on the `throw` lines are intentional, they show
+      // up in Node's output if this results in an unhandled exception.
+      throw er; // Unhandled 'error' event
+    }
+    // At least give some kind of context to the user
+    var err = new Error('Unhandled error.' + (er ? ' (' + er.message + ')' : ''));
+    err.context = er;
+    throw err; // Unhandled 'error' event
+  }
+
+  var handler = events[type];
+
+  if (handler === undefined)
+    return false;
+
+  if (typeof handler === 'function') {
+    ReflectApply(handler, this, args);
+  } else {
+    var len = handler.length;
+    var listeners = arrayClone(handler, len);
+    for (var i = 0; i < len; ++i)
+      ReflectApply(listeners[i], this, args);
+  }
+
+  return true;
+};
+
+function _addListener(target, type, listener, prepend) {
+  var m;
+  var events;
+  var existing;
+
+  checkListener(listener);
+
+  events = target._events;
+  if (events === undefined) {
+    events = target._events = Object.create(null);
+    target._eventsCount = 0;
+  } else {
+    // To avoid recursion in the case that type === "newListener"! Before
+    // adding it to the listeners, first emit "newListener".
+    if (events.newListener !== undefined) {
+      target.emit('newListener', type,
+                  listener.listener ? listener.listener : listener);
+
+      // Re-assign `events` because a newListener handler could have caused the
+      // this._events to be assigned to a new object
+      events = target._events;
+    }
+    existing = events[type];
+  }
+
+  if (existing === undefined) {
+    // Optimize the case of one listener. Don't need the extra array object.
+    existing = events[type] = listener;
+    ++target._eventsCount;
+  } else {
+    if (typeof existing === 'function') {
+      // Adding the second element, need to change to array.
+      existing = events[type] =
+        prepend ? [listener, existing] : [existing, listener];
+      // If we've already got an array, just append.
+    } else if (prepend) {
+      existing.unshift(listener);
+    } else {
+      existing.push(listener);
+    }
+
+    // Check for listener leak
+    m = _getMaxListeners(target);
+    if (m > 0 && existing.length > m && !existing.warned) {
+      existing.warned = true;
+      // No error code for this since it is a Warning
+      // eslint-disable-next-line no-restricted-syntax
+      var w = new Error('Possible EventEmitter memory leak detected. ' +
+                          existing.length + ' ' + String(type) + ' listeners ' +
+                          'added. Use emitter.setMaxListeners() to ' +
+                          'increase limit');
+      w.name = 'MaxListenersExceededWarning';
+      w.emitter = target;
+      w.type = type;
+      w.count = existing.length;
+      ProcessEmitWarning(w);
+    }
+  }
+
+  return target;
+}
+
+EventEmitter.prototype.addListener = function addListener(type, listener) {
+  return _addListener(this, type, listener, false);
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.prependListener =
+    function prependListener(type, listener) {
+      return _addListener(this, type, listener, true);
+    };
+
+function onceWrapper() {
+  if (!this.fired) {
+    this.target.removeListener(this.type, this.wrapFn);
+    this.fired = true;
+    if (arguments.length === 0)
+      return this.listener.call(this.target);
+    return this.listener.apply(this.target, arguments);
+  }
+}
+
+function _onceWrap(target, type, listener) {
+  var state = { fired: false, wrapFn: undefined, target: target, type: type, listener: listener };
+  var wrapped = onceWrapper.bind(state);
+  wrapped.listener = listener;
+  state.wrapFn = wrapped;
+  return wrapped;
+}
+
+EventEmitter.prototype.once = function once(type, listener) {
+  checkListener(listener);
+  this.on(type, _onceWrap(this, type, listener));
+  return this;
+};
+
+EventEmitter.prototype.prependOnceListener =
+    function prependOnceListener(type, listener) {
+      checkListener(listener);
+      this.prependListener(type, _onceWrap(this, type, listener));
+      return this;
+    };
+
+// Emits a 'removeListener' event if and only if the listener was removed.
+EventEmitter.prototype.removeListener =
+    function removeListener(type, listener) {
+      var list, events, position, i, originalListener;
+
+      checkListener(listener);
+
+      events = this._events;
+      if (events === undefined)
+        return this;
+
+      list = events[type];
+      if (list === undefined)
+        return this;
+
+      if (list === listener || list.listener === listener) {
+        if (--this._eventsCount === 0)
+          this._events = Object.create(null);
+        else {
+          delete events[type];
+          if (events.removeListener)
+            this.emit('removeListener', type, list.listener || listener);
+        }
+      } else if (typeof list !== 'function') {
+        position = -1;
+
+        for (i = list.length - 1; i >= 0; i--) {
+          if (list[i] === listener || list[i].listener === listener) {
+            originalListener = list[i].listener;
+            position = i;
+            break;
+          }
+        }
+
+        if (position < 0)
+          return this;
+
+        if (position === 0)
+          list.shift();
+        else {
+          spliceOne(list, position);
+        }
+
+        if (list.length === 1)
+          events[type] = list[0];
+
+        if (events.removeListener !== undefined)
+          this.emit('removeListener', type, originalListener || listener);
+      }
+
+      return this;
+    };
+
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+
+EventEmitter.prototype.removeAllListeners =
+    function removeAllListeners(type) {
+      var listeners, events, i;
+
+      events = this._events;
+      if (events === undefined)
+        return this;
+
+      // not listening for removeListener, no need to emit
+      if (events.removeListener === undefined) {
+        if (arguments.length === 0) {
+          this._events = Object.create(null);
+          this._eventsCount = 0;
+        } else if (events[type] !== undefined) {
+          if (--this._eventsCount === 0)
+            this._events = Object.create(null);
+          else
+            delete events[type];
+        }
+        return this;
+      }
+
+      // emit removeListener for all listeners on all events
+      if (arguments.length === 0) {
+        var keys = Object.keys(events);
+        var key;
+        for (i = 0; i < keys.length; ++i) {
+          key = keys[i];
+          if (key === 'removeListener') continue;
+          this.removeAllListeners(key);
+        }
+        this.removeAllListeners('removeListener');
+        this._events = Object.create(null);
+        this._eventsCount = 0;
+        return this;
+      }
+
+      listeners = events[type];
+
+      if (typeof listeners === 'function') {
+        this.removeListener(type, listeners);
+      } else if (listeners !== undefined) {
+        // LIFO order
+        for (i = listeners.length - 1; i >= 0; i--) {
+          this.removeListener(type, listeners[i]);
+        }
+      }
+
+      return this;
+    };
+
+function _listeners(target, type, unwrap) {
+  var events = target._events;
+
+  if (events === undefined)
+    return [];
+
+  var evlistener = events[type];
+  if (evlistener === undefined)
+    return [];
+
+  if (typeof evlistener === 'function')
+    return unwrap ? [evlistener.listener || evlistener] : [evlistener];
+
+  return unwrap ?
+    unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
+}
+
+EventEmitter.prototype.listeners = function listeners(type) {
+  return _listeners(this, type, true);
+};
+
+EventEmitter.prototype.rawListeners = function rawListeners(type) {
+  return _listeners(this, type, false);
+};
+
+EventEmitter.listenerCount = function(emitter, type) {
+  if (typeof emitter.listenerCount === 'function') {
+    return emitter.listenerCount(type);
+  } else {
+    return listenerCount.call(emitter, type);
+  }
+};
+
+EventEmitter.prototype.listenerCount = listenerCount;
+function listenerCount(type) {
+  var events = this._events;
+
+  if (events !== undefined) {
+    var evlistener = events[type];
+
+    if (typeof evlistener === 'function') {
+      return 1;
+    } else if (evlistener !== undefined) {
+      return evlistener.length;
+    }
+  }
+
+  return 0;
+}
+
+EventEmitter.prototype.eventNames = function eventNames() {
+  return this._eventsCount > 0 ? ReflectOwnKeys(this._events) : [];
+};
+
+function arrayClone(arr, n) {
+  var copy = new Array(n);
+  for (var i = 0; i < n; ++i)
+    copy[i] = arr[i];
+  return copy;
+}
+
+function spliceOne(list, index) {
+  for (; index + 1 < list.length; index++)
+    list[index] = list[index + 1];
+  list.pop();
+}
+
+function unwrapListeners(arr) {
+  var ret = new Array(arr.length);
+  for (var i = 0; i < ret.length; ++i) {
+    ret[i] = arr[i].listener || arr[i];
+  }
+  return ret;
+}
+
+function once(emitter, name) {
+  return new Promise(function (resolve, reject) {
+    function errorListener(err) {
+      emitter.removeListener(name, resolver);
+      reject(err);
+    }
+
+    function resolver() {
+      if (typeof emitter.removeListener === 'function') {
+        emitter.removeListener('error', errorListener);
+      }
+      resolve([].slice.call(arguments));
+    };
+
+    eventTargetAgnosticAddListener(emitter, name, resolver, { once: true });
+    if (name !== 'error') {
+      addErrorHandlerIfEventEmitter(emitter, errorListener, { once: true });
+    }
+  });
+}
+
+function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
+  if (typeof emitter.on === 'function') {
+    eventTargetAgnosticAddListener(emitter, 'error', handler, flags);
+  }
+}
+
+function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
+  if (typeof emitter.on === 'function') {
+    if (flags.once) {
+      emitter.once(name, listener);
+    } else {
+      emitter.on(name, listener);
+    }
+  } else if (typeof emitter.addEventListener === 'function') {
+    // EventTarget does not have `error` event semantics like Node
+    // EventEmitters, we do not listen for `error` events here.
+    emitter.addEventListener(name, function wrapListener(arg) {
+      // IE does not have builtin `{ once: true }` support so we
+      // have to do it manually.
+      if (flags.once) {
+        emitter.removeEventListener(name, wrapListener);
+      }
+      listener(arg);
+    });
+  } else {
+    throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
+  }
+}
+
+},{}],6:[function(require,module,exports){
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+exports.read = function (buffer, offset, isLE, mLen, nBytes) {
+  var e, m
+  var eLen = (nBytes * 8) - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var nBits = -7
+  var i = isLE ? (nBytes - 1) : 0
+  var d = isLE ? -1 : 1
+  var s = buffer[offset + i]
+
+  i += d
+
+  e = s & ((1 << (-nBits)) - 1)
+  s >>= (-nBits)
+  nBits += eLen
+  for (; nBits > 0; e = (e * 256) + buffer[offset + i], i += d, nBits -= 8) {}
+
+  m = e & ((1 << (-nBits)) - 1)
+  e >>= (-nBits)
+  nBits += mLen
+  for (; nBits > 0; m = (m * 256) + buffer[offset + i], i += d, nBits -= 8) {}
+
+  if (e === 0) {
+    e = 1 - eBias
+  } else if (e === eMax) {
+    return m ? NaN : ((s ? -1 : 1) * Infinity)
+  } else {
+    m = m + Math.pow(2, mLen)
+    e = e - eBias
+  }
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+}
+
+exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c
+  var eLen = (nBytes * 8) - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
+  var i = isLE ? 0 : (nBytes - 1)
+  var d = isLE ? 1 : -1
+  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
+
+  value = Math.abs(value)
+
+  if (isNaN(value) || value === Infinity) {
+    m = isNaN(value) ? 1 : 0
+    e = eMax
+  } else {
+    e = Math.floor(Math.log(value) / Math.LN2)
+    if (value * (c = Math.pow(2, -e)) < 1) {
+      e--
+      c *= 2
+    }
+    if (e + eBias >= 1) {
+      value += rt / c
+    } else {
+      value += rt * Math.pow(2, 1 - eBias)
+    }
+    if (value * c >= 2) {
+      e++
+      c /= 2
+    }
+
+    if (e + eBias >= eMax) {
+      m = 0
+      e = eMax
+    } else if (e + eBias >= 1) {
+      m = ((value * c) - 1) * Math.pow(2, mLen)
+      e = e + eBias
+    } else {
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
+      e = 0
+    }
+  }
+
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+  e = (e << mLen) | m
+  eLen += mLen
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+  buffer[offset + i - d] |= s * 128
+}
+
+},{}],7:[function(require,module,exports){
+exports.endianness = function () { return 'LE' };
+
+exports.hostname = function () {
+    if (typeof location !== 'undefined') {
+        return location.hostname
+    }
+    else return '';
+};
+
+exports.loadavg = function () { return [] };
+
+exports.uptime = function () { return 0 };
+
+exports.freemem = function () {
+    return Number.MAX_VALUE;
+};
+
+exports.totalmem = function () {
+    return Number.MAX_VALUE;
+};
+
+exports.cpus = function () { return [] };
+
+exports.type = function () { return 'Browser' };
+
+exports.release = function () {
+    if (typeof navigator !== 'undefined') {
+        return navigator.appVersion;
+    }
+    return '';
+};
+
+exports.networkInterfaces
+= exports.getNetworkInterfaces
+= function () { return {} };
+
+exports.arch = function () { return 'javascript' };
+
+exports.platform = function () { return 'browser' };
+
+exports.tmpdir = exports.tmpDir = function () {
+    return '/tmp';
+};
+
+exports.EOL = '\n';
+
+exports.homedir = function () {
+	return '/'
+};
+
+},{}],8:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],9:[function(require,module,exports){
+const io = require('socket.io-client') // client-side
+const mediasoupClient = require('mediasoup-client')
+const socket = io('/mediasoup')
+const cnt = require('../src/connect')
+const config = require('../config')
+
+
+
+// TCP/IP 통신은 일반적으로 sokect통신 이라고 부른다. 
+
+socket.on('connection-success', ({socketId, existProducer}) => {
+  console.log('--', socketId, 'Enters the room.', existProducer);
+})
+
+
+// if we don't supply it will be null
+const roomName = window.location.pathname.split('/')[2]
+// API 형식으로 변경을 해둬야 Front 및 Back 이랑 분리를 하여 사용을 할 수 있다. 
+
+let Streaming;
+let isStreaming = false;
+let isVideoON = false;
+
+let device;
+let rtpCapabilities;
+let producerTransport;
+let audioProducer;
+let videoProducer;
+let consumerTransports = [];
+
+const params = require('./mediasoupParams');
+let audioParams;
+let videoParams = { params };
+let consumingTransports = [];
+
+
+
+// streaming start
+// html audiotag 부분에 Streaming 부분을 넣어주면 됨
+// 이 때 video tag 부분을 활성화 시켜 user 정보를 넣어주면 됨
+const getLocalStream = () =>{
+  if(isStreaming  === true){
+    console.log("already streaming")
+    return
+  }
+  navigator.mediaDevices.getUserMedia({
+    audio : true,
+  }).then(streamSuccess)
+  .catch(error=>{
+    console.log(error.message)
+  })
+}
+
+
+// videoTag 부분에 .srcobject로 S
+/*
+  btnFinishStream.disabled = false
+  btnLocalVideo.disabled = false
+  btnLocalStream.disabled = true
+*/
+const streamSuccess = (stream)=>{
+  isStreaming = true
+  Streaming = stream
+
+  localVideo.srcObject = stream;
+  btnFinishStream.disabled = false
+  btnLocalVideo.disabled = false
+  btnLocalStream.disabled = true
+  // btnLocalScrean.disabled = false
+
+  audioParams= { track: stream.getAudioTracks()[0], ...audioParams };
+  console.log("audioParams",audioParams)
+
+  joinRoom() 
+}
+
+
+// 카메라를 받는 함수
+// isVideoON == True 일 경우 video tag부분에서 영상 제공을 마무리해야함
+// isVideoOn == False일 경우 video tag 부분에 영상 제공을 시작함
+const getLocalVideo = () =>{
+  if (isVideoON === false){
+    navigator.mediaDevices.getUserMedia({
+      video : {
+        width : {
+          min : 640,
+          max : 1920
+        },
+        height : {
+          min : 400,
+          max : 1080
+        }
+      }
+    }).then(addvideo)
+    .catch(error=>{
+      console.log(error.message)
+    })
+  }
+  if(isVideoON === true){
+    const videoTracks = Streaming.getVideoTracks();
+    Streaming.removeTrack(videoTracks[0])
+    
+    
+    localVideo.srcObject = null;
+    
+    videoProducer.close()
+    videoParams = undefined
+    isVideoON = false
+    // Streaming.getVideoTracks().forEach(track => track.stop());
+    closeProducer(videoProducer)
+  }
+}
+
+const addvideo = (stream) =>{
+  isVideoON = true
+  const videoTracks = stream.getVideoTracks();
+  Streaming.addTrack(videoTracks[0])
+
+  localVideo.srcObject = null;
+  localVideo.srcObject = Streaming;
+  
+  videoParams = { track: stream.getVideoTracks()[0], ...videoParams };
+  console.log("videoParams",videoParams)
+  try{
+    
+    connectSendTransport()
+  }catch (error)
+  {
+    console.log(error)
+    if (error.name === 'UnsupportedError')
+      {console.warn('browser not supported')}
+  }
+  
+}
+
+const joinRoom = () =>{ // to make router or go to router
+  socket.emit('joinRoom', {roomName}, (data) => {
+    console.log(`Router RTP Capabilities... ${data.rtpCapabilities}`)
+    //we assign to local variable and will be used
+    // console.log('data', data)
+    rtpCapabilities = data.rtpCapabilities
+    // once we have rtp capability, create device
+    createDevice()
+  })
+}
+
+// make device when we join the room
+const createDevice = async () =>{
+  try{
+    device = new mediasoupClient.Device()
+    await device.load({
+      routerRtpCapabilities : rtpCapabilities
+    })
+    console.log('Device RTP Capabilities', rtpCapabilities)
+    //once the device load, create transport
+    createSendTransport() // this cuz for everyone is producer & consumer
+  }catch (error)
+  {
+    console.log(error)
+    if (error.name === 'UnsupportedError')
+      {console.warn('browser not supported')}
+  }
+}
+
+//============================================================================================
+//========================== For create Send Transport =======================================
+//============================================================================================
+const createSendTransport = async ()=>{
+  await socket.emit('createWebRTCTransport',{consumer : false}, (params)=>{
+    if (params.error){
+      console.log(params.error)
+      return
+    }
+
+    producerTransport = device.createSendTransport(params) // ready for send streaming data
+    producerTransport.on('connect', async({dtlsParameters}, callback, errback) =>{
+      try{
+        // signal of local DTLS parameters to the serverside transport
+        await socket.emit('transport-connect',{
+          // transportId : producerTransport.id,
+          dtlsParameters,
+        })
+        // tell the transport that parameters were transmitted
+        callback()
+      }catch(error){
+        console.log(error)
+        errback(error)
+      }
+    })
+
+    producerTransport.on('produce', async(parameters, callback, errback) =>{
+      try{
+        await socket.emit('transport-produce',{
+          // transportId : producerTransport.id,
+          kind : parameters.kind,
+          rtpParameters : parameters.rtpParameters,
+          appData : parameters.appData          
+        }, ({id, producerExist}) => {
+          // tell the transport that parameters were transmitted and provide
+          // give producer's id for serverside
+          callback({id, producerExist})
+          if(producerExist){
+            getProducers()
+          }
+        })
+      }catch(error){
+        errback(error)
+      }
+    })
+    connectSendTransport()
+  })
+}
+
+// for connect [Send transport & produce]
+const connectSendTransport = async()=>{
+  try{
+    if (isVideoON === false){
+      audioProducer = await cnt.Producer(producerTransport, audioParams)
+    }
+  }catch(error){
+    console.warn('audio is missing')
+  }
+  
+  try{
+    videoProducer = await cnt.Producer(producerTransport, videoParams)
+  }catch(error){
+    console.warn('video is missing')
+  }
+}
+
+// server have to inform the client of a new producer just joined // and ready for consume
+socket.on('new-producer',({producerId}) => signalNewConsumerTransport(producerId))
+const getProducers = () => {
+  socket.emit('getProducers', (producerIds) =>{
+    console.log("producer Ids", producerIds)
+    producerIds.forEach(id => signalNewConsumerTransport(id))
+    // producerIds.forEach(signalNewConsumerTransport)
+  })
+}
+//============================================================================================
+//============================================================================================
+//============================================================================================
+
+
+//============================================================================================
+//======================== For create Receiver Transport =====================================
+//============================================================================================
+const signalNewConsumerTransport = async (remoteProducerId)=>{
+  //check if we are already consuming the remoteProducerId
+  if (consumingTransports.includes(remoteProducerId)) {return;}
+  consumingTransports.push(remoteProducerId);
+
+  await socket.emit('createWebRTCTransport',{consumer : true}, (params)=>{
+    if (params.error){
+      console.log(params.error)
+      return
+    }
+
+    console.log(`PARAMS... ${params}`)
+    let consumerTransport;
+    try {
+      consumerTransport = device.createRecvTransport(params)
+    } catch (error) {
+      console.log(error)
+      return
+    }
+    
+    consumerTransport.on('connect', async({dtlsParameters}, callback, errback) =>{
+      try{
+        // signal of local DTLS parameters to the serverside transport
+          await socket.emit('transport-recv-connect',{
+            // transportId : consumerTransport.id,
+            dtlsParameters : dtlsParameters,
+            serverside_ConsumerTransportId : params.id
+          })
+          callback()
+      }catch(error){
+        errback(error)
+      }
+    })
+    
+    connectRecvTransport(consumerTransport, remoteProducerId, params.id)
+  })
+}
+
+const connectRecvTransport = async(consumerTransport, remoteProducerId, serverside_ConsumerTransportId)=>{
+  await socket.emit('consume',{
+    rtpCapabilities : device.rtpCapabilities,
+    remoteProducerId,
+    serverside_ConsumerTransportId,
+  },
+  async({params}) =>{
+    if (params.error){
+      console.log('Cannot consume')
+      return
+    }
+    
+    console.log(`Consumer Params ${params.kind}`)
+    const consumer = await consumerTransport.consume({
+      id : params.id,
+      producerId : params.producerId,
+      kind : params.kind,
+      rtpParameters : params.rtpParameters,
+    })
+
+    consumerTransports = [
+      ...consumerTransports,
+      {
+        consumerTransport,
+        serverside_ConsumerTransportId : params.id,
+        producerId : remoteProducerId,
+        consumer,
+      }
+    ]
+
+//============ Create Video // 프론트 단에서 진행되는 거라 나중에 업데이트
+    createTrack(false, remoteProducerId, params.kind)
+    const {track} = await consumer
+    document.getElementById(remoteProducerId).srcObject = new MediaStream([track])
+    socket.emit('consumer-resume', {serverside_ConsumerId : params.serverside_ConsumerId})
+//=====================================================================
+  })
+}
+//============================================================================================
+//============================================================================================
+//============================================================================================
+
+socket.on('producer-closed', async({remoteProducerId})=>{
+//========= 상대방 종료시 데이터 삭제
+  await deleteVideo(false, remoteProducerId)
+  consumingTransports.pop(remoteProducerId)
+//==============================
+})
+
+// 모든 정보를 삭제함
+/*
+  btnFinishStream.disabled = true
+  btnLocalVideo.disabled = true
+  btnLocalScrean.disabled = true
+  btnLocalStream.disabled = false
+*/
+const finishStream = async () =>{ // ProducerId : 내 아이디 , remoteProducerIds : Consumers의 정보들 
+
+  if(isStreaming === false){
+    console.log("already Finished")
+    return
+  }
+  btnFinishStream.disabled = true
+  btnLocalVideo.disabled = true
+  btnLocalScrean.disabled = true
+  btnLocalStream.disabled = false
+  closeTransport(videoProducer || audioProducer || screenProducer)
+
+  videoParams = undefined
+  audioParams = undefined
+  isStreaming = false
+  isVideoON = false
+  consumingTransports = [] // Producing이 끝나 consuming을 하지 않음
+    
+}
+
+const closeProducer = async(producer) =>{
+  await socket.emit('produceClose',{
+    rtpCapabilities : device.rtpCapabilities,
+    remoteProducerId : producer.id,
+    serverside_ConsumerTransportId : producerTransport.id,
+  }, async()=>{
+    // await deleteVideo(false, to_erase)
+    producer.close()
+    videoProducer = undefined
+    producer.on('trackened', ()=>{
+      console.log('track ended')
+      //close video tarck
+    })
+    producer.on('transportclose', ()=>{
+      console.log('transport ended')
+      //close video tarck
+    })
+  })
+}
+
+
+const closeTransport = async(video, audio, screen) =>{
+  try{
+    if(video || audio)
+    {
+      let producer;
+      producer = video || audio
+      console.log("Producer ID ",producer.id)
+      await socket.emit('exitRoom',{
+        rtpCapabilities : device.rtpCapabilities,
+        remoteProducerId : producer.id, 
+        serverside_ConsumerTransportId : producerTransport.id,
+      }, async()=>{
+        await deleteVideo(true)
+        producer.close()
+        producerTransport.close()
+        Streaming.getTracks().forEach(track => track.stop());
+    
+        producer.on('trackened', ()=>{
+          console.log('track ended')
+          //close video tarck
+        })
+        producer.on('transportclose', ()=>{
+          console.log('transport ended')
+          //close video tarck
+        })
+      })
+    }
+    else{
+      console.log("Noting to close")
+      return;
+    }
+  }catch(error){
+    console.log(error.message)
+  }
+}
+
+// 영상 혹은 audio tag를 만드는
+const createTrack = async(isProducer = false, ProducerId,kind) =>{
+  if(isProducer === false)
+  {
+    const newElem = document.createElement('div')
+    newElem.setAttribute('id', `td-${ProducerId}`)
+    if (kind === 'audio'){
+      newElem.innerHTML = `<audio id="${ProducerId}" autoplay></audio>`
+    }
+    else if (kind === 'video'){
+      newElem.setAttribute('class','remoteVideo')
+      newElem.innerHTML = `<video id="${ProducerId}" autoplay class = "video"></video>`
+    }
+    videoContainer.appendChild(newElem);
+  }
+  if(isProducer === true)
+  {
+    // 검은색 칸이 보기 싫다면 업데이트 하기
+  }
+}
+
+// 여
+const deleteVideo = async(isProducer = false, remoteProducerId) =>{
+  try{
+    if(isProducer ===false) // remoteProducer가 streaming종료
+    {
+      const producerToClose = consumerTransports.find(transportData => transportData.producerId === remoteProducerId)
+      producerToClose.consumerTransport.close()
+      producerToClose.consumer.close()
+      consumerTransports = consumerTransports.filter(transportData => transportData.producerId !== remoteProducerId)
+
+      videoContainer.removeChild(document.getElementById(`td-${remoteProducerId}`))
+    }
+
+    if(isProducer ===true)
+    {
+      consumerTransports.forEach(transportData =>  deleteVideo(false, transportData.producerId))
+    }
+    //==============================
+  }catch(error){
+    console.log(error)
+    throw error
+  }
+}
+
+
+btnLocalStream.addEventListener('click', getLocalStream)
+btnLocalStream.disabled = false
+
+btnLocalVideo.addEventListener('click', getLocalVideo)
+btnLocalVideo.disabled = true
+
+btnLocalScrean
+btnLocalScrean.disabled = true
+
+btnFinishStream.addEventListener('click', finishStream)
+btnFinishStream.disabled = true
+},{"../config":1,"../src/connect":104,"./mediasoupParams":10,"mediasoup-client":74,"socket.io-client":87}],10:[function(require,module,exports){
+module.exports = {
+  //mediasoup params
+  encoding : [
+    {
+      rid : 'r0',
+      maxBitrate : 100000,
+      scalabilityMode : 'S1T3'
+    },
+    {
+      rid : 'r1',
+      maxBitrate : 300000,
+      scalabilityMode : 'S1T3'
+    },
+    {
+      rid : 'r2',
+      maxBitrate : 900000,
+      scalabilityMode : 'S1T3'
+    },
+  ],
+  codecOptions : {
+    videoGoogleStartBitrate : 1000,
+  }
+}
+},{}],11:[function(require,module,exports){
+module.exports = after
+
+function after(count, callback, err_cb) {
+    var bail = false
+    err_cb = err_cb || noop
+    proxy.count = count
+
+    return (count === 0) ? callback() : proxy
+
+    function proxy(err, result) {
+        if (proxy.count <= 0) {
+            throw new Error('after called too many times')
+        }
+        --proxy.count
+
+        // after first error, rest are passed to err_cb
+        if (err) {
+            bail = true
+            callback(err)
+            // future error callbacks will go to error handler
+            callback = err_cb
+        } else if (proxy.count === 0 && !bail) {
+            callback(null, result)
+        }
+    }
+}
+
+function noop() {}
+
+},{}],12:[function(require,module,exports){
+/**
+ * An abstraction for slicing an arraybuffer even when
+ * ArrayBuffer.prototype.slice is not supported
+ *
+ * @api public
+ */
+
+module.exports = function(arraybuffer, start, end) {
+  var bytes = arraybuffer.byteLength;
+  start = start || 0;
+  end = end || bytes;
+
+  if (arraybuffer.slice) { return arraybuffer.slice(start, end); }
+
+  if (start < 0) { start += bytes; }
+  if (end < 0) { end += bytes; }
+  if (end > bytes) { end = bytes; }
+
+  if (start >= bytes || start >= end || bytes === 0) {
+    return new ArrayBuffer(0);
+  }
+
+  var abv = new Uint8Array(arraybuffer);
+  var result = new Uint8Array(end - start);
+  for (var i = start, ii = 0; i < end; i++, ii++) {
+    result[ii] = abv[i];
+  }
+  return result.buffer;
+};
+
+},{}],13:[function(require,module,exports){
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Logger = void 0;
+const debug_1 = __importDefault(require("debug"));
+const LIB_NAME = 'awaitqueue';
+class Logger {
+    constructor(prefix) {
+        if (prefix) {
+            this._debug = (0, debug_1.default)(`${LIB_NAME}:${prefix}`);
+            this._warn = (0, debug_1.default)(`${LIB_NAME}:WARN:${prefix}`);
+            this._error = (0, debug_1.default)(`${LIB_NAME}:ERROR:${prefix}`);
+        }
+        else {
+            this._debug = (0, debug_1.default)(LIB_NAME);
+            this._warn = (0, debug_1.default)(`${LIB_NAME}:WARN`);
+            this._error = (0, debug_1.default)(`${LIB_NAME}:ERROR`);
+        }
+        /* eslint-disable no-console */
+        this._debug.log = console.info.bind(console);
+        this._warn.log = console.warn.bind(console);
+        this._error.log = console.error.bind(console);
+        /* eslint-enable no-console */
+    }
+    get debug() {
+        return this._debug;
+    }
+    get warn() {
+        return this._warn;
+    }
+    get error() {
+        return this._error;
+    }
+}
+exports.Logger = Logger;
+
+},{"debug":22}],14:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AwaitQueue = exports.AwaitQueueRemovedTaskError = exports.AwaitQueueStoppedError = void 0;
+const Logger_1 = require("./Logger");
+const logger = new Logger_1.Logger();
+/**
+ * Custom Error derived class used to reject pending tasks once stop() method
+ * has been called.
+ */
+class AwaitQueueStoppedError extends Error {
+    constructor(message) {
+        super(message !== null && message !== void 0 ? message : 'AwaitQueue stopped');
+        this.name = 'AwaitQueueStoppedError';
+        // @ts-ignore
+        if (typeof Error.captureStackTrace === 'function') {
+            // @ts-ignore
+            Error.captureStackTrace(this, AwaitQueueStoppedError);
+        }
+    }
+}
+exports.AwaitQueueStoppedError = AwaitQueueStoppedError;
+/**
+ * Custom Error derived class used to reject pending tasks once removeTask()
+ * method has been called.
+ */
+class AwaitQueueRemovedTaskError extends Error {
+    constructor(message) {
+        super(message !== null && message !== void 0 ? message : 'AwaitQueue task removed');
+        this.name = 'AwaitQueueRemovedTaskError';
+        // @ts-ignore
+        if (typeof Error.captureStackTrace === 'function') {
+            // @ts-ignore
+            Error.captureStackTrace(this, AwaitQueueRemovedTaskError);
+        }
+    }
+}
+exports.AwaitQueueRemovedTaskError = AwaitQueueRemovedTaskError;
+class AwaitQueue {
+    constructor() {
+        // Queue of pending tasks (map of PendingTasks indexed by id).
+        this.pendingTasks = new Map();
+        // Incrementing PendingTask id.
+        this.nextTaskId = 0;
+        // Whether stop() method is stopping all pending tasks.
+        this.stopping = false;
+    }
+    get size() {
+        return this.pendingTasks.size;
+    }
+    async push(task, name) {
+        name = name !== null && name !== void 0 ? name : task.name;
+        logger.debug(`push() [name:${name}]`);
+        if (typeof task !== 'function') {
+            throw new TypeError('given task is not a function');
+        }
+        if (name) {
+            try {
+                Object.defineProperty(task, 'name', { value: name });
+            }
+            catch (error) { }
+        }
+        return new Promise((resolve, reject) => {
+            const pendingTask = {
+                id: this.nextTaskId++,
+                task: task,
+                name: name,
+                enqueuedAt: Date.now(),
+                executedAt: undefined,
+                completed: false,
+                resolve: (result) => {
+                    // pendingTask.resolve() can only be called in execute() method. Since
+                    // resolve() was called it means that the task successfully completed.
+                    // However the task may have been stopped before it completed (via
+                    // stop() or remove()) so its completed flag was already set. If this
+                    // is the case, abort here since next task (if any) is already being
+                    // executed.
+                    if (pendingTask.completed) {
+                        return;
+                    }
+                    pendingTask.completed = true;
+                    // Remove the task from the queue.
+                    this.pendingTasks.delete(pendingTask.id);
+                    logger.debug(`resolving task [name:${pendingTask.name}]`);
+                    // Resolve the task with the obtained result.
+                    resolve(result);
+                    // Execute the next pending task (if any).
+                    const [nextPendingTask] = this.pendingTasks.values();
+                    // NOTE: During the resolve() callback the user app may have interacted
+                    // with the queue. For instance, the app may have pushed a task while
+                    // the queue was empty so such a task is already being executed. If so,
+                    // don't execute it twice.
+                    if (nextPendingTask && !nextPendingTask.executedAt) {
+                        void this.execute(nextPendingTask);
+                    }
+                },
+                reject: (error) => {
+                    // pendingTask.reject() can be called within execute() method if the
+                    // task completed with error. However it may have also been called in
+                    // stop() or remove() methods (before or while being executed) so its
+                    // completed flag was already set. If so, abort here since next task
+                    // (if any) is already being executed.
+                    if (pendingTask.completed) {
+                        return;
+                    }
+                    pendingTask.completed = true;
+                    // Remove the task from the queue.
+                    this.pendingTasks.delete(pendingTask.id);
+                    logger.debug(`rejecting task [name:${pendingTask.name}]: %s`, String(error));
+                    // Reject the task with the obtained error.
+                    reject(error);
+                    // Execute the next pending task (if any) unless stop() is running.
+                    if (!this.stopping) {
+                        const [nextPendingTask] = this.pendingTasks.values();
+                        // NOTE: During the reject() callback the user app may have interacted
+                        // with the queue. For instance, the app may have pushed a task while
+                        // the queue was empty so such a task is already being executed. If so,
+                        // don't execute it twice.
+                        if (nextPendingTask && !nextPendingTask.executedAt) {
+                            void this.execute(nextPendingTask);
+                        }
+                    }
+                }
+            };
+            // Append task to the queue.
+            this.pendingTasks.set(pendingTask.id, pendingTask);
+            // And execute it if this is the only task in the queue.
+            if (this.pendingTasks.size === 1) {
+                void this.execute(pendingTask);
+            }
+        });
+    }
+    stop() {
+        logger.debug('stop()');
+        this.stopping = true;
+        for (const pendingTask of this.pendingTasks.values()) {
+            logger.debug(`stop() | stopping task [name:${pendingTask.name}]`);
+            pendingTask.reject(new AwaitQueueStoppedError());
+        }
+        this.stopping = false;
+    }
+    remove(taskIdx) {
+        logger.debug(`remove() [taskIdx:${taskIdx}]`);
+        const pendingTask = Array.from(this.pendingTasks.values())[taskIdx];
+        if (!pendingTask) {
+            logger.debug(`stop() | no task with given idx [taskIdx:${taskIdx}]`);
+            return;
+        }
+        pendingTask.reject(new AwaitQueueRemovedTaskError());
+    }
+    dump() {
+        const now = Date.now();
+        let idx = 0;
+        return Array.from(this.pendingTasks.values()).map((pendingTask) => ({
+            idx: idx++,
+            task: pendingTask.task,
+            name: pendingTask.name,
+            enqueuedTime: pendingTask.executedAt
+                ? pendingTask.executedAt - pendingTask.enqueuedAt
+                : now - pendingTask.enqueuedAt,
+            executionTime: pendingTask.executedAt
+                ? now - pendingTask.executedAt
+                : 0
+        }));
+    }
+    async execute(pendingTask) {
+        logger.debug(`execute() [name:${pendingTask.name}]`);
+        if (pendingTask.executedAt) {
+            throw new Error('task already being executed');
+        }
+        pendingTask.executedAt = Date.now();
+        try {
+            const result = await pendingTask.task();
+            // Resolve the task with its resolved result (if any).
+            pendingTask.resolve(result);
+        }
+        catch (error) {
+            // Reject the task with its rejected error.
+            pendingTask.reject(error);
+        }
+    }
+}
+exports.AwaitQueue = AwaitQueue;
+
+},{"./Logger":13}],15:[function(require,module,exports){
+
+/**
+ * Expose `Backoff`.
+ */
+
+module.exports = Backoff;
+
+/**
+ * Initialize backoff timer with `opts`.
+ *
+ * - `min` initial timeout in milliseconds [100]
+ * - `max` max timeout [10000]
+ * - `jitter` [0]
+ * - `factor` [2]
+ *
+ * @param {Object} opts
+ * @api public
+ */
+
+function Backoff(opts) {
+  opts = opts || {};
+  this.ms = opts.min || 100;
+  this.max = opts.max || 10000;
+  this.factor = opts.factor || 2;
+  this.jitter = opts.jitter > 0 && opts.jitter <= 1 ? opts.jitter : 0;
+  this.attempts = 0;
+}
+
+/**
+ * Return the backoff duration.
+ *
+ * @return {Number}
+ * @api public
+ */
+
+Backoff.prototype.duration = function(){
+  var ms = this.ms * Math.pow(this.factor, this.attempts++);
+  if (this.jitter) {
+    var rand =  Math.random();
+    var deviation = Math.floor(rand * this.jitter * ms);
+    ms = (Math.floor(rand * 10) & 1) == 0  ? ms - deviation : ms + deviation;
+  }
+  return Math.min(ms, this.max) | 0;
+};
+
+/**
+ * Reset the number of attempts.
+ *
+ * @api public
+ */
+
+Backoff.prototype.reset = function(){
+  this.attempts = 0;
+};
+
+/**
+ * Set the minimum duration
+ *
+ * @api public
+ */
+
+Backoff.prototype.setMin = function(min){
+  this.ms = min;
+};
+
+/**
+ * Set the maximum duration
+ *
+ * @api public
+ */
+
+Backoff.prototype.setMax = function(max){
+  this.max = max;
+};
+
+/**
+ * Set the jitter
+ *
+ * @api public
+ */
+
+Backoff.prototype.setJitter = function(jitter){
+  this.jitter = jitter;
+};
+
+
+},{}],16:[function(require,module,exports){
+/*
+ * base64-arraybuffer
+ * https://github.com/niklasvh/base64-arraybuffer
+ *
+ * Copyright (c) 2012 Niklas von Hertzen
+ * Licensed under the MIT license.
+ */
+(function(chars){
+  "use strict";
+
+  exports.encode = function(arraybuffer) {
+    var bytes = new Uint8Array(arraybuffer),
+    i, len = bytes.length, base64 = "";
+
+    for (i = 0; i < len; i+=3) {
+      base64 += chars[bytes[i] >> 2];
+      base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
+      base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
+      base64 += chars[bytes[i + 2] & 63];
+    }
+
+    if ((len % 3) === 2) {
+      base64 = base64.substring(0, base64.length - 1) + "=";
+    } else if (len % 3 === 1) {
+      base64 = base64.substring(0, base64.length - 2) + "==";
+    }
+
+    return base64;
+  };
+
+  exports.decode =  function(base64) {
+    var bufferLength = base64.length * 0.75,
+    len = base64.length, i, p = 0,
+    encoded1, encoded2, encoded3, encoded4;
+
+    if (base64[base64.length - 1] === "=") {
+      bufferLength--;
+      if (base64[base64.length - 2] === "=") {
+        bufferLength--;
+      }
+    }
+
+    var arraybuffer = new ArrayBuffer(bufferLength),
+    bytes = new Uint8Array(arraybuffer);
+
+    for (i = 0; i < len; i+=4) {
+      encoded1 = chars.indexOf(base64[i]);
+      encoded2 = chars.indexOf(base64[i+1]);
+      encoded3 = chars.indexOf(base64[i+2]);
+      encoded4 = chars.indexOf(base64[i+3]);
+
+      bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
+      bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
+      bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
+    }
+
+    return arraybuffer;
+  };
+})("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
+
+},{}],17:[function(require,module,exports){
+/**
+ * Create a blob builder even when vendor prefixes exist
+ */
+
+var BlobBuilder = typeof BlobBuilder !== 'undefined' ? BlobBuilder :
+  typeof WebKitBlobBuilder !== 'undefined' ? WebKitBlobBuilder :
+  typeof MSBlobBuilder !== 'undefined' ? MSBlobBuilder :
+  typeof MozBlobBuilder !== 'undefined' ? MozBlobBuilder : 
+  false;
+
+/**
+ * Check if Blob constructor is supported
+ */
+
+var blobSupported = (function() {
+  try {
+    var a = new Blob(['hi']);
+    return a.size === 2;
+  } catch(e) {
+    return false;
+  }
+})();
+
+/**
+ * Check if Blob constructor supports ArrayBufferViews
+ * Fails in Safari 6, so we need to map to ArrayBuffers there.
+ */
+
+var blobSupportsArrayBufferView = blobSupported && (function() {
+  try {
+    var b = new Blob([new Uint8Array([1,2])]);
+    return b.size === 2;
+  } catch(e) {
+    return false;
+  }
+})();
+
+/**
+ * Check if BlobBuilder is supported
+ */
+
+var blobBuilderSupported = BlobBuilder
+  && BlobBuilder.prototype.append
+  && BlobBuilder.prototype.getBlob;
+
+/**
+ * Helper function that maps ArrayBufferViews to ArrayBuffers
+ * Used by BlobBuilder constructor and old browsers that didn't
+ * support it in the Blob constructor.
+ */
+
+function mapArrayBufferViews(ary) {
+  return ary.map(function(chunk) {
+    if (chunk.buffer instanceof ArrayBuffer) {
+      var buf = chunk.buffer;
+
+      // if this is a subarray, make a copy so we only
+      // include the subarray region from the underlying buffer
+      if (chunk.byteLength !== buf.byteLength) {
+        var copy = new Uint8Array(chunk.byteLength);
+        copy.set(new Uint8Array(buf, chunk.byteOffset, chunk.byteLength));
+        buf = copy.buffer;
+      }
+
+      return buf;
+    }
+
+    return chunk;
+  });
+}
+
+function BlobBuilderConstructor(ary, options) {
+  options = options || {};
+
+  var bb = new BlobBuilder();
+  mapArrayBufferViews(ary).forEach(function(part) {
+    bb.append(part);
+  });
+
+  return (options.type) ? bb.getBlob(options.type) : bb.getBlob();
+};
+
+function BlobConstructor(ary, options) {
+  return new Blob(mapArrayBufferViews(ary), options || {});
+};
+
+if (typeof Blob !== 'undefined') {
+  BlobBuilderConstructor.prototype = Blob.prototype;
+  BlobConstructor.prototype = Blob.prototype;
+}
+
+module.exports = (function() {
+  if (blobSupported) {
+    return blobSupportsArrayBufferView ? Blob : BlobConstructor;
+  } else if (blobBuilderSupported) {
+    return BlobBuilderConstructor;
+  } else {
+    return undefined;
+  }
+})();
+
+},{}],18:[function(require,module,exports){
+!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.bowser=t():e.bowser=t()}(this,(function(){return function(e){var t={};function r(n){if(t[n])return t[n].exports;var i=t[n]={i:n,l:!1,exports:{}};return e[n].call(i.exports,i,i.exports,r),i.l=!0,i.exports}return r.m=e,r.c=t,r.d=function(e,t,n){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:n})},r.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var i in e)r.d(n,i,function(t){return e[t]}.bind(null,i));return n},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p="",r(r.s=90)}({17:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n=r(18),i=function(){function e(){}return e.getFirstMatch=function(e,t){var r=t.match(e);return r&&r.length>0&&r[1]||""},e.getSecondMatch=function(e,t){var r=t.match(e);return r&&r.length>1&&r[2]||""},e.matchAndReturnConst=function(e,t,r){if(e.test(t))return r},e.getWindowsVersionName=function(e){switch(e){case"NT":return"NT";case"XP":return"XP";case"NT 5.0":return"2000";case"NT 5.1":return"XP";case"NT 5.2":return"2003";case"NT 6.0":return"Vista";case"NT 6.1":return"7";case"NT 6.2":return"8";case"NT 6.3":return"8.1";case"NT 10.0":return"10";default:return}},e.getMacOSVersionName=function(e){var t=e.split(".").splice(0,2).map((function(e){return parseInt(e,10)||0}));if(t.push(0),10===t[0])switch(t[1]){case 5:return"Leopard";case 6:return"Snow Leopard";case 7:return"Lion";case 8:return"Mountain Lion";case 9:return"Mavericks";case 10:return"Yosemite";case 11:return"El Capitan";case 12:return"Sierra";case 13:return"High Sierra";case 14:return"Mojave";case 15:return"Catalina";default:return}},e.getAndroidVersionName=function(e){var t=e.split(".").splice(0,2).map((function(e){return parseInt(e,10)||0}));if(t.push(0),!(1===t[0]&&t[1]<5))return 1===t[0]&&t[1]<6?"Cupcake":1===t[0]&&t[1]>=6?"Donut":2===t[0]&&t[1]<2?"Eclair":2===t[0]&&2===t[1]?"Froyo":2===t[0]&&t[1]>2?"Gingerbread":3===t[0]?"Honeycomb":4===t[0]&&t[1]<1?"Ice Cream Sandwich":4===t[0]&&t[1]<4?"Jelly Bean":4===t[0]&&t[1]>=4?"KitKat":5===t[0]?"Lollipop":6===t[0]?"Marshmallow":7===t[0]?"Nougat":8===t[0]?"Oreo":9===t[0]?"Pie":void 0},e.getVersionPrecision=function(e){return e.split(".").length},e.compareVersions=function(t,r,n){void 0===n&&(n=!1);var i=e.getVersionPrecision(t),s=e.getVersionPrecision(r),a=Math.max(i,s),o=0,u=e.map([t,r],(function(t){var r=a-e.getVersionPrecision(t),n=t+new Array(r+1).join(".0");return e.map(n.split("."),(function(e){return new Array(20-e.length).join("0")+e})).reverse()}));for(n&&(o=a-Math.min(i,s)),a-=1;a>=o;){if(u[0][a]>u[1][a])return 1;if(u[0][a]===u[1][a]){if(a===o)return 0;a-=1}else if(u[0][a]<u[1][a])return-1}},e.map=function(e,t){var r,n=[];if(Array.prototype.map)return Array.prototype.map.call(e,t);for(r=0;r<e.length;r+=1)n.push(t(e[r]));return n},e.find=function(e,t){var r,n;if(Array.prototype.find)return Array.prototype.find.call(e,t);for(r=0,n=e.length;r<n;r+=1){var i=e[r];if(t(i,r))return i}},e.assign=function(e){for(var t,r,n=e,i=arguments.length,s=new Array(i>1?i-1:0),a=1;a<i;a++)s[a-1]=arguments[a];if(Object.assign)return Object.assign.apply(Object,[e].concat(s));var o=function(){var e=s[t];"object"==typeof e&&null!==e&&Object.keys(e).forEach((function(t){n[t]=e[t]}))};for(t=0,r=s.length;t<r;t+=1)o();return e},e.getBrowserAlias=function(e){return n.BROWSER_ALIASES_MAP[e]},e.getBrowserTypeByAlias=function(e){return n.BROWSER_MAP[e]||""},e}();t.default=i,e.exports=t.default},18:function(e,t,r){"use strict";t.__esModule=!0,t.ENGINE_MAP=t.OS_MAP=t.PLATFORMS_MAP=t.BROWSER_MAP=t.BROWSER_ALIASES_MAP=void 0;t.BROWSER_ALIASES_MAP={"Amazon Silk":"amazon_silk","Android Browser":"android",Bada:"bada",BlackBerry:"blackberry",Chrome:"chrome",Chromium:"chromium",Electron:"electron",Epiphany:"epiphany",Firefox:"firefox",Focus:"focus",Generic:"generic","Google Search":"google_search",Googlebot:"googlebot","Internet Explorer":"ie","K-Meleon":"k_meleon",Maxthon:"maxthon","Microsoft Edge":"edge","MZ Browser":"mz","NAVER Whale Browser":"naver",Opera:"opera","Opera Coast":"opera_coast",PhantomJS:"phantomjs",Puffin:"puffin",QupZilla:"qupzilla",QQ:"qq",QQLite:"qqlite",Safari:"safari",Sailfish:"sailfish","Samsung Internet for Android":"samsung_internet",SeaMonkey:"seamonkey",Sleipnir:"sleipnir",Swing:"swing",Tizen:"tizen","UC Browser":"uc",Vivaldi:"vivaldi","WebOS Browser":"webos",WeChat:"wechat","Yandex Browser":"yandex",Roku:"roku"};t.BROWSER_MAP={amazon_silk:"Amazon Silk",android:"Android Browser",bada:"Bada",blackberry:"BlackBerry",chrome:"Chrome",chromium:"Chromium",electron:"Electron",epiphany:"Epiphany",firefox:"Firefox",focus:"Focus",generic:"Generic",googlebot:"Googlebot",google_search:"Google Search",ie:"Internet Explorer",k_meleon:"K-Meleon",maxthon:"Maxthon",edge:"Microsoft Edge",mz:"MZ Browser",naver:"NAVER Whale Browser",opera:"Opera",opera_coast:"Opera Coast",phantomjs:"PhantomJS",puffin:"Puffin",qupzilla:"QupZilla",qq:"QQ Browser",qqlite:"QQ Browser Lite",safari:"Safari",sailfish:"Sailfish",samsung_internet:"Samsung Internet for Android",seamonkey:"SeaMonkey",sleipnir:"Sleipnir",swing:"Swing",tizen:"Tizen",uc:"UC Browser",vivaldi:"Vivaldi",webos:"WebOS Browser",wechat:"WeChat",yandex:"Yandex Browser"};t.PLATFORMS_MAP={tablet:"tablet",mobile:"mobile",desktop:"desktop",tv:"tv"};t.OS_MAP={WindowsPhone:"Windows Phone",Windows:"Windows",MacOS:"macOS",iOS:"iOS",Android:"Android",WebOS:"WebOS",BlackBerry:"BlackBerry",Bada:"Bada",Tizen:"Tizen",Linux:"Linux",ChromeOS:"Chrome OS",PlayStation4:"PlayStation 4",Roku:"Roku"};t.ENGINE_MAP={EdgeHTML:"EdgeHTML",Blink:"Blink",Trident:"Trident",Presto:"Presto",Gecko:"Gecko",WebKit:"WebKit"}},90:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(91))&&n.__esModule?n:{default:n},s=r(18);function a(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}var o=function(){function e(){}var t,r,n;return e.getParser=function(e,t){if(void 0===t&&(t=!1),"string"!=typeof e)throw new Error("UserAgent should be a string");return new i.default(e,t)},e.parse=function(e){return new i.default(e).getResult()},t=e,n=[{key:"BROWSER_MAP",get:function(){return s.BROWSER_MAP}},{key:"ENGINE_MAP",get:function(){return s.ENGINE_MAP}},{key:"OS_MAP",get:function(){return s.OS_MAP}},{key:"PLATFORMS_MAP",get:function(){return s.PLATFORMS_MAP}}],(r=null)&&a(t.prototype,r),n&&a(t,n),e}();t.default=o,e.exports=t.default},91:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n=u(r(92)),i=u(r(93)),s=u(r(94)),a=u(r(95)),o=u(r(17));function u(e){return e&&e.__esModule?e:{default:e}}var d=function(){function e(e,t){if(void 0===t&&(t=!1),null==e||""===e)throw new Error("UserAgent parameter can't be empty");this._ua=e,this.parsedResult={},!0!==t&&this.parse()}var t=e.prototype;return t.getUA=function(){return this._ua},t.test=function(e){return e.test(this._ua)},t.parseBrowser=function(){var e=this;this.parsedResult.browser={};var t=o.default.find(n.default,(function(t){if("function"==typeof t.test)return t.test(e);if(t.test instanceof Array)return t.test.some((function(t){return e.test(t)}));throw new Error("Browser's test function is not valid")}));return t&&(this.parsedResult.browser=t.describe(this.getUA())),this.parsedResult.browser},t.getBrowser=function(){return this.parsedResult.browser?this.parsedResult.browser:this.parseBrowser()},t.getBrowserName=function(e){return e?String(this.getBrowser().name).toLowerCase()||"":this.getBrowser().name||""},t.getBrowserVersion=function(){return this.getBrowser().version},t.getOS=function(){return this.parsedResult.os?this.parsedResult.os:this.parseOS()},t.parseOS=function(){var e=this;this.parsedResult.os={};var t=o.default.find(i.default,(function(t){if("function"==typeof t.test)return t.test(e);if(t.test instanceof Array)return t.test.some((function(t){return e.test(t)}));throw new Error("Browser's test function is not valid")}));return t&&(this.parsedResult.os=t.describe(this.getUA())),this.parsedResult.os},t.getOSName=function(e){var t=this.getOS().name;return e?String(t).toLowerCase()||"":t||""},t.getOSVersion=function(){return this.getOS().version},t.getPlatform=function(){return this.parsedResult.platform?this.parsedResult.platform:this.parsePlatform()},t.getPlatformType=function(e){void 0===e&&(e=!1);var t=this.getPlatform().type;return e?String(t).toLowerCase()||"":t||""},t.parsePlatform=function(){var e=this;this.parsedResult.platform={};var t=o.default.find(s.default,(function(t){if("function"==typeof t.test)return t.test(e);if(t.test instanceof Array)return t.test.some((function(t){return e.test(t)}));throw new Error("Browser's test function is not valid")}));return t&&(this.parsedResult.platform=t.describe(this.getUA())),this.parsedResult.platform},t.getEngine=function(){return this.parsedResult.engine?this.parsedResult.engine:this.parseEngine()},t.getEngineName=function(e){return e?String(this.getEngine().name).toLowerCase()||"":this.getEngine().name||""},t.parseEngine=function(){var e=this;this.parsedResult.engine={};var t=o.default.find(a.default,(function(t){if("function"==typeof t.test)return t.test(e);if(t.test instanceof Array)return t.test.some((function(t){return e.test(t)}));throw new Error("Browser's test function is not valid")}));return t&&(this.parsedResult.engine=t.describe(this.getUA())),this.parsedResult.engine},t.parse=function(){return this.parseBrowser(),this.parseOS(),this.parsePlatform(),this.parseEngine(),this},t.getResult=function(){return o.default.assign({},this.parsedResult)},t.satisfies=function(e){var t=this,r={},n=0,i={},s=0;if(Object.keys(e).forEach((function(t){var a=e[t];"string"==typeof a?(i[t]=a,s+=1):"object"==typeof a&&(r[t]=a,n+=1)})),n>0){var a=Object.keys(r),u=o.default.find(a,(function(e){return t.isOS(e)}));if(u){var d=this.satisfies(r[u]);if(void 0!==d)return d}var c=o.default.find(a,(function(e){return t.isPlatform(e)}));if(c){var f=this.satisfies(r[c]);if(void 0!==f)return f}}if(s>0){var l=Object.keys(i),h=o.default.find(l,(function(e){return t.isBrowser(e,!0)}));if(void 0!==h)return this.compareVersion(i[h])}},t.isBrowser=function(e,t){void 0===t&&(t=!1);var r=this.getBrowserName().toLowerCase(),n=e.toLowerCase(),i=o.default.getBrowserTypeByAlias(n);return t&&i&&(n=i.toLowerCase()),n===r},t.compareVersion=function(e){var t=[0],r=e,n=!1,i=this.getBrowserVersion();if("string"==typeof i)return">"===e[0]||"<"===e[0]?(r=e.substr(1),"="===e[1]?(n=!0,r=e.substr(2)):t=[],">"===e[0]?t.push(1):t.push(-1)):"="===e[0]?r=e.substr(1):"~"===e[0]&&(n=!0,r=e.substr(1)),t.indexOf(o.default.compareVersions(i,r,n))>-1},t.isOS=function(e){return this.getOSName(!0)===String(e).toLowerCase()},t.isPlatform=function(e){return this.getPlatformType(!0)===String(e).toLowerCase()},t.isEngine=function(e){return this.getEngineName(!0)===String(e).toLowerCase()},t.is=function(e,t){return void 0===t&&(t=!1),this.isBrowser(e,t)||this.isOS(e)||this.isPlatform(e)},t.some=function(e){var t=this;return void 0===e&&(e=[]),e.some((function(e){return t.is(e)}))},e}();t.default=d,e.exports=t.default},92:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(17))&&n.__esModule?n:{default:n};var s=/version\/(\d+(\.?_?\d+)+)/i,a=[{test:[/googlebot/i],describe:function(e){var t={name:"Googlebot"},r=i.default.getFirstMatch(/googlebot\/(\d+(\.\d+))/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/opera/i],describe:function(e){var t={name:"Opera"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:opera)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/opr\/|opios/i],describe:function(e){var t={name:"Opera"},r=i.default.getFirstMatch(/(?:opr|opios)[\s/](\S+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/SamsungBrowser/i],describe:function(e){var t={name:"Samsung Internet for Android"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:SamsungBrowser)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/Whale/i],describe:function(e){var t={name:"NAVER Whale Browser"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:whale)[\s/](\d+(?:\.\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/MZBrowser/i],describe:function(e){var t={name:"MZ Browser"},r=i.default.getFirstMatch(/(?:MZBrowser)[\s/](\d+(?:\.\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/focus/i],describe:function(e){var t={name:"Focus"},r=i.default.getFirstMatch(/(?:focus)[\s/](\d+(?:\.\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/swing/i],describe:function(e){var t={name:"Swing"},r=i.default.getFirstMatch(/(?:swing)[\s/](\d+(?:\.\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/coast/i],describe:function(e){var t={name:"Opera Coast"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:coast)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/opt\/\d+(?:.?_?\d+)+/i],describe:function(e){var t={name:"Opera Touch"},r=i.default.getFirstMatch(/(?:opt)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/yabrowser/i],describe:function(e){var t={name:"Yandex Browser"},r=i.default.getFirstMatch(/(?:yabrowser)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/ucbrowser/i],describe:function(e){var t={name:"UC Browser"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:ucbrowser)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/Maxthon|mxios/i],describe:function(e){var t={name:"Maxthon"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:Maxthon|mxios)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/epiphany/i],describe:function(e){var t={name:"Epiphany"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:epiphany)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/puffin/i],describe:function(e){var t={name:"Puffin"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:puffin)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/sleipnir/i],describe:function(e){var t={name:"Sleipnir"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:sleipnir)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/k-meleon/i],describe:function(e){var t={name:"K-Meleon"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/(?:k-meleon)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/micromessenger/i],describe:function(e){var t={name:"WeChat"},r=i.default.getFirstMatch(/(?:micromessenger)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/qqbrowser/i],describe:function(e){var t={name:/qqbrowserlite/i.test(e)?"QQ Browser Lite":"QQ Browser"},r=i.default.getFirstMatch(/(?:qqbrowserlite|qqbrowser)[/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/msie|trident/i],describe:function(e){var t={name:"Internet Explorer"},r=i.default.getFirstMatch(/(?:msie |rv:)(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/\sedg\//i],describe:function(e){var t={name:"Microsoft Edge"},r=i.default.getFirstMatch(/\sedg\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/edg([ea]|ios)/i],describe:function(e){var t={name:"Microsoft Edge"},r=i.default.getSecondMatch(/edg([ea]|ios)\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/vivaldi/i],describe:function(e){var t={name:"Vivaldi"},r=i.default.getFirstMatch(/vivaldi\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/seamonkey/i],describe:function(e){var t={name:"SeaMonkey"},r=i.default.getFirstMatch(/seamonkey\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/sailfish/i],describe:function(e){var t={name:"Sailfish"},r=i.default.getFirstMatch(/sailfish\s?browser\/(\d+(\.\d+)?)/i,e);return r&&(t.version=r),t}},{test:[/silk/i],describe:function(e){var t={name:"Amazon Silk"},r=i.default.getFirstMatch(/silk\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/phantom/i],describe:function(e){var t={name:"PhantomJS"},r=i.default.getFirstMatch(/phantomjs\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/slimerjs/i],describe:function(e){var t={name:"SlimerJS"},r=i.default.getFirstMatch(/slimerjs\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/blackberry|\bbb\d+/i,/rim\stablet/i],describe:function(e){var t={name:"BlackBerry"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/blackberry[\d]+\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/(web|hpw)[o0]s/i],describe:function(e){var t={name:"WebOS Browser"},r=i.default.getFirstMatch(s,e)||i.default.getFirstMatch(/w(?:eb)?[o0]sbrowser\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/bada/i],describe:function(e){var t={name:"Bada"},r=i.default.getFirstMatch(/dolfin\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/tizen/i],describe:function(e){var t={name:"Tizen"},r=i.default.getFirstMatch(/(?:tizen\s?)?browser\/(\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/qupzilla/i],describe:function(e){var t={name:"QupZilla"},r=i.default.getFirstMatch(/(?:qupzilla)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/firefox|iceweasel|fxios/i],describe:function(e){var t={name:"Firefox"},r=i.default.getFirstMatch(/(?:firefox|iceweasel|fxios)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/electron/i],describe:function(e){var t={name:"Electron"},r=i.default.getFirstMatch(/(?:electron)\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/MiuiBrowser/i],describe:function(e){var t={name:"Miui"},r=i.default.getFirstMatch(/(?:MiuiBrowser)[\s/](\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/chromium/i],describe:function(e){var t={name:"Chromium"},r=i.default.getFirstMatch(/(?:chromium)[\s/](\d+(\.?_?\d+)+)/i,e)||i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/chrome|crios|crmo/i],describe:function(e){var t={name:"Chrome"},r=i.default.getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/GSA/i],describe:function(e){var t={name:"Google Search"},r=i.default.getFirstMatch(/(?:GSA)\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:function(e){var t=!e.test(/like android/i),r=e.test(/android/i);return t&&r},describe:function(e){var t={name:"Android Browser"},r=i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/playstation 4/i],describe:function(e){var t={name:"PlayStation 4"},r=i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/safari|applewebkit/i],describe:function(e){var t={name:"Safari"},r=i.default.getFirstMatch(s,e);return r&&(t.version=r),t}},{test:[/.*/i],describe:function(e){var t=-1!==e.search("\\(")?/^(.*)\/(.*)[ \t]\((.*)/:/^(.*)\/(.*) /;return{name:i.default.getFirstMatch(t,e),version:i.default.getSecondMatch(t,e)}}}];t.default=a,e.exports=t.default},93:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(17))&&n.__esModule?n:{default:n},s=r(18);var a=[{test:[/Roku\/DVP/],describe:function(e){var t=i.default.getFirstMatch(/Roku\/DVP-(\d+\.\d+)/i,e);return{name:s.OS_MAP.Roku,version:t}}},{test:[/windows phone/i],describe:function(e){var t=i.default.getFirstMatch(/windows phone (?:os)?\s?(\d+(\.\d+)*)/i,e);return{name:s.OS_MAP.WindowsPhone,version:t}}},{test:[/windows /i],describe:function(e){var t=i.default.getFirstMatch(/Windows ((NT|XP)( \d\d?.\d)?)/i,e),r=i.default.getWindowsVersionName(t);return{name:s.OS_MAP.Windows,version:t,versionName:r}}},{test:[/Macintosh(.*?) FxiOS(.*?)\//],describe:function(e){var t={name:s.OS_MAP.iOS},r=i.default.getSecondMatch(/(Version\/)(\d[\d.]+)/,e);return r&&(t.version=r),t}},{test:[/macintosh/i],describe:function(e){var t=i.default.getFirstMatch(/mac os x (\d+(\.?_?\d+)+)/i,e).replace(/[_\s]/g,"."),r=i.default.getMacOSVersionName(t),n={name:s.OS_MAP.MacOS,version:t};return r&&(n.versionName=r),n}},{test:[/(ipod|iphone|ipad)/i],describe:function(e){var t=i.default.getFirstMatch(/os (\d+([_\s]\d+)*) like mac os x/i,e).replace(/[_\s]/g,".");return{name:s.OS_MAP.iOS,version:t}}},{test:function(e){var t=!e.test(/like android/i),r=e.test(/android/i);return t&&r},describe:function(e){var t=i.default.getFirstMatch(/android[\s/-](\d+(\.\d+)*)/i,e),r=i.default.getAndroidVersionName(t),n={name:s.OS_MAP.Android,version:t};return r&&(n.versionName=r),n}},{test:[/(web|hpw)[o0]s/i],describe:function(e){var t=i.default.getFirstMatch(/(?:web|hpw)[o0]s\/(\d+(\.\d+)*)/i,e),r={name:s.OS_MAP.WebOS};return t&&t.length&&(r.version=t),r}},{test:[/blackberry|\bbb\d+/i,/rim\stablet/i],describe:function(e){var t=i.default.getFirstMatch(/rim\stablet\sos\s(\d+(\.\d+)*)/i,e)||i.default.getFirstMatch(/blackberry\d+\/(\d+([_\s]\d+)*)/i,e)||i.default.getFirstMatch(/\bbb(\d+)/i,e);return{name:s.OS_MAP.BlackBerry,version:t}}},{test:[/bada/i],describe:function(e){var t=i.default.getFirstMatch(/bada\/(\d+(\.\d+)*)/i,e);return{name:s.OS_MAP.Bada,version:t}}},{test:[/tizen/i],describe:function(e){var t=i.default.getFirstMatch(/tizen[/\s](\d+(\.\d+)*)/i,e);return{name:s.OS_MAP.Tizen,version:t}}},{test:[/linux/i],describe:function(){return{name:s.OS_MAP.Linux}}},{test:[/CrOS/],describe:function(){return{name:s.OS_MAP.ChromeOS}}},{test:[/PlayStation 4/],describe:function(e){var t=i.default.getFirstMatch(/PlayStation 4[/\s](\d+(\.\d+)*)/i,e);return{name:s.OS_MAP.PlayStation4,version:t}}}];t.default=a,e.exports=t.default},94:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(17))&&n.__esModule?n:{default:n},s=r(18);var a=[{test:[/googlebot/i],describe:function(){return{type:"bot",vendor:"Google"}}},{test:[/huawei/i],describe:function(e){var t=i.default.getFirstMatch(/(can-l01)/i,e)&&"Nova",r={type:s.PLATFORMS_MAP.mobile,vendor:"Huawei"};return t&&(r.model=t),r}},{test:[/nexus\s*(?:7|8|9|10).*/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Nexus"}}},{test:[/ipad/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Apple",model:"iPad"}}},{test:[/Macintosh(.*?) FxiOS(.*?)\//],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Apple",model:"iPad"}}},{test:[/kftt build/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Amazon",model:"Kindle Fire HD 7"}}},{test:[/silk/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet,vendor:"Amazon"}}},{test:[/tablet(?! pc)/i],describe:function(){return{type:s.PLATFORMS_MAP.tablet}}},{test:function(e){var t=e.test(/ipod|iphone/i),r=e.test(/like (ipod|iphone)/i);return t&&!r},describe:function(e){var t=i.default.getFirstMatch(/(ipod|iphone)/i,e);return{type:s.PLATFORMS_MAP.mobile,vendor:"Apple",model:t}}},{test:[/nexus\s*[0-6].*/i,/galaxy nexus/i],describe:function(){return{type:s.PLATFORMS_MAP.mobile,vendor:"Nexus"}}},{test:[/[^-]mobi/i],describe:function(){return{type:s.PLATFORMS_MAP.mobile}}},{test:function(e){return"blackberry"===e.getBrowserName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.mobile,vendor:"BlackBerry"}}},{test:function(e){return"bada"===e.getBrowserName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.mobile}}},{test:function(e){return"windows phone"===e.getBrowserName()},describe:function(){return{type:s.PLATFORMS_MAP.mobile,vendor:"Microsoft"}}},{test:function(e){var t=Number(String(e.getOSVersion()).split(".")[0]);return"android"===e.getOSName(!0)&&t>=3},describe:function(){return{type:s.PLATFORMS_MAP.tablet}}},{test:function(e){return"android"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.mobile}}},{test:function(e){return"macos"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.desktop,vendor:"Apple"}}},{test:function(e){return"windows"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.desktop}}},{test:function(e){return"linux"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.desktop}}},{test:function(e){return"playstation 4"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.tv}}},{test:function(e){return"roku"===e.getOSName(!0)},describe:function(){return{type:s.PLATFORMS_MAP.tv}}}];t.default=a,e.exports=t.default},95:function(e,t,r){"use strict";t.__esModule=!0,t.default=void 0;var n,i=(n=r(17))&&n.__esModule?n:{default:n},s=r(18);var a=[{test:function(e){return"microsoft edge"===e.getBrowserName(!0)},describe:function(e){if(/\sedg\//i.test(e))return{name:s.ENGINE_MAP.Blink};var t=i.default.getFirstMatch(/edge\/(\d+(\.?_?\d+)+)/i,e);return{name:s.ENGINE_MAP.EdgeHTML,version:t}}},{test:[/trident/i],describe:function(e){var t={name:s.ENGINE_MAP.Trident},r=i.default.getFirstMatch(/trident\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:function(e){return e.test(/presto/i)},describe:function(e){var t={name:s.ENGINE_MAP.Presto},r=i.default.getFirstMatch(/presto\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:function(e){var t=e.test(/gecko/i),r=e.test(/like gecko/i);return t&&!r},describe:function(e){var t={name:s.ENGINE_MAP.Gecko},r=i.default.getFirstMatch(/gecko\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}},{test:[/(apple)?webkit\/537\.36/i],describe:function(){return{name:s.ENGINE_MAP.Blink}}},{test:[/(apple)?webkit/i],describe:function(e){var t={name:s.ENGINE_MAP.WebKit},r=i.default.getFirstMatch(/webkit\/(\d+(\.?_?\d+)+)/i,e);return r&&(t.version=r),t}}];t.default=a,e.exports=t.default}})}));
+},{}],19:[function(require,module,exports){
 /**
  * Slice reference.
  */
@@ -3275,7 +3982,7 @@ module.exports = function(obj, fn){
   }
 };
 
-},{}],17:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -3452,7 +4159,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],18:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 
 module.exports = function(a, b){
   var fn = function(){};
@@ -3460,7 +4167,556 @@ module.exports = function(a, b){
   a.prototype = new fn;
   a.prototype.constructor = a;
 };
-},{}],19:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
+(function (process){(function (){
+/* eslint-env browser */
+
+/**
+ * This is the web browser implementation of `debug()`.
+ */
+
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = localstorage();
+exports.destroy = (() => {
+	let warned = false;
+
+	return () => {
+		if (!warned) {
+			warned = true;
+			console.warn('Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.');
+		}
+	};
+})();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+	'#0000CC',
+	'#0000FF',
+	'#0033CC',
+	'#0033FF',
+	'#0066CC',
+	'#0066FF',
+	'#0099CC',
+	'#0099FF',
+	'#00CC00',
+	'#00CC33',
+	'#00CC66',
+	'#00CC99',
+	'#00CCCC',
+	'#00CCFF',
+	'#3300CC',
+	'#3300FF',
+	'#3333CC',
+	'#3333FF',
+	'#3366CC',
+	'#3366FF',
+	'#3399CC',
+	'#3399FF',
+	'#33CC00',
+	'#33CC33',
+	'#33CC66',
+	'#33CC99',
+	'#33CCCC',
+	'#33CCFF',
+	'#6600CC',
+	'#6600FF',
+	'#6633CC',
+	'#6633FF',
+	'#66CC00',
+	'#66CC33',
+	'#9900CC',
+	'#9900FF',
+	'#9933CC',
+	'#9933FF',
+	'#99CC00',
+	'#99CC33',
+	'#CC0000',
+	'#CC0033',
+	'#CC0066',
+	'#CC0099',
+	'#CC00CC',
+	'#CC00FF',
+	'#CC3300',
+	'#CC3333',
+	'#CC3366',
+	'#CC3399',
+	'#CC33CC',
+	'#CC33FF',
+	'#CC6600',
+	'#CC6633',
+	'#CC9900',
+	'#CC9933',
+	'#CCCC00',
+	'#CCCC33',
+	'#FF0000',
+	'#FF0033',
+	'#FF0066',
+	'#FF0099',
+	'#FF00CC',
+	'#FF00FF',
+	'#FF3300',
+	'#FF3333',
+	'#FF3366',
+	'#FF3399',
+	'#FF33CC',
+	'#FF33FF',
+	'#FF6600',
+	'#FF6633',
+	'#FF9900',
+	'#FF9933',
+	'#FFCC00',
+	'#FFCC33'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+// eslint-disable-next-line complexity
+function useColors() {
+	// NB: In an Electron preload script, document will be defined but not fully
+	// initialized. Since we know we're in Chrome, we'll just detect this case
+	// explicitly
+	if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
+		return true;
+	}
+
+	// Internet Explorer and Edge do not support colors.
+	if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
+		return false;
+	}
+
+	// Is webkit? http://stackoverflow.com/a/16459606/376773
+	// document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+	return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
+		// Is firebug? http://stackoverflow.com/a/398120/376773
+		(typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
+		// Is firefox >= v31?
+		// https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
+		// Double check webkit in userAgent just in case we are in a worker
+		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
+}
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs(args) {
+	args[0] = (this.useColors ? '%c' : '') +
+		this.namespace +
+		(this.useColors ? ' %c' : ' ') +
+		args[0] +
+		(this.useColors ? '%c ' : ' ') +
+		'+' + module.exports.humanize(this.diff);
+
+	if (!this.useColors) {
+		return;
+	}
+
+	const c = 'color: ' + this.color;
+	args.splice(1, 0, c, 'color: inherit');
+
+	// The final "%c" is somewhat tricky, because there could be other
+	// arguments passed either before or after the %c, so we need to
+	// figure out the correct index to insert the CSS into
+	let index = 0;
+	let lastC = 0;
+	args[0].replace(/%[a-zA-Z%]/g, match => {
+		if (match === '%%') {
+			return;
+		}
+		index++;
+		if (match === '%c') {
+			// We only are interested in the *last* %c
+			// (the user may have provided their own)
+			lastC = index;
+		}
+	});
+
+	args.splice(lastC, 0, c);
+}
+
+/**
+ * Invokes `console.debug()` when available.
+ * No-op when `console.debug` is not a "function".
+ * If `console.debug` is not available, falls back
+ * to `console.log`.
+ *
+ * @api public
+ */
+exports.log = console.debug || console.log || (() => {});
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+function save(namespaces) {
+	try {
+		if (namespaces) {
+			exports.storage.setItem('debug', namespaces);
+		} else {
+			exports.storage.removeItem('debug');
+		}
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+function load() {
+	let r;
+	try {
+		r = exports.storage.getItem('debug');
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+
+	// If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+	if (!r && typeof process !== 'undefined' && 'env' in process) {
+		r = process.env.DEBUG;
+	}
+
+	return r;
+}
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage() {
+	try {
+		// TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
+		// The Browser also has localStorage in the global context.
+		return localStorage;
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+}
+
+module.exports = require('./common')(exports);
+
+const {formatters} = module.exports;
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+formatters.j = function (v) {
+	try {
+		return JSON.stringify(v);
+	} catch (error) {
+		return '[UnexpectedJSONParseError]: ' + error.message;
+	}
+};
+
+}).call(this)}).call(this,require('_process'))
+},{"./common":23,"_process":8}],23:[function(require,module,exports){
+
+/**
+ * This is the common logic for both the Node.js and web browser
+ * implementations of `debug()`.
+ */
+
+function setup(env) {
+	createDebug.debug = createDebug;
+	createDebug.default = createDebug;
+	createDebug.coerce = coerce;
+	createDebug.disable = disable;
+	createDebug.enable = enable;
+	createDebug.enabled = enabled;
+	createDebug.humanize = require('ms');
+	createDebug.destroy = destroy;
+
+	Object.keys(env).forEach(key => {
+		createDebug[key] = env[key];
+	});
+
+	/**
+	* The currently active debug mode names, and names to skip.
+	*/
+
+	createDebug.names = [];
+	createDebug.skips = [];
+
+	/**
+	* Map of special "%n" handling functions, for the debug "format" argument.
+	*
+	* Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+	*/
+	createDebug.formatters = {};
+
+	/**
+	* Selects a color for a debug namespace
+	* @param {String} namespace The namespace string for the debug instance to be colored
+	* @return {Number|String} An ANSI color code for the given namespace
+	* @api private
+	*/
+	function selectColor(namespace) {
+		let hash = 0;
+
+		for (let i = 0; i < namespace.length; i++) {
+			hash = ((hash << 5) - hash) + namespace.charCodeAt(i);
+			hash |= 0; // Convert to 32bit integer
+		}
+
+		return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
+	}
+	createDebug.selectColor = selectColor;
+
+	/**
+	* Create a debugger with the given `namespace`.
+	*
+	* @param {String} namespace
+	* @return {Function}
+	* @api public
+	*/
+	function createDebug(namespace) {
+		let prevTime;
+		let enableOverride = null;
+		let namespacesCache;
+		let enabledCache;
+
+		function debug(...args) {
+			// Disabled?
+			if (!debug.enabled) {
+				return;
+			}
+
+			const self = debug;
+
+			// Set `diff` timestamp
+			const curr = Number(new Date());
+			const ms = curr - (prevTime || curr);
+			self.diff = ms;
+			self.prev = prevTime;
+			self.curr = curr;
+			prevTime = curr;
+
+			args[0] = createDebug.coerce(args[0]);
+
+			if (typeof args[0] !== 'string') {
+				// Anything else let's inspect with %O
+				args.unshift('%O');
+			}
+
+			// Apply any `formatters` transformations
+			let index = 0;
+			args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
+				// If we encounter an escaped % then don't increase the array index
+				if (match === '%%') {
+					return '%';
+				}
+				index++;
+				const formatter = createDebug.formatters[format];
+				if (typeof formatter === 'function') {
+					const val = args[index];
+					match = formatter.call(self, val);
+
+					// Now we need to remove `args[index]` since it's inlined in the `format`
+					args.splice(index, 1);
+					index--;
+				}
+				return match;
+			});
+
+			// Apply env-specific formatting (colors, etc.)
+			createDebug.formatArgs.call(self, args);
+
+			const logFn = self.log || createDebug.log;
+			logFn.apply(self, args);
+		}
+
+		debug.namespace = namespace;
+		debug.useColors = createDebug.useColors();
+		debug.color = createDebug.selectColor(namespace);
+		debug.extend = extend;
+		debug.destroy = createDebug.destroy; // XXX Temporary. Will be removed in the next major release.
+
+		Object.defineProperty(debug, 'enabled', {
+			enumerable: true,
+			configurable: false,
+			get: () => {
+				if (enableOverride !== null) {
+					return enableOverride;
+				}
+				if (namespacesCache !== createDebug.namespaces) {
+					namespacesCache = createDebug.namespaces;
+					enabledCache = createDebug.enabled(namespace);
+				}
+
+				return enabledCache;
+			},
+			set: v => {
+				enableOverride = v;
+			}
+		});
+
+		// Env-specific initialization logic for debug instances
+		if (typeof createDebug.init === 'function') {
+			createDebug.init(debug);
+		}
+
+		return debug;
+	}
+
+	function extend(namespace, delimiter) {
+		const newDebug = createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
+		newDebug.log = this.log;
+		return newDebug;
+	}
+
+	/**
+	* Enables a debug mode by namespaces. This can include modes
+	* separated by a colon and wildcards.
+	*
+	* @param {String} namespaces
+	* @api public
+	*/
+	function enable(namespaces) {
+		createDebug.save(namespaces);
+		createDebug.namespaces = namespaces;
+
+		createDebug.names = [];
+		createDebug.skips = [];
+
+		let i;
+		const split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
+		const len = split.length;
+
+		for (i = 0; i < len; i++) {
+			if (!split[i]) {
+				// ignore empty strings
+				continue;
+			}
+
+			namespaces = split[i].replace(/\*/g, '.*?');
+
+			if (namespaces[0] === '-') {
+				createDebug.skips.push(new RegExp('^' + namespaces.slice(1) + '$'));
+			} else {
+				createDebug.names.push(new RegExp('^' + namespaces + '$'));
+			}
+		}
+	}
+
+	/**
+	* Disable debug output.
+	*
+	* @return {String} namespaces
+	* @api public
+	*/
+	function disable() {
+		const namespaces = [
+			...createDebug.names.map(toNamespace),
+			...createDebug.skips.map(toNamespace).map(namespace => '-' + namespace)
+		].join(',');
+		createDebug.enable('');
+		return namespaces;
+	}
+
+	/**
+	* Returns true if the given mode name is enabled, false otherwise.
+	*
+	* @param {String} name
+	* @return {Boolean}
+	* @api public
+	*/
+	function enabled(name) {
+		if (name[name.length - 1] === '*') {
+			return true;
+		}
+
+		let i;
+		let len;
+
+		for (i = 0, len = createDebug.skips.length; i < len; i++) {
+			if (createDebug.skips[i].test(name)) {
+				return false;
+			}
+		}
+
+		for (i = 0, len = createDebug.names.length; i < len; i++) {
+			if (createDebug.names[i].test(name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	* Convert regexp to namespace
+	*
+	* @param {RegExp} regxep
+	* @return {String} namespace
+	* @api private
+	*/
+	function toNamespace(regexp) {
+		return regexp.toString()
+			.substring(2, regexp.toString().length - 2)
+			.replace(/\.\*\?$/, '*');
+	}
+
+	/**
+	* Coerce `val`.
+	*
+	* @param {Mixed} val
+	* @return {Mixed}
+	* @api private
+	*/
+	function coerce(val) {
+		if (val instanceof Error) {
+			return val.stack || val.message;
+		}
+		return val;
+	}
+
+	/**
+	* XXX DO NOT USE. This is a temporary stub function.
+	* XXX It WILL be removed in the next major release.
+	*/
+	function destroy() {
+		console.warn('Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.');
+	}
+
+	createDebug.enable(createDebug.load());
+
+	return createDebug;
+}
+
+module.exports = setup;
+
+},{"ms":79}],24:[function(require,module,exports){
 module.exports = (function () {
   if (typeof self !== 'undefined') {
     return self;
@@ -3471,7 +4727,7 @@ module.exports = (function () {
   }
 })();
 
-},{}],20:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 
 module.exports = require('./socket');
 
@@ -3483,7 +4739,7 @@ module.exports = require('./socket');
  */
 module.exports.parser = require('engine.io-parser');
 
-},{"./socket":21,"engine.io-parser":31}],21:[function(require,module,exports){
+},{"./socket":26,"engine.io-parser":37}],26:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -4233,7 +5489,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
   return filteredUpgrades;
 };
 
-},{"./transport":22,"./transports/index":23,"component-emitter":17,"debug":29,"engine.io-parser":31,"indexof":42,"parseqs":81,"parseuri":82}],22:[function(require,module,exports){
+},{"./transport":27,"./transports/index":28,"component-emitter":20,"debug":34,"engine.io-parser":37,"indexof":44,"parseqs":80,"parseuri":81}],27:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -4396,7 +5652,7 @@ Transport.prototype.onClose = function () {
   this.emit('close');
 };
 
-},{"component-emitter":17,"engine.io-parser":31}],23:[function(require,module,exports){
+},{"component-emitter":20,"engine.io-parser":37}],28:[function(require,module,exports){
 /**
  * Module dependencies
  */
@@ -4451,7 +5707,7 @@ function polling (opts) {
   }
 }
 
-},{"./polling-jsonp":24,"./polling-xhr":25,"./websocket":27,"./xmlhttprequest":28}],24:[function(require,module,exports){
+},{"./polling-jsonp":29,"./polling-xhr":30,"./websocket":32,"./xmlhttprequest":33}],29:[function(require,module,exports){
 /**
  * Module requirements.
  */
@@ -4683,7 +5939,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
   }
 };
 
-},{"../globalThis":19,"./polling":26,"component-inherit":18}],25:[function(require,module,exports){
+},{"../globalThis":24,"./polling":31,"component-inherit":21}],30:[function(require,module,exports){
 /* global attachEvent */
 
 /**
@@ -5103,7 +6359,7 @@ function unloadHandler () {
   }
 }
 
-},{"../globalThis":19,"./polling":26,"./xmlhttprequest":28,"component-emitter":17,"component-inherit":18,"debug":29}],26:[function(require,module,exports){
+},{"../globalThis":24,"./polling":31,"./xmlhttprequest":33,"component-emitter":20,"component-inherit":21,"debug":34}],31:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -5350,7 +6606,7 @@ Polling.prototype.uri = function () {
   return schema + '://' + (ipv6 ? '[' + this.hostname + ']' : this.hostname) + port + this.path + query;
 };
 
-},{"../transport":22,"./xmlhttprequest":28,"component-inherit":18,"debug":29,"engine.io-parser":31,"parseqs":81,"yeast":99}],27:[function(require,module,exports){
+},{"../transport":27,"./xmlhttprequest":33,"component-inherit":21,"debug":34,"engine.io-parser":37,"parseqs":80,"yeast":103}],32:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * Module dependencies.
@@ -5653,7 +6909,7 @@ WS.prototype.check = function () {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../transport":22,"buffer":15,"component-inherit":18,"debug":29,"engine.io-parser":31,"parseqs":81,"ws":14,"yeast":99}],28:[function(require,module,exports){
+},{"../transport":27,"buffer":4,"component-inherit":21,"debug":34,"engine.io-parser":37,"parseqs":80,"ws":3,"yeast":103}],33:[function(require,module,exports){
 // browser shim for xmlhttprequest module
 
 var hasCORS = require('has-cors');
@@ -5693,7 +6949,7 @@ module.exports = function (opts) {
   }
 };
 
-},{"../globalThis":19,"has-cors":40}],29:[function(require,module,exports){
+},{"../globalThis":24,"has-cors":43}],34:[function(require,module,exports){
 (function (process){(function (){
 /**
  * This is the web browser implementation of `debug()`.
@@ -5892,7 +7148,7 @@ function localstorage() {
 }
 
 }).call(this)}).call(this,require('_process'))
-},{"./debug":30,"_process":83}],30:[function(require,module,exports){
+},{"./debug":35,"_process":8}],35:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -6119,7 +7375,161 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":80}],31:[function(require,module,exports){
+},{"ms":36}],36:[function(require,module,exports){
+/**
+ * Helpers.
+ */
+
+var s = 1000;
+var m = s * 60;
+var h = m * 60;
+var d = h * 24;
+var y = d * 365.25;
+
+/**
+ * Parse or format the given `val`.
+ *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} [options]
+ * @throws {Error} throw an error if val is not a non-empty string or a number
+ * @return {String|Number}
+ * @api public
+ */
+
+module.exports = function(val, options) {
+  options = options || {};
+  var type = typeof val;
+  if (type === 'string' && val.length > 0) {
+    return parse(val);
+  } else if (type === 'number' && isNaN(val) === false) {
+    return options.long ? fmtLong(val) : fmtShort(val);
+  }
+  throw new Error(
+    'val is not a non-empty string or a valid number. val=' +
+      JSON.stringify(val)
+  );
+};
+
+/**
+ * Parse the given `str` and return milliseconds.
+ *
+ * @param {String} str
+ * @return {Number}
+ * @api private
+ */
+
+function parse(str) {
+  str = String(str);
+  if (str.length > 100) {
+    return;
+  }
+  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(
+    str
+  );
+  if (!match) {
+    return;
+  }
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
+  switch (type) {
+    case 'years':
+    case 'year':
+    case 'yrs':
+    case 'yr':
+    case 'y':
+      return n * y;
+    case 'days':
+    case 'day':
+    case 'd':
+      return n * d;
+    case 'hours':
+    case 'hour':
+    case 'hrs':
+    case 'hr':
+    case 'h':
+      return n * h;
+    case 'minutes':
+    case 'minute':
+    case 'mins':
+    case 'min':
+    case 'm':
+      return n * m;
+    case 'seconds':
+    case 'second':
+    case 'secs':
+    case 'sec':
+    case 's':
+      return n * s;
+    case 'milliseconds':
+    case 'millisecond':
+    case 'msecs':
+    case 'msec':
+    case 'ms':
+      return n;
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Short format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function fmtShort(ms) {
+  if (ms >= d) {
+    return Math.round(ms / d) + 'd';
+  }
+  if (ms >= h) {
+    return Math.round(ms / h) + 'h';
+  }
+  if (ms >= m) {
+    return Math.round(ms / m) + 'm';
+  }
+  if (ms >= s) {
+    return Math.round(ms / s) + 's';
+  }
+  return ms + 'ms';
+}
+
+/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function fmtLong(ms) {
+  return plural(ms, d, 'day') ||
+    plural(ms, h, 'hour') ||
+    plural(ms, m, 'minute') ||
+    plural(ms, s, 'second') ||
+    ms + ' ms';
+}
+
+/**
+ * Pluralization helper.
+ */
+
+function plural(ms, n, name) {
+  if (ms < n) {
+    return;
+  }
+  if (ms < n * 1.5) {
+    return Math.floor(ms / n) + ' ' + name;
+  }
+  return Math.ceil(ms / n) + ' ' + name + 's';
+}
+
+},{}],37:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -6726,7 +8136,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
   });
 };
 
-},{"./keys":32,"./utf8":33,"after":2,"arraybuffer.slice":3,"base64-arraybuffer":10,"blob":12,"has-binary2":39}],32:[function(require,module,exports){
+},{"./keys":38,"./utf8":39,"after":11,"arraybuffer.slice":12,"base64-arraybuffer":16,"blob":17,"has-binary2":41}],38:[function(require,module,exports){
 
 /**
  * Gets the keys for an object.
@@ -6747,7 +8157,7 @@ module.exports = Object.keys || function keys (obj){
   return arr;
 };
 
-},{}],33:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 /*! https://mths.be/utf8js v2.1.2 by @mathias */
 
 var stringFromCharCode = String.fromCharCode;
@@ -6959,506 +8369,7 @@ module.exports = {
 	decode: utf8decode
 };
 
-},{}],34:[function(require,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-'use strict';
-
-var R = typeof Reflect === 'object' ? Reflect : null
-var ReflectApply = R && typeof R.apply === 'function'
-  ? R.apply
-  : function ReflectApply(target, receiver, args) {
-    return Function.prototype.apply.call(target, receiver, args);
-  }
-
-var ReflectOwnKeys
-if (R && typeof R.ownKeys === 'function') {
-  ReflectOwnKeys = R.ownKeys
-} else if (Object.getOwnPropertySymbols) {
-  ReflectOwnKeys = function ReflectOwnKeys(target) {
-    return Object.getOwnPropertyNames(target)
-      .concat(Object.getOwnPropertySymbols(target));
-  };
-} else {
-  ReflectOwnKeys = function ReflectOwnKeys(target) {
-    return Object.getOwnPropertyNames(target);
-  };
-}
-
-function ProcessEmitWarning(warning) {
-  if (console && console.warn) console.warn(warning);
-}
-
-var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
-  return value !== value;
-}
-
-function EventEmitter() {
-  EventEmitter.init.call(this);
-}
-module.exports = EventEmitter;
-module.exports.once = once;
-
-// Backwards-compat with node 0.10.x
-EventEmitter.EventEmitter = EventEmitter;
-
-EventEmitter.prototype._events = undefined;
-EventEmitter.prototype._eventsCount = 0;
-EventEmitter.prototype._maxListeners = undefined;
-
-// By default EventEmitters will print a warning if more than 10 listeners are
-// added to it. This is a useful default which helps finding memory leaks.
-var defaultMaxListeners = 10;
-
-function checkListener(listener) {
-  if (typeof listener !== 'function') {
-    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
-  }
-}
-
-Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
-  enumerable: true,
-  get: function() {
-    return defaultMaxListeners;
-  },
-  set: function(arg) {
-    if (typeof arg !== 'number' || arg < 0 || NumberIsNaN(arg)) {
-      throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
-    }
-    defaultMaxListeners = arg;
-  }
-});
-
-EventEmitter.init = function() {
-
-  if (this._events === undefined ||
-      this._events === Object.getPrototypeOf(this)._events) {
-    this._events = Object.create(null);
-    this._eventsCount = 0;
-  }
-
-  this._maxListeners = this._maxListeners || undefined;
-};
-
-// Obviously not all Emitters should be limited to 10. This function allows
-// that to be increased. Set to zero for unlimited.
-EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
-  if (typeof n !== 'number' || n < 0 || NumberIsNaN(n)) {
-    throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + n + '.');
-  }
-  this._maxListeners = n;
-  return this;
-};
-
-function _getMaxListeners(that) {
-  if (that._maxListeners === undefined)
-    return EventEmitter.defaultMaxListeners;
-  return that._maxListeners;
-}
-
-EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
-  return _getMaxListeners(this);
-};
-
-EventEmitter.prototype.emit = function emit(type) {
-  var args = [];
-  for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
-  var doError = (type === 'error');
-
-  var events = this._events;
-  if (events !== undefined)
-    doError = (doError && events.error === undefined);
-  else if (!doError)
-    return false;
-
-  // If there is no 'error' event listener then throw.
-  if (doError) {
-    var er;
-    if (args.length > 0)
-      er = args[0];
-    if (er instanceof Error) {
-      // Note: The comments on the `throw` lines are intentional, they show
-      // up in Node's output if this results in an unhandled exception.
-      throw er; // Unhandled 'error' event
-    }
-    // At least give some kind of context to the user
-    var err = new Error('Unhandled error.' + (er ? ' (' + er.message + ')' : ''));
-    err.context = er;
-    throw err; // Unhandled 'error' event
-  }
-
-  var handler = events[type];
-
-  if (handler === undefined)
-    return false;
-
-  if (typeof handler === 'function') {
-    ReflectApply(handler, this, args);
-  } else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
-      ReflectApply(listeners[i], this, args);
-  }
-
-  return true;
-};
-
-function _addListener(target, type, listener, prepend) {
-  var m;
-  var events;
-  var existing;
-
-  checkListener(listener);
-
-  events = target._events;
-  if (events === undefined) {
-    events = target._events = Object.create(null);
-    target._eventsCount = 0;
-  } else {
-    // To avoid recursion in the case that type === "newListener"! Before
-    // adding it to the listeners, first emit "newListener".
-    if (events.newListener !== undefined) {
-      target.emit('newListener', type,
-                  listener.listener ? listener.listener : listener);
-
-      // Re-assign `events` because a newListener handler could have caused the
-      // this._events to be assigned to a new object
-      events = target._events;
-    }
-    existing = events[type];
-  }
-
-  if (existing === undefined) {
-    // Optimize the case of one listener. Don't need the extra array object.
-    existing = events[type] = listener;
-    ++target._eventsCount;
-  } else {
-    if (typeof existing === 'function') {
-      // Adding the second element, need to change to array.
-      existing = events[type] =
-        prepend ? [listener, existing] : [existing, listener];
-      // If we've already got an array, just append.
-    } else if (prepend) {
-      existing.unshift(listener);
-    } else {
-      existing.push(listener);
-    }
-
-    // Check for listener leak
-    m = _getMaxListeners(target);
-    if (m > 0 && existing.length > m && !existing.warned) {
-      existing.warned = true;
-      // No error code for this since it is a Warning
-      // eslint-disable-next-line no-restricted-syntax
-      var w = new Error('Possible EventEmitter memory leak detected. ' +
-                          existing.length + ' ' + String(type) + ' listeners ' +
-                          'added. Use emitter.setMaxListeners() to ' +
-                          'increase limit');
-      w.name = 'MaxListenersExceededWarning';
-      w.emitter = target;
-      w.type = type;
-      w.count = existing.length;
-      ProcessEmitWarning(w);
-    }
-  }
-
-  return target;
-}
-
-EventEmitter.prototype.addListener = function addListener(type, listener) {
-  return _addListener(this, type, listener, false);
-};
-
-EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-EventEmitter.prototype.prependListener =
-    function prependListener(type, listener) {
-      return _addListener(this, type, listener, true);
-    };
-
-function onceWrapper() {
-  if (!this.fired) {
-    this.target.removeListener(this.type, this.wrapFn);
-    this.fired = true;
-    if (arguments.length === 0)
-      return this.listener.call(this.target);
-    return this.listener.apply(this.target, arguments);
-  }
-}
-
-function _onceWrap(target, type, listener) {
-  var state = { fired: false, wrapFn: undefined, target: target, type: type, listener: listener };
-  var wrapped = onceWrapper.bind(state);
-  wrapped.listener = listener;
-  state.wrapFn = wrapped;
-  return wrapped;
-}
-
-EventEmitter.prototype.once = function once(type, listener) {
-  checkListener(listener);
-  this.on(type, _onceWrap(this, type, listener));
-  return this;
-};
-
-EventEmitter.prototype.prependOnceListener =
-    function prependOnceListener(type, listener) {
-      checkListener(listener);
-      this.prependListener(type, _onceWrap(this, type, listener));
-      return this;
-    };
-
-// Emits a 'removeListener' event if and only if the listener was removed.
-EventEmitter.prototype.removeListener =
-    function removeListener(type, listener) {
-      var list, events, position, i, originalListener;
-
-      checkListener(listener);
-
-      events = this._events;
-      if (events === undefined)
-        return this;
-
-      list = events[type];
-      if (list === undefined)
-        return this;
-
-      if (list === listener || list.listener === listener) {
-        if (--this._eventsCount === 0)
-          this._events = Object.create(null);
-        else {
-          delete events[type];
-          if (events.removeListener)
-            this.emit('removeListener', type, list.listener || listener);
-        }
-      } else if (typeof list !== 'function') {
-        position = -1;
-
-        for (i = list.length - 1; i >= 0; i--) {
-          if (list[i] === listener || list[i].listener === listener) {
-            originalListener = list[i].listener;
-            position = i;
-            break;
-          }
-        }
-
-        if (position < 0)
-          return this;
-
-        if (position === 0)
-          list.shift();
-        else {
-          spliceOne(list, position);
-        }
-
-        if (list.length === 1)
-          events[type] = list[0];
-
-        if (events.removeListener !== undefined)
-          this.emit('removeListener', type, originalListener || listener);
-      }
-
-      return this;
-    };
-
-EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-
-EventEmitter.prototype.removeAllListeners =
-    function removeAllListeners(type) {
-      var listeners, events, i;
-
-      events = this._events;
-      if (events === undefined)
-        return this;
-
-      // not listening for removeListener, no need to emit
-      if (events.removeListener === undefined) {
-        if (arguments.length === 0) {
-          this._events = Object.create(null);
-          this._eventsCount = 0;
-        } else if (events[type] !== undefined) {
-          if (--this._eventsCount === 0)
-            this._events = Object.create(null);
-          else
-            delete events[type];
-        }
-        return this;
-      }
-
-      // emit removeListener for all listeners on all events
-      if (arguments.length === 0) {
-        var keys = Object.keys(events);
-        var key;
-        for (i = 0; i < keys.length; ++i) {
-          key = keys[i];
-          if (key === 'removeListener') continue;
-          this.removeAllListeners(key);
-        }
-        this.removeAllListeners('removeListener');
-        this._events = Object.create(null);
-        this._eventsCount = 0;
-        return this;
-      }
-
-      listeners = events[type];
-
-      if (typeof listeners === 'function') {
-        this.removeListener(type, listeners);
-      } else if (listeners !== undefined) {
-        // LIFO order
-        for (i = listeners.length - 1; i >= 0; i--) {
-          this.removeListener(type, listeners[i]);
-        }
-      }
-
-      return this;
-    };
-
-function _listeners(target, type, unwrap) {
-  var events = target._events;
-
-  if (events === undefined)
-    return [];
-
-  var evlistener = events[type];
-  if (evlistener === undefined)
-    return [];
-
-  if (typeof evlistener === 'function')
-    return unwrap ? [evlistener.listener || evlistener] : [evlistener];
-
-  return unwrap ?
-    unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
-}
-
-EventEmitter.prototype.listeners = function listeners(type) {
-  return _listeners(this, type, true);
-};
-
-EventEmitter.prototype.rawListeners = function rawListeners(type) {
-  return _listeners(this, type, false);
-};
-
-EventEmitter.listenerCount = function(emitter, type) {
-  if (typeof emitter.listenerCount === 'function') {
-    return emitter.listenerCount(type);
-  } else {
-    return listenerCount.call(emitter, type);
-  }
-};
-
-EventEmitter.prototype.listenerCount = listenerCount;
-function listenerCount(type) {
-  var events = this._events;
-
-  if (events !== undefined) {
-    var evlistener = events[type];
-
-    if (typeof evlistener === 'function') {
-      return 1;
-    } else if (evlistener !== undefined) {
-      return evlistener.length;
-    }
-  }
-
-  return 0;
-}
-
-EventEmitter.prototype.eventNames = function eventNames() {
-  return this._eventsCount > 0 ? ReflectOwnKeys(this._events) : [];
-};
-
-function arrayClone(arr, n) {
-  var copy = new Array(n);
-  for (var i = 0; i < n; ++i)
-    copy[i] = arr[i];
-  return copy;
-}
-
-function spliceOne(list, index) {
-  for (; index + 1 < list.length; index++)
-    list[index] = list[index + 1];
-  list.pop();
-}
-
-function unwrapListeners(arr) {
-  var ret = new Array(arr.length);
-  for (var i = 0; i < ret.length; ++i) {
-    ret[i] = arr[i].listener || arr[i];
-  }
-  return ret;
-}
-
-function once(emitter, name) {
-  return new Promise(function (resolve, reject) {
-    function errorListener(err) {
-      emitter.removeListener(name, resolver);
-      reject(err);
-    }
-
-    function resolver() {
-      if (typeof emitter.removeListener === 'function') {
-        emitter.removeListener('error', errorListener);
-      }
-      resolve([].slice.call(arguments));
-    };
-
-    eventTargetAgnosticAddListener(emitter, name, resolver, { once: true });
-    if (name !== 'error') {
-      addErrorHandlerIfEventEmitter(emitter, errorListener, { once: true });
-    }
-  });
-}
-
-function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
-  if (typeof emitter.on === 'function') {
-    eventTargetAgnosticAddListener(emitter, 'error', handler, flags);
-  }
-}
-
-function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
-  if (typeof emitter.on === 'function') {
-    if (flags.once) {
-      emitter.once(name, listener);
-    } else {
-      emitter.on(name, listener);
-    }
-  } else if (typeof emitter.addEventListener === 'function') {
-    // EventTarget does not have `error` event semantics like Node
-    // EventEmitters, we do not listen for `error` events here.
-    emitter.addEventListener(name, function wrapListener(arg) {
-      // IE does not have builtin `{ once: true }` support so we
-      // have to do it manually.
-      if (flags.once) {
-        emitter.removeEventListener(name, wrapListener);
-      }
-      listener(arg);
-    });
-  } else {
-    throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
-  }
-}
-
-},{}],35:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 const debug = require('debug')('h264-profile-level-id');
 
 /* eslint-disable no-console */
@@ -7913,13 +8824,7 @@ function isLevelAsymmetryAllowed(params = {})
 	);
 }
 
-},{"debug":36}],36:[function(require,module,exports){
-arguments[4][6][0].apply(exports,arguments)
-},{"./common":37,"_process":83,"dup":6}],37:[function(require,module,exports){
-arguments[4][7][0].apply(exports,arguments)
-},{"dup":7,"ms":38}],38:[function(require,module,exports){
-arguments[4][8][0].apply(exports,arguments)
-},{"dup":8}],39:[function(require,module,exports){
+},{"debug":22}],41:[function(require,module,exports){
 (function (Buffer){(function (){
 /* global Blob File */
 
@@ -7987,7 +8892,14 @@ function hasBinary (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":15,"isarray":43}],40:[function(require,module,exports){
+},{"buffer":4,"isarray":42}],42:[function(require,module,exports){
+var toString = {}.toString;
+
+module.exports = Array.isArray || function (arr) {
+  return toString.call(arr) == '[object Array]';
+};
+
+},{}],43:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -8006,94 +8918,7 @@ try {
   module.exports = false;
 }
 
-},{}],41:[function(require,module,exports){
-/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
-exports.read = function (buffer, offset, isLE, mLen, nBytes) {
-  var e, m
-  var eLen = (nBytes * 8) - mLen - 1
-  var eMax = (1 << eLen) - 1
-  var eBias = eMax >> 1
-  var nBits = -7
-  var i = isLE ? (nBytes - 1) : 0
-  var d = isLE ? -1 : 1
-  var s = buffer[offset + i]
-
-  i += d
-
-  e = s & ((1 << (-nBits)) - 1)
-  s >>= (-nBits)
-  nBits += eLen
-  for (; nBits > 0; e = (e * 256) + buffer[offset + i], i += d, nBits -= 8) {}
-
-  m = e & ((1 << (-nBits)) - 1)
-  e >>= (-nBits)
-  nBits += mLen
-  for (; nBits > 0; m = (m * 256) + buffer[offset + i], i += d, nBits -= 8) {}
-
-  if (e === 0) {
-    e = 1 - eBias
-  } else if (e === eMax) {
-    return m ? NaN : ((s ? -1 : 1) * Infinity)
-  } else {
-    m = m + Math.pow(2, mLen)
-    e = e - eBias
-  }
-  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
-}
-
-exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
-  var e, m, c
-  var eLen = (nBytes * 8) - mLen - 1
-  var eMax = (1 << eLen) - 1
-  var eBias = eMax >> 1
-  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
-  var i = isLE ? 0 : (nBytes - 1)
-  var d = isLE ? 1 : -1
-  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
-
-  value = Math.abs(value)
-
-  if (isNaN(value) || value === Infinity) {
-    m = isNaN(value) ? 1 : 0
-    e = eMax
-  } else {
-    e = Math.floor(Math.log(value) / Math.LN2)
-    if (value * (c = Math.pow(2, -e)) < 1) {
-      e--
-      c *= 2
-    }
-    if (e + eBias >= 1) {
-      value += rt / c
-    } else {
-      value += rt * Math.pow(2, 1 - eBias)
-    }
-    if (value * c >= 2) {
-      e++
-      c /= 2
-    }
-
-    if (e + eBias >= eMax) {
-      m = 0
-      e = eMax
-    } else if (e + eBias >= 1) {
-      m = ((value * c) - 1) * Math.pow(2, mLen)
-      e = e + eBias
-    } else {
-      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
-      e = 0
-    }
-  }
-
-  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
-
-  e = (e << mLen) | m
-  eLen += mLen
-  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
-
-  buffer[offset + i - d] |= s * 128
-}
-
-},{}],42:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 
 var indexOf = [].indexOf;
 
@@ -8104,14 +8929,7 @@ module.exports = function(arr, obj){
   }
   return -1;
 };
-},{}],43:[function(require,module,exports){
-var toString = {}.toString;
-
-module.exports = Array.isArray || function (arr) {
-  return toString.call(arr) == '[object Array]';
-};
-
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Consumer = void 0;
@@ -8301,7 +9119,7 @@ class Consumer extends EnhancedEventEmitter_1.EnhancedEventEmitter {
 }
 exports.Consumer = Consumer;
 
-},{"./EnhancedEventEmitter":48,"./Logger":49,"./errors":54}],45:[function(require,module,exports){
+},{"./EnhancedEventEmitter":49,"./Logger":50,"./errors":55}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DataConsumer = void 0;
@@ -8459,7 +9277,7 @@ class DataConsumer extends EnhancedEventEmitter_1.EnhancedEventEmitter {
 }
 exports.DataConsumer = DataConsumer;
 
-},{"./EnhancedEventEmitter":48,"./Logger":49}],46:[function(require,module,exports){
+},{"./EnhancedEventEmitter":49,"./Logger":50}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DataProducer = void 0;
@@ -8633,7 +9451,7 @@ class DataProducer extends EnhancedEventEmitter_1.EnhancedEventEmitter {
 }
 exports.DataProducer = DataProducer;
 
-},{"./EnhancedEventEmitter":48,"./Logger":49,"./errors":54}],47:[function(require,module,exports){
+},{"./EnhancedEventEmitter":49,"./Logger":50,"./errors":55}],48:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -8670,6 +9488,7 @@ const errors_1 = require("./errors");
 const utils = __importStar(require("./utils"));
 const ortc = __importStar(require("./ortc"));
 const Transport_1 = require("./Transport");
+const Chrome111_1 = require("./handlers/Chrome111");
 const Chrome74_1 = require("./handlers/Chrome74");
 const Chrome70_1 = require("./handlers/Chrome70");
 const Chrome67_1 = require("./handlers/Chrome67");
@@ -8705,7 +9524,10 @@ function detectDevice() {
         const browser = bowser_1.default.getParser(ua);
         const engine = browser.getEngine();
         // Chrome, Chromium, and Edge.
-        if (browser.satisfies({ chrome: '>=74', chromium: '>=74', 'microsoft edge': '>=88' })) {
+        if (browser.satisfies({ chrome: '>=111', chromium: '>=111', 'microsoft edge': '>=111' })) {
+            return 'Chrome111';
+        }
+        else if (browser.satisfies({ chrome: '>=74', chromium: '>=74', 'microsoft edge': '>=88' })) {
             return 'Chrome74';
         }
         else if (browser.satisfies({ chrome: '>=70', chromium: '>=70' })) {
@@ -8745,7 +9567,10 @@ function detectDevice() {
             const match = ua.match(/(?:(?:Chrome|Chromium))[ /](\w+)/i);
             if (match) {
                 const version = Number(match[1]);
-                if (version >= 74) {
+                if (version >= 111) {
+                    return 'Chrome111';
+                }
+                else if (version >= 74) {
                     return 'Chrome74';
                 }
                 else if (version >= 70) {
@@ -8759,7 +9584,7 @@ function detectDevice() {
                 }
             }
             else {
-                return 'Chrome74';
+                return 'Chrome111';
             }
         }
         // Unsupported browser.
@@ -8817,6 +9642,9 @@ class Device {
                 }
             }
             switch (handlerName) {
+                case 'Chrome111':
+                    this._handlerFactory = Chrome111_1.Chrome111.createFactory();
+                    break;
                 case 'Chrome74':
                     this._handlerFactory = Chrome74_1.Chrome74.createFactory();
                     break;
@@ -9043,7 +9871,7 @@ class Device {
 }
 exports.Device = Device;
 
-},{"./EnhancedEventEmitter":48,"./Logger":49,"./Transport":53,"./errors":54,"./handlers/Chrome55":55,"./handlers/Chrome67":56,"./handlers/Chrome70":57,"./handlers/Chrome74":58,"./handlers/Edge11":59,"./handlers/Firefox60":60,"./handlers/ReactNative":62,"./handlers/ReactNativeUnifiedPlan":63,"./handlers/Safari11":64,"./handlers/Safari12":65,"./ortc":73,"./utils":76,"bowser":13}],48:[function(require,module,exports){
+},{"./EnhancedEventEmitter":49,"./Logger":50,"./Transport":54,"./errors":55,"./handlers/Chrome111":56,"./handlers/Chrome55":57,"./handlers/Chrome67":58,"./handlers/Chrome70":59,"./handlers/Chrome74":60,"./handlers/Edge11":61,"./handlers/Firefox60":62,"./handlers/ReactNative":64,"./handlers/ReactNativeUnifiedPlan":65,"./handlers/Safari11":66,"./handlers/Safari12":67,"./ortc":75,"./utils":78,"bowser":18}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnhancedEventEmitter = void 0;
@@ -9115,7 +9943,7 @@ class EnhancedEventEmitter extends events_1.EventEmitter {
 }
 exports.EnhancedEventEmitter = EnhancedEventEmitter;
 
-},{"./Logger":49,"events":34}],49:[function(require,module,exports){
+},{"./Logger":50,"events":5}],50:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -9154,7 +9982,7 @@ class Logger {
 }
 exports.Logger = Logger;
 
-},{"debug":77}],50:[function(require,module,exports){
+},{"debug":22}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Producer = void 0;
@@ -9430,7 +10258,7 @@ class Producer extends EnhancedEventEmitter_1.EnhancedEventEmitter {
 }
 exports.Producer = Producer;
 
-},{"./EnhancedEventEmitter":48,"./Logger":49,"./errors":54}],51:[function(require,module,exports){
+},{"./EnhancedEventEmitter":49,"./Logger":50,"./errors":55}],52:[function(require,module,exports){
 "use strict";
 /**
  * The RTP capabilities define what mediasoup or an endpoint can receive at
@@ -9438,11 +10266,11 @@ exports.Producer = Producer;
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -9467,9 +10295,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Transport = void 0;
 const awaitqueue_1 = require("awaitqueue");
+const queue_microtask_1 = __importDefault(require("queue-microtask"));
 const Logger_1 = require("./Logger");
 const EnhancedEventEmitter_1 = require("./EnhancedEventEmitter");
 const errors_1 = require("./errors");
@@ -9606,8 +10438,9 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
      * Close the Transport.
      */
     close() {
-        if (this._closed)
+        if (this._closed) {
             return;
+        }
         logger.debug('close()');
         this._closed = true;
         // Stop the AwaitQueue.
@@ -9643,8 +10476,9 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
      * @returns {RTCStatsReport}
      */
     async getStats() {
-        if (this._closed)
+        if (this._closed) {
             throw new errors_1.InvalidStateError('closed');
+        }
         return this._handler.getTransportStats();
     }
     /**
@@ -9652,10 +10486,12 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
      */
     async restartIce({ iceParameters }) {
         logger.debug('restartIce()');
-        if (this._closed)
+        if (this._closed) {
             throw new errors_1.InvalidStateError('closed');
-        else if (!iceParameters)
+        }
+        else if (!iceParameters) {
             throw new TypeError('missing iceParameters');
+        }
         // Enqueue command.
         return this._awaitQueue.push(async () => this._handler.restartIce(iceParameters), 'transport.restartIce()');
     }
@@ -9664,10 +10500,12 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
      */
     async updateIceServers({ iceServers } = {}) {
         logger.debug('updateIceServers()');
-        if (this._closed)
+        if (this._closed) {
             throw new errors_1.InvalidStateError('closed');
-        else if (!Array.isArray(iceServers))
+        }
+        else if (!Array.isArray(iceServers)) {
             throw new TypeError('missing iceServers');
+        }
         // Enqueue command.
         return this._awaitQueue.push(async () => this._handler.updateIceServers(iceServers), 'transport.updateIceServers()');
     }
@@ -9676,22 +10514,30 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
      */
     async produce({ track, encodings, codecOptions, codec, stopTracks = true, disableTrackOnPause = true, zeroRtpOnPause = false, appData = {} } = {}) {
         logger.debug('produce() [track:%o]', track);
-        if (this._closed)
+        if (this._closed) {
             throw new errors_1.InvalidStateError('closed');
-        else if (!track)
+        }
+        else if (!track) {
             throw new TypeError('missing track');
-        else if (this._direction !== 'send')
+        }
+        else if (this._direction !== 'send') {
             throw new errors_1.UnsupportedError('not a sending Transport');
-        else if (!this._canProduceByKind[track.kind])
+        }
+        else if (!this._canProduceByKind[track.kind]) {
             throw new errors_1.UnsupportedError(`cannot produce ${track.kind}`);
-        else if (track.readyState === 'ended')
+        }
+        else if (track.readyState === 'ended') {
             throw new errors_1.InvalidStateError('track ended');
-        else if (this.listenerCount('connect') === 0 && this._connectionState === 'new')
+        }
+        else if (this.listenerCount('connect') === 0 && this._connectionState === 'new') {
             throw new TypeError('no "connect" listener set into this transport');
-        else if (this.listenerCount('produce') === 0)
+        }
+        else if (this.listenerCount('produce') === 0) {
             throw new TypeError('no "produce" listener set into this transport');
-        else if (appData && typeof appData !== 'object')
+        }
+        else if (appData && typeof appData !== 'object') {
             throw new TypeError('if given, appData must be an object');
+        }
         // Enqueue command.
         return this._awaitQueue.push(async () => {
             let normalizedEncodings;
@@ -9705,24 +10551,33 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
                 normalizedEncodings = encodings
                     .map((encoding) => {
                     const normalizedEncoding = { active: true };
-                    if (encoding.active === false)
+                    if (encoding.active === false) {
                         normalizedEncoding.active = false;
-                    if (typeof encoding.dtx === 'boolean')
+                    }
+                    if (typeof encoding.dtx === 'boolean') {
                         normalizedEncoding.dtx = encoding.dtx;
-                    if (typeof encoding.scalabilityMode === 'string')
+                    }
+                    if (typeof encoding.scalabilityMode === 'string') {
                         normalizedEncoding.scalabilityMode = encoding.scalabilityMode;
-                    if (typeof encoding.scaleResolutionDownBy === 'number')
+                    }
+                    if (typeof encoding.scaleResolutionDownBy === 'number') {
                         normalizedEncoding.scaleResolutionDownBy = encoding.scaleResolutionDownBy;
-                    if (typeof encoding.maxBitrate === 'number')
+                    }
+                    if (typeof encoding.maxBitrate === 'number') {
                         normalizedEncoding.maxBitrate = encoding.maxBitrate;
-                    if (typeof encoding.maxFramerate === 'number')
+                    }
+                    if (typeof encoding.maxFramerate === 'number') {
                         normalizedEncoding.maxFramerate = encoding.maxFramerate;
-                    if (typeof encoding.adaptivePtime === 'boolean')
+                    }
+                    if (typeof encoding.adaptivePtime === 'boolean') {
                         normalizedEncoding.adaptivePtime = encoding.adaptivePtime;
-                    if (typeof encoding.priority === 'string')
+                    }
+                    if (typeof encoding.priority === 'string') {
                         normalizedEncoding.priority = encoding.priority;
-                    if (typeof encoding.networkPriority === 'string')
+                    }
+                    if (typeof encoding.networkPriority === 'string') {
                         normalizedEncoding.networkPriority = encoding.networkPriority;
+                    }
                     return normalizedEncoding;
                 });
             }
@@ -9783,24 +10638,32 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
     async consume({ id, producerId, kind, rtpParameters, streamId, appData = {} }) {
         logger.debug('consume()');
         rtpParameters = utils.clone(rtpParameters, undefined);
-        if (this._closed)
+        if (this._closed) {
             throw new errors_1.InvalidStateError('closed');
-        else if (this._direction !== 'recv')
+        }
+        else if (this._direction !== 'recv') {
             throw new errors_1.UnsupportedError('not a receiving Transport');
-        else if (typeof id !== 'string')
+        }
+        else if (typeof id !== 'string') {
             throw new TypeError('missing id');
-        else if (typeof producerId !== 'string')
+        }
+        else if (typeof producerId !== 'string') {
             throw new TypeError('missing producerId');
-        else if (kind !== 'audio' && kind !== 'video')
+        }
+        else if (kind !== 'audio' && kind !== 'video') {
             throw new TypeError(`invalid kind '${kind}'`);
-        else if (this.listenerCount('connect') === 0 && this._connectionState === 'new')
+        }
+        else if (this.listenerCount('connect') === 0 && this._connectionState === 'new') {
             throw new TypeError('no "connect" listener set into this transport');
-        else if (appData && typeof appData !== 'object')
+        }
+        else if (appData && typeof appData !== 'object') {
             throw new TypeError('if given, appData must be an object');
+        }
         // Ensure the device can consume it.
         const canConsume = ortc.canReceive(rtpParameters, this._extendedRtpCapabilities);
-        if (!canConsume)
+        if (!canConsume) {
             throw new errors_1.UnsupportedError('cannot consume this Producer');
+        }
         const consumerCreationTask = new ConsumerCreationTask({
             id,
             producerId,
@@ -9812,9 +10675,14 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
         // Store the Consumer creation task.
         this._pendingConsumerTasks.push(consumerCreationTask);
         // There is no Consumer creation in progress, create it now.
-        if (this._consumerCreationInProgress === false) {
-            this.createPendingConsumers();
-        }
+        (0, queue_microtask_1.default)(() => {
+            if (this._closed) {
+                throw new errors_1.InvalidStateError('closed');
+            }
+            if (this._consumerCreationInProgress === false) {
+                this.createPendingConsumers();
+            }
+        });
         return consumerCreationTask.promise;
     }
     /**
@@ -9822,20 +10690,27 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
      */
     async produceData({ ordered = true, maxPacketLifeTime, maxRetransmits, label = '', protocol = '', appData = {} } = {}) {
         logger.debug('produceData()');
-        if (this._closed)
+        if (this._closed) {
             throw new errors_1.InvalidStateError('closed');
-        else if (this._direction !== 'send')
+        }
+        else if (this._direction !== 'send') {
             throw new errors_1.UnsupportedError('not a sending Transport');
-        else if (!this._maxSctpMessageSize)
+        }
+        else if (!this._maxSctpMessageSize) {
             throw new errors_1.UnsupportedError('SCTP not enabled by remote Transport');
-        else if (this.listenerCount('connect') === 0 && this._connectionState === 'new')
+        }
+        else if (this.listenerCount('connect') === 0 && this._connectionState === 'new') {
             throw new TypeError('no "connect" listener set into this transport');
-        else if (this.listenerCount('producedata') === 0)
+        }
+        else if (this.listenerCount('producedata') === 0) {
             throw new TypeError('no "producedata" listener set into this transport');
-        else if (appData && typeof appData !== 'object')
+        }
+        else if (appData && typeof appData !== 'object') {
             throw new TypeError('if given, appData must be an object');
-        if (maxPacketLifeTime || maxRetransmits)
+        }
+        if (maxPacketLifeTime || maxRetransmits) {
             ordered = false;
+        }
         // Enqueue command.
         return this._awaitQueue.push(async () => {
             const { dataChannel, sctpStreamParameters } = await this._handler.sendDataChannel({
@@ -9869,20 +10744,27 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
     async consumeData({ id, dataProducerId, sctpStreamParameters, label = '', protocol = '', appData = {} }) {
         logger.debug('consumeData()');
         sctpStreamParameters = utils.clone(sctpStreamParameters, undefined);
-        if (this._closed)
+        if (this._closed) {
             throw new errors_1.InvalidStateError('closed');
-        else if (this._direction !== 'recv')
+        }
+        else if (this._direction !== 'recv') {
             throw new errors_1.UnsupportedError('not a receiving Transport');
-        else if (!this._maxSctpMessageSize)
+        }
+        else if (!this._maxSctpMessageSize) {
             throw new errors_1.UnsupportedError('SCTP not enabled by remote Transport');
-        else if (typeof id !== 'string')
+        }
+        else if (typeof id !== 'string') {
             throw new TypeError('missing id');
-        else if (typeof dataProducerId !== 'string')
+        }
+        else if (typeof dataProducerId !== 'string') {
             throw new TypeError('missing dataProducerId');
-        else if (this.listenerCount('connect') === 0 && this._connectionState === 'new')
+        }
+        else if (this.listenerCount('connect') === 0 && this._connectionState === 'new') {
             throw new TypeError('no "connect" listener set into this transport');
-        else if (appData && typeof appData !== 'object')
+        }
+        else if (appData && typeof appData !== 'object') {
             throw new TypeError('if given, appData must be an object');
+        }
         // This may throw.
         ortc.validateSctpStreamParameters(sctpStreamParameters);
         // Enqueue command.
@@ -9950,7 +10832,8 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
                     this.handleConsumer(consumer);
                     // If this is the first video Consumer and the Consumer for RTP probation
                     // has not yet been created, it's time to create it.
-                    if (!this._probatorConsumerCreated && !videoConsumerForProbator && kind === 'video') {
+                    if (!this._probatorConsumerCreated &&
+                        !videoConsumerForProbator && kind === 'video') {
                         videoConsumerForProbator = consumer;
                     }
                     // Emit observer event.
@@ -10085,19 +10968,22 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
             this.safeEmit('connect', { dtlsParameters }, callback, errback);
         });
         handler.on('@connectionstatechange', (connectionState) => {
-            if (connectionState === this._connectionState)
+            if (connectionState === this._connectionState) {
                 return;
+            }
             logger.debug('connection state changed to %s', connectionState);
             this._connectionState = connectionState;
-            if (!this._closed)
+            if (!this._closed) {
                 this.safeEmit('connectionstatechange', connectionState);
+            }
         });
     }
     handleProducer(producer) {
         producer.on('@close', () => {
             this._producers.delete(producer.id);
-            if (this._closed)
+            if (this._closed) {
                 return;
+            }
             this._awaitQueue.push(async () => this._handler.stopSending(producer.localId), 'producer @close event')
                 .catch((error) => logger.warn('producer.close() failed:%o', error));
         });
@@ -10127,8 +11013,9 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
                 .catch(errback);
         });
         producer.on('@getstats', (callback, errback) => {
-            if (this._closed)
+            if (this._closed) {
                 return errback(new errors_1.InvalidStateError('closed'));
+            }
             this._handler.getSenderStats(producer.localId)
                 .then(callback)
                 .catch(errback);
@@ -10139,8 +11026,9 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
             this._consumers.delete(consumer.id);
             this._pendingPauseConsumers.delete(consumer.id);
             this._pendingResumeConsumers.delete(consumer.id);
-            if (this._closed)
+            if (this._closed) {
                 return;
+            }
             // Store the Consumer into the close list.
             this._pendingCloseConsumers.set(consumer.id, consumer);
             // There is no Consumer close in progress, do it now.
@@ -10156,9 +11044,14 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
             // Store the Consumer into the pending list.
             this._pendingPauseConsumers.set(consumer.id, consumer);
             // There is no Consumer pause in progress, do it now.
-            if (this._consumerPauseInProgress === false) {
-                this.pausePendingConsumers();
-            }
+            (0, queue_microtask_1.default)(() => {
+                if (this._closed) {
+                    return;
+                }
+                if (this._consumerPauseInProgress === false) {
+                    this.pausePendingConsumers();
+                }
+            });
         });
         consumer.on('@resume', () => {
             // If Consumer is pending to be paused, remove from pending pause list.
@@ -10168,13 +11061,19 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
             // Store the Consumer into the pending list.
             this._pendingResumeConsumers.set(consumer.id, consumer);
             // There is no Consumer resume in progress, do it now.
-            if (this._consumerResumeInProgress === false) {
-                this.resumePendingConsumers();
-            }
+            (0, queue_microtask_1.default)(() => {
+                if (this._closed) {
+                    return;
+                }
+                if (this._consumerResumeInProgress === false) {
+                    this.resumePendingConsumers();
+                }
+            });
         });
         consumer.on('@getstats', (callback, errback) => {
-            if (this._closed)
+            if (this._closed) {
                 return errback(new errors_1.InvalidStateError('closed'));
+            }
             this._handler.getReceiverStats(consumer.localId)
                 .then(callback)
                 .catch(errback);
@@ -10193,7 +11092,7 @@ class Transport extends EnhancedEventEmitter_1.EnhancedEventEmitter {
 }
 exports.Transport = Transport;
 
-},{"./Consumer":44,"./DataConsumer":45,"./DataProducer":46,"./EnhancedEventEmitter":48,"./Logger":49,"./Producer":50,"./errors":54,"./ortc":73,"./utils":76,"awaitqueue":5}],54:[function(require,module,exports){
+},{"./Consumer":45,"./DataConsumer":46,"./DataProducer":47,"./EnhancedEventEmitter":49,"./Logger":50,"./Producer":51,"./errors":55,"./ortc":75,"./utils":78,"awaitqueue":14,"queue-microtask":82}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InvalidStateError = exports.UnsupportedError = void 0;
@@ -10234,7 +11133,649 @@ class InvalidStateError extends Error {
 }
 exports.InvalidStateError = InvalidStateError;
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Chrome111 = void 0;
+const sdpTransform = __importStar(require("sdp-transform"));
+const Logger_1 = require("../Logger");
+const utils = __importStar(require("../utils"));
+const ortc = __importStar(require("../ortc"));
+const sdpCommonUtils = __importStar(require("./sdp/commonUtils"));
+const sdpUnifiedPlanUtils = __importStar(require("./sdp/unifiedPlanUtils"));
+const HandlerInterface_1 = require("./HandlerInterface");
+const RemoteSdp_1 = require("./sdp/RemoteSdp");
+const scalabilityModes_1 = require("../scalabilityModes");
+const logger = new Logger_1.Logger('Chrome111');
+const SCTP_NUM_STREAMS = { OS: 1024, MIS: 1024 };
+class Chrome111 extends HandlerInterface_1.HandlerInterface {
+    /**
+     * Creates a factory function.
+     */
+    static createFactory() {
+        return () => new Chrome111();
+    }
+    constructor() {
+        super();
+        // Map of RTCTransceivers indexed by MID.
+        this._mapMidTransceiver = new Map();
+        // Local stream for sending.
+        this._sendStream = new MediaStream();
+        // Whether a DataChannel m=application section has been created.
+        this._hasDataChannelMediaSection = false;
+        // Sending DataChannel id value counter. Incremented for each new DataChannel.
+        this._nextSendSctpStreamId = 0;
+        // Got transport local and remote parameters.
+        this._transportReady = false;
+    }
+    get name() {
+        return 'Chrome111';
+    }
+    close() {
+        logger.debug('close()');
+        // Close RTCPeerConnection.
+        if (this._pc) {
+            try {
+                this._pc.close();
+            }
+            catch (error) { }
+        }
+        this.emit('@close');
+    }
+    async getNativeRtpCapabilities() {
+        logger.debug('getNativeRtpCapabilities()');
+        const pc = new RTCPeerConnection({
+            iceServers: [],
+            iceTransportPolicy: 'all',
+            bundlePolicy: 'max-bundle',
+            rtcpMuxPolicy: 'require',
+            sdpSemantics: 'unified-plan'
+        });
+        try {
+            pc.addTransceiver('audio');
+            pc.addTransceiver('video');
+            const offer = await pc.createOffer();
+            try {
+                pc.close();
+            }
+            catch (error) { }
+            const sdpObject = sdpTransform.parse(offer.sdp);
+            const nativeRtpCapabilities = sdpCommonUtils.extractRtpCapabilities({ sdpObject });
+            return nativeRtpCapabilities;
+        }
+        catch (error) {
+            try {
+                pc.close();
+            }
+            catch (error2) { }
+            throw error;
+        }
+    }
+    async getNativeSctpCapabilities() {
+        logger.debug('getNativeSctpCapabilities()');
+        return {
+            numStreams: SCTP_NUM_STREAMS
+        };
+    }
+    run({ direction, iceParameters, iceCandidates, dtlsParameters, sctpParameters, iceServers, iceTransportPolicy, additionalSettings, proprietaryConstraints, extendedRtpCapabilities }) {
+        logger.debug('run()');
+        this._direction = direction;
+        this._remoteSdp = new RemoteSdp_1.RemoteSdp({
+            iceParameters,
+            iceCandidates,
+            dtlsParameters,
+            sctpParameters
+        });
+        this._sendingRtpParametersByKind =
+            {
+                audio: ortc.getSendingRtpParameters('audio', extendedRtpCapabilities),
+                video: ortc.getSendingRtpParameters('video', extendedRtpCapabilities)
+            };
+        this._sendingRemoteRtpParametersByKind =
+            {
+                audio: ortc.getSendingRemoteRtpParameters('audio', extendedRtpCapabilities),
+                video: ortc.getSendingRemoteRtpParameters('video', extendedRtpCapabilities)
+            };
+        if (dtlsParameters.role && dtlsParameters.role !== 'auto') {
+            this._forcedLocalDtlsRole = dtlsParameters.role === 'server'
+                ? 'client'
+                : 'server';
+        }
+        this._pc = new RTCPeerConnection({
+            iceServers: iceServers || [],
+            iceTransportPolicy: iceTransportPolicy || 'all',
+            bundlePolicy: 'max-bundle',
+            rtcpMuxPolicy: 'require',
+            sdpSemantics: 'unified-plan',
+            ...additionalSettings
+        }, proprietaryConstraints);
+        if (this._pc.connectionState) {
+            this._pc.addEventListener('connectionstatechange', () => {
+                this.emit('@connectionstatechange', this._pc.connectionState);
+            });
+        }
+        else {
+            logger.warn('run() | pc.connectionState not supported, using pc.iceConnectionState');
+            this._pc.addEventListener('iceconnectionstatechange', () => {
+                switch (this._pc.iceConnectionState) {
+                    case 'checking':
+                        this.emit('@connectionstatechange', 'connecting');
+                        break;
+                    case 'connected':
+                    case 'completed':
+                        this.emit('@connectionstatechange', 'connected');
+                        break;
+                    case 'failed':
+                        this.emit('@connectionstatechange', 'failed');
+                        break;
+                    case 'disconnected':
+                        this.emit('@connectionstatechange', 'disconnected');
+                        break;
+                    case 'closed':
+                        this.emit('@connectionstatechange', 'closed');
+                        break;
+                }
+            });
+        }
+    }
+    async updateIceServers(iceServers) {
+        logger.debug('updateIceServers()');
+        const configuration = this._pc.getConfiguration();
+        configuration.iceServers = iceServers;
+        this._pc.setConfiguration(configuration);
+    }
+    async restartIce(iceParameters) {
+        logger.debug('restartIce()');
+        // Provide the remote SDP handler with new remote ICE parameters.
+        this._remoteSdp.updateIceParameters(iceParameters);
+        if (!this._transportReady)
+            return;
+        if (this._direction === 'send') {
+            const offer = await this._pc.createOffer({ iceRestart: true });
+            logger.debug('restartIce() | calling pc.setLocalDescription() [offer:%o]', offer);
+            await this._pc.setLocalDescription(offer);
+            const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+            logger.debug('restartIce() | calling pc.setRemoteDescription() [answer:%o]', answer);
+            await this._pc.setRemoteDescription(answer);
+        }
+        else {
+            const offer = { type: 'offer', sdp: this._remoteSdp.getSdp() };
+            logger.debug('restartIce() | calling pc.setRemoteDescription() [offer:%o]', offer);
+            await this._pc.setRemoteDescription(offer);
+            const answer = await this._pc.createAnswer();
+            logger.debug('restartIce() | calling pc.setLocalDescription() [answer:%o]', answer);
+            await this._pc.setLocalDescription(answer);
+        }
+    }
+    async getTransportStats() {
+        return this._pc.getStats();
+    }
+    async send({ track, encodings, codecOptions, codec }) {
+        var _a;
+        this.assertSendDirection();
+        logger.debug('send() [kind:%s, track.id:%s]', track.kind, track.id);
+        if (encodings && encodings.length > 1) {
+            encodings.forEach((encoding, idx) => {
+                encoding.rid = `r${idx}`;
+            });
+            // Set rid and verify scalabilityMode in each encoding.
+            // NOTE: Even if WebRTC allows different scalabilityMode (different number
+            // of temporal layers) per simulcast stream, we need that those are the
+            // same in all them, so let's pick up the highest value.
+            // NOTE: If scalabilityMode is not given, Chrome will use L1T3.
+            let nextRid = 1;
+            let maxTemporalLayers = 1;
+            for (const encoding of encodings) {
+                const temporalLayers = encoding.scalabilityMode
+                    ? (0, scalabilityModes_1.parse)(encoding.scalabilityMode).temporalLayers
+                    : 3;
+                if (temporalLayers > maxTemporalLayers) {
+                    maxTemporalLayers = temporalLayers;
+                }
+            }
+            for (const encoding of encodings) {
+                encoding.rid = `r${nextRid++}`;
+                encoding.scalabilityMode = `L1T${maxTemporalLayers}`;
+            }
+        }
+        const sendingRtpParameters = utils.clone(this._sendingRtpParametersByKind[track.kind], {});
+        // This may throw.
+        sendingRtpParameters.codecs =
+            ortc.reduceCodecs(sendingRtpParameters.codecs, codec);
+        const sendingRemoteRtpParameters = utils.clone(this._sendingRemoteRtpParametersByKind[track.kind], {});
+        // This may throw.
+        sendingRemoteRtpParameters.codecs =
+            ortc.reduceCodecs(sendingRemoteRtpParameters.codecs, codec);
+        const mediaSectionIdx = this._remoteSdp.getNextMediaSectionIdx();
+        const transceiver = this._pc.addTransceiver(track, {
+            direction: 'sendonly',
+            streams: [this._sendStream],
+            sendEncodings: encodings
+        });
+        const offer = await this._pc.createOffer();
+        let localSdpObject = sdpTransform.parse(offer.sdp);
+        if (!this._transportReady) {
+            await this.setupTransport({
+                localDtlsRole: (_a = this._forcedLocalDtlsRole) !== null && _a !== void 0 ? _a : 'client',
+                localSdpObject
+            });
+        }
+        logger.debug('send() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        // We can now get the transceiver.mid.
+        const localId = transceiver.mid;
+        // Set MID.
+        sendingRtpParameters.mid = localId;
+        localSdpObject = sdpTransform.parse(this._pc.localDescription.sdp);
+        const offerMediaObject = localSdpObject.media[mediaSectionIdx.idx];
+        // Set RTCP CNAME.
+        sendingRtpParameters.rtcp.cname =
+            sdpCommonUtils.getCname({ offerMediaObject });
+        // Set RTP encodings by parsing the SDP offer if no encodings are given.
+        if (!encodings) {
+            sendingRtpParameters.encodings =
+                sdpUnifiedPlanUtils.getRtpEncodings({ offerMediaObject });
+        }
+        // Set RTP encodings by parsing the SDP offer and complete them with given
+        // one if just a single encoding has been given.
+        else if (encodings.length === 1) {
+            const newEncodings = sdpUnifiedPlanUtils.getRtpEncodings({ offerMediaObject });
+            Object.assign(newEncodings[0], encodings[0]);
+            sendingRtpParameters.encodings = newEncodings;
+        }
+        // Otherwise if more than 1 encoding are given use them verbatim.
+        else {
+            sendingRtpParameters.encodings = encodings;
+        }
+        this._remoteSdp.send({
+            offerMediaObject,
+            reuseMid: mediaSectionIdx.reuseMid,
+            offerRtpParameters: sendingRtpParameters,
+            answerRtpParameters: sendingRemoteRtpParameters,
+            codecOptions,
+            extmapAllowMixed: true
+        });
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('send() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
+        // Store in the map.
+        this._mapMidTransceiver.set(localId, transceiver);
+        return {
+            localId,
+            rtpParameters: sendingRtpParameters,
+            rtpSender: transceiver.sender
+        };
+    }
+    async stopSending(localId) {
+        this.assertSendDirection();
+        logger.debug('stopSending() [localId:%s]', localId);
+        const transceiver = this._mapMidTransceiver.get(localId);
+        if (!transceiver)
+            throw new Error('associated RTCRtpTransceiver not found');
+        transceiver.sender.replaceTrack(null);
+        this._pc.removeTrack(transceiver.sender);
+        const mediaSectionClosed = this._remoteSdp.closeMediaSection(transceiver.mid);
+        if (mediaSectionClosed) {
+            try {
+                transceiver.stop();
+            }
+            catch (error) { }
+        }
+        const offer = await this._pc.createOffer();
+        logger.debug('stopSending() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('stopSending() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
+        this._mapMidTransceiver.delete(localId);
+    }
+    async pauseSending(localId) {
+        this.assertSendDirection();
+        logger.debug('pauseSending() [localId:%s]', localId);
+        const transceiver = this._mapMidTransceiver.get(localId);
+        if (!transceiver)
+            throw new Error('associated RTCRtpTransceiver not found');
+        transceiver.direction = 'inactive';
+        this._remoteSdp.pauseMediaSection(localId);
+        const offer = await this._pc.createOffer();
+        logger.debug('pauseSending() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('pauseSending() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
+    }
+    async resumeSending(localId) {
+        this.assertSendDirection();
+        logger.debug('resumeSending() [localId:%s]', localId);
+        const transceiver = this._mapMidTransceiver.get(localId);
+        this._remoteSdp.resumeSendingMediaSection(localId);
+        if (!transceiver)
+            throw new Error('associated RTCRtpTransceiver not found');
+        transceiver.direction = 'sendonly';
+        const offer = await this._pc.createOffer();
+        logger.debug('resumeSending() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('resumeSending() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
+    }
+    async replaceTrack(localId, track) {
+        this.assertSendDirection();
+        if (track) {
+            logger.debug('replaceTrack() [localId:%s, track.id:%s]', localId, track.id);
+        }
+        else {
+            logger.debug('replaceTrack() [localId:%s, no track]', localId);
+        }
+        const transceiver = this._mapMidTransceiver.get(localId);
+        if (!transceiver)
+            throw new Error('associated RTCRtpTransceiver not found');
+        await transceiver.sender.replaceTrack(track);
+    }
+    async setMaxSpatialLayer(localId, spatialLayer) {
+        this.assertSendDirection();
+        logger.debug('setMaxSpatialLayer() [localId:%s, spatialLayer:%s]', localId, spatialLayer);
+        const transceiver = this._mapMidTransceiver.get(localId);
+        if (!transceiver)
+            throw new Error('associated RTCRtpTransceiver not found');
+        const parameters = transceiver.sender.getParameters();
+        parameters.encodings.forEach((encoding, idx) => {
+            if (idx <= spatialLayer)
+                encoding.active = true;
+            else
+                encoding.active = false;
+        });
+        await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setMaxSpatialLayer() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setMaxSpatialLayer() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
+    }
+    async setRtpEncodingParameters(localId, params) {
+        this.assertSendDirection();
+        logger.debug('setRtpEncodingParameters() [localId:%s, params:%o]', localId, params);
+        const transceiver = this._mapMidTransceiver.get(localId);
+        if (!transceiver)
+            throw new Error('associated RTCRtpTransceiver not found');
+        const parameters = transceiver.sender.getParameters();
+        parameters.encodings.forEach((encoding, idx) => {
+            parameters.encodings[idx] = { ...encoding, ...params };
+        });
+        await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setRtpEncodingParameters() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setRtpEncodingParameters() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
+    }
+    async getSenderStats(localId) {
+        this.assertSendDirection();
+        const transceiver = this._mapMidTransceiver.get(localId);
+        if (!transceiver)
+            throw new Error('associated RTCRtpTransceiver not found');
+        return transceiver.sender.getStats();
+    }
+    async sendDataChannel({ ordered, maxPacketLifeTime, maxRetransmits, label, protocol }) {
+        var _a;
+        this.assertSendDirection();
+        const options = {
+            negotiated: true,
+            id: this._nextSendSctpStreamId,
+            ordered,
+            maxPacketLifeTime,
+            maxRetransmits,
+            protocol
+        };
+        logger.debug('sendDataChannel() [options:%o]', options);
+        const dataChannel = this._pc.createDataChannel(label, options);
+        // Increase next id.
+        this._nextSendSctpStreamId =
+            ++this._nextSendSctpStreamId % SCTP_NUM_STREAMS.MIS;
+        // If this is the first DataChannel we need to create the SDP answer with
+        // m=application section.
+        if (!this._hasDataChannelMediaSection) {
+            const offer = await this._pc.createOffer();
+            const localSdpObject = sdpTransform.parse(offer.sdp);
+            const offerMediaObject = localSdpObject.media
+                .find((m) => m.type === 'application');
+            if (!this._transportReady) {
+                await this.setupTransport({
+                    localDtlsRole: (_a = this._forcedLocalDtlsRole) !== null && _a !== void 0 ? _a : 'client',
+                    localSdpObject
+                });
+            }
+            logger.debug('sendDataChannel() | calling pc.setLocalDescription() [offer:%o]', offer);
+            await this._pc.setLocalDescription(offer);
+            this._remoteSdp.sendSctpAssociation({ offerMediaObject });
+            const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+            logger.debug('sendDataChannel() | calling pc.setRemoteDescription() [answer:%o]', answer);
+            await this._pc.setRemoteDescription(answer);
+            this._hasDataChannelMediaSection = true;
+        }
+        const sctpStreamParameters = {
+            streamId: options.id,
+            ordered: options.ordered,
+            maxPacketLifeTime: options.maxPacketLifeTime,
+            maxRetransmits: options.maxRetransmits
+        };
+        return { dataChannel, sctpStreamParameters };
+    }
+    async receive(optionsList) {
+        var _a;
+        this.assertRecvDirection();
+        const results = [];
+        const mapLocalId = new Map();
+        for (const options of optionsList) {
+            const { trackId, kind, rtpParameters, streamId } = options;
+            logger.debug('receive() [trackId:%s, kind:%s]', trackId, kind);
+            const localId = rtpParameters.mid || String(this._mapMidTransceiver.size);
+            mapLocalId.set(trackId, localId);
+            this._remoteSdp.receive({
+                mid: localId,
+                kind,
+                offerRtpParameters: rtpParameters,
+                streamId: streamId || rtpParameters.rtcp.cname,
+                trackId
+            });
+        }
+        const offer = { type: 'offer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('receive() | calling pc.setRemoteDescription() [offer:%o]', offer);
+        await this._pc.setRemoteDescription(offer);
+        let answer = await this._pc.createAnswer();
+        const localSdpObject = sdpTransform.parse(answer.sdp);
+        for (const options of optionsList) {
+            const { trackId, rtpParameters } = options;
+            const localId = mapLocalId.get(trackId);
+            const answerMediaObject = localSdpObject.media
+                .find((m) => String(m.mid) === localId);
+            // May need to modify codec parameters in the answer based on codec
+            // parameters in the offer.
+            sdpCommonUtils.applyCodecParameters({
+                offerRtpParameters: rtpParameters,
+                answerMediaObject
+            });
+        }
+        answer = { type: 'answer', sdp: sdpTransform.write(localSdpObject) };
+        if (!this._transportReady) {
+            await this.setupTransport({
+                localDtlsRole: (_a = this._forcedLocalDtlsRole) !== null && _a !== void 0 ? _a : 'client',
+                localSdpObject
+            });
+        }
+        logger.debug('receive() | calling pc.setLocalDescription() [answer:%o]', answer);
+        await this._pc.setLocalDescription(answer);
+        for (const options of optionsList) {
+            const { trackId } = options;
+            const localId = mapLocalId.get(trackId);
+            const transceiver = this._pc.getTransceivers()
+                .find((t) => t.mid === localId);
+            if (!transceiver) {
+                throw new Error('new RTCRtpTransceiver not found');
+            }
+            else {
+                // Store in the map.
+                this._mapMidTransceiver.set(localId, transceiver);
+                results.push({
+                    localId,
+                    track: transceiver.receiver.track,
+                    rtpReceiver: transceiver.receiver
+                });
+            }
+        }
+        return results;
+    }
+    async stopReceiving(localIds) {
+        this.assertRecvDirection();
+        for (const localId of localIds) {
+            logger.debug('stopReceiving() [localId:%s]', localId);
+            const transceiver = this._mapMidTransceiver.get(localId);
+            if (!transceiver)
+                throw new Error('associated RTCRtpTransceiver not found');
+            this._remoteSdp.closeMediaSection(transceiver.mid);
+        }
+        const offer = { type: 'offer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('stopReceiving() | calling pc.setRemoteDescription() [offer:%o]', offer);
+        await this._pc.setRemoteDescription(offer);
+        const answer = await this._pc.createAnswer();
+        logger.debug('stopReceiving() | calling pc.setLocalDescription() [answer:%o]', answer);
+        await this._pc.setLocalDescription(answer);
+        for (const localId of localIds) {
+            this._mapMidTransceiver.delete(localId);
+        }
+    }
+    async pauseReceiving(localIds) {
+        this.assertRecvDirection();
+        for (const localId of localIds) {
+            logger.debug('pauseReceiving() [localId:%s]', localId);
+            const transceiver = this._mapMidTransceiver.get(localId);
+            if (!transceiver)
+                throw new Error('associated RTCRtpTransceiver not found');
+            transceiver.direction = 'inactive';
+            this._remoteSdp.pauseMediaSection(localId);
+        }
+        const offer = { type: 'offer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('pauseReceiving() | calling pc.setRemoteDescription() [offer:%o]', offer);
+        await this._pc.setRemoteDescription(offer);
+        const answer = await this._pc.createAnswer();
+        logger.debug('pauseReceiving() | calling pc.setLocalDescription() [answer:%o]', answer);
+        await this._pc.setLocalDescription(answer);
+    }
+    async resumeReceiving(localIds) {
+        this.assertRecvDirection();
+        for (const localId of localIds) {
+            logger.debug('resumeReceiving() [localId:%s]', localId);
+            const transceiver = this._mapMidTransceiver.get(localId);
+            if (!transceiver)
+                throw new Error('associated RTCRtpTransceiver not found');
+            transceiver.direction = 'recvonly';
+            this._remoteSdp.resumeReceivingMediaSection(localId);
+        }
+        const offer = { type: 'offer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('resumeReceiving() | calling pc.setRemoteDescription() [offer:%o]', offer);
+        await this._pc.setRemoteDescription(offer);
+        const answer = await this._pc.createAnswer();
+        logger.debug('resumeReceiving() | calling pc.setLocalDescription() [answer:%o]', answer);
+        await this._pc.setLocalDescription(answer);
+    }
+    async getReceiverStats(localId) {
+        this.assertRecvDirection();
+        const transceiver = this._mapMidTransceiver.get(localId);
+        if (!transceiver)
+            throw new Error('associated RTCRtpTransceiver not found');
+        return transceiver.receiver.getStats();
+    }
+    async receiveDataChannel({ sctpStreamParameters, label, protocol }) {
+        var _a;
+        this.assertRecvDirection();
+        const { streamId, ordered, maxPacketLifeTime, maxRetransmits } = sctpStreamParameters;
+        const options = {
+            negotiated: true,
+            id: streamId,
+            ordered,
+            maxPacketLifeTime,
+            maxRetransmits,
+            protocol
+        };
+        logger.debug('receiveDataChannel() [options:%o]', options);
+        const dataChannel = this._pc.createDataChannel(label, options);
+        // If this is the first DataChannel we need to create the SDP offer with
+        // m=application section.
+        if (!this._hasDataChannelMediaSection) {
+            this._remoteSdp.receiveSctpAssociation();
+            const offer = { type: 'offer', sdp: this._remoteSdp.getSdp() };
+            logger.debug('receiveDataChannel() | calling pc.setRemoteDescription() [offer:%o]', offer);
+            await this._pc.setRemoteDescription(offer);
+            const answer = await this._pc.createAnswer();
+            if (!this._transportReady) {
+                const localSdpObject = sdpTransform.parse(answer.sdp);
+                await this.setupTransport({
+                    localDtlsRole: (_a = this._forcedLocalDtlsRole) !== null && _a !== void 0 ? _a : 'client',
+                    localSdpObject
+                });
+            }
+            logger.debug('receiveDataChannel() | calling pc.setRemoteDescription() [answer:%o]', answer);
+            await this._pc.setLocalDescription(answer);
+            this._hasDataChannelMediaSection = true;
+        }
+        return { dataChannel };
+    }
+    async setupTransport({ localDtlsRole, localSdpObject }) {
+        if (!localSdpObject)
+            localSdpObject = sdpTransform.parse(this._pc.localDescription.sdp);
+        // Get our local DTLS parameters.
+        const dtlsParameters = sdpCommonUtils.extractDtlsParameters({ sdpObject: localSdpObject });
+        // Set our DTLS role.
+        dtlsParameters.role = localDtlsRole;
+        // Update the remote DTLS role in the SDP.
+        this._remoteSdp.updateDtlsRole(localDtlsRole === 'client' ? 'server' : 'client');
+        // Need to tell the remote transport about our parameters.
+        await new Promise((resolve, reject) => {
+            this.safeEmit('@connect', { dtlsParameters }, resolve, reject);
+        });
+        this._transportReady = true;
+    }
+    assertSendDirection() {
+        if (this._direction !== 'send') {
+            throw new Error('method can just be called for handlers with "send" direction');
+        }
+    }
+    assertRecvDirection() {
+        if (this._direction !== 'recv') {
+            throw new Error('method can just be called for handlers with "recv" direction');
+        }
+    }
+}
+exports.Chrome111 = Chrome111;
+
+},{"../Logger":50,"../ortc":75,"../scalabilityModes":76,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/unifiedPlanUtils":73,"sdp-transform":84}],57:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -10499,7 +12040,7 @@ class Chrome55 extends HandlerInterface_1.HandlerInterface {
         if (sendingRtpParameters.encodings.length > 1 &&
             sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/vp8') {
             for (const encoding of sendingRtpParameters.encodings) {
-                encoding.scalabilityMode = 'S1T3';
+                encoding.scalabilityMode = 'L1T3';
             }
         }
         this._remoteSdp.send({
@@ -10772,7 +12313,7 @@ class Chrome55 extends HandlerInterface_1.HandlerInterface {
 }
 exports.Chrome55 = Chrome55;
 
-},{"../Logger":49,"../errors":54,"../ortc":73,"../utils":76,"./HandlerInterface":61,"./sdp/RemoteSdp":68,"./sdp/commonUtils":69,"./sdp/planBUtils":70,"sdp-transform":85}],56:[function(require,module,exports){
+},{"../Logger":50,"../errors":55,"../ortc":75,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/planBUtils":72,"sdp-transform":84}],58:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -11037,7 +12578,7 @@ class Chrome67 extends HandlerInterface_1.HandlerInterface {
         if (sendingRtpParameters.encodings.length > 1 &&
             sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/vp8') {
             for (const encoding of sendingRtpParameters.encodings) {
-                encoding.scalabilityMode = 'S1T3';
+                encoding.scalabilityMode = 'L1T3';
             }
         }
         this._remoteSdp.send({
@@ -11356,7 +12897,7 @@ class Chrome67 extends HandlerInterface_1.HandlerInterface {
 }
 exports.Chrome67 = Chrome67;
 
-},{"../Logger":49,"../ortc":73,"../utils":76,"./HandlerInterface":61,"./sdp/RemoteSdp":68,"./sdp/commonUtils":69,"./sdp/planBUtils":70,"sdp-transform":85}],57:[function(require,module,exports){
+},{"../Logger":50,"../ortc":75,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/planBUtils":72,"sdp-transform":84}],59:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -11651,7 +13192,7 @@ class Chrome70 extends HandlerInterface_1.HandlerInterface {
             (sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/vp8' ||
                 sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/h264')) {
             for (const encoding of sendingRtpParameters.encodings) {
-                encoding.scalabilityMode = 'S1T3';
+                encoding.scalabilityMode = 'L1T3';
             }
         }
         this._remoteSdp.send({
@@ -11730,6 +13271,13 @@ class Chrome70 extends HandlerInterface_1.HandlerInterface {
                 encoding.active = false;
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setMaxSpatialLayer() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setMaxSpatialLayer() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async setRtpEncodingParameters(localId, params) {
         this.assertSendDirection();
@@ -11742,6 +13290,13 @@ class Chrome70 extends HandlerInterface_1.HandlerInterface {
             parameters.encodings[idx] = { ...encoding, ...params };
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setRtpEncodingParameters() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setRtpEncodingParameters() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async getSenderStats(localId) {
         this.assertSendDirection();
@@ -11957,7 +13512,7 @@ class Chrome70 extends HandlerInterface_1.HandlerInterface {
 }
 exports.Chrome70 = Chrome70;
 
-},{"../Logger":49,"../ortc":73,"../scalabilityModes":74,"../utils":76,"./HandlerInterface":61,"./sdp/RemoteSdp":68,"./sdp/commonUtils":69,"./sdp/unifiedPlanUtils":71,"sdp-transform":85}],58:[function(require,module,exports){
+},{"../Logger":50,"../ortc":75,"../scalabilityModes":76,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/unifiedPlanUtils":73,"sdp-transform":84}],60:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -12242,7 +13797,12 @@ class Chrome74 extends HandlerInterface_1.HandlerInterface {
             (sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/vp8' ||
                 sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/h264')) {
             for (const encoding of sendingRtpParameters.encodings) {
-                encoding.scalabilityMode = 'S1T3';
+                if (encoding.scalabilityMode) {
+                    encoding.scalabilityMode = `L1T${layers.temporalLayers}`;
+                }
+                else {
+                    encoding.scalabilityMode = 'L1T3';
+                }
             }
         }
         this._remoteSdp.send({
@@ -12344,6 +13904,13 @@ class Chrome74 extends HandlerInterface_1.HandlerInterface {
                 encoding.active = false;
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setMaxSpatialLayer() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setMaxSpatialLayer() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async setRtpEncodingParameters(localId, params) {
         this.assertSendDirection();
@@ -12356,6 +13923,13 @@ class Chrome74 extends HandlerInterface_1.HandlerInterface {
             parameters.encodings[idx] = { ...encoding, ...params };
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setRtpEncodingParameters() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setRtpEncodingParameters() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async getSenderStats(localId) {
         this.assertSendDirection();
@@ -12596,7 +14170,7 @@ class Chrome74 extends HandlerInterface_1.HandlerInterface {
 }
 exports.Chrome74 = Chrome74;
 
-},{"../Logger":49,"../ortc":73,"../scalabilityModes":74,"../utils":76,"./HandlerInterface":61,"./sdp/RemoteSdp":68,"./sdp/commonUtils":69,"./sdp/unifiedPlanUtils":71,"sdp-transform":85}],59:[function(require,module,exports){
+},{"../Logger":50,"../ortc":75,"../scalabilityModes":76,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/unifiedPlanUtils":73,"sdp-transform":84}],61:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -13030,7 +14604,7 @@ class Edge11 extends HandlerInterface_1.HandlerInterface {
 }
 exports.Edge11 = Edge11;
 
-},{"../Logger":49,"../errors":54,"../ortc":73,"../utils":76,"./HandlerInterface":61,"./ortc/edgeUtils":66}],60:[function(require,module,exports){
+},{"../Logger":50,"../errors":55,"../ortc":75,"../utils":78,"./HandlerInterface":63,"./ortc/edgeUtils":68}],62:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -13066,6 +14640,7 @@ const sdpCommonUtils = __importStar(require("./sdp/commonUtils"));
 const sdpUnifiedPlanUtils = __importStar(require("./sdp/unifiedPlanUtils"));
 const HandlerInterface_1 = require("./HandlerInterface");
 const RemoteSdp_1 = require("./sdp/RemoteSdp");
+const scalabilityModes_1 = require("../scalabilityModes");
 const logger = new Logger_1.Logger('Firefox60');
 const SCTP_NUM_STREAMS = { OS: 16, MIS: 2048 };
 class Firefox60 extends HandlerInterface_1.HandlerInterface {
@@ -13292,6 +14867,7 @@ class Firefox60 extends HandlerInterface_1.HandlerInterface {
         // Firefox does not respect ICE-Lite.
         if (!this._transportReady)
             await this.setupTransport({ localDtlsRole: 'client', localSdpObject });
+        const layers = (0, scalabilityModes_1.parse)((encodings || [{}])[0].scalabilityMode);
         logger.debug('send() | calling pc.setLocalDescription() [offer:%o]', offer);
         await this._pc.setLocalDescription(offer);
         // We can now get the transceiver.mid.
@@ -13326,7 +14902,12 @@ class Firefox60 extends HandlerInterface_1.HandlerInterface {
             (sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/vp8' ||
                 sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/h264')) {
             for (const encoding of sendingRtpParameters.encodings) {
-                encoding.scalabilityMode = 'S1T3';
+                if (encoding.scalabilityMode) {
+                    encoding.scalabilityMode = `L1T${layers.temporalLayers}`;
+                }
+                else {
+                    encoding.scalabilityMode = 'L1T3';
+                }
             }
         }
         this._remoteSdp.send({
@@ -13436,6 +15017,13 @@ class Firefox60 extends HandlerInterface_1.HandlerInterface {
                 encoding.active = false;
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setMaxSpatialLayer() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setMaxSpatialLayer() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async setRtpEncodingParameters(localId, params) {
         this.assertSendDirection();
@@ -13448,6 +15036,13 @@ class Firefox60 extends HandlerInterface_1.HandlerInterface {
             parameters.encodings[idx] = { ...encoding, ...params };
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setRtpEncodingParameters() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setRtpEncodingParameters() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async getSenderStats(localId) {
         this.assertSendDirection();
@@ -13673,7 +15268,7 @@ class Firefox60 extends HandlerInterface_1.HandlerInterface {
 }
 exports.Firefox60 = Firefox60;
 
-},{"../Logger":49,"../errors":54,"../ortc":73,"../utils":76,"./HandlerInterface":61,"./sdp/RemoteSdp":68,"./sdp/commonUtils":69,"./sdp/unifiedPlanUtils":71,"sdp-transform":85}],61:[function(require,module,exports){
+},{"../Logger":50,"../errors":55,"../ortc":75,"../scalabilityModes":76,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/unifiedPlanUtils":73,"sdp-transform":84}],63:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HandlerInterface = void 0;
@@ -13685,7 +15280,7 @@ class HandlerInterface extends EnhancedEventEmitter_1.EnhancedEventEmitter {
 }
 exports.HandlerInterface = HandlerInterface;
 
-},{"../EnhancedEventEmitter":48}],62:[function(require,module,exports){
+},{"../EnhancedEventEmitter":49}],64:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -13956,7 +15551,7 @@ class ReactNative extends HandlerInterface_1.HandlerInterface {
             (sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/vp8' ||
                 sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/h264')) {
             for (const encoding of sendingRtpParameters.encodings) {
-                encoding.scalabilityMode = 'S1T3';
+                encoding.scalabilityMode = 'L1T3';
             }
         }
         this._remoteSdp.send({
@@ -14239,7 +15834,7 @@ class ReactNative extends HandlerInterface_1.HandlerInterface {
 }
 exports.ReactNative = ReactNative;
 
-},{"../Logger":49,"../errors":54,"../ortc":73,"../utils":76,"./HandlerInterface":61,"./sdp/RemoteSdp":68,"./sdp/commonUtils":69,"./sdp/planBUtils":70,"sdp-transform":85}],63:[function(require,module,exports){
+},{"../Logger":50,"../errors":55,"../ortc":75,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/planBUtils":72,"sdp-transform":84}],65:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -14528,7 +16123,12 @@ class ReactNativeUnifiedPlan extends HandlerInterface_1.HandlerInterface {
             (sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/vp8' ||
                 sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/h264')) {
             for (const encoding of sendingRtpParameters.encodings) {
-                encoding.scalabilityMode = 'S1T3';
+                if (encoding.scalabilityMode) {
+                    encoding.scalabilityMode = `L1T${layers.temporalLayers}`;
+                }
+                else {
+                    encoding.scalabilityMode = 'L1T3';
+                }
             }
         }
         this._remoteSdp.send({
@@ -14630,6 +16230,13 @@ class ReactNativeUnifiedPlan extends HandlerInterface_1.HandlerInterface {
                 encoding.active = false;
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setMaxSpatialLayer() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setMaxSpatialLayer() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async setRtpEncodingParameters(localId, params) {
         this.assertSendDirection();
@@ -14642,6 +16249,13 @@ class ReactNativeUnifiedPlan extends HandlerInterface_1.HandlerInterface {
             parameters.encodings[idx] = { ...encoding, ...params };
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setRtpEncodingParameters() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setRtpEncodingParameters() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async getSenderStats(localId) {
         this.assertSendDirection();
@@ -14882,7 +16496,7 @@ class ReactNativeUnifiedPlan extends HandlerInterface_1.HandlerInterface {
 }
 exports.ReactNativeUnifiedPlan = ReactNativeUnifiedPlan;
 
-},{"../Logger":49,"../ortc":73,"../scalabilityModes":74,"../utils":76,"./HandlerInterface":61,"./sdp/RemoteSdp":68,"./sdp/commonUtils":69,"./sdp/unifiedPlanUtils":71,"sdp-transform":85}],64:[function(require,module,exports){
+},{"../Logger":50,"../ortc":75,"../scalabilityModes":76,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/unifiedPlanUtils":73,"sdp-transform":84}],66:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -15145,7 +16759,7 @@ class Safari11 extends HandlerInterface_1.HandlerInterface {
         if (sendingRtpParameters.encodings.length > 1 &&
             sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/vp8') {
             for (const encoding of sendingRtpParameters.encodings) {
-                encoding.scalabilityMode = 'S1T3';
+                encoding.scalabilityMode = 'L1T3';
             }
         }
         this._remoteSdp.send({
@@ -15460,7 +17074,7 @@ class Safari11 extends HandlerInterface_1.HandlerInterface {
 }
 exports.Safari11 = Safari11;
 
-},{"../Logger":49,"../ortc":73,"../utils":76,"./HandlerInterface":61,"./sdp/RemoteSdp":68,"./sdp/commonUtils":69,"./sdp/planBUtils":70,"sdp-transform":85}],65:[function(require,module,exports){
+},{"../Logger":50,"../ortc":75,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/planBUtils":72,"sdp-transform":84}],67:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -15495,6 +17109,7 @@ const sdpCommonUtils = __importStar(require("./sdp/commonUtils"));
 const sdpUnifiedPlanUtils = __importStar(require("./sdp/unifiedPlanUtils"));
 const HandlerInterface_1 = require("./HandlerInterface");
 const RemoteSdp_1 = require("./sdp/RemoteSdp");
+const scalabilityModes_1 = require("../scalabilityModes");
 const logger = new Logger_1.Logger('Safari12');
 const SCTP_NUM_STREAMS = { OS: 1024, MIS: 1024 };
 class Safari12 extends HandlerInterface_1.HandlerInterface {
@@ -15680,6 +17295,7 @@ class Safari12 extends HandlerInterface_1.HandlerInterface {
                 localSdpObject
             });
         }
+        const layers = (0, scalabilityModes_1.parse)((encodings || [{}])[0].scalabilityMode);
         if (encodings && encodings.length > 1) {
             logger.debug('send() | enabling legacy simulcast');
             localSdpObject = sdpTransform.parse(offer.sdp);
@@ -15717,7 +17333,12 @@ class Safari12 extends HandlerInterface_1.HandlerInterface {
             (sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/vp8' ||
                 sendingRtpParameters.codecs[0].mimeType.toLowerCase() === 'video/h264')) {
             for (const encoding of sendingRtpParameters.encodings) {
-                encoding.scalabilityMode = 'S1T3';
+                if (encoding.scalabilityMode) {
+                    encoding.scalabilityMode = `L1T${layers.temporalLayers}`;
+                }
+                else {
+                    encoding.scalabilityMode = 'L1T3';
+                }
             }
         }
         this._remoteSdp.send({
@@ -15820,6 +17441,13 @@ class Safari12 extends HandlerInterface_1.HandlerInterface {
                 encoding.active = false;
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setMaxSpatialLayer() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setMaxSpatialLayer() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async setRtpEncodingParameters(localId, params) {
         this.assertSendDirection();
@@ -15832,6 +17460,13 @@ class Safari12 extends HandlerInterface_1.HandlerInterface {
             parameters.encodings[idx] = { ...encoding, ...params };
         });
         await transceiver.sender.setParameters(parameters);
+        this._remoteSdp.muxMediaSectionSimulcast(localId, parameters.encodings);
+        const offer = await this._pc.createOffer();
+        logger.debug('setRtpEncodingParameters() | calling pc.setLocalDescription() [offer:%o]', offer);
+        await this._pc.setLocalDescription(offer);
+        const answer = { type: 'answer', sdp: this._remoteSdp.getSdp() };
+        logger.debug('setRtpEncodingParameters() | calling pc.setRemoteDescription() [answer:%o]', answer);
+        await this._pc.setRemoteDescription(answer);
     }
     async getSenderStats(localId) {
         this.assertSendDirection();
@@ -16069,7 +17704,7 @@ class Safari12 extends HandlerInterface_1.HandlerInterface {
 }
 exports.Safari12 = Safari12;
 
-},{"../Logger":49,"../ortc":73,"../utils":76,"./HandlerInterface":61,"./sdp/RemoteSdp":68,"./sdp/commonUtils":69,"./sdp/unifiedPlanUtils":71,"sdp-transform":85}],66:[function(require,module,exports){
+},{"../Logger":50,"../ortc":75,"../scalabilityModes":76,"../utils":78,"./HandlerInterface":63,"./sdp/RemoteSdp":70,"./sdp/commonUtils":71,"./sdp/unifiedPlanUtils":73,"sdp-transform":84}],68:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -16153,7 +17788,7 @@ function mangleRtpParameters(rtpParameters) {
 }
 exports.mangleRtpParameters = mangleRtpParameters;
 
-},{"../../utils":76}],67:[function(require,module,exports){
+},{"../../utils":78}],69:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -16180,6 +17815,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OfferMediaSection = exports.AnswerMediaSection = exports.MediaSection = void 0;
+const sdpTransform = __importStar(require("sdp-transform"));
 const utils = __importStar(require("../../utils"));
 class MediaSection {
     constructor({ iceParameters, iceCandidates, dtlsParameters, planB = false }) {
@@ -16443,6 +18079,29 @@ class AnswerMediaSection extends MediaSection {
     resume() {
         this._mediaObject.direction = 'recvonly';
     }
+    muxSimulcastStreams(encodings) {
+        var _a;
+        if (!this._mediaObject.simulcast || !this._mediaObject.simulcast.list1) {
+            return;
+        }
+        const layers = {};
+        for (const encoding of encodings) {
+            if (encoding.rid) {
+                layers[encoding.rid] = encoding;
+            }
+        }
+        const raw = this._mediaObject.simulcast.list1;
+        // NOTE: Ignore bug in @types/sdp-transform.
+        // Ongoing PR: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/64119
+        // @ts-ignore
+        const simulcastStreams = sdpTransform.parseSimulcastStreamList(raw);
+        for (const simulcastStream of simulcastStreams) {
+            for (const simulcastFormat of simulcastStream) {
+                simulcastFormat.paused = !((_a = layers[simulcastFormat.scid]) === null || _a === void 0 ? void 0 : _a.active);
+            }
+        }
+        this._mediaObject.simulcast.list1 = simulcastStreams.map((simulcastFormats) => simulcastFormats.map((f) => `${f.paused ? '~' : ''}${f.scid}`).join(',')).join(';');
+    }
 }
 exports.AnswerMediaSection = AnswerMediaSection;
 class OfferMediaSection extends MediaSection {
@@ -16690,7 +18349,7 @@ function getCodecName(codec) {
     return mimeTypeMatch[2];
 }
 
-},{"../../utils":76}],68:[function(require,module,exports){
+},{"../../utils":78,"sdp-transform":84}],70:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -16893,12 +18552,13 @@ class RemoteSdp {
         this._regenerateBundleMids();
         return true;
     }
+    muxMediaSectionSimulcast(mid, encodings) {
+        const mediaSection = this._findMediaSection(mid);
+        mediaSection.muxSimulcastStreams(encodings);
+        this._replaceMediaSection(mediaSection);
+    }
     planBStopReceiving({ mid, offerRtpParameters }) {
-        const idx = this._midToIndex.get(mid);
-        if (idx === undefined) {
-            throw new Error(`no media section found with mid '${mid}'`);
-        }
-        const mediaSection = this._mediaSections[idx];
+        const mediaSection = this._findMediaSection(mid);
         mediaSection.planBStopReceiving({ offerRtpParameters });
         this._replaceMediaSection(mediaSection);
     }
@@ -16990,7 +18650,7 @@ class RemoteSdp {
 }
 exports.RemoteSdp = RemoteSdp;
 
-},{"../../Logger":49,"./MediaSection":67,"sdp-transform":85}],69:[function(require,module,exports){
+},{"../../Logger":50,"./MediaSection":69,"sdp-transform":84}],71:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -17018,6 +18678,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.applyCodecParameters = exports.getCname = exports.extractDtlsParameters = exports.extractRtpCapabilities = void 0;
 const sdpTransform = __importStar(require("sdp-transform"));
+/**
+ * This function must be called with an SDP with 1 m=audio and 1 m=video
+ * sections.
+ */
 function extractRtpCapabilities({ sdpObject }) {
     // Map of RtpCodecParameters indexed by payload type.
     const codecsMap = new Map();
@@ -17074,16 +18738,29 @@ function extractRtpCapabilities({ sdpObject }) {
         }
         // Get RTCP feedback for each codec.
         for (const fb of m.rtcpFb || []) {
-            const codec = codecsMap.get(fb.payload);
-            if (!codec)
-                continue;
             const feedback = {
                 type: fb.type,
                 parameter: fb.subtype
             };
             if (!feedback.parameter)
                 delete feedback.parameter;
-            codec.rtcpFeedback.push(feedback);
+            // rtcp-fb payload is not '*', so just apply it to its corresponding
+            // codec.
+            if (fb.payload !== '*') {
+                const codec = codecsMap.get(fb.payload);
+                if (!codec)
+                    continue;
+                codec.rtcpFeedback.push(feedback);
+            }
+            // If rtcp-fb payload is '*' it must be applied to all codecs with same
+            // kind (with some exceptions such as RTX codec).
+            else {
+                for (const codec of codecsMap.values()) {
+                    if (codec.kind === kind && !/.+\/rtx$/i.test(codec.mimeType)) {
+                        codec.rtcpFeedback.push(feedback);
+                    }
+                }
+            }
         }
         // Get RTP header extensions.
         for (const ext of m.ext || []) {
@@ -17186,7 +18863,7 @@ function applyCodecParameters({ offerRtpParameters, answerMediaObject }) {
 }
 exports.applyCodecParameters = applyCodecParameters;
 
-},{"sdp-transform":85}],70:[function(require,module,exports){
+},{"sdp-transform":84}],72:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addLegacySimulcast = exports.getRtpEncodings = void 0;
@@ -17332,7 +19009,7 @@ function addLegacySimulcast({ offerMediaObject, track, numStreams }) {
 }
 exports.addLegacySimulcast = addLegacySimulcast;
 
-},{}],71:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addLegacySimulcast = exports.getRtpEncodings = void 0;
@@ -17353,16 +19030,16 @@ function getRtpEncodings({ offerMediaObject }) {
         ssrc = Number(ssrc);
         rtxSsrc = Number(rtxSsrc);
         if (ssrcs.has(ssrc)) {
-            // Remove both the SSRC and RTX SSRC from the set so later we know that they
-            // are already handled.
+            // Remove both the SSRC and RTX SSRC from the set so later we know
+            // that they are already handled.
             ssrcs.delete(ssrc);
             ssrcs.delete(rtxSsrc);
             // Add to the map.
             ssrcToRtxSsrc.set(ssrc, rtxSsrc);
         }
     }
-    // If the set of SSRCs is not empty it means that RTX is not being used, so take
-    // media SSRCs from there.
+    // If the set of SSRCs is not empty it means that RTX is not being used, so
+    // take media SSRCs from there.
     for (const ssrc of ssrcs) {
         // Add to the map.
         ssrcToRtxSsrc.set(ssrc, null);
@@ -17457,7 +19134,7 @@ function addLegacySimulcast({ offerMediaObject, numStreams }) {
 }
 exports.addLegacySimulcast = addLegacySimulcast;
 
-},{}],72:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -17497,14 +19174,14 @@ exports.types = types;
 /**
  * Expose mediasoup-client version.
  */
-exports.version = '3.6.70';
+exports.version = '3.6.80';
 /**
  * Expose parseScalabilityMode() function.
  */
 var scalabilityModes_1 = require("./scalabilityModes");
 Object.defineProperty(exports, "parseScalabilityMode", { enumerable: true, get: function () { return scalabilityModes_1.parse; } });
 
-},{"./Device":47,"./scalabilityModes":74,"./types":75,"debug":77}],73:[function(require,module,exports){
+},{"./Device":48,"./scalabilityModes":76,"./types":77,"debug":22}],75:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -18351,7 +20028,7 @@ function reduceRtcpFeedback(codecA, codecB) {
     return reducedRtcpFeedback;
 }
 
-},{"./utils":76,"h264-profile-level-id":35}],74:[function(require,module,exports){
+},{"./utils":78,"h264-profile-level-id":40}],76:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parse = void 0;
@@ -18373,7 +20050,7 @@ function parse(scalabilityMode) {
 }
 exports.parse = parse;
 
-},{}],75:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -18401,7 +20078,7 @@ __exportStar(require("./SctpParameters"), exports);
 __exportStar(require("./handlers/HandlerInterface"), exports);
 __exportStar(require("./errors"), exports);
 
-},{"./Consumer":44,"./DataConsumer":45,"./DataProducer":46,"./Device":47,"./Producer":50,"./RtpParameters":51,"./SctpParameters":52,"./Transport":53,"./errors":54,"./handlers/HandlerInterface":61}],76:[function(require,module,exports){
+},{"./Consumer":45,"./DataConsumer":46,"./DataProducer":47,"./Device":48,"./Producer":51,"./RtpParameters":52,"./SctpParameters":53,"./Transport":54,"./errors":55,"./handlers/HandlerInterface":63}],78:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateRandomNumber = exports.clone = void 0;
@@ -18422,13 +20099,7 @@ function generateRandomNumber() {
 }
 exports.generateRandomNumber = generateRandomNumber;
 
-},{}],77:[function(require,module,exports){
-arguments[4][6][0].apply(exports,arguments)
-},{"./common":78,"_process":83,"dup":6}],78:[function(require,module,exports){
-arguments[4][7][0].apply(exports,arguments)
-},{"dup":7,"ms":79}],79:[function(require,module,exports){
-arguments[4][8][0].apply(exports,arguments)
-},{"dup":8}],80:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -18437,6 +20108,7 @@ var s = 1000;
 var m = s * 60;
 var h = m * 60;
 var d = h * 24;
+var w = d * 7;
 var y = d * 365.25;
 
 /**
@@ -18458,7 +20130,7 @@ module.exports = function(val, options) {
   var type = typeof val;
   if (type === 'string' && val.length > 0) {
     return parse(val);
-  } else if (type === 'number' && isNaN(val) === false) {
+  } else if (type === 'number' && isFinite(val)) {
     return options.long ? fmtLong(val) : fmtShort(val);
   }
   throw new Error(
@@ -18480,7 +20152,7 @@ function parse(str) {
   if (str.length > 100) {
     return;
   }
-  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(
+  var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
     str
   );
   if (!match) {
@@ -18495,6 +20167,10 @@ function parse(str) {
     case 'yr':
     case 'y':
       return n * y;
+    case 'weeks':
+    case 'week':
+    case 'w':
+      return n * w;
     case 'days':
     case 'day':
     case 'd':
@@ -18537,16 +20213,17 @@ function parse(str) {
  */
 
 function fmtShort(ms) {
-  if (ms >= d) {
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
     return Math.round(ms / d) + 'd';
   }
-  if (ms >= h) {
+  if (msAbs >= h) {
     return Math.round(ms / h) + 'h';
   }
-  if (ms >= m) {
+  if (msAbs >= m) {
     return Math.round(ms / m) + 'm';
   }
-  if (ms >= s) {
+  if (msAbs >= s) {
     return Math.round(ms / s) + 's';
   }
   return ms + 'ms';
@@ -18561,28 +20238,32 @@ function fmtShort(ms) {
  */
 
 function fmtLong(ms) {
-  return plural(ms, d, 'day') ||
-    plural(ms, h, 'hour') ||
-    plural(ms, m, 'minute') ||
-    plural(ms, s, 'second') ||
-    ms + ' ms';
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
+    return plural(ms, msAbs, d, 'day');
+  }
+  if (msAbs >= h) {
+    return plural(ms, msAbs, h, 'hour');
+  }
+  if (msAbs >= m) {
+    return plural(ms, msAbs, m, 'minute');
+  }
+  if (msAbs >= s) {
+    return plural(ms, msAbs, s, 'second');
+  }
+  return ms + ' ms';
 }
 
 /**
  * Pluralization helper.
  */
 
-function plural(ms, n, name) {
-  if (ms < n) {
-    return;
-  }
-  if (ms < n * 1.5) {
-    return Math.floor(ms / n) + ' ' + name;
-  }
-  return Math.ceil(ms / n) + ' ' + name + 's';
+function plural(ms, msAbs, n, name) {
+  var isPlural = msAbs >= n * 1.5;
+  return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
 
-},{}],81:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 /**
  * Compiles a querystring
  * Returns string representation of the object
@@ -18621,7 +20302,7 @@ exports.decode = function(qs){
   return qry;
 };
 
-},{}],82:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -18691,193 +20372,20 @@ function queryKey(uri, query) {
     return data;
 }
 
+},{}],82:[function(require,module,exports){
+(function (global){(function (){
+/*! queue-microtask. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+let promise
+
+module.exports = typeof queueMicrotask === 'function'
+  ? queueMicrotask.bind(typeof window !== 'undefined' ? window : global)
+  // reuse resolved promise, and allocate it lazily
+  : cb => (promise || (promise = Promise.resolve()))
+    .then(cb)
+    .catch(err => setTimeout(() => { throw err }, 0))
+
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],83:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],84:[function(require,module,exports){
 var grammar = module.exports = {
   v: [{
     name: 'version',
@@ -19373,7 +20881,7 @@ Object.keys(grammar).forEach(function (key) {
   });
 });
 
-},{}],85:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 var parser = require('./parser');
 var writer = require('./writer');
 
@@ -19386,7 +20894,7 @@ exports.parseRemoteCandidates = parser.parseRemoteCandidates;
 exports.parseImageAttributes = parser.parseImageAttributes;
 exports.parseSimulcastStreamList = parser.parseSimulcastStreamList;
 
-},{"./parser":86,"./writer":87}],86:[function(require,module,exports){
+},{"./parser":85,"./writer":86}],85:[function(require,module,exports){
 var toIntIfInt = function (v) {
   return String(Number(v)) === v ? Number(v) : v;
 };
@@ -19512,7 +21020,7 @@ exports.parseSimulcastStreamList = function (str) {
   });
 };
 
-},{"./grammar":84}],87:[function(require,module,exports){
+},{"./grammar":83}],86:[function(require,module,exports){
 var grammar = require('./grammar');
 
 // customized util.format - discards excess arguments and can void middle ones
@@ -19628,7 +21136,7 @@ module.exports = function (session, opts) {
   return sdp.join('\r\n') + '\r\n';
 };
 
-},{"./grammar":84}],88:[function(require,module,exports){
+},{"./grammar":83}],87:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -19724,7 +21232,7 @@ exports.connect = lookup;
 exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
-},{"./manager":89,"./socket":91,"./url":92,"debug":93,"socket.io-parser":96}],89:[function(require,module,exports){
+},{"./manager":88,"./socket":90,"./url":91,"debug":92,"socket.io-parser":96}],88:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -20303,7 +21811,7 @@ Manager.prototype.onreconnect = function () {
   this.emitAll('reconnect', attempt);
 };
 
-},{"./on":90,"./socket":91,"backo2":9,"component-bind":16,"component-emitter":17,"debug":93,"engine.io-client":20,"indexof":42,"socket.io-parser":96}],90:[function(require,module,exports){
+},{"./on":89,"./socket":90,"backo2":15,"component-bind":19,"component-emitter":20,"debug":92,"engine.io-client":25,"indexof":44,"socket.io-parser":96}],89:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -20329,7 +21837,7 @@ function on (obj, ev, fn) {
   };
 }
 
-},{}],91:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -20769,7 +22277,7 @@ Socket.prototype.binary = function (binary) {
   return this;
 };
 
-},{"./on":90,"component-bind":16,"component-emitter":17,"debug":93,"has-binary2":39,"parseqs":81,"socket.io-parser":96,"to-array":98}],92:[function(require,module,exports){
+},{"./on":89,"component-bind":19,"component-emitter":20,"debug":92,"has-binary2":41,"parseqs":80,"socket.io-parser":96,"to-array":102}],91:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -20846,11 +22354,13 @@ function url (uri, loc) {
   return obj;
 }
 
-},{"debug":93,"parseuri":82}],93:[function(require,module,exports){
-arguments[4][29][0].apply(exports,arguments)
-},{"./debug":94,"_process":83,"dup":29}],94:[function(require,module,exports){
-arguments[4][30][0].apply(exports,arguments)
-},{"dup":30,"ms":80}],95:[function(require,module,exports){
+},{"debug":92,"parseuri":81}],92:[function(require,module,exports){
+arguments[4][34][0].apply(exports,arguments)
+},{"./debug":93,"_process":8,"dup":34}],93:[function(require,module,exports){
+arguments[4][35][0].apply(exports,arguments)
+},{"dup":35,"ms":94}],94:[function(require,module,exports){
+arguments[4][36][0].apply(exports,arguments)
+},{"dup":36}],95:[function(require,module,exports){
 /*global Blob,File*/
 
 /**
@@ -21001,7 +22511,7 @@ exports.removeBlobs = function(data, callback) {
   }
 };
 
-},{"./is-buffer":97,"isarray":43}],96:[function(require,module,exports){
+},{"./is-buffer":97,"isarray":100}],96:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -21418,7 +22928,7 @@ function error(msg) {
   };
 }
 
-},{"./binary":95,"./is-buffer":97,"component-emitter":17,"debug":93,"isarray":43}],97:[function(require,module,exports){
+},{"./binary":95,"./is-buffer":97,"component-emitter":20,"debug":98,"isarray":100}],97:[function(require,module,exports){
 (function (Buffer){(function (){
 
 module.exports = isBuf;
@@ -21442,7 +22952,15 @@ function isBuf(obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":15}],98:[function(require,module,exports){
+},{"buffer":4}],98:[function(require,module,exports){
+arguments[4][34][0].apply(exports,arguments)
+},{"./debug":99,"_process":8,"dup":34}],99:[function(require,module,exports){
+arguments[4][35][0].apply(exports,arguments)
+},{"dup":35,"ms":101}],100:[function(require,module,exports){
+arguments[4][42][0].apply(exports,arguments)
+},{"dup":42}],101:[function(require,module,exports){
+arguments[4][36][0].apply(exports,arguments)
+},{"dup":36}],102:[function(require,module,exports){
 module.exports = toArray
 
 function toArray(list, index) {
@@ -21457,7 +22975,7 @@ function toArray(list, index) {
     return array
 }
 
-},{}],99:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
@@ -21527,495 +23045,7 @@ yeast.encode = encode;
 yeast.decode = decode;
 module.exports = yeast;
 
-},{}],100:[function(require,module,exports){
-const io = require('socket.io-client') // client-side
-const mediasoupClient = require('mediasoup-client')
-const socket = io('/mediasoup')
-const cnt = require('../src/connect')
-const config = require('../config')
-
-
-
-// TCP/IP 통신은 일반적으로 sokect통신 이라고 부른다. 
-
-socket.on('connection-success', ({socketId, existProducer}) => {
-  console.log('--', socketId, 'Enters the room.', existProducer);
-})
-
-
-// if we don't supply it will be null
-const roomName = window.location.pathname.split('/')[2]
-// API 형식으로 변경을 해둬야 Front 및 Back 이랑 분리를 하여 사용을 할 수 있다. 
-
-let Streaming;
-let isStreaming = false;
-let isVideoON = false;
-
-let device;
-let rtpCapabilities;
-let producerTransport;
-let audioProducer;
-let videoProducer;
-let screenProducer; // 아직 업데이트 안됨
-let consumerTransports = [];
-
-const params = require('./mediasoupParams');
-let audioParams;
-let videoParams = { params };
-let consumingTransports = [];
-
-
-
-// streaming start
-const getLocalStream = () =>{
-  if(isStreaming  === true){
-    console.log("already streaming")
-    return
-  }
-  navigator.mediaDevices.getUserMedia({
-    audio : true,
-  }).then(streamSuccess)
-  .catch(error=>{
-    console.log(error.message)
-  })
-}
-
-const streamSuccess = (stream)=>{
-  isStreaming = true
-  localVideo.srcObject = stream;
-  Streaming = stream
-  btnFinishStream.disabled = false
-  btnLocalVideo.disabled = false
-  btnLocalStream.disabled = true
-  // btnLocalScrean.disabled = false
-
-  audioParams= { track: stream.getAudioTracks()[0], ...audioParams };
-  console.log("audioParams",audioParams)
-
-  joinRoom() 
-}
-
-const getLocalVideo = () =>{
-  if (isVideoON === false){
-    navigator.mediaDevices.getUserMedia({
-      video : {
-        width : {
-          min : 640,
-          max : 1920
-        },
-        height : {
-          min : 400,
-          max : 1080
-        }
-      }
-    }).then(addvideo)
-    .catch(error=>{
-      console.log(error.message)
-    })
-  }
-  if(isVideoON === true){
-    const videoTracks = Streaming.getVideoTracks();
-    Streaming.removeTrack(videoTracks[0])
-    
-    videoProducer.close()
-    localVideo.srcObject = null;
-    videoParams = undefined
-    isVideoON = false
-    // Streaming.getVideoTracks().forEach(track => track.stop());
-    closeProducer(videoProducer)
-  }
-}
-
-const addvideo = (stream) =>{
-  isVideoON = true
-  const videoTracks = stream.getVideoTracks();
-  Streaming.addTrack(videoTracks[0])
-  localVideo.srcObject = null;
-  localVideo.srcObject = Streaming;
-  
-  videoParams = { track: stream.getVideoTracks()[0], ...videoParams };
-  console.log("videoParams",videoParams)
-  try{
-    
-    connectSendTransport()
-  }catch (error)
-  {
-    console.log(error)
-    if (error.name === 'UnsupportedError')
-      {console.warn('browser not supported')}
-  }
-  
-}
- 
-const joinRoom = () =>{ // to make router or go to router
-  socket.emit('joinRoom', {roomName}, (data) => {
-    console.log(`Router RTP Capabilities... ${data.rtpCapabilities}`)
-    //we assign to local variable and will be used
-    // console.log('data', data)
-    rtpCapabilities = data.rtpCapabilities
-    // once we have rtp capability, create device
-    createDevice()
-  })
-}
-
-// make device when we join the room
-const createDevice = async () =>{
-  try{
-    device = new mediasoupClient.Device()
-    await device.load({
-      routerRtpCapabilities : rtpCapabilities
-    })
-    console.log('Device RTP Capabilities', rtpCapabilities)
-    //once the device load, create transport
-    createSendTransport() // this cuz for everyone is producer & consumer
-  }catch (error)
-  {
-    console.log(error)
-    if (error.name === 'UnsupportedError')
-      {console.warn('browser not supported')}
-  }
-}
-
-//============================================================================================
-//========================== For create Send Transport =======================================
-//============================================================================================
-const createSendTransport = async ()=>{
-  await socket.emit('createWebRTCTransport',{consumer : false}, ({params})=>{
-    if (params.error){
-      console.log(params.error)
-      return
-    }
-
-    producerTransport = device.createSendTransport(params) // ready for send streaming data
-    producerTransport.on('connect', async({dtlsParameters}, callback, errback) =>{
-      try{
-        // signal of local DTLS parameters to the serverside transport
-        await socket.emit('transport-connect',{
-          // transportId : producerTransport.id,
-          dtlsParameters,
-        })
-        // tell the transport that parameters were transmitted
-        callback()
-      }catch(error){
-        console.log(error)
-        errback(error)
-      }
-    })
-
-    producerTransport.on('produce', async(parameters, callback, errback) =>{
-      try{
-        await socket.emit('transport-produce',{
-          // transportId : producerTransport.id,
-          kind : parameters.kind,
-          rtpParameters : parameters.rtpParameters,
-          appData : parameters.appData          
-        }, ({id, producerExist}) => {
-          // tell the transport that parameters were transmitted and provide
-          // give producer's id for serverside
-          callback({id, producerExist})
-          if(producerExist){
-            getProducers()
-          }
-        })
-      }catch(error){
-        errback(error)
-      }
-    })
-    connectSendTransport()
-  })
-}
-
-// for connect [Send transport & produce]
-const connectSendTransport = async()=>{
-  try{
-    if (isVideoON === false){
-      audioProducer = await cnt.Producer(producerTransport, audioParams)
-    }
-  }catch(error){
-    console.warn('audio is missing')
-  }
-  
-  try{
-    videoProducer = await cnt.Producer(producerTransport, videoParams)
-  }catch(error){
-    console.warn('video is missing')
-  }
-}
-
-// server have to inform the client of a new producer just joined // and ready for consume
-socket.on('new-producer',({producerId}) => signalNewConsumerTransport(producerId))
-const getProducers = () => {
-  socket.emit('getProducers', (producerIds) =>{
-    console.log("producer Ids", producerIds)
-    producerIds.forEach(id => signalNewConsumerTransport(id))
-    // producerIds.forEach(signalNewConsumerTransport)
-  })
-}
-//============================================================================================
-//============================================================================================
-//============================================================================================
-
-
-//============================================================================================
-//======================== For create Receiver Transport =====================================
-//============================================================================================
-const signalNewConsumerTransport = async (remoteProducerId)=>{
-  //check if we are already consuming the remoteProducerId
-  if (consumingTransports.includes(remoteProducerId)) {return;}
-  consumingTransports.push(remoteProducerId);
-
-  await socket.emit('createWebRTCTransport',{consumer : true}, ({params})=>{
-    if (params.error){
-      console.log(params.error)
-      return
-    }
-
-    console.log(`PARAMS... ${params}`)
-    let consumerTransport;
-    try {
-      consumerTransport = device.createRecvTransport(params)
-    } catch (error) {
-      // exceptions: 
-      // InvalidStateError - if not loaded
-      // TypeError - if wrong arguments.
-      console.log(error)
-      return
-    }
-    
-    consumerTransport.on('connect', async({dtlsParameters}, callback, errback) =>{
-      try{
-        // signal of local DTLS parameters to the serverside transport
-          await socket.emit('transport-recv-connect',{
-            // transportId : consumerTransport.id,
-            dtlsParameters : dtlsParameters,
-            serverside_ConsumerTransportId : params.id
-          })
-          // tell the transport that parameters were transmitted
-          callback()
-      }catch(error){
-        errback(error)
-      }
-    })
-    
-    connectRecvTransport(consumerTransport, remoteProducerId, params.id)
-    // [ params.id ] is "server side" consumer transpor id
-    // this is transported by server 'createWebRTCTransport' 
-  })
-}
-
-const connectRecvTransport = async(consumerTransport, remoteProducerId, serverside_ConsumerTransportId)=>{
-  await socket.emit('consume',{
-    rtpCapabilities : device.rtpCapabilities,
-    remoteProducerId,
-    serverside_ConsumerTransportId,
-  },
-  async({params}) =>{
-    if (params.error){
-      console.log('Cannot consume')
-      return
-    }
-    
-    console.log(`Consumer Params ${params.kind}`)
-    const consumer = await consumerTransport.consume({
-      id : params.id,
-      producerId : params.producerId,
-      kind : params.kind,
-      rtpParameters : params.rtpParameters,
-    })
-
-    consumerTransports = [
-      ...consumerTransports,
-      {
-        consumerTransport,
-        serverside_ConsumerTransportId : params.id,
-        producerId : remoteProducerId,
-        consumer,
-      }
-    ]
-
-//============ Create Video // 프론트 단에서 진행되는 거라 나중에 업데이트
-    createTrack(false, remoteProducerId, params.kind)
-    const {track} = await consumer
-    console.log(track)
-    document.getElementById(remoteProducerId).srcObject = new MediaStream([track])
-    socket.emit('consumer-resume', {serverside_ConsumerId : params.serverside_ConsumerId})
-//=====================================================================
-  })
-}
-//============================================================================================
-//============================================================================================
-//============================================================================================
-
-socket.on('producer-closed', async({remoteProducerId})=>{
-//========= 상대방 종료시 데이터 삭제
-  await deleteVideo(false, remoteProducerId)
-  consumingTransports.pop(remoteProducerId)
-//==============================
-})
-
-// 23.02.03 종료될 때, consumer가 제대로 제거되지 않는 현상이 발생하는데, 이 문제 해결바람.
-// --> 다시 켤 때 연쇄적으로 에러가 발생한ㄷ. 
-const finishStream = async () =>{ // ProducerId : 내 아이디 , remoteProducerIds : Consumers의 정보들 
-  /// 정보 지워버리기.
-  // can find with consumerTransports
-  if(isStreaming === false){
-    console.log("already Finished")
-    return
-  }
-  btnFinishStream.disabled = true
-  btnLocalVideo.disabled = true
-  btnLocalScrean.disabled = true
-  btnLocalStream.disabled = false
- 
-  closeTransport(videoProducer || audioProducer || screenProducer)
-
-  videoParams = undefined
-  audioParams = undefined
-  isStreaming = false
-  isVideoON = false
-  consumingTransports = [] // Producing이 끝나 consuming을 하지 않음
-    
-}
-
-const closeProducer = async(producer) =>{
-  console.log(producer)
-  await socket.emit('produceClose',{
-    rtpCapabilities : device.rtpCapabilities,
-    remoteProducerId : producer.id,
-    serverside_ConsumerTransportId : producerTransport.id,
-  }, async()=>{
-    // await deleteVideo(false, to_erase)
-    producer.close()
-    videoProducer = undefined
-    producer.on('trackened', ()=>{
-      console.log('track ended')
-      //close video tarck
-    })
-    producer.on('transportclose', ()=>{
-      console.log('transport ended')
-      //close video tarck
-    })
-  })
-}
-
-
-const closeTransport = async(video, audio, screen) =>{
-  try{
-    if(video || audio)
-    {
-      let producer;
-      producer = video || audio
-      console.log(producer.kind)
-      console.log("Producer ID ",producer.id)
-      await socket.emit('exitRoom',{
-        rtpCapabilities : device.rtpCapabilities,
-        remoteProducerId : producer.id, 
-        serverside_ConsumerTransportId : producerTransport.id,
-      }, async()=>{
-        await deleteVideo(true)
-        producer.close()
-        producerTransport.close()
-        Streaming.getTracks().forEach(track => track.stop());
-    
-        producer.on('trackened', ()=>{
-          console.log('track ended')
-          //close video tarck
-        })
-        producer.on('transportclose', ()=>{
-          console.log('transport ended')
-          //close video tarck
-        })
-      })
-    }
-    else{
-      console.log("Noting to close")
-      return;
-    }
-  }catch(error){
-    console.log(error.message)
-  }
-}
-
-
-const createTrack = async(isProducer = false, ProducerId,kind) =>{
-  if(isProducer === false)
-  {
-    const newElem = document.createElement('div')
-    newElem.setAttribute('id', `td-${ProducerId}`)
-    if (kind === 'audio'){
-      newElem.innerHTML = `<audio id="${ProducerId}" autoplay></audio>`
-    }
-    else if (kind === 'video'){
-      newElem.setAttribute('class','remoteVideo')
-      newElem.innerHTML = `<video id="${ProducerId}" autoplay class = "video"></video>`
-    }
-    videoContainer.appendChild(newElem);
-  }
-  if(isProducer === true)
-  {
-    // 검은색 칸이 보기 싫다면 업데이트 하기
-  }
-}
-
-const deleteVideo = async(isProducer = false, remoteProducerId) =>{
-  try{
-    if(isProducer ===false) // remoteProducer가 streaming종료
-    {
-      const producerToClose = consumerTransports.find(transportData => transportData.producerId === remoteProducerId)
-      producerToClose.consumerTransport.close()
-      producerToClose.consumer.close()
-      consumerTransports = consumerTransports.filter(transportData => transportData.producerId !== remoteProducerId)
-      videoContainer.removeChild(document.getElementById(`td-${remoteProducerId}`))
-    }
-
-    if(isProducer ===true)
-    {
-      consumerTransports.forEach(transportData =>  deleteVideo(false, transportData.producerId))
-    }
-    //==============================
-  }catch(error){
-    console.log(error)
-    throw error
-  }
-}
-
-
-btnLocalStream.addEventListener('click', getLocalStream)
-btnLocalStream.disabled = false
-
-btnLocalVideo.addEventListener('click', getLocalVideo)
-btnLocalVideo.disabled = true
-
-btnLocalScrean
-btnLocalScrean.disabled = true
-
-btnFinishStream.addEventListener('click', finishStream)
-btnFinishStream.disabled = true
-},{"../config":1,"../src/connect":102,"./mediasoupParams":101,"mediasoup-client":72,"socket.io-client":88}],101:[function(require,module,exports){
-module.exports = {
-  //mediasoup params
-  encoding : [
-    {
-      rid : 'r0',
-      maxBitrate : 100000,
-      scalabilityMode : 'S1T3'
-    },
-    {
-      rid : 'r1',
-      maxBitrate : 300000,
-      scalabilityMode : 'S1T3'
-    },
-    {
-      rid : 'r2',
-      maxBitrate : 900000,
-      scalabilityMode : 'S1T3'
-    },
-  ],
-  codecOptions : {
-    videoGoogleStartBitrate : 1000,
-  }
-}
-},{}],102:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 
 
 exports.Producer = async(producerTransport, Params) => {
@@ -22031,4 +23061,34 @@ exports.Producer = async(producerTransport, Params) => {
   })
   return Producer
 }
-},{}]},{},[100]);
+
+
+let Streaming
+exports.streamSuccess = async (audioParams, stream)=>{
+  isStreaming = true
+  localVideo.srcObject = stream;
+  Streaming = stream
+  btnFinishStream.disabled = false
+  btnLocalVideo.disabled = false
+  btnLocalStream.disabled = true
+  // btnLocalScrean.disabled = false
+
+  audioParams= { track: stream.getAudioTracks()[0], ...audioParams };
+  console.log("audioParams",audioParams)
+  return {audioParams, Streaming}
+}
+
+
+exports.addvideo = (videoParams, stream) =>{
+  isVideoON = true
+  const videoTracks = stream.getVideoTracks();
+  Streaming.addTrack(videoTracks[0])
+  localVideo.srcObject = null;
+  localVideo.srcObject = Streaming;
+  
+  videoParams = { track: stream.getVideoTracks()[0], ...videoParams };
+  console.log("videoParams",videoParams)
+
+  return {videoParams, Streaming}
+}
+},{}]},{},[9]);

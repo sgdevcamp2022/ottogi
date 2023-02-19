@@ -1,10 +1,11 @@
 module.exports = {
+  socketId : undefined,
   listenIp: '0.0.0.0',
   listenPort: 3000,
   // sslCrt: '/etc/ssl/certs/ssl-cert-snakeoil.pem',
   // sslKey: '/etc/ssl/private/ssl-cert-snakeoil.key',
-  cert : process.env.HTTPS_CERT_FULLCHAIN || `${__dirname}/server/certs/cert.pem`,// have to change for get `${__dirname}/server/certs/fullchain.pem`,
-  key  : process.env.HTTPS_CERT_PRIVKEY ||  `${__dirname}/server/certs/key.pem`, // have to change for get`${__dirname}/server/certs/privkey.pem`,
+  cert : process.env.HTTPS_CERT_FULLCHAIN || `${__dirname}/server/certs/cert.pem`, // have to change for get `${__dirname}/server/certs/fullchain.pem`,
+  key  : process.env.HTTPS_CERT_PRIVKEY   || `${__dirname}/server/certs/key.pem`,  // have to change for get `${__dirname}/server/certs/privkey.pem`,
   mediasoup: {
     // Worker settings
     worker: {
