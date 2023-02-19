@@ -5,4 +5,4 @@ export default {
   component: UserState80Div,
 };
 
-export const UserState80 = () => <UserState80Div />;
+export const UserState80 = () => <UserState80Div status="1" />;

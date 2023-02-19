@@ -6,20 +6,27 @@ import UserState32 from "./UserState32";
 
 interface FriendBoxProps {
   name: string;
-  status: string;
+  status: "0" | "1" | "2" | "3";
   onClick: MouseEventHandler<HTMLDivElement>;
   Buttons: ReactElement;
 }
+
+const statusTable = {
+  "0": "오프라인",
+  "1": "온라인",
+  "2": "받은 친구 요청",
+  "3": "보낸 친구 요청",
+};
 
 const FriendBox = ({ name, status, onClick, Buttons }: FriendBoxProps) => {
   return (
     <ButtonWrapper onClick={onClick}>
       <FriendDefaultBoxContainer>
         <UserContainer>
-          <UserState32 />
+          <UserState32 status={status} />
           <UserText>
             <Text text={name} color="white" fontWeight="bold" mb={3} />
-            <Text text={status} fontSize="sm" color="auth-desc" />
+            <Text text={statusTable[status]} fontSize="sm" color="auth-desc" />
           </UserText>
         </UserContainer>
         <ButtonsWrapper>{Buttons}</ButtonsWrapper>

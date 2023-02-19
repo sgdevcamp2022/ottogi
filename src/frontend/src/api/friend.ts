@@ -61,6 +61,16 @@ const friendApi = {
       }
     );
   },
+
+  isOnline: async ({ queryKey }: any) => {
+    const { userId } = queryKey[1];
+    return await clientApi.get(`/state/get`, {
+      params: { userId },
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+  },
 };
 
 export default friendApi;

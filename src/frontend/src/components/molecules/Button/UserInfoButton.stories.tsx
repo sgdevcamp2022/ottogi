@@ -5,4 +5,4 @@ export default {
   component: UserInfoButton,
 };
 
-export const UserInfo = () => <UserInfoButton />;
+export const UserInfo = () => <UserInfoButton status="1" />;

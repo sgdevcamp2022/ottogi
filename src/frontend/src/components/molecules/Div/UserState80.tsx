@@ -3,24 +3,22 @@ import Status from "@components/atoms/Div/Status";
 import styled from "styled-components";
 import mask from "../../../assets/mask/avatar-mask-80.png";
 
-export type StateType = "on" | "off" | "disturb" | "mobile" | "empty";
-
 interface UserStateProps {
-  status?: StateType;
+  status: "0" | "1" | "2" | "3";
   fontSize?: string;
   src?: string;
 }
 
 const UserState80 = ({
-  src,
-  status = "on",
+  src = "",
+  status,
   fontSize = "24px",
 }: UserStateProps) => {
   return (
     <UserStateContainer>
       <Mask>
         <div style={{ backgroundColor: "black", width: 80, height: 80 }}>
-          <LogoImage width={5} height={5} onClick={() => null} />
+          <LogoImage width={5} height={5} onClick={() => null} src={src} />
         </div>
       </Mask>
       <IconWrapper>

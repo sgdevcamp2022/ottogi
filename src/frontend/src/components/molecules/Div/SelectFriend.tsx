@@ -6,14 +6,15 @@ import styled from "styled-components";
 import UserState32 from "./UserState32";
 
 interface SelectFriendProps {
+  status: "0" | "1" | "2" | "3";
   check?: boolean;
 }
 
-const SelectFriend = ({ check = false }: SelectFriendProps) => {
+const SelectFriend = ({ check = false, status }: SelectFriendProps) => {
   return (
     <ButtonWrapper onClick={() => null}>
       <SelectFriendContainer>
-        <UserState32 />
+        <UserState32 status={status} />
         <UserNameWrapper>
           <Text text="name" />
         </UserNameWrapper>
