@@ -12,7 +12,7 @@ import { useUserStore } from "@store/useUserStore";
 import { useState } from "react";
 
 const CreateServerForm = () => {
-  const { userInfo, accessToken } = useUserStore();
+  const { userInfo } = useUserStore();
   const navigate = useNavigate();
   let formData = new FormData();
   const [name, changeName] = useInput();
@@ -32,7 +32,7 @@ const CreateServerForm = () => {
   console.log(formData);
 
   const MakeServer = () => {
-    createServer({ formData, accessToken });
+    createServer({ formData });
     navigate(-1);
   };
 

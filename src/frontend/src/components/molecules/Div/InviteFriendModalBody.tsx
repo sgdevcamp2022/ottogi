@@ -12,9 +12,8 @@ const InviteFriendModalBody = () => {
   const [search, changeSearch] = useInput();
   const {
     userInfo: { email },
-    accessToken,
   } = useUserStore();
-  const { data } = useGetFriendList({ email, accessToken });
+  const { data } = useGetFriendList({ email });
 
   if (!data) return <></>;
   const friendList = data.data.data;

@@ -2,10 +2,12 @@
   "name": "mediasoup-sample-app",
   "version": "1.2.2",
   "description": "Mediasoup Sample App",
-  "main": "signaling_server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "watch": "watchify public/index.js -o public/bundle.js -v"
+    "lint": "eslint -c .eslintrc.js server.js lib connect.js",
+    "start": "cross-env nodemon server.js",
+    "connect": "node connect.js",
+    "watch": "cross-env watchify ./public/index.js -o ./public/bundle.js -v"
   },
   "author": "",
   "license": "ISC",

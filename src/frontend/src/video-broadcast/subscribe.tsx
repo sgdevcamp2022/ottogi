@@ -140,7 +140,10 @@ function Subscribe(props: any) {
 
       if (kind === "video") {
         console.log("-- resume kind=" + kind);
-        sendRequest("resume", { kind: kind })
+        sendRequest("resume", { 
+          consumerId : consumer.id, 
+          kind: kind,
+        })
           .then(() => {
             console.log("resume OK");
             return consumer;

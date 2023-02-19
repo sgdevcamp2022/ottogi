@@ -2,31 +2,24 @@ import styled from "styled-components";
 import Text from "../atoms/Text/Text";
 import SettingButton from "../atoms/Button/SettingButton";
 import { Divider } from "@mui/material";
-import { useState } from "react";
+import { useEffect } from "react";
 import SetDefaultButton from "../atoms/Button/SetDefaultButton";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useUserStore } from "@store/useUserStore";
 import { COOKIE_KEY } from "@configs/cookie";
-import clientApi from "@api/axios";
+import authApi from "@api/auth";
 
 const ServerSettingBar = () => {
-  const { accessToken } = useUserStore();
-  const [number, setNumber] = useState("");
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([COOKIE_KEY]);
   const { resetUser } = useUserStore();
 
-  const logoutApi = async () => {
-    return clientApi.get("/user/member/logout", {
-      headers: { Authorization: "Bearer " + accessToken },
-    });
-  };
-
   const logout = async () => {
-    await logoutApi();
+    await authApi.logout;
 
     removeCookie(COOKIE_KEY);
+    sessionStorage.clear();
     resetUser();
     navigate("/login");
   };

@@ -8,9 +8,8 @@ import ScrollableBox from "./scrollableBox";
 const FriendList = () => {
   const {
     userInfo: { email },
-    accessToken,
   } = useUserStore();
-  const { data: friendList } = useGetFriendList({ email, accessToken });
+  const { data: friendList } = useGetFriendList({ email });
 
   if (!friendList) return <></>;
 

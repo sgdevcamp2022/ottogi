@@ -1,16 +1,14 @@
 import clientApi from "./axios";
 
-interface HeaderToken {
-  accessToken: string;
-}
-
-interface FriendParams extends HeaderToken {
+interface FriendParams {
   email: string;
 }
 
+const accessToken = sessionStorage.getItem("accessToken");
+
 const friendApi = {
   getAll: async ({ queryKey }: any) => {
-    const { email, accessToken } = queryKey[1];
+    const { email } = queryKey[1];
     return await clientApi.get(`/user/member/showfriend`, {
       params: { email },
       headers: {
@@ -19,7 +17,7 @@ const friendApi = {
     });
   },
 
-  request: async ({ email, accessToken }: FriendParams) => {
+  request: async ({ email }: FriendParams) => {
     return await clientApi.post(
       "/user/member/addfriend",
       { email },
@@ -31,7 +29,7 @@ const friendApi = {
     );
   },
 
-  accept: async ({ email, accessToken }: FriendParams) => {
+  accept: async ({ email }: FriendParams) => {
     return await clientApi.post(
       "/user/member/acceptfriend",
       { email },
@@ -43,7 +41,7 @@ const friendApi = {
     );
   },
 
-  reject: async ({ email, accessToken }: FriendParams) => {
+  reject: async ({ email }: FriendParams) => {
     return await clientApi.delete("/user/member/rejectfriend", {
       data: { email },
       headers: {
@@ -52,7 +50,7 @@ const friendApi = {
     });
   },
 
-  cancel: async ({ email, accessToken }: FriendParams) => {
+  cancel: async ({ email }: FriendParams) => {
     return await clientApi.post(
       "/user/member/cancelfriend",
       { email },

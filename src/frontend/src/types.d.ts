@@ -1,5 +1,3 @@
-type AccessTokenType = string;
-
 interface UserInfoType {
   id: number;
   email: string;

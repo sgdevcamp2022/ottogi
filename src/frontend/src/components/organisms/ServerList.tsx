@@ -18,10 +18,9 @@ const ServerList = () => {
   // const [userId, setUserId] = useState<Number>();
   const navigate = useNavigate();
   const [data, setData] = useState<community[]>([]);
-  const { userInfo, accessToken } = useUserStore();
+  const { userInfo } = useUserStore();
   const { data: res, isLoading } = useGetServerList({
     userId: userInfo.id,
-    accessToken,
   });
   const [num, setNum] = useState<Number>();
 
@@ -37,6 +36,7 @@ const ServerList = () => {
   const onCreateServer = () => {
     navigate("/CreateServer");
   };
+
   if (isLoading)
     return (
       <BarContainer>

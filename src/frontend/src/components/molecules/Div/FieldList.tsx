@@ -9,14 +9,13 @@ import useInput from "@hooks/common/useInput";
 import useModifyPassword from "@hooks/query/useModifyPassword";
 import { useUserStore } from "@store/useUserStore";
 import useModifyName from "@hooks/query/useModifyName";
-import LoginForm from "@components/molecules/Form/LoginForm";
+
+const accessToken = sessionStorage.getItem("accessToken");
 
 const NameChange = () => {
   const [name, changeName] = useInput();
   const [password, changePassword] = useInput();
-  const { userInfo, accessToken } = useUserStore();
   const { mutate: modifyName } = useModifyName();
-  console.log(accessToken);
 
   return (
     <>
@@ -89,7 +88,6 @@ const NameChange = () => {
 };
 
 const PwChange = () => {
-  const { userInfo, accessToken } = useUserStore();
   const [passwordConfirm, changePasswordConfirm] = useInput();
   const [password, changePassword] = useInput();
   const [originalPassword, changeOriginalPassword] = useInput();
