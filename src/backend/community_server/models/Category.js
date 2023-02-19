@@ -21,7 +21,7 @@ const getCategoryId = (communityId)=>{
 
 const getCategory = (communityId)=>{
   let categoryList = [];
-  let findsql = `SELECT JSON_OBJECT ('categoy_id', id, 'category_name', name) FROM category WHERE community_id = ${db.escape(communityId)}`;
+  let findsql = `SELECT JSON_OBJECT ('category_id', id, 'category_name', name) FROM category WHERE community_id = ${db.escape(communityId)}`;
 
   return new Promise((resolve, reject) => {
       db.query(findsql, (err, res) => {
