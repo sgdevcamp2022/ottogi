@@ -137,6 +137,36 @@ const getCommunityId = (userId)=>{
     })
 }
 
+const getmem = (userId, communityId)=>{
+    let findsql = `SELECT user_id FROM community_member WHERE user_id = ${db.escape(userId)} AND community_id = ${db.escape(communityId)}`;
+
+    return new Promise((resolve, reject) => {
+        db.query(findsql, (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                if(res.length>0) resolve(true);
+                else resolve(false);
+            }
+        })
+    })
+}
+
+const checkprofile = (userId, communityId)=>{
+    let findsql = `SELECT profile FROM community_member WHERE user_id = ${db.escape(userId)} AND community_id = ${db.escape(communityId)}`;
+
+    return new Promise((resolve, reject) => {
+        db.query(findsql, (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                if(res.length>0) resolve(false);
+                else resolve(true);
+            }
+        })
+    })
+}
+
 module.exports = {
     //커뮤니티 생성 디비 명령어? (모델)
     create: (communityName, img, userId, profile) => {
@@ -154,25 +184,28 @@ module.exports = {
     },
 
     //커뮤니티 참가 명령어
-    join: (communityId, uesrId, profile) => {
+    join: (communityId, userId, profile) => {
         let name = [];
         let getProfile = JSON.stringify(profile);
+        //초대로 밖에 못들어오니까
+        if(getmem(userId, communityId) && checkprofile(userId, communityId)){
+            let sql = `UPDATE community_member SET profile = '${getProfile}' WHERE community_id = '${communityId}' AND user_id = '${userId}'`;
+            db.query(sql);
 
-        let sql = `INSERT INTO community_member (community_id, user_id, profile) VALUES (${db.escape(communityId)}, ${db.escape(uesrId)}, '${getProfile}')`;
-        db.query(sql);
-        let findsql = `SELECT name FROM community WHERE id = ${db.escape(communityId)}`;
-        return new Promise((resolve, reject) => {
-            db.query(findsql, (err, res) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    for (let data of res) {
-                        name.push(data.name);
-                    };
-                    resolve(name);
-                }
+            let findsql = `SELECT name FROM community WHERE id = ${db.escape(communityId)}`;
+            return new Promise((resolve, reject) => {
+                db.query(findsql, (err, res) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        for (let data of res) {
+                            name.push(data.name);
+                        };
+                        resolve(name);
+                    }
+                })
             })
-        })
+        }
     },
 
     //커뮤니티 정보 변경 명령어

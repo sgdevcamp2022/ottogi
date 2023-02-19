@@ -6,8 +6,7 @@ module.exports = {
     communityCreate: async (req, res) => {
         const {communityName, userId, profile} = req.body;
         const img = req.file ?? '';
-        console.log(img);
-        console.log(req);
+
         if (!communityName || !userId) {
             res.json({
                 success: false,
@@ -15,7 +14,6 @@ module.exports = {
                 data: null,
             })
         } else {
-            console.log('폼데이터')
             community.create(communityName, img.location , userId, profile);
             res.json({
                 success: true,
@@ -27,7 +25,8 @@ module.exports = {
 
     //커뮤니티 참가
     communityJoin: async(req, res) => {
-        const {communityId, userId, profile} = req.body;
+        const {communityId, userId, profile} = req.query;
+
         if (!communityId || !userId) {
             res.json({
                 success: false,
@@ -164,5 +163,5 @@ module.exports = {
                 data: null,
             });
         }
-    }
+    },
 };

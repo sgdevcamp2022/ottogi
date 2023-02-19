@@ -4,6 +4,7 @@ const {upload} = require('../confing/s3');
 const category = require('../controllers/categoryController');
 const channel = require('../controllers/channelController');
 const community = require('../controllers/communityController');
+const invite = require('../controllers/invitationController');
 
 router.get('/test', (req, res) => {
     res.send('good connect!');
@@ -12,6 +13,10 @@ router.get('/test', (req, res) => {
 //커뮤니티 하위 카테고리, 채널 조회 -> json 형식으로 보내주기
 router.get('/community/getlist', community.loadList);
 router.get('/community/getoption', category.loadList);
+
+//초대관련
+router.post('/community/invite/member', invite.inviteMember);
+router.get('/community/invite/:shortUrl/:userId', invite.redirect);
 
 //커뮤니티(서버) 생성
 router.post('/community/create', upload.single('img'), community.communityCreate);
