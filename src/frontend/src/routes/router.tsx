@@ -9,10 +9,16 @@ import NotFound from "../pages/NotFound";
 import ServerSetting from "../pages/ServerSetting";
 import UserSetting from "../pages/UserSetting";
 import CreateServer from "@pages/CreateServer";
+import Home from "src/video-broadcast";
+import Publish from "src/video-broadcast/publish";
 
 const Router = () => {
   return (
     <Routes>
+      {/* webrct 테스트 라우터 */}
+      <Route path={"/index"} element={<Home />} />
+      <Route path={"/publish"} element={<Publish />} />
+      <Route path={"/subscribe"} element={<Publish />} />
       <Route
         path={"/"}
         element={
