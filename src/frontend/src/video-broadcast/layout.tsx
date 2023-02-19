@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { io as socketIOClient } from "socket.io-client";
 import { isPropertySignature } from "typescript";
-import { config } from "../app.config";
+import { config } from "src/app.config";
 
 function Layout(props: any) {
   React.useEffect(() => {

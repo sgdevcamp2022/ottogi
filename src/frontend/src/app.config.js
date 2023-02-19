@@ -1,4 +1,4 @@
 export const config = {
-  SERVER_ENDPOINT: "localhost:4443",
-  APP_ENDPOINT: "localhost:3000",
+  SERVER_ENDPOINT: "https://192.168.0.170:4443",
+  APP_ENDPOINT: "https://192.168.0.170:3000",
 };

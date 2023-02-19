@@ -9,8 +9,9 @@ import NotFound from "../pages/NotFound";
 import ServerSetting from "../pages/ServerSetting";
 import UserSetting from "../pages/UserSetting";
 import CreateServer from "@pages/CreateServer";
-import Home from "src/video-broadcast";
+import Home from "src/home";
 import Publish from "src/video-broadcast/publish";
+import BroadHome from 'src/video-broadcast';
 
 const Router = () => {
   return (
@@ -19,6 +20,13 @@ const Router = () => {
       <Route path={"/index"} element={<Home />} />
       <Route path={"/publish"} element={<Publish />} />
       <Route path={"/subscribe"} element={<Publish />} />
+
+      <Route path='/Home' element={<Home />} />
+      <Route
+          path='/broadcast/:view'
+          element={<BroadHome/>}
+      />
+
       <Route
         path={"/"}
         element={
