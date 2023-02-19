@@ -25,6 +25,18 @@ const ServerList = () => {
   });
   const [num, setNum] = useState<Number>();
 
+  const onMain = () => {
+    navigate("/@me");
+  };
+
+  const onServer = (v: Number) => {
+    setNum(v);
+    navigate("/" + v);
+  };
+
+  const onCreateServer = () => {
+    navigate("/CreateServer");
+  };
   if (isLoading)
     return (
       <BarContainer>
@@ -60,19 +72,6 @@ const ServerList = () => {
       }
     }
   }
-
-  const onMain = () => {
-    navigate("/@me");
-  };
-
-  const onServer = (v: Number) => {
-    setNum(v);
-    navigate("/" + v);
-  };
-
-  const onCreateServer = () => {
-    navigate("/CreateServer");
-  };
 
   return (
     <BarContainer>
