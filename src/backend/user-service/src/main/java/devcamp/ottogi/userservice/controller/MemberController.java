@@ -6,11 +6,8 @@ import devcamp.ottogi.userservice.dto.request.MemberModifyRequestDto;
 import devcamp.ottogi.userservice.dto.response.MemberResponseDto;
 import devcamp.ottogi.userservice.exception.ApiException;
 import devcamp.ottogi.userservice.response.CommonResponse;
-import devcamp.ottogi.userservice.service.AuthService;
-import devcamp.ottogi.userservice.service.FileUploadService;
-import devcamp.ottogi.userservice.service.MemberService;
+import devcamp.ottogi.userservice.service.*;
 //import devcamp.ottogi.userservice.util.SecurityUtil;
-import devcamp.ottogi.userservice.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +29,7 @@ public class MemberController {
     private final ResponseService responseService;
     private final AuthService authService;
     private final FileUploadService fileUploadService;
+    private final StateManagementService stateManagementService;
 
     @GetMapping("/info")
     public CommonResponse<Object> findMemberInfoById(HttpServletRequest request) {
@@ -44,6 +42,13 @@ public class MemberController {
         log.info("/email 호출");
         return ResponseEntity.ok(memberService.findMemberInfoByEmail(email));
     }
+
+    @PostMapping("/logout")
+    public CommonResponse<Object> logout(HttpServletRequest request){
+        stateManagementService.sendLogoutState(request.getHeader("id"));
+        return responseService.getSuccessResponse(LOGOUT_SUCCESS, null);
+    }
+
 
     @PostMapping("/addfriend")
     public CommonResponse<Object> addFriend(HttpServletRequest request, @RequestBody FriendRequestDto friendRequestDto){

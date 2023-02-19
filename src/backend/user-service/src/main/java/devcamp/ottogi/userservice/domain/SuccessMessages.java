@@ -10,6 +10,7 @@ public enum SuccessMessages {
     SEND_EMAIL("이메일을 전송하였습니다."),
     SIGNUP_SUCCESS("회원가입이 정상적으로 완료되었습니다."),
     LOGIN_SUCCESS("로그인이 완료되었습니다."),
+    LOGOUT_SUCCESS("로그아웃이 완료되었습니다."),
     VIEW_SUCCESS("조회 완료!"),
     REISSUE_SUCCESS("토큰 재발급 완료"),
 

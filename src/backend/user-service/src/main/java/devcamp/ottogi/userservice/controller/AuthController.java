@@ -6,10 +6,7 @@ import devcamp.ottogi.userservice.dto.request.TokenRequestDto;
 import devcamp.ottogi.userservice.dto.request.EmailCodeRequestDto;
 import devcamp.ottogi.userservice.exception.ApiException;
 import devcamp.ottogi.userservice.response.CommonResponse;
-import devcamp.ottogi.userservice.service.AuthService;
-import devcamp.ottogi.userservice.service.EmailService;
-import devcamp.ottogi.userservice.service.FileUploadService;
-import devcamp.ottogi.userservice.service.ResponseService;
+import devcamp.ottogi.userservice.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +29,7 @@ public class AuthController {
     private String userEmail;
     private MemberRegisterRequestDto userMemberRequestDto;
     private final FileUploadService fileUploadService;
+    private final StateManagementService stateManagementService;
 
     @GetMapping("/test")
     public String test(){
@@ -90,6 +88,7 @@ public class AuthController {
     public CommonResponse<Object> login(@RequestBody MemberLoginRequestDto memberLoginDto) {
         return responseService.getSuccessResponse(LOGIN_SUCCESS, authService.login(memberLoginDto));
     }
+
 
     @PostMapping("/reissue") //재발급
     public CommonResponse<Object> reissue(@RequestBody TokenRequestDto tokenRequestDto) {

@@ -37,6 +37,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+    private final StateManagementService stateManagementService;
     private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
@@ -65,6 +66,11 @@ public class AuthService {
             // 4. RefreshToken 저장 (key, value, timout, time 단위(ms))
             redisTemplate.opsForValue()
                     .set("RT:" + authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
+
+            Member member = memberRepository.findByEmail(memberLoginDto.getEmail())
+                    .orElseThrow(()-> new ApiException(NO_MEMBER_ERROR));
+
+            stateManagementService.sendLoginState(member.getId().toString());
 
             return tokenDto;
 
