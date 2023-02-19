@@ -17,7 +17,7 @@ const Tab2Footer = () => {
   return (
     <Tab2FooterContainer>
       <InfoContainer>
-        <UserInfoButton />
+        <UserInfoButton status="1" />
       </InfoContainer>
       <ButtonContainer>
         <UserOnOffButton

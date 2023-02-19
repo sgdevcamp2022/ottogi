@@ -6,12 +6,11 @@ import AtIcon from "../atoms/Icons/AtIcon";
 import CallWifiIcon from "../atoms/Icons/CallWifiIcon";
 import VideocamIcon from "../atoms/Icons/VideocamIcon";
 import Text from "../atoms/Text/Text";
-import { StateType } from "../molecules/Div/UserState32";
 import SearchInput from "../molecules/Input/SearchInput";
 
 interface DirectMessageHeaderProps {
   name: string;
-  status: StateType;
+  status: "0" | "1" | "2" | "3";
 }
 
 const DirectMessageHeader = ({ name, status }: DirectMessageHeaderProps) => {

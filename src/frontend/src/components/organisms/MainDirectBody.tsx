@@ -1,4 +1,5 @@
 import clientApi from "@api/axios";
+import WelcomeMessage from "@components/molecules/Div/WelcomeMessage";
 import { Client } from "@stomp/stompjs";
 import { useUserStore } from "@store/useUserStore";
 import getFormatDate from "@utils/getFormatDate";
@@ -17,6 +18,7 @@ interface addChatLogProps {
   name: string;
   createdAt: string;
   imagePath: string;
+  type: string;
 }
 
 const accessToken = sessionStorage.getItem("accessToken");
@@ -60,16 +62,22 @@ const MainDirectBody = () => {
     name,
     createdAt,
     imagePath,
+    type,
   }: addChatLogProps) => {
-    setChatLog((prev) => [...prev, { message, name, createdAt, imagePath }]);
+    setChatLog((prev) => [
+      ...prev,
+      { message, name, createdAt, imagePath, type },
+    ]);
   };
 
   const subscribeChatRoom = () => {
     if (client) {
       client.subscribe(`/topic/${channelId}`, (data) => {
-        const { message, name, createdAt, imagePath } = JSON.parse(data.body);
+        const { message, name, createdAt, imagePath, type } = JSON.parse(
+          data.body
+        );
 
-        addChatLog({ message, name, createdAt, imagePath });
+        addChatLog({ message, name, createdAt, imagePath, type });
       });
     }
   };
@@ -119,23 +127,28 @@ const MainDirectBody = () => {
             minute={2}
             createdAt={new Date()}
           /> */}
-            {chatLog.map(({ message, name, createdAt, imagePath }, idx) => {
-              return (
-                <>
-                  {idx === 0 || chatLog[idx - 1].name !== chatLog[idx].name ? (
-                    <MessageLog
-                      text={message}
-                      name={name}
-                      createdAt={getFormatDate(createdAt)}
-                      hasImage
-                      imageUrl={imagePath}
-                    />
-                  ) : (
-                    <MessageLog text={message} createdAt={createdAt} />
-                  )}
-                </>
-              );
-            })}
+            {chatLog.map(
+              ({ message, name, createdAt, imagePath, type }, idx) => {
+                return (
+                  <>
+                    {type === "ENTER" ? (
+                      <WelcomeMessage name={name} />
+                    ) : idx === 0 ||
+                      chatLog[idx - 1].name !== chatLog[idx].name ? (
+                      <MessageLog
+                        text={message}
+                        name={name}
+                        createdAt={getFormatDate(createdAt)}
+                        hasImage
+                        imageUrl={imagePath}
+                      />
+                    ) : (
+                      <MessageLog text={message} createdAt={createdAt} />
+                    )}
+                  </>
+                );
+              }
+            )}
           </div>
         </ScrollableBox>
       </MainDirectBodyContainer>

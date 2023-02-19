@@ -1,3 +1,5 @@
+import useGetFriendStatus from "@hooks/query/useGetFriendStatus";
+import useMainStore from "@store/useMainStore";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import TabDivider from "../atoms/Div/TabDivider";
@@ -5,13 +7,21 @@ import DirectMessageHeader from "./DirectMessageHeader";
 import FriendHeader from "./FriendHeader";
 
 const Tab3MainHeader = () => {
-  const { userId } = useParams();
+  const { channelId } = useParams();
+  const { userId, userName } = useMainStore();
+  if (!userId) <></>;
+
+  const { data: status, isLoading } = useGetFriendStatus({
+    userId: Number(userId),
+  });
+
+  if (isLoading) return <></>;
 
   return (
     <Tab3MainHeaderContainer>
       <HeaderWrapper>
-        {userId ? (
-          <DirectMessageHeader name="허다은" status="on" />
+        {channelId ? (
+          <DirectMessageHeader name={userName} status={status?.data.data} />
         ) : (
           <FriendHeader />
         )}

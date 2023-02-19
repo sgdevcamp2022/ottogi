@@ -54,7 +54,7 @@ const CreateDirectMessageModal = ({
             <SelectFriend />
             <SelectFriend check /> */}
             {friendList.map((friend) => (
-              <SelectFriend check={true} />
+              <SelectFriend check={true} status="1" />
               // <SelectFriend check={check} />
             ))}
           </ScrollableBox>

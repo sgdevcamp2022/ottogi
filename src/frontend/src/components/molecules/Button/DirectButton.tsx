@@ -2,21 +2,29 @@ import styled from "styled-components";
 import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
 import Text from "@components/atoms/Text/Text";
 import { useNavigate, useParams } from "react-router-dom";
-import UserState32, { StateType } from "../Div/UserState32";
+import UserState32 from "../Div/UserState32";
 import useSendToStore from "@store/useSendToStore";
+import useGetFriendStatus from "@hooks/query/useGetFriendStatus";
+import useMainStore from "@store/useMainStore";
 
 interface DirectButtonProps {
   id: string;
   name: string;
-  status?: StateType;
+  userId: number;
 }
 
-const DirectButton = ({ id, name, status = "on" }: DirectButtonProps) => {
+const DirectButton = ({ id, name, userId }: DirectButtonProps) => {
+  const { setUserId, setUserName } = useMainStore();
+  const { data: status, isLoading } = useGetFriendStatus({ userId });
   const { channelId } = useParams();
   const navigate = useNavigate();
   const { setSendTo } = useSendToStore();
 
+  if (isLoading) return <></>;
+
   const goChatRoom = () => {
+    setUserId(userId);
+    setUserName(name);
     navigate(`/@me/${id}`);
     setSendTo(name);
   };
@@ -30,7 +38,7 @@ const DirectButton = ({ id, name, status = "on" }: DirectButtonProps) => {
       color="inactive"
     >
       <DirectButtonContainer>
-        <UserState32 status={status} />
+        <UserState32 status={status?.data.data} />
         <Text text={name} />
       </DirectButtonContainer>
     </ButtonWrapper>

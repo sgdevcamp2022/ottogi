@@ -35,7 +35,13 @@ const InviteFriendModalBody = () => {
         <ScrollableBox>
           <FriendListContainer>
             {num > 0 ? (
-              friendList.map((v: FriendType) => <InviteFriendBox />)
+              friendList.map(({ name, userId, channelId }: FriendType) => (
+                <InviteFriendBox
+                  name={name}
+                  userId={userId}
+                  channelId={channelId}
+                />
+              ))
             ) : (
               <TextWrapper>
                 <Text

@@ -33,13 +33,21 @@ const MainTotal = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"모든 친구"} num={num} />
           <ScrollableBox>
-            {friendList.map(({ email, name, channelId }) => (
-              <FriendDefaultBox key={email} id={channelId} name={name} />
-            ))}
+            {friendList.map(
+              ({ email, name, channelId, userId, friendState }) => (
+                <FriendDefaultBox
+                  key={email}
+                  id={channelId}
+                  name={name}
+                  userId={userId}
+                  status={friendState}
+                />
+              )
+            )}
           </ScrollableBox>
         </>
       ) : (
-        <>
+        <Container>
           <EmptyContainer
             image="addFriend"
             text="Ottogi는 친구를 기다리고 있어요."
@@ -53,7 +61,7 @@ const MainTotal = () => {
               fontSize="sm"
             />
           </ButtonWrapper>
-        </>
+        </Container>
       )}
     </>
   );
@@ -62,6 +70,11 @@ const MainTotal = () => {
 const ButtonWrapper = styled.div`
   margin-top: 20px;
   text-align: center;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export default MainTotal;

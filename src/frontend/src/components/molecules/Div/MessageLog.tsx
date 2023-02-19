@@ -1,5 +1,6 @@
 import LogoImage from "@components/atoms/Div/LogoImage";
 import MessageText from "@components/atoms/Div/MessageText";
+import { createRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import MessageHoverButtons from "../Button/MessageHoverButtons";
 import MessageUserDate from "./MessageUserDate";
@@ -19,8 +20,18 @@ const MessageLog = ({
   imageUrl,
   createdAt,
 }: MessageLogProps) => {
+  const [height, setHeight] = useState(24);
+  const textRef = createRef<HTMLParagraphElement>();
+
+  useEffect(() => {
+    if (textRef?.current) {
+      const textHeight = textRef.current.offsetHeight;
+      setHeight(textHeight);
+    }
+  }, []);
+
   return (
-    <MessageLogContainer hasImage={hasImage}>
+    <MessageLogContainer hasImage={hasImage} height={height}>
       {/* <MessageHoverButtons /> */}
       {hasImage && (
         <LogoImageContainer>
@@ -37,6 +48,7 @@ const MessageLog = ({
           <MessageUserDate name={name} createdAt={createdAt} />
         )}
         <MessageText
+          ref={textRef}
           text={text}
           hasDate={!hasImage}
           createdAt={new Date(createdAt)}
@@ -46,15 +58,15 @@ const MessageLog = ({
   );
 };
 
-const MessageLogContainer = styled.div<{ hasImage: boolean }>`
+const MessageLogContainer = styled.div<{ hasImage: boolean; height: number }>`
   margin-top: ${({ hasImage }) => (hasImage ? 16 : 0)}px;
   padding-top: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
   padding-bottom: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
   position: relative;
-  /* min-height: 1.375rem; */
+  /* min-height: 22px; */
+  /* height: ${({ height }) => height}px; */
   display: flex;
   flex-direction: row;
-  align-items: center;
   &:hover {
     background-color: ${({ theme }) => theme.backgroundColor["msg-hover"]};
     .msg-hover,
@@ -66,6 +78,7 @@ const MessageLogContainer = styled.div<{ hasImage: boolean }>`
 
 const LogoImageContainer = styled.div`
   margin-left: 16px;
+  position: absolute;
 `;
 
 const TextContainer = styled.div`

@@ -18,9 +18,16 @@ const FriendList = () => {
       <DirectMessage />
       <ScrollableBox>
         <ListContainer>
-          {friendList.data.data.map(({ name, channelId }: FriendType) => (
-            <DirectButton key={name} name={name} id={channelId} />
-          ))}
+          {friendList.data.data.map(
+            ({ name, userId, channelId }: FriendType) => (
+              <DirectButton
+                key={name}
+                name={name}
+                userId={userId}
+                id={channelId}
+              />
+            )
+          )}
         </ListContainer>
       </ScrollableBox>
     </FriendListContainer>

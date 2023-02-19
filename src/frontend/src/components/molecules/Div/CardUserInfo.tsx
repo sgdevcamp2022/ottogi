@@ -9,7 +9,7 @@ const CardUserInfo = () => {
   return (
     <InfoContainer>
       <Logo>
-        <UserState80 />
+        <UserState80 status="1" />
       </Logo>
       <NameWrapper>
         <Text
