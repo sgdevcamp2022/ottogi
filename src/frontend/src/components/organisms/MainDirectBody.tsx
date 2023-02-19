@@ -92,7 +92,6 @@ const MainDirectBody = () => {
 
     getChatLogs();
     connectChatRoom();
-
     return () => disconnectChatRoom();
   }, [channelId]);
 
