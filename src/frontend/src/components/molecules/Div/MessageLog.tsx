@@ -64,10 +64,9 @@ const MessageLogContainer = styled.div<{ hasImage: boolean; height: number }>`
   padding-bottom: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
   position: relative;
   /* min-height: 22px; */
-  height: ${({ height }) => height}px;
+  /* height: ${({ height }) => height}px; */
   display: flex;
   flex-direction: row;
-  align-items: center;
   &:hover {
     background-color: ${({ theme }) => theme.backgroundColor["msg-hover"]};
     .msg-hover,
@@ -79,6 +78,7 @@ const MessageLogContainer = styled.div<{ hasImage: boolean; height: number }>`
 
 const LogoImageContainer = styled.div`
   margin-left: 16px;
+  position: absolute;
 `;
 
 const TextContainer = styled.div`

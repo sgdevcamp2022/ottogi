@@ -31,17 +31,19 @@ const MessageText = forwardRef<HTMLParagraphElement, MessageTextProps>(
 );
 
 const MessageTextContainer = styled.div`
-  word-break: break-all;
+  p {
+    word-break: break-all;
+  }
   display: flex;
   align-items: center;
 `;
 
 const MessageDate = styled.span`
+  position: absolute;
   margin-left: 12px;
   visibility: hidden;
 `;
 const TextContainer = styled.div`
-  position: absolute;
   left: 0;
   padding: 2px 48px 2px 72px;
 `;
@@ -56,6 +58,7 @@ interface TextProps {
 }
 
 const Text = styled.p<Omit<TextProps, "text">>`
+  line-height: 1.5rem;
   color: ${({ theme, color }) => theme.color[color]};
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
   margin-top: 0px;
