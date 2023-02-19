@@ -1,0 +1,17 @@
+.idea
+node_modules/
+package-lock.json
+/config.js
+/client.js
+/test.*
+/index.html
+
+
+.greenlockrc
+greenlock.d/
+
+*-backup.html
+*-backup.js
+
+server/certs/*
+!server/certs/README.md
