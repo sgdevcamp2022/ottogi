@@ -3273,7 +3273,7 @@ const finishStream = async () =>{ // ProducerId : 내 아이디 , remoteProducer
   btnLocalVideo.disabled = true
   btnLocalScrean.disabled = true
   btnLocalStream.disabled = false
-  closeTransport(videoProducer || audioProducer || screenProducer)
+  closeTransport(videoProducer || audioProducer)
 
   videoParams = undefined
   audioParams = undefined
