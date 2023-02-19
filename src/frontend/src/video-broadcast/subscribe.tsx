@@ -256,6 +256,7 @@ function Subscribe(props: any) {
         config.SERVER_ENDPOINT + "/video-broadcast"
       );
       socketRef.current = io;
+      console.log("안녕하세요")
     }
 
     return new Promise((resolve: any, reject: any) => {

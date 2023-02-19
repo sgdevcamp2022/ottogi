@@ -78,7 +78,7 @@ async function runExpressApp() {
     expressApp.use(bodyParser.json());
     expressApp.use(bodyParser.urlencoded({ extended: false }));
     // expressApp.use('/rooms/:roomId',express.static(__dirname + '/public'));
-    expressApp.get('/broadcast/:roomId', (req, res)=>{
+    expressApp.get('/test', (req, res)=>{
         res.send('연결성공')
     })
     
@@ -126,30 +126,22 @@ async function runWebServer(){
 
 
 async function runSocketServer() {
-    const io = Server(httpsServer, {
+    socketServer = Server(httpsServer, {
         cors: {
-            origin: [`https://localhost:${listenPort}`],
+            origin: '*',
             methods: ['GET', 'POST'],
-            transports: ['websocket'],  
         },
     });
-    // io.on('connection', (socket) => {
-    //     console.log('New user online');
-    //     socket.on('disconnect', () => {
-    //         console.log('User offline');
-    //     });
-    // });
 
-    connections = io.of('/video-broadcast')
-    connections.on('connection', async (socket) => {
+    connections = socketServer.of('/video-broadcast')
+    socketServer.on('connection', async (socket) => {
         console.log('client connected');
-        socket.emit("connect",{ socketId: socket.id, })
-        // if (await manage.getTransport(transports, socket.id).produce({
-        //     kind,
-        //     rtpParameters
-        // })) {
-        //     socket.emit('newProducer');
-        // }
+        if (await manage.getTransport(transports, socket.id).produce({
+            kind,
+            rtpParameters
+        })) {
+            socket.emit('newProducer');
+        }
 
         socket.on('disconnect', () => {
             console.log('client disconnected');
