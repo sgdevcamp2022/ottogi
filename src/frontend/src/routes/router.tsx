@@ -22,25 +22,25 @@ const Router = () => {
       <Route
         path={"/"}
         element={
-          // <ProtectPage>
-          <Main />
-          // </ProtectPage>
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
         }
       />
       <Route
         path={"/@me"}
         element={
-          // <ProtectPage>
-          <Main />
-          // </ProtectPage>
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
         }
       />
       <Route
         path="/@me/:channelId"
         element={
-          // <ProtectPage>
-          <Main />
-          // </ProtectPage>
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
         }
       />
 
