@@ -3,29 +3,20 @@ import Subscribe from "./subscribe";
 import Publish from "./publish";
 import { io as socketIOClient } from "socket.io-client";
 import { config } from "src/app.config";
-import { useParams } from 'react-router-dom';
-
+import { useParams } from "react-router-dom";
 
 const userSocket: any = socketIOClient(
-    config.SERVER_ENDPOINT + '/video-broadcast'
+  config.SERVER_ENDPOINT + "/video-broadcast"
 );
 
-function BroadHome(props: any) {
-
-  console.log(props)
-  const view = props.match.params.view;
+function BroadHome() {
+  // const view = props.match.params.view;
+  const { view } = useParams();
+  console.log(view);
   return (
     <Layout>
-      {view === "publish" ? (
-        <Publish
-          userSocket={userSocket}
-        />
-      ) : null}
-      {view === "subscribe" ? (
-        <Subscribe
-          userSocket={userSocket}
-        />
-      ) : null}
+      {view === "publish" ? <Publish userSocket={userSocket} /> : null}
+      {view === "subscribe" ? <Subscribe userSocket={userSocket} /> : null}
     </Layout>
   );
 }

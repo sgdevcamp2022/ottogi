@@ -11,21 +11,18 @@ import UserSetting from "../pages/UserSetting";
 import CreateServer from "@pages/CreateServer";
 import Home from "src/home";
 import Publish from "src/video-broadcast/publish";
-import BroadHome from 'src/video-broadcast';
+import BroadHome from "src/video-broadcast";
 
 const Router = () => {
   return (
     <Routes>
       {/* webrct 테스트 라우터 */}
       <Route path={"/index"} element={<Home />} />
-      <Route path={"/publish"} element={<Publish />} />
-      <Route path={"/subscribe"} element={<Publish />} />
+      {/* <Route path={"/publish"} element={<Publish />} />
+      <Route path={"/subscribe"} element={<Publish />} /> */}
 
-      <Route path='/Home' element={<Home />} />
-      <Route
-          path='/broadcast/:view'
-          element={<BroadHome/>}
-      />
+      <Route path="/Home" element={<Home />} />
+      <Route path="/broadcast/:view" element={<BroadHome />} />
 
       <Route
         path={"/"}
