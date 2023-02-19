@@ -3,6 +3,31 @@ import clientApi from "./axios";
 const accessToken = sessionStorage.getItem("accessToken");
 
 const serverApi = {
+  sendInvite: async ({ communityId, userId, shortUrl }: any) => {
+    return await clientApi.post(
+      `/community/invite/member`,
+      { communityId, userId, shortUrl },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+  },
+
+  sendInviteToChat: async ({ sender, channelId, linkMessage }: any) => {
+    console.log(linkMessage);
+    return await clientApi.post(
+      `/chat/invite`,
+      { sender, channelId, linkMessage },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+  },
+
   // 커뮤니티 리스트 가져옴
   getList: async ({ queryKey }: any) => {
     const { userId } = queryKey[1];
