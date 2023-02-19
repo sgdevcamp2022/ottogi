@@ -28,9 +28,9 @@ const Tab2ServerBody = () => {
     '{"category_id": 1, "category_name": "음성 채널"},{"category_id": 2, "category_name": "채팅 채널"}',
     '{"type": 1, "channel_id": 1, "category_id": 1, "channel_name": "일반"},{"type": 2, "channel_id": 3, "category_id": 1, "channel_name": "일반"},{"type": 1, "channel_id": 2, "category_id": 2, "channel_name": "일반"},{"type": 2, "channel_id": 4, "category_id": 2, "channel_name": "일반"}',
   ];
-  console.log(JSON.parse(JSON.stringify(data[0])));
-  console.log(JSON.stringify(data[0]));
-  console.log(JSON.stringify(data[1]));
+  // console.log(JSON.parse(JSON.stringify(data[0])));
+  // console.log(JSON.stringify(data[0]));
+  // console.log(JSON.stringify(data[1]));
   const List = JSON.parse(JSON.stringify(data[0])).split("},");
   const List2 = JSON.parse(JSON.stringify(data[1])).split("},");
   // for (let i = 0; i < List.length; i++) {

@@ -1,3 +1,4 @@
+import useDeviceStore from "@store/useDeviceStore";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeadsetIcon from "../atoms/Icons/HeadsetIcon";
@@ -10,8 +11,22 @@ import UserOnOffButton from "../molecules/Button/UserOnOffButton";
 
 const Tab2Footer = () => {
   const navigate = useNavigate();
+  const { mic, sound, setMic, setSound } = useDeviceStore();
+
   const userSetting = () => {
     navigate("/UserSetting");
+  };
+
+  const clickMic = () => {
+    // navigator.mediaDevices.getUserMedia({ audio: !mic }).then((stream: any) => {
+    //   setMic(!mic);
+    // });
+  };
+
+  const clickSound = () => {
+    // navigator.mediaDevices.getUserMedia({ video: !sound }).then((stream: any) => {
+    // setSound(!sound);
+    // });
   };
 
   return (
@@ -24,13 +39,13 @@ const Tab2Footer = () => {
           text="음소거"
           OnIcon={<MicIcon />}
           OffIcon={<MicOffIcon />}
-          onClick={() => null}
+          onClick={clickMic}
         />
         <UserOnOffButton
           text="헤드셋 음소거"
           OnIcon={<HeadsetIcon />}
           OffIcon={<HeadsetOffIcon />}
-          onClick={() => null}
+          onClick={clickSound}
         />
         <UserOnOffButton
           text="사용자 설정"
