@@ -4,7 +4,7 @@
   "description": "Mediasoup Sample App",
   "main": "signaling_server.js",
   "scripts": {
-    "start": "nodemon signaling_server.js",
+    "start": "nodemon server.js",
     "watch": "watchify public/index.js -o public/bundle.js -v"
   },
   "author": "",
