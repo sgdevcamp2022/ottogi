@@ -47,7 +47,7 @@ const MainTotal = () => {
           </ScrollableBox>
         </>
       ) : (
-        <>
+        <Container>
           <EmptyContainer
             image="addFriend"
             text="Ottogi는 친구를 기다리고 있어요."
@@ -61,7 +61,7 @@ const MainTotal = () => {
               fontSize="sm"
             />
           </ButtonWrapper>
-        </>
+        </Container>
       )}
     </>
   );
@@ -70,6 +70,11 @@ const MainTotal = () => {
 const ButtonWrapper = styled.div`
   margin-top: 20px;
   text-align: center;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export default MainTotal;
