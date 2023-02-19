@@ -35,10 +35,32 @@ const ServerList = () => {
     navigate("/CreateServer");
   };
 
-  if (isLoading) return <></>;
+  if (isLoading)
+    return (
+      <BarContainer>
+        <ScrollableBox>
+          <ul>
+            <li onClick={onMain}>
+              <ServerImage
+                avatarHeight={3}
+                avatarWidth={3}
+                name="메인"
+                id={10000}
+              />
+            </li>
+            <Divider />
+
+            <li onClick={onCreateServer}>
+              <ServerImage avatarHeight={3} avatarWidth={3} name="" id={10001}>
+                <AddIcon />
+              </ServerImage>
+            </li>
+          </ul>
+        </ScrollableBox>
+      </BarContainer>
+    );
 
   const List = res?.data.data[0].split("},");
-
   if (List.length > 1 && data.length < List?.length) {
     for (let i = 0; i < List?.length; i++) {
       if (i !== List.length - 1) {

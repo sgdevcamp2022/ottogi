@@ -1,6 +1,6 @@
 import ServerLabel from "../molecules/Div/ServerLabel";
 import ServerRoomButton from "../molecules/Div/ServerRoomButton";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserStore } from "@store/useUserStore";
 import useGetCategoryList from "@hooks/query/useGetCategoryList";
 
@@ -17,25 +17,19 @@ interface RoomType {
 }
 
 const Tab2ServerBody = () => {
-  const { serverId } = useParams();
+  const navigate = useNavigate();
+  const { serverId, channelId } = useParams();
   const { accessToken } = useUserStore();
   const { data: res, isLoading } = useGetCategoryList({
     communityId: serverId,
     accessToken,
   });
-  if (!serverId || isLoading) return <></>;
-  const data = [
-    '{"category_id": 1, "category_name": "음성 채널"},{"category_id": 2, "category_name": "채팅 채널"}',
-    '{"type": 1, "channel_id": 1, "category_id": 1, "channel_name": "일반"},{"type": 2, "channel_id": 3, "category_id": 1, "channel_name": "일반"},{"type": 1, "channel_id": 2, "category_id": 2, "channel_name": "일반"},{"type": 2, "channel_id": 4, "category_id": 2, "channel_name": "일반"}',
-  ];
-  console.log(JSON.parse(JSON.stringify(data[0])));
-  console.log(JSON.stringify(data[0]));
-  console.log(JSON.stringify(data[1]));
+
+  const data = res?.data?.data;
+  if (!data || !serverId || isLoading) return <></>;
+
   const List = JSON.parse(JSON.stringify(data[0])).split("},");
   const List2 = JSON.parse(JSON.stringify(data[1])).split("},");
-  // for (let i = 0; i < List.length; i++) {
-  //   console.log(List[i]);
-  // }
   const categoryList: CategoryType[] = [];
   const roomList: RoomType[] = [];
 
@@ -58,6 +52,17 @@ const Tab2ServerBody = () => {
     }
   }
 
+  if (!channelId) {
+    let id;
+    for (let i = 0; i < roomList.length; i++) {
+      if (roomList[i]["type"] === 2) {
+        id = roomList[i]["channel_id"];
+        break;
+      }
+    }
+    navigate(`/${serverId}/${id}`);
+  }
+
   return (
     <div>
       {!isLoading &&
@@ -67,13 +72,11 @@ const Tab2ServerBody = () => {
             <>
               {roomList
                 .filter(
-                  (room) => room["category_id"] === category["category_id"]
+                  (room) => room["category_id"] === category["categoy_id"]
                 )
                 .map((room) => (
                   <ServerRoomButton
-                    type={
-                      room["channel_name"] === "음성 채널" ? "voice" : "chat"
-                    }
+                    type={room["type"] === 1 ? "voice" : "chat"}
                     text={room["channel_name"]}
                     serverId={serverId}
                     channelId={room["channel_id"]}
