@@ -274,7 +274,7 @@ function Publish(props: any) {
       });
       socket.on("newProducer", async function (message: any) {
         console.warn("IGNORE socket.io newProducer:", message);
-      });
+      }); // 원본
     });
   };
 
@@ -306,9 +306,9 @@ function Publish(props: any) {
       </button>
 
       <button disabled={isPublished || !isStartMedia} onClick={handlePublish}>
-        publish
+        publish 
       </button>
-      <button
+      <button 
         disabled={!isPublished || !isStartMedia}
         onClick={handleDisconnect}
       >
