@@ -28,6 +28,8 @@ const logger = new Logger();
 // const queue = new AwaitQueue();
 const rooms = new Map();
 
+
+
 let worker
 // let rooms = {}          // { roomName1: { Router, peers: [ socketId1, ... ] }, ...}
 let peers = {}          // { socketId1: { roomName1, socket, transports = [id1, id2,], producers = [id1, id2,] , consumers = [id1, id2,], peerDetails }, ...}
@@ -78,7 +80,7 @@ async function runExpressApp() {
     expressApp.use(bodyParser.json());
     expressApp.use(bodyParser.urlencoded({ extended: false }));
     // expressApp.use('/rooms/:roomId',express.static(__dirname + '/public'));
-    expressApp.get('/broadcast/:roomId', (req, res)=>{
+    expressApp.get('/test', (req, res)=>{
         res.send('연결성공')
     })
     
@@ -124,32 +126,26 @@ async function runWebServer(){
 }
 //=====================================================================================================
 
-
+const socketMain = require('./server/index');
+const broadcast = require('./server/video-broadcast');
 async function runSocketServer() {
     const io = Server(httpsServer, {
         cors: {
-            origin: [`https://localhost:${listenPort}`],
+            origin: '*',
             methods: ['GET', 'POST'],
-            transports: ['websocket'],  
         },
     });
-    // io.on('connection', (socket) => {
-    //     console.log('New user online');
-    //     socket.on('disconnect', () => {
-    //         console.log('User offline');
-    //     });
-    // });
 
-    connections = io.of('/video-broadcast')
-    connections.on('connection', async (socket) => {
-        console.log('client connected');
-        socket.emit("connect",{ socketId: socket.id, })
-        // if (await manage.getTransport(transports, socket.id).produce({
-        //     kind,
-        //     rtpParameters
-        // })) {
-        //     socket.emit('newProducer');
-        // }
+    
+    const broadcastIO = io.of('/video-broadcast');
+    broadcastIO.on('connection', async (socket) => {
+        consoleLog('conference');
+        if (await manage.getTransport(transports, socket.id).produce({
+            kind,
+            rtpParameters
+        })) {
+            socket.emit('newProducer');
+        }
 
         socket.on('disconnect', () => {
             console.log('client disconnected');
@@ -399,38 +395,3 @@ async function createConsumer(producer, rtpCapabilities, socketId) {
     };
 }
 
-    // socket.on('exitRoom', async({rtpCapabilities, remoteProducerId, serverside_ConsumerTransportId}, callback) =>{
-    //     // producers.forEach(producerData => console.log("아이디",producerData.producer.id, "종류", producerData.producer.kind))
-    //     // 접속한producer데이터 삭제
-    //     closeProducer(socket.id, rtpCapabilities, remoteProducerId, serverside_ConsumerTransportId)
-        
-    //     let producerTransport = manage.getTransport(transports, socket.id, false)
-    //     producerTransport.close([])
-
-    //     let item_consumers = manage.removeItems(consumers, socket.id, 'consumer')
-    //     consumers = item_consumers;
-    //     let item_producers = manage.removeItems(producers, socket.id, 'producer')
-    //     producers = item_producers;
-    //     let item_transports = manage.removeItems(transports, socket.id, 'transport')
-    //     transports = item_transports
-    //     if(peers[socket.id]){
-    //         const {roomName} = peers[socket.id]
-    //         delete peers[socket.id]
-    //         let room_ = rooms.get(roomName)
-    //         console.log(room_.peers)
-    //         room_.peers = room_.peers.filter(socketId => socketId !== socket.id)
-    //     }
-    //     callback()
-    // })
-
-    // socket.on('produceClose', async({rtpCapabilities, remoteProducerId, serverside_ConsumerTransportId}, callback) =>{
-    //     let producer_kind;
-    //     closeProducer(socket.id, rtpCapabilities, remoteProducerId, serverside_ConsumerTransportId, producer_kind)
-    //     let item_producers = manage.removeItems(producers, socket.id, 'producer', producer_kind)
-    //     producers = item_producers;
-    //     if(peers[socket.id]){
-    //         peers[socket.id].producers.filter(producerId => producerId !== remoteProducerId)
-    //         // remove socket from room
-    //     }
-    //     callback()
-    // })
