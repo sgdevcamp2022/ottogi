@@ -1,7 +1,7 @@
 const io = require('socket.io-client') // client-side
 const mediasoupClient = require('mediasoup-client')
 const socket = io('/mediasoup')
-const cnt = require('../src/connect')
+const cnt = require('./lib/connect')
 const config = require('../config')
 
 
@@ -192,6 +192,7 @@ const createSendTransport = async ()=>{
         }, ({id, producerExist}) => {
           // tell the transport that parameters were transmitted and provide
           // give producer's id for serverside
+          console.log("엥",id, producerExist)
           callback({id, producerExist})
           if(producerExist){
             getProducers()
@@ -223,10 +224,11 @@ const connectSendTransport = async()=>{
 
 // server have to inform the client of a new producer just joined // and ready for consume
 socket.on('new-producer',({producerId}) => signalNewConsumerTransport(producerId))
+
 const getProducers = () => {
   socket.emit('getProducers', (producerIds) =>{
     console.log("producer Ids", producerIds)
-    console.log(producerIds)
+    console.log("얍얍얍",producerIds)
     producerIds.forEach(id => signalNewConsumerTransport(id))
     // producerIds.forEach(signalNewConsumerTransport)
   })
