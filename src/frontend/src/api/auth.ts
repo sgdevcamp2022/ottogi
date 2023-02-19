@@ -1,7 +1,6 @@
 import clientApi from "./axios";
 
 interface ReissueParams {
-  accessToken: string;
   refreshToken: string;
 }
 interface LoginParams {
@@ -12,6 +11,8 @@ interface LoginParams {
 interface RegisterParams extends LoginParams {
   name: string;
 }
+
+const accessToken = sessionStorage.getItem("accessToken");
 
 const authApi = {
   login: async ({ email, password }: LoginParams) => {
@@ -26,7 +27,13 @@ const authApi = {
     });
   },
 
-  getUserInfo: async (accessToken: AccessTokenType) => {
+  logout: async () => {
+    return clientApi.get("/user/member/logout", {
+      headers: { Authorization: "Bearer " + accessToken },
+    });
+  },
+
+  getUserInfo: async () => {
     return await clientApi.get("/user/member/info", {
       headers: { Authorization: "Bearer " + accessToken },
     });
@@ -36,7 +43,7 @@ const authApi = {
     return await clientApi.post("/user/auth/email", { userCode });
   },
 
-  reissue: async ({ accessToken, refreshToken }: ReissueParams) => {
+  reissue: async ({ refreshToken }: ReissueParams) => {
     return await clientApi.post("/user/auth/reissue", {
       accessToken,
       refreshToken,

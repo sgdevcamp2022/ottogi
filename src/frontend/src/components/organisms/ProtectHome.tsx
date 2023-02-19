@@ -1,6 +1,4 @@
-import { COOKIE_KEY } from "@configs/cookie";
 import { ReactElement } from "react";
-import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
 
 interface ProtectAuthProps {
@@ -8,11 +6,9 @@ interface ProtectAuthProps {
 }
 
 const ProtectPage = ({ children }: ProtectAuthProps) => {
-  const [cookies] = useCookies([COOKIE_KEY]);
+  const accessToken = sessionStorage.getItem("accessToken");
 
-  return (
-    <>{cookies[COOKIE_KEY] ? children : <Navigate replace to="/login" />}</>
-  );
+  return <>{accessToken ? children : <Navigate replace to="/login" />}</>;
 };
 
 export default ProtectPage;

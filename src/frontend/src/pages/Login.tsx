@@ -19,7 +19,7 @@ const Login = () => {
   const [password, changePassword] = useInput();
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { mutate: login } = useLogin(email);
+  const { mutate: login } = useLogin();
 
   const onLoadRegister = () => navigate("/register");
 

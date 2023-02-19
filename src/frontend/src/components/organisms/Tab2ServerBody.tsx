@@ -19,10 +19,8 @@ interface RoomType {
 const Tab2ServerBody = () => {
   const navigate = useNavigate();
   const { serverId, channelId } = useParams();
-  const { accessToken } = useUserStore();
   const { data: res, isLoading } = useGetCategoryList({
     communityId: serverId,
-    accessToken,
   });
 
   const data = res?.data?.data;

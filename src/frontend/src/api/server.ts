@@ -1,9 +1,11 @@
 import clientApi from "./axios";
 
+const accessToken = sessionStorage.getItem("accessToken");
+
 const serverApi = {
   // 커뮤니티 리스트 가져옴
   getList: async ({ queryKey }: any) => {
-    const { userId, accessToken } = queryKey[1];
+    const { userId } = queryKey[1];
     return await clientApi.get(`/community/getlist/`, {
       params: { userId },
       headers: {
@@ -13,7 +15,7 @@ const serverApi = {
   },
   // 커뮤니티의 채널리스트 가져옴
   getChannel: async ({ queryKey }: any) => {
-    const { communityId, accessToken } = queryKey[1];
+    const { communityId } = queryKey[1];
     return await clientApi.get(`/community/getoption/`, {
       params: { communityId },
       headers: {
@@ -26,7 +28,6 @@ const serverApi = {
     // communityName,
     // img,
     // userId,
-    accessToken,
     formData,
   }: // profile,
   any) => {
@@ -50,7 +51,7 @@ const serverApi = {
     });
   },
   // 커뮤니티 이름 변경
-  update: async ({ communityName, communityId, userId, accessToken }: any) => {
+  update: async ({ communityName, communityId, userId }: any) => {
     return await clientApi.patch(
       "/community/update",
       {

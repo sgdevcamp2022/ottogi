@@ -19,8 +19,9 @@ interface addChatLogProps {
   imagePath: string;
 }
 
+const accessToken = sessionStorage.getItem("accessToken");
+
 const MainDirectBody = () => {
-  const { accessToken } = useUserStore();
   const { channelId = "" } = useParams();
   const scrollRef = useRef<null | HTMLDivElement>(null);
   const { userInfo } = useUserStore();

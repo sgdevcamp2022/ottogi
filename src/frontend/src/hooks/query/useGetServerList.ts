@@ -1,11 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import serverSettingApi from "@api/server";
 
-const useGetServerList = ({ userId, accessToken }: any) => {
-  return useQuery(
-    ["ServerList", { userId, accessToken }],
-    serverSettingApi.getList
-  );
+const useGetServerList = ({ userId }: any) => {
+  return useQuery(["ServerList", { userId }], serverSettingApi.getList);
 };
 
 export default useGetServerList;

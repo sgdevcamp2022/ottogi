@@ -52,17 +52,17 @@ const Router = () => {
       <Route
         path="/:serverId"
         element={
-          // <ProtectPage>
-          <Server />
-          // </ProtectPage>
+          <ProtectPage>
+            <Server />
+          </ProtectPage>
         }
       />
       <Route
         path="/:serverId/:channelId"
         element={
-          // <ProtectPage>
-          <Server />
-          // </ProtectPage>
+          <ProtectPage>
+            <Server />
+          </ProtectPage>
         }
       />
 

@@ -51,7 +51,7 @@ const MessageLogContainer = styled.div<{ hasImage: boolean }>`
   padding-top: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
   padding-bottom: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
   position: relative;
-  min-height: 1.375rem;
+  /* min-height: 1.375rem; */
   display: flex;
   flex-direction: row;
   align-items: center;

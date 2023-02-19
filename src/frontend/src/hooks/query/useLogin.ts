@@ -5,9 +5,9 @@ import { useMutation } from "@tanstack/react-query";
 import { useUserStore } from "@store/useUserStore";
 import authApi from "@api/auth";
 
-const useLogin = (email: string) => {
+const useLogin = () => {
   const [cookies, setCookie] = useCookies([COOKIE_KEY]);
-  const { setAccessToken, setUserInfo } = useUserStore();
+  const { setUserInfo } = useUserStore();
   const navigate = useNavigate();
 
   return useMutation(authApi.login, {
@@ -18,11 +18,11 @@ const useLogin = (email: string) => {
     }: any) => {
       const setTokens = () => {
         setCookie(COOKIE_KEY, refreshToken);
-        setAccessToken(accessToken);
+        sessionStorage.setItem("accessToken", accessToken);
       };
 
       const getUserInfo = async () => {
-        const { data } = await authApi.getUserInfo(accessToken);
+        const { data } = await authApi.getUserInfo();
         setUserInfo(data.data);
       };
 
