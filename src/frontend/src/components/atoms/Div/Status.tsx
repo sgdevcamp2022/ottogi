@@ -11,8 +11,8 @@ interface StatusProps {
 }
 
 const statusTable = {
-  "0": "on",
-  "1": "off",
+  "0": "off",
+  "1": "on",
   "2": "",
   "3": "",
 };
