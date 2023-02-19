@@ -6,7 +6,6 @@ import UserState80 from "./UserState80";
 
 const CardUserInfo = () => {
   const { userInfo } = useUserStore();
-  console.log(userInfo);
   return (
     <InfoContainer>
       <Logo>
@@ -26,8 +25,6 @@ const CardUserInfo = () => {
     </InfoContainer>
   );
 };
-
-export default CardUserInfo;
 
 const Logo = styled.div`
   width: 80px;
@@ -64,3 +61,5 @@ const NameWrapper = styled.div`
   width: auto;
   display: flex;
 `;
+
+export default CardUserInfo;

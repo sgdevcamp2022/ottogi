@@ -8,15 +8,24 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useUserStore } from "@store/useUserStore";
 import { COOKIE_KEY } from "@configs/cookie";
+import clientApi from "@api/axios";
 
 const ServerSettingBar = () => {
+  const { accessToken } = useUserStore();
   const [number, setNumber] = useState("");
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([COOKIE_KEY]);
   const { resetUser } = useUserStore();
 
-  const logout = () => {
-    console.log(1);
+  const logoutApi = async () => {
+    return clientApi.get("/user/member/logout", {
+      headers: { Authorization: "Bearer " + accessToken },
+    });
+  };
+
+  const logout = async () => {
+    await logoutApi();
+
     removeCookie(COOKIE_KEY);
     resetUser();
     navigate("/login");

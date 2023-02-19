@@ -87,12 +87,11 @@ const MainDirectBody = () => {
           Authorization: "Bearer " + accessToken,
         },
       });
-      setChatLog(data.data.data);
+      setChatLog(data.data.data || []);
     };
 
     getChatLogs();
     connectChatRoom();
-
     return () => disconnectChatRoom();
   }, []);
 

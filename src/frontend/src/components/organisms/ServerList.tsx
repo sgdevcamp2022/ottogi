@@ -24,16 +24,6 @@ const ServerList = () => {
     accessToken,
   });
   const [num, setNum] = useState<Number>();
-  const onMain = () => {
-    navigate("/@me");
-  };
-  const onServer = (v: Number) => {
-    setNum(v);
-    navigate("/" + v);
-  };
-  const onCreateServer = () => {
-    navigate("/CreateServer");
-  };
 
   if (isLoading) return <></>;
 
@@ -48,13 +38,19 @@ const ServerList = () => {
       }
     }
   }
-  // useEffect(() => {
-  //   console.log(res);
-  //   console.log("hello");
 
-  // }, [data, List]);
+  const onMain = () => {
+    navigate("/@me");
+  };
 
-  // if (!res?.data) return <></>;
+  const onServer = (v: Number) => {
+    setNum(v);
+    navigate("/" + v);
+  };
+
+  const onCreateServer = () => {
+    navigate("/CreateServer");
+  };
 
   return (
     <BarContainer>
@@ -77,9 +73,7 @@ const ServerList = () => {
                     avatarHeight={3}
                     avatarWidth={3}
                     name={v.name}
-                    // name="name"
                     id={v.community_id}
-                    // id={1}
                   />
                 </li>
               );
