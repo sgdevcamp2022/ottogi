@@ -1,6 +1,6 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType, ColorType } from "../../../styles/theme";
+import { BackgroundColorType, ColorType } from "@styles/theme";
 
 interface ButtonProps {
   text: string;
@@ -32,11 +32,9 @@ const FieldButton = ({
   );
 };
 
-export const ButtonContainer = styled.button<{
-  color: ColorType;
-  backgroundColor: BackgroundColorType;
-  fontWeight: "normal" | "bold";
-}>`
+export const ButtonContainer = styled.button<
+  Omit<ButtonProps, "text" | "onClick">
+>`
   text-align: center;
   border: none;
   width: 100%;

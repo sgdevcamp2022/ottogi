@@ -1,24 +1,96 @@
 import styled from "styled-components";
 import { Divider } from "../atoms/Div/Divider.stories";
 import ServerImage from "../atoms/Div/ServerImage";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AddIcon from "@components/atoms/Icons/AddIcon";
+import useGetServerList from "@hooks/query/useGetServerList";
+import { useUserStore } from "@store/useUserStore";
+import ScrollableBox from "@components/molecules/Div/scrollableBox";
+
+interface community {
+  img: string;
+  community_id: Number;
+  name: string;
+}
 
 const ServerList = () => {
+  // const [userId, setUserId] = useState<Number>();
+  const navigate = useNavigate();
+  const [data, setData] = useState<community[]>([]);
+  const { userInfo, accessToken } = useUserStore();
+  const { data: res, isLoading } = useGetServerList({
+    userId: userInfo.id,
+    accessToken,
+  });
+  const [num, setNum] = useState<Number>();
+  const onMain = () => {
+    navigate("/@me");
+  };
+  const onServer = (v: Number) => {
+    setNum(v);
+    navigate("/" + v);
+  };
+  const onCreateServer = () => {
+    navigate("/CreateServer");
+  };
+
+  if (isLoading) return <></>;
+
+  const List = res?.data.data[0].split("},");
+
+  if (List.length > 1 && data.length < List?.length) {
+    for (let i = 0; i < List?.length; i++) {
+      if (i !== List.length - 1) {
+        data.push(JSON.parse(List[i] + "}"));
+      } else {
+        data.push(JSON.parse(List[i]));
+      }
+    }
+  }
+  // useEffect(() => {
+  //   console.log(res);
+  //   console.log("hello");
+
+  // }, [data, List]);
+
+  // if (!res?.data) return <></>;
+
   return (
     <BarContainer>
-      <ServerImage
-        onMouseover={() => console.log(1)}
-        onClick={() => console.log(1)}
-      />
-      <Divider />
-      <ul>
-        <li>
-          <ClickedWrapper />
-          <ServerImage
-            onMouseover={() => console.log(1)}
-            onClick={() => console.log(1)}
-          />
-        </li>
-      </ul>
+      <ScrollableBox>
+        <ul>
+          <li onClick={onMain}>
+            <ServerImage
+              avatarHeight={3}
+              avatarWidth={3}
+              name="메인"
+              id={10000}
+            />
+          </li>
+          <Divider />
+          {!isLoading &&
+            data.map((v: any) => {
+              return (
+                <li onClick={() => onServer(v.community_id)}>
+                  <ServerImage
+                    avatarHeight={3}
+                    avatarWidth={3}
+                    name={v.name}
+                    // name="name"
+                    id={v.community_id}
+                    // id={1}
+                  />
+                </li>
+              );
+            })}
+          <li onClick={onCreateServer}>
+            <ServerImage avatarHeight={3} avatarWidth={3} name="" id={10001}>
+              <AddIcon />
+            </ServerImage>
+          </li>
+        </ul>
+      </ScrollableBox>
     </BarContainer>
   );
 };
@@ -27,10 +99,9 @@ export default ServerList;
 
 const BarContainer = styled.div`
   width: 4.5rem;
-  height: 67.5rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding-top: 0.75rem;
   background-color: ${({ theme }) => theme.backgroundColor.tab1};
   ul {
@@ -42,26 +113,8 @@ const BarContainer = styled.div`
   li {
     width: 100%;
     display: flex;
-    margin-bottom: 1rem;
-    justify-content: center;
     position: relative;
+    padding: 0;
+    left: 0;
   }
-`;
-
-const ClickedWrapper = styled.div`
-  height: 40px;
-  left: 0px;
-  list-style-type: none;
-  line-height: 16px;
-  width: 8px;
-  top: 0px;
-  background-color: #fff;
-  border-radius: 0 1rem 1rem 0;
-  justify-content: flex-start;
-  vertical-align: baseline;
-  user-select: none;
-  margin-left: -0.25rem;
-  margin-top: 0.125rem;
-  opacity: 1;
-  position: absolute;
 `;

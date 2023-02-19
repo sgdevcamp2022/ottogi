@@ -1,45 +1,68 @@
-import { useMutation } from "@tanstack/react-query";
+import CancelIcon from "@components/atoms/Icons/CancelIcon";
+import CheckIcon from "@components/atoms/Icons/CheckIcon";
+import useAcceptFriend from "@hooks/query/useAcceptFriend";
+import useRejectFriend from "@hooks/query/useRejectFriend";
+import { useUserStore } from "@store/useUserStore";
 import { ReactElement } from "react";
-import friendApi from "../../../api/friend";
-import useAcceptFriend from "../../../hooks/query/useAcceptFriend";
-import useCancelFriend from "../../../hooks/query/useCancelFriend";
-import useRejectFriend from "../../../hooks/query/useRejectFriend";
-import { useUserStore } from "../../../store/useUserStore";
-import CancelIcon from "../../atoms/Icons/CancelIcon";
-import CheckIcon from "../../atoms/Icons/CheckIcon";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import RoundButton from "../Button/RoundButton";
 import FriendBox from "./FriendBox";
 
-type WaitingStatusType = "REQUEST" | "WAIT";
-
 interface FriendWaitingBoxProps {
   name: string;
-  status: WaitingStatusType;
+  email: string;
+  status: FriendStateType;
 }
 
-const FriendWaitingBox = ({ name, status }: FriendWaitingBoxProps) => {
-  const { userInfo } = useUserStore();
+const FriendWaitingBox = ({ name, email, status }: FriendWaitingBoxProps) => {
+  const navigate = useNavigate();
+  const { userInfo, accessToken } = useUserStore();
   const { mutate: acceptFriend } = useAcceptFriend();
   const { mutate: rejectFriend } = useRejectFriend();
-  const { mutate: cancelFriend } = useCancelFriend();
 
-  if (!userInfo) return <></>;
+  if (!userInfo) navigate("/login");
 
-  const params = { email: userInfo.email, accessToken: userInfo.accessToken };
+  const params = { email, accessToken: accessToken };
 
   let Buttons: ReactElement;
-  if (status === "REQUEST") {
+  if (status === "WAIT") {
     Buttons = (
       <>
-        <RoundButton Icon={<CheckIcon />} onClick={() => acceptFriend(params)} />
-        <RoundButton Icon={<CancelIcon />} onClick={() => rejectFriend(params)} />
+        <RoundButton
+          Icon={<CheckIcon />}
+          onClick={() => acceptFriend(params)}
+        />
+        <RoundButton
+          Icon={
+            <CancelIconWrapper>
+              <CancelIcon />
+            </CancelIconWrapper>
+          }
+          onClick={() => rejectFriend(params)}
+        />
       </>
     );
   } else {
-    Buttons = <RoundButton Icon={<CancelIcon />} onClick={() => cancelFriend(params)} />;
+    Buttons = (
+      <RoundButton Icon={<CancelIcon />} onClick={() => rejectFriend(params)} />
+    );
   }
 
-  return <FriendBox name={name} status={`${status === "REQUEST" ? "받은" : "보낸"} 친구 요청`} onClick={() => null} Buttons={Buttons} />;
+  return (
+    <FriendBox
+      name={name}
+      status={`${status === "WAIT" ? "받은" : "보낸"} 친구 요청`}
+      onClick={() => null}
+      Buttons={Buttons}
+    />
+  );
 };
+
+const CancelIconWrapper = styled.div`
+  &:hover {
+    color: ${({ theme }) => theme.backgroundColor["voice-hangup"]};
+  }
+`;
 
 export default FriendWaitingBox;

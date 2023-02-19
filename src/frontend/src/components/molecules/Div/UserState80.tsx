@@ -1,31 +1,31 @@
+import LogoImage from "@components/atoms/Div/LogoImage";
+import Status from "@components/atoms/Div/Status";
 import styled from "styled-components";
-import { StatusColorType } from "../../../styles/theme";
-import StateDisturbIcon from "../../atoms/Icons/StateDisturbIcon";
-import StateEmptyIcon from "../../atoms/Icons/StateEmptyIcon";
-import StateMobileIcon from "../../atoms/Icons/StateMobileIcon";
-import StateOffIcon from "../../atoms/Icons/StateOffIcon";
-import StateOnIcon from "../../atoms/Icons/StateOnIcon";
+import mask from "../../../assets/mask/avatar-mask-80.png";
 
 export type StateType = "on" | "off" | "disturb" | "mobile" | "empty";
 
 interface UserStateProps {
   status?: StateType;
-  fontSize?: number;
+  fontSize?: string;
+  src?: string;
 }
 
-const UserState80 = ({ status = "on", fontSize = 16 }: UserStateProps) => {
+const UserState80 = ({
+  src,
+  status = "on",
+  fontSize = "24px",
+}: UserStateProps) => {
   return (
     <UserStateContainer>
-      {/* <Mask>
-        <LogoImage onClick={() => null} />
+      <Mask>
+        <div style={{ backgroundColor: "black", width: 80, height: 80 }}>
+          <LogoImage width={5} height={5} onClick={() => null} />
+        </div>
       </Mask>
-      <IconWrapper status={status}>
-        {status === "on" && <StateOnIcon fontSize={fontSize} />}
-        {status === "off" && <StateOffIcon fontSize={fontSize} />}
-        {status === "disturb" && <StateDisturbIcon fontSize={fontSize} />}
-        {status === "mobile" && <StateMobileIcon fontSize={fontSize} />}
-        {status === "empty" && <StateEmptyIcon fontSize={fontSize} />}
-      </IconWrapper> */}
+      <IconWrapper>
+        <Status status={status} fontSize={fontSize} />
+      </IconWrapper>
     </UserStateContainer>
   );
 };
@@ -35,18 +35,17 @@ const UserStateContainer = styled.div`
 `;
 
 const Mask = styled.div`
-  width: 32px;
-  height: 32px;
-  mask-image: url("avatar-mask-32.png");
+  width: 80px;
+  height: 80px;
+  mask-image: url(${mask});
   mask-size: contain;
   mask-repeat: no-repeat;
 `;
 
-const IconWrapper = styled.div<{ status: StatusColorType }>`
+const IconWrapper = styled.div`
   position: absolute;
-  transform: translate(120%, -70%);
+  transform: translate(230%, -90%);
   border-radius: 25px;
-  color: ${({ theme, status }) => theme.statusColor[status]};
 `;
 
 export default UserState80;

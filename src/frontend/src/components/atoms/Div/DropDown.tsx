@@ -3,7 +3,6 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 import styled from "styled-components";
-import { Avatar, Menu } from "@mui/material";
 
 const DropDown = () => {
   const [server, setServer] = useState("");
@@ -19,18 +18,13 @@ const DropDown = () => {
         onChange={handleChange}
         sx={{ color: "white", display: "flex", flexDirection: "row" }}
       >
-        <StyledItem value={10}>
-          <Avatar />
-          Ten
-        </StyledItem>
+        <StyledItem value={10}>Ten</StyledItem>
         <StyledItem value={20}>Twenty</StyledItem>
         <StyledItem value={30}>Thirty</StyledItem>
       </Select>
     </StyledFormControl>
   );
 };
-
-export default DropDown;
 
 const StyledFormControl = styled(FormControl)`
   width: 100%;
@@ -44,3 +38,5 @@ const StyledItem = styled(MenuItem)`
   color: ${({ theme }) => theme.color["white"]};
   display: flex;
 `;
+
+export default DropDown;

@@ -1,9 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import friendApi from "../../api/friend";
-import { UserInfoType } from "../../store/useUserStore";
+import friendApi from "@api/friend";
 
-const useGetFriendList = (userInfo: UserInfoType) => {
-  return useQuery(["friend", { email: userInfo?.email, accessToken: userInfo?.accessToken }], friendApi.getAll);
+interface useGetFriendListProps {
+  email: string;
+  accessToken: AccessTokenType;
+}
+
+const useGetFriendList = ({ email, accessToken }: useGetFriendListProps) => {
+  return useQuery(["friendList", { email, accessToken }], friendApi.getAll);
 };
 
 export default useGetFriendList;

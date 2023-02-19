@@ -1,5 +1,6 @@
 import DivServerImage from "./ServerImage";
 import { action } from "@storybook/addon-actions";
+import AddIcon from "../Icons/AddIcon";
 
 export default {
   title: "atoms/div",
@@ -7,5 +8,7 @@ export default {
 };
 
 export const ServerImage = () => (
-  <DivServerImage onMouseover={action("hover")} onClick={action("clicked")} />
+  <DivServerImage avatarHeight={3} avatarWidth={3} id={3} name="서버1">
+    <AddIcon />
+  </DivServerImage>
 );

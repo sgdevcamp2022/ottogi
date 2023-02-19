@@ -1,30 +1,37 @@
 import styled from "styled-components";
-import { ColorType, FontSizeType } from "../../../styles/theme";
+import { ColorType, FontSizeType } from "@styles/theme";
 
 interface SpanProps {
   text: string;
   color?: ColorType;
   fontSize?: FontSizeType;
+  fontWeight?: string;
   mr?: number;
 }
 
-const SpanText = ({ text, color = "inherit", fontSize = "base", mr = 0 }: SpanProps) => {
+const SpanText = ({
+  text,
+  color = "inherit",
+  fontSize = "base",
+  fontWeight = "normal",
+  mr = 0,
+}: SpanProps) => {
   return (
-    <SpanTextContainer color={color} fontSize={fontSize} mr={mr}>
+    <SpanTextContainer
+      color={color}
+      fontSize={fontSize}
+      fontWeight={fontWeight}
+      mr={mr}
+    >
       {text}
     </SpanTextContainer>
   );
 };
 
-interface SpanTextContainerProps {
-  color: ColorType;
-  fontSize: FontSizeType;
-  mr: number;
-}
-
-const SpanTextContainer = styled.span<SpanTextContainerProps>`
+const SpanTextContainer = styled.span<Omit<SpanProps, "text">>`
   color: ${({ theme, color }) => theme.color[color]};
   font-size: ${({ theme, fontSize }) => theme.fontSize[fontSize]};
+  font-weight: ${({ fontWeight }) => fontWeight};
   margin-right: ${({ mr }) => mr}px;
 `;
 

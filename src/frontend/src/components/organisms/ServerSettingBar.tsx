@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import Text from "../atoms/Text/Text";
-import SettingButton from "../atoms/Button/SettingButton";
-import { Divider } from "@mui/material";
+import ServerSettingButton from "../atoms/Button/ServerSettingButton copy";
 
 const ServerSettingBar = () => {
   return (
     <BarContainer>
       <Header>
         <Text
-          text="사용자 설정"
+          text="개별 서버 방 이름"
           fontSize="xs"
           color="msg-hover"
           mb={6}
@@ -17,37 +16,33 @@ const ServerSettingBar = () => {
       </Header>
       <ul>
         <li>
-          <SettingButton
-            text="내 계정"
+          <ServerSettingButton
+            status={"일반"}
+            text="일반"
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
         </li>
         <li>
-          <SettingButton
-            text="프로필"
+          <ServerSettingButton
+            text="멤버"
+            status={"멤버"}
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
         </li>
         <li>
-          <SettingButton
-            text="알림"
+          <ServerSettingButton
+            text="초대"
+            status={"초대"}
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
         </li>
-
+        {/* 
         <Divider
-          sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 1, mt: 1, mb: 1 }}
-        />
-        <li>
-          <SettingButton
-            text="로그아웃"
-            backgroundColor="voice-icon"
-            onClick={() => console.log(1)}
-          />
-        </li>
+          sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 1, mt: 1, mb: 2 }}
+        /> */}
       </ul>
     </BarContainer>
   );

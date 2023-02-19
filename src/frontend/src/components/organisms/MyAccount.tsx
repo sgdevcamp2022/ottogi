@@ -4,8 +4,12 @@ import SettingWrapper from "./SettingWrapper";
 import { Divider } from "@mui/material";
 import FieldButton from "../atoms/Button/fieldButton";
 import styled from "styled-components";
+import useDeleteUser from "@hooks/query/useDeleteUser";
+import { useUserStore } from "@store/useUserStore";
 
 const MyAccount = () => {
+  const { mutate: deleteUser } = useDeleteUser();
+  const { userInfo, accessToken } = useUserStore();
   return (
     <SettingWrapper>
       <>
@@ -20,7 +24,7 @@ const MyAccount = () => {
         <Divider
           sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 9, mt: 5, mb: 5 }}
         />
-        <Text
+        {/* <Text
           text="비밀번호"
           color="white"
           fontWeight="bold"
@@ -31,17 +35,28 @@ const MyAccount = () => {
           <FieldButton
             text="비밀번호 변경하기"
             onClick={() => console.log(1)}
+            fontWeight="bold"
           />
         </ButtonWrappper>
         <Divider
           sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 9, mt: 5, mb: 5 }}
+        /> */}
+        <Text
+          text={"계정 삭제하기"}
+          color="setting-tab"
+          fontSize="xs"
+          mb={10}
         />
-        <Text text={"계정 삭제하기"} color="setting-tab" fontSize="xs" mb={5} />
         <ButtonWrappper2>
           <FieldButton
             text="계정 삭제하기"
-            onClick={() => console.log(1)}
+            onClick={() =>
+              deleteUser({
+                accessToken: accessToken,
+              })
+            }
             backgroundColor="voice-hangup"
+            fontWeight="bold"
           />
         </ButtonWrappper2>
       </>
@@ -52,7 +67,7 @@ const MyAccount = () => {
 export default MyAccount;
 
 const ButtonWrappper = styled.div`
-  width: 8.5rem;
+  width: 10em;
   height: 2rem;
 `;
 

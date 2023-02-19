@@ -1,6 +1,6 @@
+import LogoImage from "@components/atoms/Div/LogoImage";
+import MessageText from "@components/atoms/Div/MessageText";
 import styled from "styled-components";
-import LogoImage from "../../atoms/Div/LogoImage";
-import MessageText from "../../atoms/Div/MessageText";
 import MessageHoverButtons from "../Button/MessageHoverButtons";
 import MessageUserDate from "./MessageUserDate";
 
@@ -8,28 +8,48 @@ interface MessageLogProps {
   hasImage?: boolean;
   imageUrl?: string;
   name?: string;
-  createdAt: Date;
+  createdAt: string;
   text: string;
 }
 
-const MessageLog = ({ text, hasImage = false, createdAt }: MessageLogProps) => {
+const MessageLog = ({
+  text,
+  name,
+  hasImage = false,
+  imageUrl,
+  createdAt,
+}: MessageLogProps) => {
   return (
-    <MessageLogContainer>
-      <MessageHoverButtons />
+    <MessageLogContainer hasImage={hasImage}>
+      {/* <MessageHoverButtons /> */}
       {hasImage && (
         <LogoImageContainer>
-          <LogoImage onClick={() => null} />
+          <LogoImage
+            src={imageUrl}
+            height={2.5}
+            width={2.5}
+            onClick={() => null}
+          />
         </LogoImageContainer>
       )}
       <TextContainer>
-        {hasImage && <MessageUserDate name="nno3onn" createdAt={new Date()} />}
-        <MessageText text={text} hasDate={!hasImage} />
+        {hasImage && name && (
+          <MessageUserDate name={name} createdAt={createdAt} />
+        )}
+        <MessageText
+          text={text}
+          hasDate={!hasImage}
+          createdAt={new Date(createdAt)}
+        />
       </TextContainer>
     </MessageLogContainer>
   );
 };
 
-const MessageLogContainer = styled.div`
+const MessageLogContainer = styled.div<{ hasImage: boolean }>`
+  margin-top: ${({ hasImage }) => (hasImage ? 16 : 0)}px;
+  padding-top: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
+  padding-bottom: ${({ hasImage }) => (hasImage ? 12 : 0)}px;
   position: relative;
   min-height: 1.375rem;
   display: flex;
@@ -45,7 +65,6 @@ const MessageLogContainer = styled.div`
 `;
 
 const LogoImageContainer = styled.div`
-  position: relative;
   margin-left: 16px;
 `;
 

@@ -1,18 +1,10 @@
-import { ReactElement } from "react";
 import styled from "styled-components";
 
-interface ScrollableBoxProps {
-  children: ReactElement;
-}
-
-const ScrollableBox = ({ children }: ScrollableBoxProps) => {
-  return <ScrollableContainer>{children}</ScrollableContainer>;
-};
-
-const ScrollableContainer = styled.div`
-  /* background-color: red; */
+const ScrollableBox = styled.div`
   width: 100%;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 
   ::-webkit-scrollbar {
     width: 8px; /* 스크롤바의 너비 */

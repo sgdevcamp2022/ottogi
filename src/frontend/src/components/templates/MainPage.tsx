@@ -1,31 +1,27 @@
 import styled from "styled-components";
 import MainBody from "../organisms/MainBody";
 import ServerList from "../organisms/ServerList";
-import Tab2Body from "../organisms/Tab2Body";
+import Tab2MainBody from "../organisms/Tab2MainBody";
 import Tab2Footer from "../organisms/Tab2Footer";
 import Tab2MainHeader from "../organisms/Tab2MainHeader";
-import Tab3Header from "../organisms/Tab3Header";
+import Tab3MainHeader from "../organisms/Tab3MainHeader";
 
 const MainPage = () => {
   return (
     <>
-      <Tab1Container>
-        <ServerList />
-      </Tab1Container>
+      <ServerList />
       <Tab2Container>
         <Tab2MainHeader />
-        <Tab2Body />
-        <Tab2Footer name="nno3onn" />
+        <Tab2MainBody />
+        <Tab2Footer />
       </Tab2Container>
       <Tab3Container>
-        <Tab3Header />
+        <Tab3MainHeader />
         <MainBody />
       </Tab3Container>
     </>
   );
 };
-
-const Tab1Container = styled.div``;
 
 const Tab2Container = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor.tab2};

@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import useInput from "../../hooks/common/useInput";
+import useInput from "@hooks/common/useInput";
+import useGetFriendList from "@hooks/query/useGetFriendList";
+import { useUserStore } from "@store/useUserStore";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
 import FriendDefaultBox from "../molecules/Div/FriendDefaultBox";
@@ -7,29 +8,40 @@ import ScrollableBox from "../molecules/Div/scrollableBox";
 import LabelText from "../molecules/Text/LabelText";
 
 const MainOnline = () => {
-  const num = 10;
+  const {
+    userInfo: { email },
+    accessToken,
+  } = useUserStore();
+  const { data, isSuccess } = useGetFriendList({ email, accessToken });
   const [value, onChangeValue] = useInput();
+
+  if (!isSuccess) return <></>;
+
+  const friendList: FriendType[] = data.data.data.filter(
+    (friend: FriendType) => friend.friendState === "ACCEPTED"
+  );
+  const num = friendList.length;
+
   return (
-    <MainOnlineContainer>
+    <>
       {num > 0 ? (
         <>
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"온라인"} num={num} />
           <ScrollableBox>
-            <>
-              {new Array(num).fill(null).map((v, idx) => (
-                <FriendDefaultBox id={idx} name="nno3onn" />
-              ))}
-            </>
+            {friendList.map(({ email, name, channelId }) => (
+              <FriendDefaultBox key={email} id={channelId} name={name} />
+            ))}
           </ScrollableBox>
         </>
       ) : (
-        <EmptyContainer image="sleep" text="아무도 Ottogi와 놀고 싶지 않은가 봐요." />
+        <EmptyContainer
+          image="sleep"
+          text="아무도 Ottogi와 놀고 싶지 않은가 봐요."
+        />
       )}
-    </MainOnlineContainer>
+    </>
   );
 };
-
-const MainOnlineContainer = styled.div``;
 
 export default MainOnline;

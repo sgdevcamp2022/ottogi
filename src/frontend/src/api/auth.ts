@@ -17,8 +17,19 @@ const authApi = {
   login: async ({ email, password }: LoginParams) => {
     return await clientApi.post("/user/auth/login", { email, password });
   },
+
   register: async ({ email, name, password }: RegisterParams) => {
-    return await clientApi.post("/user/auth/register", { email, name, password });
+    return await clientApi.post("/user/auth/register", {
+      email,
+      name,
+      password,
+    });
+  },
+
+  getUserInfo: async (accessToken: AccessTokenType) => {
+    return await clientApi.get("/user/member/info", {
+      headers: { Authorization: "Bearer " + accessToken },
+    });
   },
 
   verify: async (userCode: string) => {
@@ -26,7 +37,10 @@ const authApi = {
   },
 
   reissue: async ({ accessToken, refreshToken }: ReissueParams) => {
-    return await clientApi.post("/user/auth/reissue", { accessToken, refreshToken });
+    return await clientApi.post("/user/auth/reissue", {
+      accessToken,
+      refreshToken,
+    });
   },
 };
 

@@ -1,28 +1,28 @@
+import FieldButton from "@components/atoms/Button/fieldButton";
+import Text from "@components/atoms/Text/Text";
+import { useUserStore } from "@store/useUserStore";
 import styled from "styled-components";
-import FieldButton from "../../atoms/Button/fieldButton";
-import Text from "../../atoms/Text/Text";
+import UserState80 from "./UserState80";
 
 const CardUserInfo = () => {
+  const { userInfo } = useUserStore();
+  console.log(userInfo);
   return (
     <InfoContainer>
-      <Logo />
+      <Logo>
+        <UserState80 />
+      </Logo>
       <NameWrapper>
-        <Text text="UserName" fontSize="lg" fontWeight="bold" color="white" />
         <Text
-          text="UserName"
+          text={userInfo.name}
           fontSize="lg"
           fontWeight="bold"
-          color="setting-tab"
+          color="white"
         />
       </NameWrapper>
-      <>
-        <ButtonWrappper>
-          <FieldButton
-            text="사용자 프로필 편집"
-            onClick={() => console.log(1)}
-          />
-        </ButtonWrappper>
-      </>
+      <ButtonWrapper>
+        <FieldButton text="사용자 프로필 편집" onClick={() => console.log(1)} />
+      </ButtonWrapper>
     </InfoContainer>
   );
 };
@@ -32,14 +32,14 @@ export default CardUserInfo;
 const Logo = styled.div`
   width: 80px;
   height: 80px;
-  background-color: yellow;
+  background-color: ${({ theme }) => theme.backgroundColor["voice-nobody"]};
   position: absolute;
-  top: 82px;
-  left: 22px;
+  top: 75px;
+  left: 20px;
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
   border-radius: 3rem;
-  border: 0.125rem solid white;
+  border: 0.25rem solid ${({ theme }) => theme.backgroundColor["voice-nobody"]}; ;
 `;
 
 const InfoContainer = styled.div`
@@ -55,7 +55,7 @@ const InfoContainer = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor["voice-nobody"]};
 `;
 
-const ButtonWrappper = styled.div`
+const ButtonWrapper = styled.div`
   width: auto;
   height: 2rem;
 `;

@@ -1,6 +1,6 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
-import { ColorType } from "../../../styles/theme";
+import { ColorType } from "@styles/theme";
 
 interface LinkTextProps {
   text: string;

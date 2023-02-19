@@ -1,29 +1,40 @@
 import styled from "styled-components";
-import DefaultModal from "../components/organisms/DefaultModal";
+import AuthModal from "../components/organisms/AuthModal";
 import HeaderHelmet from "../components/atoms/Helmet";
 import { useRegisterStore } from "../store/useRegisterStore";
-import ReigsterStep1 from "../components/organisms/RegisterStep1";
-import ReigsterStep2 from "../components/organisms/RegisterStep2";
-import ReigsterStep3 from "../components/organisms/RegisterStep3";
+import RegisterStep1 from "../components/organisms/RegisterStep1";
+import RegisterStep2 from "../components/organisms/RegisterStep2";
+import RegisterStep3 from "../components/organisms/RegisterStep3";
+import { useEffect } from "react";
+import backgroundImage from "../assets/images/auth.png";
 
 const Register = () => {
-  const { step } = useRegisterStore(({ step }) => ({ step }));
+  const { step, resetStep } = useRegisterStore(({ step, resetStep }) => ({
+    step,
+    resetStep,
+  }));
+
+  useEffect(() => {
+    resetStep();
+  }, []);
+
+  const getRegisterComponent = [RegisterStep1, RegisterStep2, RegisterStep3];
+  const Component = getRegisterComponent[step - 1];
+
   return (
     <LoginContainer>
       <HeaderHelmet title="회원가입 | Discord" />
-      <DefaultModal width={480}>
-        <>
-          {step === 1 && <ReigsterStep1 />}
-          {step === 2 && <ReigsterStep2 />}
-          {step === 3 && <ReigsterStep3 />}
-        </>
-      </DefaultModal>
+      <AuthModal width={480}>
+        <Component />
+      </AuthModal>
     </LoginContainer>
   );
 };
 
 const LoginContainer = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor.primary};
+  background-image: url(${backgroundImage});
+  background-size: cover;
+  background-position: center;
 `;
 
 export default Register;

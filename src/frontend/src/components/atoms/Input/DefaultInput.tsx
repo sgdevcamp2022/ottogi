@@ -1,14 +1,11 @@
 import { ChangeEventHandler } from "react";
 import styled from "styled-components";
-import {
-  BackgroundColorType,
-  ColorType,
-  FontSizeType,
-} from "../../../styles/theme";
+import { BackgroundColorType, ColorType, FontSizeType } from "@styles/theme";
 
 interface DefaultInputProps {
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  type: string;
   maxLength?: number;
   width?: number | string;
   height?: number | string;
@@ -22,6 +19,7 @@ interface DefaultInputProps {
 const DefaultInput = ({
   value,
   onChange,
+  type = "text",
   maxLength = 524288,
   width = "100%",
   height = "100%",
@@ -35,6 +33,7 @@ const DefaultInput = ({
     <DefaultInputContainer
       value={value}
       onChange={onChange}
+      type={type}
       maxLength={maxLength}
       width={width}
       height={height}
@@ -47,16 +46,17 @@ const DefaultInput = ({
   );
 };
 
-interface DefaultInputContainerProps {
-  width: number | string;
-  height: number | string;
-  placeholderColor: ColorType;
-  fontSize: FontSizeType;
-  color: ColorType;
-  backgroundColor: BackgroundColorType;
-}
-
-const DefaultInputContainer = styled.input<DefaultInputContainerProps>`
+const DefaultInputContainer = styled.input<
+  Pick<
+    DefaultInputProps,
+    | "width"
+    | "height"
+    | "placeholderColor"
+    | "fontSize"
+    | "color"
+    | "backgroundColor"
+  >
+>`
   width: ${({ width }) => (width === "100%" ? "100%" : `${width}px`)};
   height: ${({ height }) => (height === "100%" ? "100%" : `${height}px`)};
   padding: 0.625rem;

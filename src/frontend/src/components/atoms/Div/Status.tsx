@@ -1,5 +1,5 @@
+import { StateType } from "@components/molecules/Div/UserState32";
 import styled from "styled-components";
-import { StateType } from "../../molecules/Div/UserState32";
 import StateDisturbIcon from "../Icons/StateDisturbIcon";
 import StateEmptyIcon from "../Icons/StateEmptyIcon";
 import StateMobileIcon from "../Icons/StateMobileIcon";

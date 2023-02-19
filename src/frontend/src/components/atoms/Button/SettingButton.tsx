@@ -1,6 +1,7 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
-import { BackgroundColorType, ColorType } from "../../../styles/theme";
+import { BackgroundColorType, ColorType } from "@styles/theme";
+import useUserSetStore, { UserSettingType } from "@store/useUserSetStore";
 
 interface SettingButtonProps {
   text: string;
@@ -9,34 +10,57 @@ interface SettingButtonProps {
   color?: ColorType;
   backgroundColor?: BackgroundColorType;
   disabled?: boolean;
+  status: UserSettingType;
 }
 
 const SettingButton = ({
   text,
   onClick,
   fontWeight = "normal",
-  color = "white",
-  backgroundColor = "primary",
   disabled = false,
+  status,
 }: SettingButtonProps) => {
+  const { userStatus, userSettingStatus } = useUserSetStore(
+    ({ userStatus, userSettingStatus }) => ({
+      userStatus,
+      userSettingStatus,
+    })
+  );
+
+  const getColor = (status: UserSettingType) => {
+    return status === userStatus ? "white" : "tab3-header";
+  };
+
+  // const getHoverColor = (status: UserSettingType) => {
+  //   return status === userStatus ? "white" : "icon";
+  // };
+
+  const getBackgroundColor = (status: UserSettingType) => {
+    return status === userStatus ? "active" : "trans";
+  };
+
+  // const getHoverBackgroundColor = () => {
+  //   return "active";
+  // };
+
+  const changeUserStatus = (mainStatus: UserSettingType) => {
+    userSettingStatus(mainStatus);
+  };
   return (
     <SettingButtonContainer
-      disabled={disabled}
-      onClick={onClick}
+      onClick={() => changeUserStatus(status)}
       fontWeight={fontWeight}
-      color={color}
-      backgroundColor={backgroundColor}
+      color={getColor(status)}
+      backgroundColor={getBackgroundColor(status)}
     >
       {text}
     </SettingButtonContainer>
   );
 };
 
-export const SettingButtonContainer = styled.button<{
-  color: ColorType;
-  backgroundColor: BackgroundColorType;
-  fontWeight: "normal" | "bold";
-}>`
+export const SettingButtonContainer = styled.button<
+  Pick<SettingButtonProps, "color" | "backgroundColor" | "fontWeight">
+>`
   margin-bottom: 4px;
   text-align: left;
   border: none;

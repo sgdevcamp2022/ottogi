@@ -1,19 +1,25 @@
+import LogoImage from "@components/atoms/Div/LogoImage";
+import Status from "@components/atoms/Div/Status";
 import styled from "styled-components";
-import LogoImage from "../../atoms/Div/LogoImage";
-import Status from "../../atoms/Div/Status";
+import mask from "../../../assets/mask/avatar-mask-32.png";
 
 export type StateType = "on" | "off" | "disturb" | "mobile" | "empty";
 
 interface UserStateProps {
   status?: StateType;
   fontSize?: string;
+  src?: string;
 }
 
-const UserState32 = ({ status = "on", fontSize = "16px" }: UserStateProps) => {
+const UserState32 = ({
+  status = "on",
+  fontSize = "16px",
+  src = "",
+}: UserStateProps) => {
   return (
     <UserStateContainer>
       <Mask>
-        <LogoImage onClick={() => null} />
+        <LogoImage height={2} width={2} onClick={() => null} src={src} />
       </Mask>
       <IconWrapper>
         <Status status={status} fontSize={fontSize} />
@@ -29,7 +35,7 @@ const UserStateContainer = styled.div`
 const Mask = styled.div`
   width: 32px;
   height: 32px;
-  mask-image: url("avatar-mask-32.png");
+  mask-image: url(${mask});
   mask-size: contain;
   mask-repeat: no-repeat;
 `;

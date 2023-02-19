@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeadsetIcon from "../atoms/Icons/HeadsetIcon";
 import HeadsetOffIcon from "../atoms/Icons/HeadsetOffIcon";
@@ -7,20 +8,36 @@ import SettingsIcon from "../atoms/Icons/SettingsIcon";
 import UserInfoButton from "../molecules/Button/UserInfoButton";
 import UserOnOffButton from "../molecules/Button/UserOnOffButton";
 
-interface UserInfoBarProps {
-  name: string;
-}
+const Tab2Footer = () => {
+  const navigate = useNavigate();
+  const userSetting = () => {
+    navigate("/UserSetting");
+  };
 
-const Tab2Footer = ({ name }: UserInfoBarProps) => {
   return (
     <Tab2FooterContainer>
       <InfoContainer>
-        <UserInfoButton name={name} />
+        <UserInfoButton />
       </InfoContainer>
       <ButtonContainer>
-        <UserOnOffButton OnIcon={<MicIcon />} OffIcon={<MicOffIcon />} onClick={() => {}} />
-        <UserOnOffButton OnIcon={<HeadsetIcon />} OffIcon={<HeadsetOffIcon />} onClick={() => {}} />
-        <UserOnOffButton OnIcon={<SettingsIcon />} OffIcon={<SettingsIcon />} onClick={() => {}} />
+        <UserOnOffButton
+          text="음소거"
+          OnIcon={<MicIcon />}
+          OffIcon={<MicOffIcon />}
+          onClick={() => null}
+        />
+        <UserOnOffButton
+          text="헤드셋 음소거"
+          OnIcon={<HeadsetIcon />}
+          OffIcon={<HeadsetOffIcon />}
+          onClick={() => null}
+        />
+        <UserOnOffButton
+          text="사용자 설정"
+          OnIcon={<SettingsIcon />}
+          OffIcon={<SettingsIcon />}
+          onClick={() => userSetting()}
+        />
       </ButtonContainer>
     </Tab2FooterContainer>
   );

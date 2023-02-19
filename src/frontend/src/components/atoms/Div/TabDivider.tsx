@@ -7,7 +7,7 @@ const TabDivider = () => {
 const Divider = styled.div`
   width: 100%;
   height: 0.0938rem;
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
   background-color: ${({ theme }) => theme.backgroundColor["user-tab"]};
 `;
 

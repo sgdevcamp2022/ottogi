@@ -1,4 +1,4 @@
-import Text from "../../atoms/Text/Text";
+import Text from "@components/atoms/Text/Text";
 
 interface AuthDescProps {
   text: string;

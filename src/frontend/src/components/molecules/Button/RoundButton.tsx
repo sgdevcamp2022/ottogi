@@ -1,6 +1,6 @@
 import { MouseEventHandler, ReactElement } from "react";
 import styled from "styled-components";
-import { flexCenter } from "../../../styles/flexCenter";
+import { flexCenter } from "@styles/flexCenter";
 
 interface RoundButtonProps {
   Icon: ReactElement;

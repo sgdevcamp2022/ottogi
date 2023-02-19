@@ -2,15 +2,80 @@ import { Route, Routes } from "react-router-dom";
 import Main from "../pages/Main";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Server from "../pages/Server";
+import ProtectAuth from "../components/organisms/ProtectAuth";
+import ProtectPage from "../components/organisms/ProtectHome";
 import NotFound from "../pages/NotFound";
+import ServerSetting from "../pages/ServerSetting";
+import UserSetting from "../pages/UserSetting";
+import CreateServer from "@pages/CreateServer";
 
 const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<Main />} />
-      <Route path="/:userId" element={<Main />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route
+        path={"/"}
+        element={
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
+        }
+      />
+      <Route
+        path={"/@me"}
+        element={
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
+        }
+      />
+      <Route
+        path="/@me/:channelId"
+        element={
+          // <ProtectPage>
+          <Main />
+          // </ProtectPage>
+        }
+      />
+
+      {/* 테스트 용으로 만들어 둔거. */}
+      <Route path="/ServerSetting" element={<ServerSetting />} />
+      <Route path="/UserSetting" element={<UserSetting />} />
+      <Route path="/CreateServer" element={<CreateServer />} />
+      {/* <Route path="/:serverId/" element={<Server />} /> */}
+      <Route
+        path="/:serverId"
+        element={
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
+        }
+      />
+      <Route
+        path="/:serverId/:channelId"
+        element={
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
+        }
+      />
+
+      <Route
+        path="/login"
+        element={
+          <ProtectAuth>
+            <Login />
+          </ProtectAuth>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <ProtectAuth>
+            <Register />
+          </ProtectAuth>
+        }
+      />
       <Route path="/*" element={<NotFound />} />
     </Routes>
   );

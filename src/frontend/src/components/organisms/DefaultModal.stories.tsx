@@ -1,4 +1,4 @@
-import DefaultModal from "./DefaultModal";
+import DefaultModal from "./AuthModal";
 
 export default {
   title: "Organisms/Modal",
