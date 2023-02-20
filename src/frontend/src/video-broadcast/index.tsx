@@ -12,7 +12,6 @@ const userSocket: any = socketIOClient(
 function BroadHome() {
   // const view = props.match.params.view;
   const { view } = useParams();
-  console.log(view);
   return (
     <Layout>
       {view === "publish" ? <Publish userSocket={userSocket} /> : null}
