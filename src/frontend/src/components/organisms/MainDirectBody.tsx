@@ -1,6 +1,7 @@
 import clientApi from "@api/axios";
 import WelcomeMessage from "@components/molecules/Div/WelcomeMessage";
-import { Client } from "@stomp/stompjs";
+import { Client, Stomp } from "@stomp/stompjs";
+import * as StompJS from "@stomp/stompjs";
 import { useUserStore } from "@store/useUserStore";
 import getFormatDate from "@utils/getFormatDate";
 import { useEffect, useRef, useState } from "react";
@@ -33,6 +34,10 @@ const MainDirectBody = () => {
   const connectChatRoom = () => {
     client = new Client({
       brokerURL: process.env.REACT_APP_BROKER_URL,
+      connectHeaders: {
+        channelId,
+        userId: userInfo.id.toString(),
+      },
       // debug: (err) => console.error(err),
       onConnect: () => subscribeChatRoom(),
     });
