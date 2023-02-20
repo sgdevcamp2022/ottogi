@@ -1,4 +1,5 @@
 import FieldButton from "@components/atoms/Button/fieldButton";
+import SettingButton from "@components/atoms/Button/SettingButton";
 import Text from "@components/atoms/Text/Text";
 import { useUserStore } from "@store/useUserStore";
 import styled from "styled-components";
@@ -20,7 +21,14 @@ const CardUserInfo = () => {
         />
       </NameWrapper>
       <ButtonWrapper>
-        <FieldButton text="사용자 프로필 편집" onClick={() => console.log(1)} />
+        <SettingButton
+          text="사용자 프로필 편집"
+          status={"프로필"}
+          onClick={() => {
+            console.log(1);
+          }}
+          // <FieldButton text="사용자 프로필 편집" onClick={() => console.log(1)} />
+        />
       </ButtonWrapper>
     </InfoContainer>
   );

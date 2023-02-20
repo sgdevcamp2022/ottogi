@@ -1,3 +1,4 @@
+import useUserSettingModalStore from "@store/useUserSettingModalStore";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeadsetIcon from "../atoms/Icons/HeadsetIcon";
@@ -13,6 +14,7 @@ const Tab2Footer = () => {
   const userSetting = () => {
     navigate("/UserSetting");
   };
+  const { setUserSettingModal } = useUserSettingModalStore();
 
   return (
     <>
@@ -37,7 +39,8 @@ const Tab2Footer = () => {
             text="사용자 설정"
             OnIcon={<SettingsIcon />}
             OffIcon={<SettingsIcon />}
-            onClick={() => userSetting()}
+            // onClick={() => userSetting()}
+            onClick={() => setUserSettingModal(true)}
           />
         </ButtonContainer>
       </Tab2FooterContainer>
