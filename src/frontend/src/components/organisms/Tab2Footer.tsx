@@ -15,31 +15,33 @@ const Tab2Footer = () => {
   };
 
   return (
-    <Tab2FooterContainer>
-      <InfoContainer>
-        <UserInfoButton status="1" />
-      </InfoContainer>
-      <ButtonContainer>
-        <UserOnOffButton
-          text="음소거"
-          OnIcon={<MicIcon />}
-          OffIcon={<MicOffIcon />}
-          onClick={() => null}
-        />
-        <UserOnOffButton
-          text="헤드셋 음소거"
-          OnIcon={<HeadsetIcon />}
-          OffIcon={<HeadsetOffIcon />}
-          onClick={() => null}
-        />
-        <UserOnOffButton
-          text="사용자 설정"
-          OnIcon={<SettingsIcon />}
-          OffIcon={<SettingsIcon />}
-          onClick={() => userSetting()}
-        />
-      </ButtonContainer>
-    </Tab2FooterContainer>
+    <>
+      <Tab2FooterContainer>
+        <InfoContainer>
+          <UserInfoButton status="1" />
+        </InfoContainer>
+        <ButtonContainer>
+          <UserOnOffButton
+            text="음소거"
+            OnIcon={<MicIcon />}
+            OffIcon={<MicOffIcon />}
+            onClick={() => null}
+          />
+          <UserOnOffButton
+            text="헤드셋 음소거"
+            OnIcon={<HeadsetIcon />}
+            OffIcon={<HeadsetOffIcon />}
+            onClick={() => null}
+          />
+          <UserOnOffButton
+            text="사용자 설정"
+            OnIcon={<SettingsIcon />}
+            OffIcon={<SettingsIcon />}
+            onClick={() => userSetting()}
+          />
+        </ButtonContainer>
+      </Tab2FooterContainer>
+    </>
   );
 };
 
