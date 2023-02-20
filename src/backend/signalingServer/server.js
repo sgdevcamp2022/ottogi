@@ -128,7 +128,7 @@ async function runWebServer(){
 async function runSocketServer() {
     const io = Server(httpsServer, {
         cors: {
-            origin: [`https://localhost:${listenPort}`],
+            origin: `*`,
             methods: ['GET', 'POST'],
             transports: ['websocket'],  
         },
@@ -143,7 +143,7 @@ async function runSocketServer() {
     connections = io.of('/video-broadcast')
     connections.on('connection', async (socket) => {
         console.log('client connected');
-        socket.emit("connect",{ socketId: socket.id, })
+        socket.emit("connection-success",{ socketId: socket.id, })
         // if (await manage.getTransport(transports, socket.id).produce({
         //     kind,
         //     rtpParameters
