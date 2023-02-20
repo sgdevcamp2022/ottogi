@@ -44,21 +44,21 @@ const friendApi = {
   reject: async ({ email }: FriendParams) => {
     return await clientApi.delete("/user/member/rejectfriend", {
       data: { email },
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
+      // headers: {
+      //   Authorization: "Bearer " + accessToken,
+      // },
     });
   },
 
   cancel: async ({ email }: FriendParams) => {
     return await clientApi.post(
       "/user/member/cancelfriend",
-      { email },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
+      { email }
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + accessToken,
+      //   },
+      // }
     );
   },
 
@@ -66,9 +66,9 @@ const friendApi = {
     const { userId } = queryKey[1];
     return await clientApi.get(`/state/get`, {
       params: { userId },
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
+      // headers: {
+      //   Authorization: "Bearer " + accessToken,
+      // },
     });
   },
 };

@@ -32,7 +32,7 @@ const authApi = {
   logout: async () => {
     return clientApi.get(
       "/user/member/logout"
-      // {
+      //  {
       //   headers: { Authorization: "Bearer " + accessToken },
       // }
     );

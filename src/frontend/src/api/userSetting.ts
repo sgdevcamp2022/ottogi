@@ -14,12 +14,12 @@ const userSettingApi = {
       {
         name,
         originalPassword: password,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
       }
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + accessToken,
+      //   },
+      // }
     );
   },
   // 비밀번호 변경
@@ -29,30 +29,36 @@ const userSettingApi = {
       {
         password,
         originalPassword,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
       }
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + accessToken,
+      //   },
+      // }
     );
   },
   // 계정 삭제하기
   deleteUser: async () => {
-    return await clientApi.delete("user/member/userdelete", {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    });
+    return await clientApi.delete(
+      "user/member/userdelete"
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + accessToken,
+      //   },
+      // }
+    );
   },
 
   // 유저 이미지 변경
   modifyImage: async () => {
-    return await clientApi.patch("user/member/userdelete", {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    });
+    return await clientApi.patch(
+      "user/member/userdelete"
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + accessToken,
+      //   },
+      // }
+    );
   },
 
   // 서버 프로필명 이름 변경
