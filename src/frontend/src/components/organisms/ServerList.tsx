@@ -7,8 +7,9 @@ import AddIcon from "@components/atoms/Icons/AddIcon";
 import useGetServerList from "@hooks/query/useGetServerList";
 import { useUserStore } from "@store/useUserStore";
 import ScrollableBox from "@components/molecules/Div/scrollableBox";
+import useCommunityUpdate from "@hooks/query/useCommunityUpdate";
 
-interface community {
+interface Community {
   img: string;
   community_id: Number;
   name: string;
@@ -17,13 +18,17 @@ interface community {
 const ServerList = () => {
   // const [userId, setUserId] = useState<Number>();
   const navigate = useNavigate();
-  const [data, setData] = useState<community[]>([]);
+  const [data, setData] = useState<Community[]>([]);
   const { userInfo } = useUserStore();
-  const { data: res, isLoading } = useGetServerList({
+  const {
+    data: res,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useGetServerList({
     userId: userInfo.id,
   });
   const [num, setNum] = useState<Number>();
-
   const onMain = () => {
     navigate("/@me");
   };
@@ -36,8 +41,7 @@ const ServerList = () => {
   const onCreateServer = () => {
     navigate("/CreateServer");
   };
-
-  if (isLoading)
+  if (!isSuccess) {
     return (
       <BarContainer>
         <ScrollableBox>
@@ -61,18 +65,21 @@ const ServerList = () => {
         </ScrollableBox>
       </BarContainer>
     );
-
+  }
   const List = res?.data.data[0].split("},");
-  if (List.length > 1 && data.length < List?.length) {
+  if (List.length > 0 && data.length < List?.length) {
     for (let i = 0; i < List?.length; i++) {
       if (i !== List.length - 1) {
+        console.log(JSON.parse(List[i] + "}"));
         data.push(JSON.parse(List[i] + "}"));
       } else {
         data.push(JSON.parse(List[i]));
+        console.log(JSON.parse(List[i]));
       }
     }
   }
 
+  console.log(data);
   return (
     <BarContainer>
       <ScrollableBox>
@@ -86,7 +93,7 @@ const ServerList = () => {
             />
           </li>
           <Divider />
-          {!isLoading &&
+          {isSuccess &&
             data.map((v: any) => {
               return (
                 <li onClick={() => onServer(v.community_id)}>

@@ -19,19 +19,19 @@ interface RoomType {
 const Tab2ServerBody = () => {
   const navigate = useNavigate();
   const { serverId, channelId } = useParams();
-  const { data: res, isLoading } = useGetCategoryList({
+  const { data: res, isSuccess } = useGetCategoryList({
     communityId: serverId,
   });
 
   const data = res?.data?.data;
-  if (!data || !serverId || isLoading) return <></>;
+  if (!serverId || !isSuccess) return <></>;
 
   const List = JSON.parse(JSON.stringify(data[0])).split("},");
   const List2 = JSON.parse(JSON.stringify(data[1])).split("},");
   const categoryList: CategoryType[] = [];
   const roomList: RoomType[] = [];
 
-  if (List.length > 1 && categoryList.length < List?.length) {
+  if (List.length > 0 && categoryList.length < List?.length) {
     for (let i = 0; i < List?.length; i++) {
       if (i !== List.length - 1) {
         categoryList.push(JSON.parse(List[i] + "}"));
@@ -40,7 +40,7 @@ const Tab2ServerBody = () => {
       }
     }
   }
-  if (List2.length > 1 && roomList.length < List2?.length) {
+  if (List2.length > 0 && roomList.length < List2?.length) {
     for (let i = 0; i < List2?.length; i++) {
       if (i !== List2.length - 1) {
         roomList.push(JSON.parse(List2[i] + "}"));
@@ -63,26 +63,23 @@ const Tab2ServerBody = () => {
 
   return (
     <div>
-      {!isLoading &&
-        categoryList.map((category: any) => (
+      {categoryList.map((category: any) => (
+        <>
+          <ServerLabel text={category["category_name"]} />
           <>
-            <ServerLabel text={category["category_name"]} />
-            <>
-              {roomList
-                .filter(
-                  (room) => room["category_id"] === category["categoy_id"]
-                )
-                .map((room) => (
-                  <ServerRoomButton
-                    type={room["type"] === 1 ? "voice" : "chat"}
-                    text={room["channel_name"]}
-                    serverId={serverId}
-                    channelId={room["channel_id"]}
-                  />
-                ))}
-            </>
+            {roomList
+              .filter((room) => room["category_id"] === category["category_id"])
+              .map((room) => (
+                <ServerRoomButton
+                  type={room["type"] === 1 ? "voice" : "chat"}
+                  text={room["channel_name"]}
+                  serverId={serverId}
+                  channelId={room["channel_id"]}
+                />
+              ))}
           </>
-        ))}
+        </>
+      ))}
     </div>
   );
 };
