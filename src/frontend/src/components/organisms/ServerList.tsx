@@ -1,18 +1,11 @@
 import styled from "styled-components";
 import { Divider } from "../atoms/Div/Divider.stories";
 import ServerImage from "../atoms/Div/ServerImage";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@components/atoms/Icons/AddIcon";
 import useGetServerList from "@hooks/query/useGetServerList";
 import { useUserStore } from "@store/useUserStore";
 import ScrollableBox from "@components/molecules/Div/scrollableBox";
-
-interface Community {
-  img: string;
-  community_id: Number;
-  name: string;
-}
 
 const ServerList = () => {
   const navigate = useNavigate();
@@ -32,7 +25,8 @@ const ServerList = () => {
   const onCreateServer = () => {
     navigate("/CreateServer");
   };
-  if (!isSuccess) {
+
+  const EmptyContainer = () => {
     return (
       <BarContainer>
         <ScrollableBox>
@@ -56,21 +50,26 @@ const ServerList = () => {
         </ScrollableBox>
       </BarContainer>
     );
+  };
+
+  if (!isSuccess) {
+    return <EmptyContainer />;
   }
+
+  console.log(res.data.data);
   const List = res?.data.data[0].split("},");
+  if (List[0] === "") return <EmptyContainer />;
+
   if (List.length > 0) {
     for (let i = 0; i < List?.length; i++) {
       if (i !== List.length - 1) {
-        console.log(JSON.parse(List[i] + "}"));
         data.push(JSON.parse(List[i] + "}"));
       } else {
         data.push(JSON.parse(List[i]));
-        console.log(JSON.parse(List[i]));
       }
     }
   }
 
-  console.log(data);
   return (
     <BarContainer>
       <ScrollableBox>
@@ -84,9 +83,9 @@ const ServerList = () => {
             />
           </li>
           <Divider />
-          {data.map((v: any) => {
+          {data.map((v: any, idx) => {
             return (
-              <li onClick={() => onServer(v.community_id)}>
+              <li key={idx} onClick={() => onServer(v.community_id)}>
                 <ServerImage
                   avatarHeight={3}
                   avatarWidth={3}

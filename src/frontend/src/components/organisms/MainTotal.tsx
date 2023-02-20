@@ -37,6 +37,7 @@ const MainTotal = () => {
               ({ email, name, channelId, userId, friendState }) => (
                 <FriendDefaultBox
                   key={email}
+                  email={email}
                   id={channelId}
                   name={name}
                   userId={userId}
@@ -70,6 +71,7 @@ const MainTotal = () => {
 const ButtonWrapper = styled.div`
   margin-top: 20px;
   text-align: center;
+  position: relative;
 `;
 
 const Container = styled.div`

@@ -12,6 +12,7 @@ import EtcModal from "./EtcModal";
 import FriendBox from "./FriendBox";
 
 interface FriendDefaultBoxProps {
+  email: string;
   id: string;
   name: string;
   userId: number;
@@ -19,11 +20,13 @@ interface FriendDefaultBoxProps {
 }
 
 const FriendDefaultBox = ({
+  email,
   id,
   name,
   userId,
   status,
 }: FriendDefaultBoxProps) => {
+  const { setDeleteFriendEmail } = useMainStore();
   const navigate = useNavigate();
   const { setUserName, setUserId } = useMainStore();
   const [showEtcModal, setShowEtcModal] = useState(false);
@@ -35,6 +38,11 @@ const FriendDefaultBox = ({
     navigate(`/@me/${id}`);
     setUserName(name);
     setUserId(userId);
+  };
+
+  const clickChatIcon = () => {
+    setDeleteFriendEmail(email);
+    setShowEtcModal(!showEtcModal);
   };
 
   let Buttons: ReactElement;
@@ -52,10 +60,7 @@ const FriendDefaultBox = ({
         </Tip>
         <EtcContainer>
           <Tip title="기타" place="top">
-            <RoundButton
-              Icon={<MoreIcon />}
-              onClick={() => setShowEtcModal(!showEtcModal)}
-            />
+            <RoundButton Icon={<MoreIcon />} onClick={clickChatIcon} />
           </Tip>
           {showEtcModal && <EtcModal />}
         </EtcContainer>
@@ -72,8 +77,6 @@ const FriendDefaultBox = ({
   );
 };
 
-const EtcContainer = styled.div`
-  position: relative;
-`;
+const EtcContainer = styled.div``;
 
 export default FriendDefaultBox;

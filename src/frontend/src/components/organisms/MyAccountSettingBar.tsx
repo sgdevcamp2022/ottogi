@@ -19,6 +19,7 @@ const ServerSettingBar = () => {
     cookies.remove(COOKIE_KEY);
     sessionStorage.clear();
     resetUser();
+
     navigate("/login");
   };
 

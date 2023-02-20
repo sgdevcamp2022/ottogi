@@ -28,7 +28,8 @@ const SideBar = ({ children }: SideBarProps) => {
         fontWeight="bold"
         mb={16}
       />
-      {friendList ? <>{children}</> : <NobodyActive />}
+      <NobodyActive />
+      {/* {friendList ? <>{children}</> : <NobodyActive />} */}
     </SideBarContainer>
   );
 };
