@@ -17,12 +17,12 @@ const MainTotal = () => {
   const {
     userInfo: { email },
   } = useUserStore();
-  const { data, isSuccess } = useGetFriendList({ email });
+  const { data, isSuccess } = useGetFriendList(email);
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data.data.data.filter(
+  const friendList: FriendType[] = data?.data.data.filter(
     (f: FriendType) => f.friendState === "ACCEPTED"
   );
   const num = friendList.length;

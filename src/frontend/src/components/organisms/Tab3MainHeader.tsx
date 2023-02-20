@@ -9,13 +9,10 @@ import FriendHeader from "./FriendHeader";
 const Tab3MainHeader = () => {
   const { channelId } = useParams();
   const { userId, userName } = useMainStore();
-  if (!userId) <></>;
 
-  const { data: status, isLoading } = useGetFriendStatus({
+  const { data: status } = useGetFriendStatus({
     userId: Number(userId),
   });
-
-  if (isLoading) return <></>;
 
   return (
     <Tab3MainHeaderContainer>

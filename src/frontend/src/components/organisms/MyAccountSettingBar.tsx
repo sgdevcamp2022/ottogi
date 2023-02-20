@@ -2,23 +2,21 @@ import styled from "styled-components";
 import Text from "../atoms/Text/Text";
 import SettingButton from "../atoms/Button/SettingButton";
 import { Divider } from "@mui/material";
-import { useEffect } from "react";
 import SetDefaultButton from "../atoms/Button/SetDefaultButton";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import { useUserStore } from "@store/useUserStore";
 import { COOKIE_KEY } from "@configs/cookie";
 import authApi from "@api/auth";
+import { cookies } from "src/App";
 
 const ServerSettingBar = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies([COOKIE_KEY]);
   const { resetUser } = useUserStore();
 
   const logout = async () => {
     await authApi.logout;
 
-    removeCookie(COOKIE_KEY);
+    cookies.remove(COOKIE_KEY);
     sessionStorage.clear();
     resetUser();
     navigate("/login");

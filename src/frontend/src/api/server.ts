@@ -6,12 +6,12 @@ const serverApi = {
   sendInvite: async ({ communityId, userId, shortUrl }: any) => {
     return await clientApi.post(
       `/community/invite/member`,
-      { communityId, userId, shortUrl },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
+      { communityId, userId, shortUrl }
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + accessToken,
+      //   },
+      // }
     );
   },
 
@@ -19,12 +19,12 @@ const serverApi = {
     console.log(linkMessage);
     return await clientApi.post(
       `/chat/invite`,
-      { sender, channelId, linkMessage },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
+      { sender, channelId, linkMessage }
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + accessToken,
+      //   },
+      // }
     );
   },
 
@@ -33,9 +33,9 @@ const serverApi = {
     const { userId } = queryKey[1];
     return await clientApi.get(`/community/getlist/`, {
       params: { userId },
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
+      // headers: {
+      //   Authorization: "Bearer " + accessToken,
+      // },
     });
   },
   // 커뮤니티의 채널리스트 가져옴
@@ -43,9 +43,9 @@ const serverApi = {
     const { communityId } = queryKey[1];
     return await clientApi.get(`/community/getoption/`, {
       params: { communityId },
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
+      // headers: {
+      //   Authorization: "Bearer " + accessToken,
+      // },
     });
   },
   // 커뮤니티 생성

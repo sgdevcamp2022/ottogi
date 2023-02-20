@@ -23,7 +23,7 @@ const CreateDirectMessageModal = ({
   const {
     userInfo: { email },
   } = useUserStore();
-  const { data, isSuccess } = useGetFriendList({ email });
+  const { data, isSuccess } = useGetFriendList(email);
 
   const [search, changeSearch] = useInput();
 

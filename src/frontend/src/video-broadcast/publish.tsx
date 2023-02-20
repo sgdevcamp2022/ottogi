@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Device } from "mediasoup-client";
 import { io as socketIOClient } from "socket.io-client";
-import { promise } from './socketUtils';
 import { config } from "src/app.config";
 
 function Publish(props: any) {
