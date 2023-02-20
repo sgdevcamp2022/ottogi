@@ -53,14 +53,14 @@ const ServerSettingBar = () => {
             onClick={() => console.log(1)}
           />
         </li>
-        <li>
+        {/* <li>
           <SettingButton
             text="알림"
             status={"알림"}
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
-        </li>
+        </li> */}
 
         <Divider
           sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 1, mt: 1, mb: 1 }}

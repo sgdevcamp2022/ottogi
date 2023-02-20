@@ -19,6 +19,7 @@ const SettingButton = ({
   fontWeight = "normal",
   disabled = false,
   status,
+  backgroundColor,
 }: SettingButtonProps) => {
   const { userStatus, userSettingStatus } = useUserSetStore(
     ({ userStatus, userSettingStatus }) => ({

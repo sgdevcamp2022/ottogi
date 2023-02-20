@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Divider } from "../atoms/Div/Divider.stories";
 import ServerImage from "../atoms/Div/ServerImage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AddIcon from "@components/atoms/Icons/AddIcon";
 import useGetServerList from "@hooks/query/useGetServerList";
 import { useUserStore } from "@store/useUserStore";
@@ -9,15 +9,16 @@ import ScrollableBox from "@components/molecules/Div/scrollableBox";
 
 const ServerList = () => {
   const navigate = useNavigate();
+  const params = useParams();
   const data = [];
   const { userInfo } = useUserStore();
   const { data: res, isSuccess } = useGetServerList({
     userId: userInfo.id,
   });
+  // console.log(res);
   const onMain = () => {
     navigate("/@me");
   };
-
   const onServer = (v: Number) => {
     navigate("/" + v);
   };
@@ -25,6 +26,9 @@ const ServerList = () => {
   const onCreateServer = () => {
     navigate("/CreateServer");
   };
+  if (params === null) {
+    onMain();
+  }
 
   const EmptyContainer = () => {
     return (
@@ -67,9 +71,9 @@ const ServerList = () => {
       } else {
         data.push(JSON.parse(List[i]));
       }
+      data.push(JSON.parse(List[i]));
     }
   }
-
   return (
     <BarContainer>
       <ScrollableBox>

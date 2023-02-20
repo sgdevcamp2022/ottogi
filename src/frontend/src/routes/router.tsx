@@ -9,6 +9,8 @@ import NotFound from "../pages/NotFound";
 import ServerSetting from "../pages/ServerSetting";
 import UserSetting from "../pages/UserSetting";
 import CreateServer from "@pages/CreateServer";
+import Home from "src/video-broadcast/home";
+import BroadHome from "src/video-broadcast";
 
 const Router = () => {
   return (
@@ -21,6 +23,8 @@ const Router = () => {
           </ProtectPage>
         }
       />
+      <Route path="/Home" element={<Home />} />
+      <Route path="/broadcast/:view" element={<BroadHome />} />
 
       <Route
         path="/login"

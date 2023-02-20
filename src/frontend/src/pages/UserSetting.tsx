@@ -3,6 +3,9 @@ import ServerSettingBar from "../components/organisms/MyAccountSettingBar";
 import UserProfile from "../components/organisms/UserProfile";
 import MyAccount from "../components/organisms/MyAccount";
 import useUserSetStore, { UserSettingType } from "../store/useUserSetStore";
+import BackgroundModal from "@components/organisms/BackgroundModal";
+import useUserSettingModalStore from "@store/useUserSettingModalStore";
+import CancelIcon from "@components/atoms/Icons/CancelIcon";
 const userComponent = {
   "내 계정": MyAccount,
   프로필: UserProfile,
@@ -15,23 +18,42 @@ const getStatus = (status: UserSettingType) => {
 };
 
 const UserSetting = () => {
+  const { setUserSettingModal } = useUserSettingModalStore();
   const { userStatus } = useUserSetStore(({ userStatus }) => ({
     userStatus,
   }));
   return (
-    <SettingBox>
-      <Side>
-        <ServerSettingBar />
-      </Side>
-      <Container>
-        {/* <UserProfile /> */}
-        {getStatus(userStatus)}
-      </Container>
-    </SettingBox>
+    <BackgroundModal
+      width={800}
+      p={0}
+      onClick={() => setUserSettingModal(false)}
+    >
+      <SettingBox>
+        <Side>
+          <ServerSettingBar />
+        </Side>
+        <Container>
+          <CancelIconWrapper onClick={() => setUserSettingModal(false)}>
+            <CancelIcon />
+          </CancelIconWrapper>
+          {/* <UserProfile /> */}
+          {getStatus(userStatus)}
+        </Container>
+      </SettingBox>
+    </BackgroundModal>
   );
 };
 
 export default UserSetting;
+
+const CancelIconWrapper = styled.div`
+  font-size: 5rem;
+  color: ${({ theme }) => theme.color["auth-desc"]};
+  cursor: pointer;
+  position: absolute;
+  right: 500px;
+  top: 25px;
+`;
 
 const SettingBox = styled.div`
   width: 100%;
