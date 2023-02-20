@@ -3,6 +3,7 @@ import ServerRoomButton from "../molecules/Div/ServerRoomButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserStore } from "@store/useUserStore";
 import useGetCategoryList from "@hooks/query/useGetCategoryList";
+import UserChannelOnBox from "@components/molecules/Div/UserChannelOnBox";
 
 interface CategoryType {
   category_id: number;
@@ -70,12 +71,15 @@ const Tab2ServerBody = () => {
             {roomList
               .filter((room) => room["category_id"] === category["category_id"])
               .map((room) => (
-                <ServerRoomButton
-                  type={room["type"] === 1 ? "voice" : "chat"}
-                  text={room["channel_name"]}
-                  serverId={serverId}
-                  channelId={room["channel_id"]}
-                />
+                <>
+                  <ServerRoomButton
+                    type={room["type"] === 1 ? "voice" : "chat"}
+                    text={room["channel_name"]}
+                    serverId={serverId}
+                    channelId={room["channel_id"]}
+                  />
+                  <UserChannelOnBox />
+                </>
               ))}
           </>
         </>

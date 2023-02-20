@@ -32,6 +32,7 @@ const MainOnline = () => {
               ({ email, name, channelId, userId, friendState }) => (
                 <FriendDefaultBox
                   key={email}
+                  email={email}
                   id={channelId}
                   name={name}
                   userId={userId}

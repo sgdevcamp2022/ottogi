@@ -10,24 +10,28 @@ const useLogin = () => {
   const navigate = useNavigate();
 
   return useMutation(authApi.login, {
-    onSuccess: ({
+    onSuccess: async ({
       data: {
         data: { accessToken, refreshToken },
       },
     }: any) => {
-      const setTokens = () => {
+      console.log(0);
+      const setTokens = async () => {
+        console.log(1);
         cookies.set(COOKIE_KEY, refreshToken);
         sessionStorage.setItem("accessToken", accessToken);
       };
 
       const getUserInfo = async () => {
-        const { data } = await authApi.getUserInfo();
+        const data = await authApi.getUserInfo();
+        console.log(111, data);
         setUserInfo(data.data);
       };
 
-      setTokens();
+      await setTokens();
       getUserInfo();
-      navigate("/@me");
+      console.log(1);
+      // navigate("/@me");
     },
   });
 };
