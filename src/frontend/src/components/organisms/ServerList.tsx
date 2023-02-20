@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Divider } from "../atoms/Div/Divider.stories";
 import ServerImage from "../atoms/Div/ServerImage";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AddIcon from "@components/atoms/Icons/AddIcon";
 import useGetServerList from "@hooks/query/useGetServerList";
 import { useUserStore } from "@store/useUserStore";
@@ -16,15 +16,16 @@ interface Community {
 
 const ServerList = () => {
   const navigate = useNavigate();
+  // console.log(params !== null);
   const data = [];
   const { userInfo } = useUserStore();
   const { data: res, isSuccess } = useGetServerList({
     userId: userInfo.id,
   });
+  // console.log(res);
   const onMain = () => {
     navigate("/@me");
   };
-
   const onServer = (v: Number) => {
     navigate("/" + v);
   };
@@ -32,6 +33,10 @@ const ServerList = () => {
   const onCreateServer = () => {
     navigate("/CreateServer");
   };
+  const params = useParams();
+  if (params === null) {
+    onMain();
+  }
   if (!isSuccess) {
     return (
       <BarContainer>
@@ -61,16 +66,11 @@ const ServerList = () => {
   if (List.length > 0) {
     for (let i = 0; i < List?.length; i++) {
       if (i !== List.length - 1) {
-        console.log(JSON.parse(List[i] + "}"));
         data.push(JSON.parse(List[i] + "}"));
-      } else {
-        data.push(JSON.parse(List[i]));
-        console.log(JSON.parse(List[i]));
       }
+      data.push(JSON.parse(List[i]));
     }
   }
-
-  console.log(data);
   return (
     <BarContainer>
       <ScrollableBox>
