@@ -30,21 +30,11 @@ const authApi = {
   },
 
   logout: async () => {
-    return clientApi.get(
-      "/user/member/logout"
-      //  {
-      //   headers: { Authorization: "Bearer " + accessToken },
-      // }
-    );
+    return clientApi.get("/user/member/logout");
   },
 
   getUserInfo: async () => {
-    return await clientApi.get(
-      "/user/member/info"
-      // {
-      //   headers: { Authorization: "Bearer " + accessToken },
-      // }
-    );
+    return await clientApi.get("/user/member/info");
   },
 
   verify: async (userCode: string) => {

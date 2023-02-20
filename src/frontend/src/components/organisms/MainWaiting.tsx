@@ -21,7 +21,7 @@ const MainWaiting = () => {
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data.data.data.filter(
+  const friendList: FriendType[] = data?.data.data.filter(
     (friend: FriendState) =>
       friend.friendState === "REQUEST" || friend.friendState === "WAIT"
   );

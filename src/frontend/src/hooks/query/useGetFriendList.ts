@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import friendApi from "@api/friend";
 
 const useGetFriendList = (email: string) => {

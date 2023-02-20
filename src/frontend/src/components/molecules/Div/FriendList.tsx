@@ -11,14 +11,12 @@ const FriendList = () => {
   } = useUserStore();
   const { data: friendList } = useGetFriendList(email);
 
-  if (!friendList) return <></>;
-
   return (
     <FriendListContainer>
       <DirectMessage />
       <ScrollableBox>
         <ListContainer>
-          {friendList.data.data.map(
+          {friendList?.data.data.map(
             ({ name, userId, channelId }: FriendType) => (
               <DirectButton
                 key={name}

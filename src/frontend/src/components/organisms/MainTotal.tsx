@@ -22,7 +22,7 @@ const MainTotal = () => {
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data.data.data.filter(
+  const friendList: FriendType[] = data?.data.data.filter(
     (f: FriendType) => f.friendState === "ACCEPTED"
   );
   const num = friendList.length;
