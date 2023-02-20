@@ -9,7 +9,7 @@ const FriendList = () => {
   const {
     userInfo: { email },
   } = useUserStore();
-  const { data: friendList } = useGetFriendList({ email });
+  const { data: friendList } = useGetFriendList(email);
 
   if (!friendList) return <></>;
 

@@ -11,7 +11,7 @@ const MainOnline = () => {
   const {
     userInfo: { email },
   } = useUserStore();
-  const { data, isSuccess } = useGetFriendList({ email });
+  const { data, isSuccess } = useGetFriendList(email);
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;

@@ -13,7 +13,7 @@ const SideBar = ({ children }: SideBarProps) => {
   const {
     userInfo: { email },
   } = useUserStore();
-  const { data, isSuccess } = useGetFriendList({ email });
+  const { data } = useGetFriendList(email);
 
   if (!data) return <></>;
 
