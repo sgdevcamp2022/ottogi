@@ -59,8 +59,6 @@ const ServerList = () => {
   if (!isSuccess) {
     return <EmptyContainer />;
   }
-
-  console.log(res.data.data);
   const List = res?.data.data[0].split("},");
   if (List[0] === "") return <EmptyContainer />;
 
@@ -71,7 +69,6 @@ const ServerList = () => {
       } else {
         data.push(JSON.parse(List[i]));
       }
-      data.push(JSON.parse(List[i]));
     }
   }
   return (
