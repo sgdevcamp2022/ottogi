@@ -1,7 +1,9 @@
 import React, { Suspense, lazy } from "react";
 import { Device } from "mediasoup-client";
 import { io as socketIOClient } from "socket.io-client";
+import { promise } from './socketUtils';
 import { config } from "src/app.config";
+
 function Publish(props: any) {
   const localVideo: any = React.useRef();
   const localStream: any = React.useRef();
@@ -15,13 +17,14 @@ function Publish(props: any) {
   const [useVideo, setUseVideo] = React.useState(true);
   const [useAudio, setUseAudio] = React.useState(true);
   const [isStartMedia, setIsStartMedia] = React.useState(false);
+  let [isVideoON, setVideoState] = React.useState(false);
   const [isPublished, setIsPublished] = React.useState(false);
 
   // ============ UI button ==========
-  const handleUseVideo = (e: any) => {
+  const handleUseVideo = (e: any) => { // 영상제공 on off --> 무슨기능이지..
     setUseVideo(!useVideo);
   };
-  const handleUseAudio = (e: any) => {
+  const handleUseAudio = (e: any) => { // for 음소거 기능
     setUseAudio(!useAudio);
   };
 
@@ -30,12 +33,11 @@ function Publish(props: any) {
       console.warn("WARN: local media ALREADY started");
       return;
     }
-
     navigator.mediaDevices
       .getUserMedia({ audio: useAudio, video: useVideo })
       .then((stream: any) => {
         localStream.current = stream;
-        playVideo(localVideo.current, localStream.current);
+        StartStream(localVideo.current, localStream.current);
         setIsStartMedia(true);
       })
       .catch((err) => {
@@ -43,16 +45,41 @@ function Publish(props: any) {
       });
   };
 
-  function playVideo(element: any, stream: any) {
-    if (element.srcObject) {
-      console.warn("element ALREADY playing, so ignore");
-      return;
-    }
-    element.srcObject = stream;
-    element.volume = 0;
-    return element.play();
+function StartStream(element: any, stream: any) {
+  if (element.srcObject) {
+    console.warn("element ALREADY playing, so ignore");
+    return;
   }
+  element.srcObject = stream;
+  element.volume = 0;
+  element.play();
 
+  joinRoom() 
+}
+
+  // function handleVideoState() {
+  //   if(!isVideoON){
+  //     setVideoState(isVideoON);
+  //     navigator.mediaDevices
+  //     .getUserMedia({ audio: useAudio, video: useVideo }).then((stream: any) => {
+  //       localStream.current = stream;
+  //       addvideo(localVideo.current, localStream.current);
+  //       setIsStartMedia(true);
+  //     }).catch((err) => {
+  //       console.error("media ERROR:", err);
+  //     });
+  //   }
+  // }
+
+  // function addvideo(element: any, stream: any) {
+  //   element.srcObject = stream;
+  //   element.volume = 0;
+  //   const videoTracks = stream.getVideoTracks();
+  //   return  element.srcObject.addTrack(videoTracks[0])
+  // }
+  
+
+  
   function pauseVideo(element: any) {
     element.pause();
     element.srcObject = null;
@@ -77,7 +104,7 @@ function Publish(props: any) {
     }
   }
 
-  async function handlePublish() {
+  async function joinRoom() {
     if (!localStream.current) {
       console.warn("WARN: local media NOT READY");
       return;
@@ -85,11 +112,14 @@ function Publish(props: any) {
 
     // --- connect socket.io ---
     if (!socketRef.current) {
+      console.log("진입")
       await connectSocket().catch((err: any) => {
         console.error(err);
         return;
       });
+      console.log(socketRef.current);
     }
+
     // --- get capabilities --
     const data = await sendRequest("getRouterRtpCapabilities", {});
     console.log("getRouterRtpCapabilities:", data);
@@ -237,23 +267,30 @@ function Publish(props: any) {
     });
   }
 
-  const connectSocket: any = () => {
+
+  const connectSocket: any = async() => {
+
     if (socketRef.current == null) {
       const io: any = socketIOClient(
-        config.SERVER_ENDPOINT + "/video-broadcast"
+        config.SERVER_ENDPOINT + '/video-broadcast',
+        { transports: ["websocket"] }
       );
       socketRef.current = io;
     }
 
     return new Promise((resolve: any, reject: any) => {
       const socket = socketRef.current;
-      socket.on("connect", function (evt: any) {
+      socket.connect()
+      console.log("진입 ",socket)
+      socket.on("connection-success", function (evt: any) {
         console.log("socket.io connected()");
       });
+
       socket.on("error", function (err: any) {
         console.error("socket.io ERROR:", err);
         reject(err);
       });
+      
       socket.on("message", function (message: any) {
         console.log("socket.io message:", message);
         if (message.type === "welcome") {
@@ -274,8 +311,8 @@ function Publish(props: any) {
       });
       socket.on("newProducer", async function (message: any) {
         console.warn("IGNORE socket.io newProducer:", message);
-      }); // 원본
-    });
+      });
+    }); // 작업중인 폴ㄷ러
   };
 
   return (
@@ -298,33 +335,55 @@ function Publish(props: any) {
         ></input>
         <label>audio</label>
       </div>
-      <button disabled={isStartMedia} onClick={handleStartMedia}>
-        Start Media
-      </button>
-      <button disabled={!isStartMedia || isPublished} onClick={handleStopMedia}>
-        Stop Media
-      </button>
 
-      <button disabled={isPublished || !isStartMedia} onClick={handlePublish}>
-        publish 
-      </button>
-      <button 
-        disabled={!isPublished || !isStartMedia}
-        onClick={handleDisconnect}
-      >
-        Disconnect
-      </button>
-      <div>
-        local video
-        <video
-          ref={localVideo}
-          autoPlay
-          style={{
-            width: "240px",
-            height: "180px",
-            border: "1px solid black",
-          }}
-        ></video>
+      <table>
+        <thead>
+          <tr>
+            <td>
+              <button disabled={isStartMedia} onClick={handleStartMedia}>
+                Start Streaming
+              </button>
+            </td>
+          </tr>
+          <tr>
+          <td>
+            <button disabled={isPublished || !isStartMedia} onClick={handleStopMedia}>
+              Stop Streaming
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <button disabled={isPublished || !isStartMedia} onClick={handleDisconnect}>
+            Disconnect
+          </button>
+          </td>
+        </tr>
+        </thead>
+      </table>
+
+      <div id="video">
+        <table className="mainTable">
+          <tbody>
+            <tr>
+              <td className="localColumn">
+                local video
+                <video
+                  ref={localVideo}
+                  autoPlay
+                  style={{
+                    width: "240px",
+                    height: "180px",
+                    border: "1px solid black",
+                  }}
+                ></video>
+              </td>
+              <td className="remoteColumn">
+                <div id="videoContainer"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
