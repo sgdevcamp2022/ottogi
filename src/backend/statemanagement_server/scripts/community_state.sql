@@ -25,8 +25,9 @@ DROP TABLE IF EXISTS `state`;
 CREATE TABLE `state` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `location` int DEFAULT NULL,
+  `location` varchar(45) COLLATE utf8mb3_bin DEFAULT NULL,
   `status` int NOT NULL DEFAULT '0',
+  `session_id` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -49,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-18 14:32:40
+-- Dump completed on 2023-02-20 17:48:28

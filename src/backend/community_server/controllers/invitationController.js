@@ -35,6 +35,7 @@ module.exports = {
     } else {
       const communityId = await invite.geturl(shortUrl);
       const response = await community.join(communityId, userId, null);
+      // res.redirect(`http://localhost:3000/@me`);
       res.json({
         success: true,
         message: `Join Success community : ${response}`,

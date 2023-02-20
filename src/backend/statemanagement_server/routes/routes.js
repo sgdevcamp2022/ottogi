@@ -9,5 +9,8 @@ router.get('/state/test', (req, res) => {
 //상태 업데이트
 router.post('/state/update', management.stateChange);
 router.get('/state/get', management.loadstate);
+router.get('/state/getchannel', management.loadchannelId);
+router.post('/state/connect', management.connect);
+router.delete('/state/disconnect', management.Disconnect);
 
 module.exports = router;

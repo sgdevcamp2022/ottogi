@@ -66,6 +66,17 @@ const insertMember =  (communityId, userId, profile) => {
     );
 }
 
+const inMember =  (communityId, userId, profile) => {
+    let sql = `INSERT INTO community_member(user_id, role, community_id, profile) VALUES(${db.escape(userId)}, 1, ${db.escape(communityId)}, '${profile}');`;
+    db.query(sql, (err, res) => {
+        if (err) 
+            console.log(err);
+        else
+            console.log(`멤버 추가 성공`);
+        }
+    );
+}
+
 const publicCategory =  async(communityId) => {
     let sql = `INSERT INTO category(community_id, name) VALUES(${db.escape(communityId)}, '음성 채널');`;
     let sql2 = `INSERT INTO category(community_id, name) VALUES(${db.escape(communityId)}, '채팅 채널');`;
@@ -116,7 +127,7 @@ const publicChannel = (categoryId, type)=>{
     let sql = `INSERT INTO channel(category_id, name, type) VALUES(${db.escape(categoryId)}, '일반', ${type});`;
     db.query(sql,(err, res)=>{
         if(err) console.log(err);
-        else console.log(`최종 성공`);
+        else console.log(`채널 생성 성공`);
     })
 }
 
@@ -178,17 +189,18 @@ module.exports = {
             } else {
                 const communityId = await findCommunityId(communityName);
                 await insertMember(communityId, userId, profile);
-                console.log(`생성 성공`);
+                console.log(`커뮤니티 생성 성공`);
             }   
         });
     },
 
     //커뮤니티 참가 명령어
-    join: (communityId, userId, profile) => {
+    join: async(communityId, userId, profile) => {
+        await inMember(communityId, userId, profile);
         let name = [];
         let getProfile = JSON.stringify(profile);
         //초대로 밖에 못들어오니까
-        if(getmem(userId, communityId) && checkprofile(userId, communityId)){
+        if(await getmem(userId, communityId) && await checkprofile(userId, communityId)){
             let sql = `UPDATE community_member SET profile = '${getProfile}' WHERE community_id = '${communityId}' AND user_id = '${userId}'`;
             db.query(sql);
 
@@ -230,7 +242,6 @@ module.exports = {
                 if (err) {
                     reject(err);
                 } else {
-                    console.log(`성공: ${res}`);
                     resolve(`succes`);
                 }
             })
