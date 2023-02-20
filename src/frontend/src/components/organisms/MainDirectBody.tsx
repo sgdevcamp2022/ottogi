@@ -89,6 +89,8 @@ const MainDirectBody = () => {
   };
 
   useEffect(() => {
+    if (!channelId) return;
+
     const getChatLogs = async () => {
       const data = await clientApi.get("/chat/getchats", {
         params: { channelId },

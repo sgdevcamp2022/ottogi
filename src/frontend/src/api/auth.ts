@@ -1,3 +1,4 @@
+import axios from "axios";
 import clientApi from "./axios";
 
 interface ReissueParams {
@@ -12,15 +13,16 @@ interface RegisterParams extends LoginParams {
   name: string;
 }
 
+const baseURL = process.env.REACT_APP_BASE_URL;
 const accessToken = sessionStorage.getItem("accessToken");
 
 const authApi = {
   login: async ({ email, password }: LoginParams) => {
-    return await clientApi.post("/user/auth/login", { email, password });
+    return await axios.post(`${baseURL}/user/auth/login`, { email, password });
   },
 
   register: async ({ email, name, password }: RegisterParams) => {
-    return await clientApi.post("/user/auth/register", {
+    return await axios.post(`${baseURL}/user/auth/register`, {
       email,
       name,
       password,
@@ -28,19 +30,25 @@ const authApi = {
   },
 
   logout: async () => {
-    return clientApi.get("/user/member/logout", {
-      headers: { Authorization: "Bearer " + accessToken },
-    });
+    return clientApi.get(
+      "/user/member/logout"
+      // {
+      //   headers: { Authorization: "Bearer " + accessToken },
+      // }
+    );
   },
 
   getUserInfo: async () => {
-    return await clientApi.get("/user/member/info", {
-      headers: { Authorization: "Bearer " + accessToken },
-    });
+    return await clientApi.get(
+      "/user/member/info"
+      // {
+      //   headers: { Authorization: "Bearer " + accessToken },
+      // }
+    );
   },
 
   verify: async (userCode: string) => {
-    return await clientApi.post("/user/auth/email", { userCode });
+    return await axios.post(`${baseURL}/user/auth/email`, { userCode });
   },
 
   reissue: async ({ refreshToken }: ReissueParams) => {
