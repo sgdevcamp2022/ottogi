@@ -144,13 +144,8 @@ async function runSocketServer() {
     connections.on('connection', async (socket) => {
         console.log('client connected');
         socket.emit("connection-success",{ socketId: socket.id, })
-        // if (await manage.getTransport(transports, socket.id).produce({
-        //     kind,
-        //     rtpParameters
-        // })) {
-        //     socket.emit('newProducer');
-        // }
-
+        
+        
         socket.on('disconnect', () => {
             console.log('client disconnected');
             let item_consumers = manage.removeItems(consumers, socket.id, 'consumer')
@@ -168,7 +163,7 @@ async function runSocketServer() {
                 room_.peers = room_.peers.filter(socketId => socketId !== socket.id)
             }
         });
-
+        
         socket.on('connect_error', (err) => {
             console.error('client connection error', err);
         });
@@ -205,24 +200,24 @@ async function runSocketServer() {
             // send to client
             callback({rtpCapabilities})
         })
-
-    socket.on('createProducerTransport',async(data, callback)=>{
-        // have to get room name from peer's properties
-        const {roomName} = peers[socket.id] // 첫 producer를 통해 peers를 타고타고 roomName을 가져오는 방식
-        const router = rooms.get(roomName).mediasoupRouter
-        try{
+        
+        socket.on('createProducerTransport',async(data, callback)=>{
+            // have to get room name from peer's properties
+            const {roomName} = peers[socket.id] // 첫 producer를 통해 peers를 타고타고 roomName을 가져오는 방식
+            const router = rooms.get(roomName).mediasoupRouter
+            try{
             let {transport, params} = await createWebRTCTransport(router)
             callback(params)
             let informs = manage.addTransport(socket.id, transports, transport, roomName, false, peers)
             transports = informs.transports
             peers = informs.peers
-
+            
         }catch(err){
             console.error(err);
             callback({ params: err.message });
         }
     })
-
+    
     socket.on('createConsumerTransport',async(data, callback)=>{
         // have to get room name from peer's properties
         const {roomName} = peers[socket.id] // 첫 producer를 통해 peers를 타고타고 roomName을 가져오는 방식
@@ -233,25 +228,33 @@ async function runSocketServer() {
             let informs = manage.addTransport(socket.id, transports, transport, roomName, true, peers)
             transports = informs.transports
             peers = informs.peers
-
+            
         }catch(err){
             console.error(err);
             callback({ params: err.message });
         }
     })
-
+    
+    
     socket.on('connectProducerTransport', async (data, callback) => {
         // getTransport(transports, socket.id, is_consumer = F)
         await manage.getTransport(transports, socket.id, false).connect({ dtlsParameters: data.dtlsParameters })
         callback();
     });
-
+    
     socket.on('connectConsumerTransport', async (data, callback) => {
         // getTransport(transports, socket.id, is_consumer = T)
         await manage.getTransport(transports, socket.id, true).connect({ dtlsParameters: data.dtlsParameters })
         callback();
     });
-
+    
+    if (await manage.getTransport(transports, socket.id).produce({
+        kind,
+        rtpParameters
+    })) {
+        socket.emit('newProducer');
+    }
+    
     socket.on('produce', async (data, callback) => {
         const {kind, rtpParameters} = data;
         const {roomName} = peers[socket.id];
