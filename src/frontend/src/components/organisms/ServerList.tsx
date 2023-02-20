@@ -7,7 +7,6 @@ import AddIcon from "@components/atoms/Icons/AddIcon";
 import useGetServerList from "@hooks/query/useGetServerList";
 import { useUserStore } from "@store/useUserStore";
 import ScrollableBox from "@components/molecules/Div/scrollableBox";
-import useCommunityUpdate from "@hooks/query/useCommunityUpdate";
 
 interface Community {
   img: string;
@@ -16,25 +15,17 @@ interface Community {
 }
 
 const ServerList = () => {
-  // const [userId, setUserId] = useState<Number>();
   const navigate = useNavigate();
-  const [data, setData] = useState<Community[]>([]);
+  const data = [];
   const { userInfo } = useUserStore();
-  const {
-    data: res,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useGetServerList({
+  const { data: res, isSuccess } = useGetServerList({
     userId: userInfo.id,
   });
-  const [num, setNum] = useState<Number>();
   const onMain = () => {
     navigate("/@me");
   };
 
   const onServer = (v: Number) => {
-    setNum(v);
     navigate("/" + v);
   };
 
@@ -67,7 +58,7 @@ const ServerList = () => {
     );
   }
   const List = res?.data.data[0].split("},");
-  if (List.length > 0 && data.length < List?.length) {
+  if (List.length > 0) {
     for (let i = 0; i < List?.length; i++) {
       if (i !== List.length - 1) {
         console.log(JSON.parse(List[i] + "}"));
@@ -93,19 +84,18 @@ const ServerList = () => {
             />
           </li>
           <Divider />
-          {isSuccess &&
-            data.map((v: any) => {
-              return (
-                <li onClick={() => onServer(v.community_id)}>
-                  <ServerImage
-                    avatarHeight={3}
-                    avatarWidth={3}
-                    name={v.name}
-                    id={v.community_id}
-                  />
-                </li>
-              );
-            })}
+          {data.map((v: any) => {
+            return (
+              <li onClick={() => onServer(v.community_id)}>
+                <ServerImage
+                  avatarHeight={3}
+                  avatarWidth={3}
+                  name={v.name}
+                  id={v.community_id}
+                />
+              </li>
+            );
+          })}
           <li onClick={onCreateServer}>
             <ServerImage avatarHeight={3} avatarWidth={3} name="" id={10001}>
               <AddIcon />
