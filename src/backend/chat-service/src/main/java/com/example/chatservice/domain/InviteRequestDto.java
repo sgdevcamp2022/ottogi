@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InviteRequestDto {
-    private String communityId;
-    private String communityName;
     private String sender;
     private String channelId;
+    private String linkMessage;
 }

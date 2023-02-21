@@ -82,19 +82,26 @@ public class MessageController {
     @GetMapping("/getchats")
     public CommonResponse<Object> chats(@RequestParam String channelId ){
         ChatViewDto chatViewDto = new ChatViewDto(channelId);
-        log.info(chatViewDto.getChannelId());
-        log.info("test log");
-        return responseService.getSuccessResponse(CHAT_VIEW_SUCCESS, chatRedisService.chats(chatViewDto));
+        try {
+            return responseService.getSuccessResponse(CHAT_VIEW_SUCCESS, chatRedisService.chats(chatViewDto));
+        } catch (Exception e){
+            return responseService.getSuccessResponse(CHAT_EMPTY_VIEW_SUCCESS, null);
+        }
     }
 
     @PostMapping("/invite")
     public CommonResponse<Object> invite(@RequestBody InviteRequestDto inviteRequestDto) {
+
+        log.info("초대장 요청 메세지 생성 [IN] Link : {} ", inviteRequestDto.getLinkMessage());
 
         MessageRequestDto messageRequestDto = new MessageRequestDto().convertInviteDto(inviteRequestDto);
         messageRequestDto.modifyImagePath(SERVER_IMAGE);
         messageRequestDto.setCreatedAt();
 
         message_topic(messageRequestDto);
+
+        log.info("초대장 요청 메세지 생성 [DONE] Link : {} ", inviteRequestDto.getLinkMessage());
+
         return responseService.getSuccessResponse(INVITE_MSG_SUCCESS, null);
     }
 

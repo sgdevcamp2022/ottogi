@@ -38,7 +38,7 @@ public class MessageRequestDto {
                 .channelId(inviteRequestDto.getChannelId())
                 .name("OTTOGI")
                 .type(INVITE)
-                .message(inviteRequestDto.getSender() +" 님이 " + inviteRequestDto.getCommunityName() +
+                .message(inviteRequestDto.getLinkMessage() + " ," + inviteRequestDto.getSender() +" 님이 " +
                         " 커뮤니티로의 초대장을 보내셨습니다")
                 .build();
     }
