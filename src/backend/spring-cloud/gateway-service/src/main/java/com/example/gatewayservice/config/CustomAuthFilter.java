@@ -54,12 +54,18 @@ public class CustomAuthFilter extends AbstractGatewayFilterFactory<CustomAuthFil
                 }
             }
 
+            log.info(request.getHeaders().get("Authorization").toString());
+            log.info(request.getHeaders().get("Authorization").toString().substring(7));
+
+
             String jwt = request.getHeaders().get("Authorization").get(0).substring(7);
 
             ErrorCode errorCode = validateToken(jwt);
 
             if(errorCode != null){
                 try {
+                    log.info("에러 발생!");
+                    log.info(errorCode.getMessage());
                     return handleUnAuthorize(exchange, errorCode);
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
@@ -82,6 +88,7 @@ public class CustomAuthFilter extends AbstractGatewayFilterFactory<CustomAuthFil
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return null;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info(e.getMessage());
             return JWT_INVALID;
         } catch (ExpiredJwtException e) {
             return JWT_EXPIRED;
