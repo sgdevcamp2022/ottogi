@@ -53,7 +53,7 @@ async function createMediasoupWorker() {
 
   const mediaCodecs = config.mediasoup.routerOptions.mediaCodecs;
   router = await worker.createRouter({ mediaCodecs });
-  console, log("-- mediasoup worker start. --");
+  console.log("-- mediasoup worker start. --");
   return worker;
 }
 //=====================================================================================================
@@ -83,41 +83,41 @@ async function runExpressApp() {
 
 //=====================================================================================================
 async function runWebServer() {
-  const { key, cert } = config.https.tls;
-  if (!fs.existsSync(key) || !fs.existsSync(cert)) {
-    console.error("SSL files are not found. check your config.js file");
-    process.exit(0);
-  }
-  const tls = {
-    cert: fs.readFileSync(config.https.tls.cert, "utf-8"),
-    key: fs.readFileSync(config.https.tls.key, "utf-8"),
-  };
+    const { key, cert } = config.https.tls;
+    if (!fs.existsSync(key) || !fs.existsSync(cert)) {
+        console.error("SSL files are not found. check your config.js file");
+        process.exit(0);
+    }
+    const tls = {
+        cert: fs.readFileSync(config.https.tls.cert, "utf-8"),
+        key: fs.readFileSync(config.https.tls.key, "utf-8"),
+        rejectUnauthorized: false,
+    };
 
-  httpsServer = https.createServer(tls, expressApp);
-  httpsServer.on("error", (err) => {
-    console.error("starting web server failed:", err.message);
-  });
-  await new Promise((resolve) => {
-    httpsServer.listen(listenPort, () => {
-      console.log("server is running");
-      console.log(`open https://${ip}:${listenPort} in your web browser`);
-      resolve();
+    httpsServer = https.createServer(tls, expressApp);
+    httpsServer.on("error", (err) => {
+        console.error("starting web server failed:", err.message);
     });
-  });
-}
+    await new Promise((resolve) => {
+        httpsServer.listen(listenPort, () => {
+        console.log("server is running");
+        console.log(`open https://${ip}:${listenPort} in your web browser`);
+        resolve();
+        })});
+    }
 //=====================================================================================================
 
 const socketMain = require("./server/video-broadcast");
 async function runSocketServer() {
-  const io = Server(httpsServer, {
-    cors: {
-      origin: `*`,
-      methods: ["GET", "POST"],
-      transports: ["websocket"],
-    },
-  });
-  socketMain(io, worker, router);
+    const io = Server(httpsServer, {
+        cors: {
+            origin: `*`,
+            methods: ['GET', 'POST'],
+            transports: ['websocket'],
+        },
+    });
+    socketMain(io, worker, router);
 
-  console.log("running WebSocketServer...");
-  // logger.info('running WebSocketServer...');
+    console.log('running WebSocketServer...');
+    // logger.info('running WebSocketServer...');
 }
