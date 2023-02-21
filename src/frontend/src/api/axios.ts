@@ -1,4 +1,7 @@
+import { COOKIE_KEY } from "@configs/cookie";
 import axios from "axios";
+import { cookies } from "src/App";
+import authApi from "./auth";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 const accessToken = sessionStorage.getItem("accessToken");
@@ -12,29 +15,31 @@ clientApi.interceptors.request.use((config) => {
   return config;
 });
 
-// clientApi.interceptors.response.use(
-//   (res) => res,
-//   async (err) => {
-//     const errMessage = err.response.data.errorCode;
-//     console.log("message: ", errMessage);
+clientApi.interceptors.response.use(
+  (res) => res,
+  async (err) => {
+    const errMessage = err.response.data.errorCode;
+    console.log("message: ", errMessage);
 
-//     if (errMessage !== "AUTH012") return Promise.reject(err);
+    if (errMessage !== "AUTH012") return Promise.reject(err);
 
-//     const originalRequest = err.config;
-//     console.log("originalRequest: ", originalRequest);
+    // const originalRequest = err.config;
+    // console.log("originalRequest: ", originalRequest);
 
-//     const { data } = await authApi.reissue({
-//       refreshToken: cookies.get(COOKIE_KEY),
-//     });
-//     console.log("tokens: ", data.data);
+    const { data } = await authApi.reissue({
+      refreshToken: cookies.get(COOKIE_KEY),
+    });
+    console.log("tokens: ", data.data);
 
-//     const { accessToken, refreshToken } = data.data;
-//     console.log(accessToken, refreshToken);
+    const { accessToken, refreshToken } = data.data;
+    console.log(accessToken, refreshToken);
 
-//     cookies.set(COOKIE_KEY, refreshToken);
-//     sessionStorage.setItem("accessToken", accessToken);
-//     return clientApi(originalRequest);
-//   }
-// );
+    cookies.set(COOKIE_KEY, refreshToken);
+    sessionStorage.setItem("accessToken", accessToken);
+
+    // return clientApi(originalRequest);
+    return Promise.resolve();
+  }
+);
 
 export default clientApi;
