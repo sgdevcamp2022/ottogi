@@ -9,6 +9,8 @@ import NotFound from "../pages/NotFound";
 import ServerSetting from "../pages/ServerSetting";
 import UserSetting from "../pages/UserSetting";
 import CreateServer from "@pages/CreateServer";
+import Home from "src/video-broadcast/home";
+import BroadHome from "src/video-broadcast";
 
 const Router = () => {
   return (
@@ -21,6 +23,26 @@ const Router = () => {
           </ProtectPage>
         }
       />
+      <Route path="/Home" element={<Home />} />
+      <Route path="/broadcast/:view" element={<BroadHome />} />
+
+      <Route
+        path="/login"
+        element={
+          <ProtectAuth>
+            <Login />
+          </ProtectAuth>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <ProtectAuth>
+            <Register />
+          </ProtectAuth>
+        }
+      />
+
       <Route
         path={"/@me"}
         element={
@@ -43,6 +65,7 @@ const Router = () => {
       <Route path="/UserSetting" element={<UserSetting />} />
       <Route path="/CreateServer" element={<CreateServer />} />
       {/* <Route path="/:serverId/" element={<Server />} /> */}
+
       <Route
         path="/:serverId"
         element={
@@ -60,22 +83,6 @@ const Router = () => {
         }
       />
 
-      <Route
-        path="/login"
-        element={
-          <ProtectAuth>
-            <Login />
-          </ProtectAuth>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <ProtectAuth>
-            <Register />
-          </ProtectAuth>
-        }
-      />
       <Route path="/*" element={<NotFound />} />
     </Routes>
   );

@@ -3,16 +3,14 @@ import Status from "@components/atoms/Div/Status";
 import styled from "styled-components";
 import mask from "../../../assets/mask/avatar-mask-32.png";
 
-export type StateType = "on" | "off" | "disturb" | "mobile" | "empty";
-
 interface UserStateProps {
-  status?: StateType;
+  status: "0" | "1" | "2" | "3";
   fontSize?: string;
   src?: string;
 }
 
 const UserState32 = ({
-  status = "on",
+  status,
   fontSize = "16px",
   src = "",
 }: UserStateProps) => {

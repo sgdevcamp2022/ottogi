@@ -1,5 +1,3 @@
-type AccessTokenType = string;
-
 interface UserInfoType {
   id: number;
   email: string;
@@ -18,4 +16,5 @@ interface FriendType {
   friendState: FriendStateType;
   channelId: string;
   createdAt: Date;
+  profileImagePath: string;
 }

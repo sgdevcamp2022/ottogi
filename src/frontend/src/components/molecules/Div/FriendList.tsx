@@ -8,20 +8,31 @@ import ScrollableBox from "./scrollableBox";
 const FriendList = () => {
   const {
     userInfo: { email },
-    accessToken,
   } = useUserStore();
-  const { data: friendList } = useGetFriendList({ email, accessToken });
+  const { data, isSuccess } = useGetFriendList(email);
 
-  if (!friendList) return <></>;
+  if (!isSuccess) return <></>;
+
+  const friendList: FriendType[] = data?.data.data.filter(
+    (friend: FriendType) => friend.friendState === "ACCEPTED"
+  );
 
   return (
     <FriendListContainer>
       <DirectMessage />
       <ScrollableBox>
         <ListContainer>
-          {friendList.data.data.map(({ name, channelId }: FriendType) => (
-            <DirectButton key={name} name={name} id={channelId} />
-          ))}
+          {friendList.map(
+            ({ name, userId, channelId, profileImagePath }: FriendType) => (
+              <DirectButton
+                key={name}
+                name={name}
+                userId={userId}
+                id={channelId}
+                src={profileImagePath}
+              />
+            )
+          )}
         </ListContainer>
       </ScrollableBox>
     </FriendListContainer>

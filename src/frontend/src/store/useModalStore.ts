@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 
 interface ModalState {
   inviteFriendModal: boolean;
@@ -10,17 +10,12 @@ interface ModalAction {
 }
 
 const useModalStore = create<ModalState & ModalAction>()(
-  devtools(
-    persist(
-      (set) => ({
-        inviteFriendModal: true,
+  devtools((set) => ({
+    inviteFriendModal: true,
 
-        setInviteFriendModal: (inviteFriendModal: boolean) =>
-          set({ inviteFriendModal }),
-      }),
-      { name: "main" }
-    )
-  )
+    setInviteFriendModal: (inviteFriendModal: boolean) =>
+      set({ inviteFriendModal }),
+  }))
 );
 
 export default useModalStore;

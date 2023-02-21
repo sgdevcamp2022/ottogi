@@ -16,14 +16,13 @@ const MainTotal = () => {
   }));
   const {
     userInfo: { email },
-    accessToken,
   } = useUserStore();
-  const { data, isSuccess } = useGetFriendList({ email, accessToken });
+  const { data, isSuccess } = useGetFriendList(email);
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data.data.data.filter(
+  const friendList: FriendType[] = data?.data.data.filter(
     (f: FriendType) => f.friendState === "ACCEPTED"
   );
   const num = friendList.length;
@@ -34,13 +33,23 @@ const MainTotal = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"모든 친구"} num={num} />
           <ScrollableBox>
-            {friendList.map(({ email, name, channelId }) => (
-              <FriendDefaultBox key={email} id={channelId} name={name} />
-            ))}
+            {friendList.map(
+              ({ email, name, channelId, userId, friendState }) => (
+                <FriendDefaultBox
+                  isTotal={false}
+                  key={email}
+                  email={email}
+                  id={channelId}
+                  name={name}
+                  userId={userId}
+                  status={friendState}
+                />
+              )
+            )}
           </ScrollableBox>
         </>
       ) : (
-        <>
+        <Container>
           <EmptyContainer
             image="addFriend"
             text="Ottogi는 친구를 기다리고 있어요."
@@ -54,7 +63,7 @@ const MainTotal = () => {
               fontSize="sm"
             />
           </ButtonWrapper>
-        </>
+        </Container>
       )}
     </>
   );
@@ -63,6 +72,12 @@ const MainTotal = () => {
 const ButtonWrapper = styled.div`
   margin-top: 20px;
   text-align: center;
+  position: relative;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export default MainTotal;

@@ -9,15 +9,19 @@ import useInput from "@hooks/common/useInput";
 import useModifyPassword from "@hooks/query/useModifyPassword";
 import { useUserStore } from "@store/useUserStore";
 import useModifyName from "@hooks/query/useModifyName";
-import LoginForm from "@components/molecules/Form/LoginForm";
 
 const NameChange = () => {
+  const { userInfo, setUserInfo } = useUserStore();
   const [name, changeName] = useInput();
   const [password, changePassword] = useInput();
-  const { userInfo, accessToken } = useUserStore();
   const { mutate: modifyName } = useModifyName();
-  console.log(accessToken);
-
+  const updataUserName = () => {
+    modifyName({
+      name,
+      password,
+    });
+    setUserInfo({ ...userInfo, name });
+  };
   return (
     <>
       <TopWrapper>
@@ -73,23 +77,13 @@ const NameChange = () => {
         </Wrapper>
       </TopWrapper>
       <Bottom>
-        <DefaultButton
-          text="완료"
-          onClick={() =>
-            modifyName({
-              name,
-              password,
-              accessToken,
-            })
-          }
-        />
+        <DefaultButton text="완료" onClick={() => updataUserName()} />
       </Bottom>
     </>
   );
 };
 
 const PwChange = () => {
-  const { userInfo, accessToken } = useUserStore();
   const [passwordConfirm, changePasswordConfirm] = useInput();
   const [password, changePassword] = useInput();
   const [originalPassword, changeOriginalPassword] = useInput();
@@ -174,7 +168,6 @@ const PwChange = () => {
             modifyPassword({
               password,
               originalPassword,
-              accessToken,
             })
           }
         />
@@ -209,7 +202,7 @@ const FieldList = () => {
       )}
       <FieldContinaer>
         <LeftRow>
-          <Text text="사용자명" fontSize="xs" color="setting-tab" />
+          <Text text="사용자명" fontSize="xs" color="setting-tab" mb={8} />
           <Text text={userInfo.name} fontSize="base" color="white" />
         </LeftRow>
         <ButtonWrappper>
@@ -222,7 +215,7 @@ const FieldList = () => {
       </FieldContinaer>
       <FieldContinaer>
         <LeftRow>
-          <Text text="이메일" fontSize="xs" color="setting-tab" />
+          <Text text="이메일" fontSize="xs" color="setting-tab" mb={8} />
           <Text text={userInfo.email} fontSize="base" color="white" />
         </LeftRow>
         {/* <ButtonWrappper>
@@ -235,8 +228,8 @@ const FieldList = () => {
       </FieldContinaer>
       <FieldContinaer>
         <LeftRow>
-          <Text text="비밀번호" fontSize="xs" color="setting-tab" />
-          <Text text="xxxx" fontSize="base" color="white" />
+          <Text text="비밀번호" fontSize="xs" color="setting-tab" mb={8} />
+          <Text text="********" fontSize="base" color="white" />
         </LeftRow>
         <ButtonWrappper>
           <FieldButton text="변경하기" onClick={onClickToggleModal2} />
@@ -263,7 +256,9 @@ const FieldContinaer = styled.div`
   padding-bottom: 1rem;
 `;
 
-const LeftRow = styled.div``;
+const LeftRow = styled.div`
+  align-items: center;
+`;
 
 const ButtonWrappper = styled.div`
   width: auto;

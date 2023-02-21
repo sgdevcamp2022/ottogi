@@ -1,5 +1,6 @@
 import useInput from "@hooks/common/useInput";
 import useGetFriendList from "@hooks/query/useGetFriendList";
+import useGetFriendStatus from "@hooks/query/useGetFriendStatus";
 import { useUserStore } from "@store/useUserStore";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
@@ -10,14 +11,13 @@ import LabelText from "../molecules/Text/LabelText";
 const MainOnline = () => {
   const {
     userInfo: { email },
-    accessToken,
   } = useUserStore();
-  const { data, isSuccess } = useGetFriendList({ email, accessToken });
+  const { data, isSuccess } = useGetFriendList(email);
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data.data.data.filter(
+  const friendList: FriendType[] = data?.data.data.filter(
     (friend: FriendType) => friend.friendState === "ACCEPTED"
   );
   const num = friendList.length;
@@ -29,9 +29,19 @@ const MainOnline = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"온라인"} num={num} />
           <ScrollableBox>
-            {friendList.map(({ email, name, channelId }) => (
-              <FriendDefaultBox key={email} id={channelId} name={name} />
-            ))}
+            {friendList.map(
+              ({ email, name, channelId, userId, friendState }) => (
+                <FriendDefaultBox
+                  isTotal={true}
+                  key={email}
+                  email={email}
+                  id={channelId}
+                  name={name}
+                  userId={userId}
+                  status={friendState}
+                />
+              )
+            )}
           </ScrollableBox>
         </>
       ) : (

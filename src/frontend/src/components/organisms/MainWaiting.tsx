@@ -15,14 +15,13 @@ interface FriendState {
 const MainWaiting = () => {
   const {
     userInfo: { email },
-    accessToken,
   } = useUserStore();
-  const { data, isSuccess } = useGetFriendList({ email, accessToken });
+  const { data, isSuccess } = useGetFriendList(email);
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data.data.data.filter(
+  const friendList: FriendType[] = data?.data.data.filter(
     (friend: FriendState) =>
       friend.friendState === "REQUEST" || friend.friendState === "WAIT"
   );

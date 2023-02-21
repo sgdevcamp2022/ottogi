@@ -33,11 +33,6 @@ interface ButtonProps {
 }
 
 const StyledIconButton = styled(IconButton)<ButtonProps>`
-  &:hover {
-    .avatar {
-      box-shadow: 1rem 1rem 1rem black;
-    }
-  }
   .avatar {
     width: 100%;
     height: 100%;

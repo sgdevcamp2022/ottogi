@@ -1,4 +1,7 @@
+import UserSetting from "@pages/UserSetting";
 import useModalStore from "@store/useModalStore";
+import useUserSettingModalStore from "@store/useUserSettingModalStore";
+import { useEffect } from "react";
 import styled from "styled-components";
 import InviteFriendModal from "../organisms/InviteFriendModal";
 import ServerList from "../organisms/ServerList";
@@ -9,7 +12,12 @@ import Tab3ServerBody from "../organisms/Tab3ServerBody";
 import Tab3ServerHeader from "../organisms/Tab3ServerHeader";
 
 const ServerPage = () => {
-  const { inviteFriendModal } = useModalStore();
+  const { inviteFriendModal, setInviteFriendModal } = useModalStore();
+  const { userSettingModal, setUserSettingModal } = useUserSettingModalStore();
+  useEffect(() => {
+    setInviteFriendModal(false);
+    setUserSettingModal(false);
+  }, []);
   return (
     <>
       <ServerList />
@@ -23,6 +31,7 @@ const ServerPage = () => {
         <Tab3ServerBody />
       </Tab3Container>
       {inviteFriendModal && <InviteFriendModal />}
+      {userSettingModal && <UserSetting />}
     </>
   );
 };

@@ -17,13 +17,13 @@ interface FriendWaitingBoxProps {
 
 const FriendWaitingBox = ({ name, email, status }: FriendWaitingBoxProps) => {
   const navigate = useNavigate();
-  const { userInfo, accessToken } = useUserStore();
+  const { userInfo } = useUserStore();
   const { mutate: acceptFriend } = useAcceptFriend();
   const { mutate: rejectFriend } = useRejectFriend();
 
   if (!userInfo) navigate("/login");
 
-  const params = { email, accessToken: accessToken };
+  const params = { email };
 
   let Buttons: ReactElement;
   if (status === "WAIT") {
@@ -52,7 +52,7 @@ const FriendWaitingBox = ({ name, email, status }: FriendWaitingBoxProps) => {
   return (
     <FriendBox
       name={name}
-      status={`${status === "WAIT" ? "받은" : "보낸"} 친구 요청`}
+      status={status === "WAIT" ? "2" : "3"}
       onClick={() => null}
       Buttons={Buttons}
     />

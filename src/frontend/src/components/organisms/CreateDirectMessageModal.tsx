@@ -22,9 +22,8 @@ const CreateDirectMessageModal = ({
 }: CreateDirectMessageModalProps) => {
   const {
     userInfo: { email },
-    accessToken,
   } = useUserStore();
-  const { data, isSuccess } = useGetFriendList({ email, accessToken });
+  const { data, isSuccess } = useGetFriendList(email);
 
   const [search, changeSearch] = useInput();
 
@@ -55,7 +54,7 @@ const CreateDirectMessageModal = ({
             <SelectFriend />
             <SelectFriend check /> */}
             {friendList.map((friend) => (
-              <SelectFriend check={true} />
+              <SelectFriend check={true} status="1" />
               // <SelectFriend check={check} />
             ))}
           </ScrollableBox>

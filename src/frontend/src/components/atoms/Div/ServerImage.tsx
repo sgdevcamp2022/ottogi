@@ -3,6 +3,7 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { ReactElement } from "react";
 import useServerStore from "../../../store/useServerStore";
+import { useParams } from "react-router-dom";
 
 interface ServerImageProps {
   // onClick: MouseEventHandler<HTMLButtonElement>;
@@ -24,6 +25,7 @@ const ServerImage = ({
   avatarHeight = 3,
   avatarWidth = 3,
 }: ServerImageProps) => {
+  const params = useParams();
   const { server, setServer } = useServerStore(({ server, setServer }) => ({
     server,
     setServer,

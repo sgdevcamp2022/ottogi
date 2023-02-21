@@ -2,6 +2,8 @@ import Tip from "@components/atoms/Div/Tooltip";
 import CancelIcon from "@components/atoms/Icons/CancelIcon";
 import ChatIcon from "@components/atoms/Icons/ChatIcon";
 import MoreIcon from "@components/atoms/Icons/MoreIcon";
+import useGetFriendStatus from "@hooks/query/useGetFriendStatus";
+import useMainStore from "@store/useMainStore";
 import { ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -10,29 +12,49 @@ import EtcModal from "./EtcModal";
 import FriendBox from "./FriendBox";
 
 interface FriendDefaultBoxProps {
+  isTotal: boolean;
+  email: string;
   id: string;
   name: string;
-  status?:
-    | "온라인"
-    | "오프라인"
-    | "자리 비움"
-    | "다른 용무 중"
-    | "보낸 친구 요청";
+  userId: number;
+  status: FriendStateType;
 }
 
 const FriendDefaultBox = ({
+  isTotal,
+  email,
   id,
   name,
-  status = "온라인",
+  userId,
+  status,
 }: FriendDefaultBoxProps) => {
+  const { setDeleteFriendEmail } = useMainStore();
   const navigate = useNavigate();
+  const { setUserName, setUserId } = useMainStore();
   const [showEtcModal, setShowEtcModal] = useState(false);
+  const { data: isOnline, isLoading } = useGetFriendStatus({ userId });
 
-  // const onClick = () => navigate(`/@me/${id}`);
-  const onClick = () => null;
+  if (isLoading) return <></>;
+
+  if (!isTotal) {
+    if (isOnline?.data.data !== "1") {
+      return <></>;
+    }
+  }
+
+  const enterDM = () => {
+    navigate(`/@me/${id}`);
+    setUserName(name);
+    setUserId(userId);
+  };
+
+  const clickChatIcon = () => {
+    setDeleteFriendEmail(email);
+    setShowEtcModal(!showEtcModal);
+  };
 
   let Buttons: ReactElement;
-  if (status === "보낸 친구 요청") {
+  if (status === "WAIT") {
     Buttons = (
       <Tip title="취소" place="top">
         <RoundButton Icon={<CancelIcon />} onClick={() => null} />
@@ -42,17 +64,11 @@ const FriendDefaultBox = ({
     Buttons = (
       <>
         <Tip title="메시지 보내기" place="top">
-          <RoundButton
-            Icon={<ChatIcon />}
-            onClick={() => navigate(`/@me/${id}`)}
-          />
+          <RoundButton Icon={<ChatIcon />} onClick={enterDM} />
         </Tip>
         <EtcContainer>
           <Tip title="기타" place="top">
-            <RoundButton
-              Icon={<MoreIcon />}
-              onClick={() => setShowEtcModal(!showEtcModal)}
-            />
+            <RoundButton Icon={<MoreIcon />} onClick={clickChatIcon} />
           </Tip>
           {showEtcModal && <EtcModal />}
         </EtcContainer>
@@ -62,15 +78,13 @@ const FriendDefaultBox = ({
   return (
     <FriendBox
       name={name}
-      status={status}
-      onClick={onClick}
+      status={isOnline?.data.data}
+      onClick={() => null}
       Buttons={Buttons}
     />
   );
 };
 
-const EtcContainer = styled.div`
-  position: relative;
-`;
+const EtcContainer = styled.div``;
 
 export default FriendDefaultBox;

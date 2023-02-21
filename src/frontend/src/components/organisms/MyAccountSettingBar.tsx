@@ -2,23 +2,24 @@ import styled from "styled-components";
 import Text from "../atoms/Text/Text";
 import SettingButton from "../atoms/Button/SettingButton";
 import { Divider } from "@mui/material";
-import { useState } from "react";
 import SetDefaultButton from "../atoms/Button/SetDefaultButton";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import { useUserStore } from "@store/useUserStore";
 import { COOKIE_KEY } from "@configs/cookie";
+import { cookies } from "src/App";
+import useLogout from "@hooks/query/useLogout";
 
 const ServerSettingBar = () => {
-  const [number, setNumber] = useState("");
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies([COOKIE_KEY]);
   const { resetUser } = useUserStore();
+  const { mutate: logoutUser } = useLogout();
 
-  const logout = () => {
-    console.log(1);
-    removeCookie(COOKIE_KEY);
+  const logout = async () => {
+    cookies.remove(COOKIE_KEY);
+    localStorage.clear();
     resetUser();
+
+    logoutUser();
     navigate("/login");
   };
 
@@ -52,14 +53,14 @@ const ServerSettingBar = () => {
             onClick={() => console.log(1)}
           />
         </li>
-        <li>
+        {/* <li>
           <SettingButton
             text="알림"
             status={"알림"}
             backgroundColor="voice-icon"
             onClick={() => console.log(1)}
           />
-        </li>
+        </li> */}
 
         <Divider
           sx={{ borderColor: "#96989D93", opacity: 0.5, mr: 1, mt: 1, mb: 1 }}
