@@ -59,9 +59,12 @@ const ServerList = () => {
   if (!res?.data.data) {
     return <EmptyContainer />;
   }
+<<<<<<< HEAD
+
+=======
   console.log("res", res);
+>>>>>>> 6dccf11c80e173c2affd59035bd71d81a2c7d8bc
   const List = res?.data.data[0].split("},");
-  console.log(11, List);
   if (List[0] === "") return <EmptyContainer />;
 
   if (List.length > 0) {

@@ -7,6 +7,7 @@ export default {
 
 export const FriendBox = () => (
   <FriendBoxDiv
+    isTotal={false}
     email="email@naver.com"
     id={"1"}
     name="허다은"

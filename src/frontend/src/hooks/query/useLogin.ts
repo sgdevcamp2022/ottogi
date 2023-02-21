@@ -25,8 +25,8 @@ const useLogin = () => {
         setUserInfo(data.data.data);
       };
 
-      setTokens();
-      getUserInfo();
+      await setTokens();
+      await getUserInfo();
       navigate("/@me");
     },
   });

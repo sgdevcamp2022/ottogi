@@ -12,6 +12,7 @@ import EtcModal from "./EtcModal";
 import FriendBox from "./FriendBox";
 
 interface FriendDefaultBoxProps {
+  isTotal: boolean;
   email: string;
   id: string;
   name: string;
@@ -20,6 +21,7 @@ interface FriendDefaultBoxProps {
 }
 
 const FriendDefaultBox = ({
+  isTotal,
   email,
   id,
   name,
@@ -33,6 +35,12 @@ const FriendDefaultBox = ({
   const { data: isOnline, isLoading } = useGetFriendStatus({ userId });
 
   if (isLoading) return <></>;
+
+  if (!isTotal) {
+    if (isOnline?.data.data !== "1") {
+      return <></>;
+    }
+  }
 
   const enterDM = () => {
     navigate(`/@me/${id}`);

@@ -29,7 +29,6 @@ clientApi.interceptors.response.use(
     const { data } = await authApi.reissue({
       refreshToken: cookies.get(COOKIE_KEY),
     });
-    console.log("tokens: ", data.data);
 
     const { accessToken, refreshToken } = data.data;
     console.log(accessToken, refreshToken);
