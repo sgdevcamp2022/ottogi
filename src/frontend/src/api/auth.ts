@@ -17,7 +17,7 @@ interface RegisterProps extends LoginProps {
 }
 
 const baseURL = process.env.REACT_APP_BASE_URL;
-const accessToken = sessionStorage.getItem("accessToken");
+const accessToken = localStorage.getItem("accessToken");
 
 const authApi = {
   login: async ({ email, password }: LoginProps) => {
@@ -33,7 +33,7 @@ const authApi = {
   },
 
   logout: async () => {
-    return clientApi.get("/user/member/logout");
+    return await clientApi.post("/user/member/logout");
   },
 
   getUserInfo: async ({ accessToken }: GetUserInfoProps) => {

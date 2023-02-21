@@ -17,7 +17,7 @@ const useLogin = () => {
     }: any) => {
       const setTokens = async () => {
         cookies.set(COOKIE_KEY, refreshToken);
-        sessionStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("accessToken", accessToken);
       };
 
       const getUserInfo = async () => {
@@ -25,8 +25,8 @@ const useLogin = () => {
         setUserInfo(data.data.data);
       };
 
-      setTokens();
-      getUserInfo();
+      await setTokens();
+      await getUserInfo();
       navigate("/@me");
     },
   });

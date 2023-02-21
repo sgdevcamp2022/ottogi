@@ -22,7 +22,7 @@ interface addChatLogProps {
   type: string;
 }
 
-const accessToken = sessionStorage.getItem("accessToken");
+const accessToken = localStorage.getItem("accessToken");
 
 const MainDirectBody = () => {
   const { channelId = "" } = useParams();
@@ -32,6 +32,8 @@ const MainDirectBody = () => {
   const [message, setMessage] = useState("");
 
   const connectChatRoom = () => {
+    if (userInfo.id === -1) return;
+
     client = new Client({
       brokerURL: process.env.REACT_APP_BROKER_URL,
       connectHeaders: {

@@ -9,7 +9,7 @@ interface ProtectAuthProps {
 
 const ProtectAuth = ({ children }: ProtectAuthProps) => {
   const cookie = cookies.get(COOKIE_KEY);
-  const accessToken = sessionStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
 
   return (
     <>{cookie && accessToken ? <Navigate replace to="/@me" /> : children}</>
