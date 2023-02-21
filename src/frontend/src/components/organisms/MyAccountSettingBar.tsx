@@ -6,18 +6,16 @@ import SetDefaultButton from "../atoms/Button/SetDefaultButton";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@store/useUserStore";
 import { COOKIE_KEY } from "@configs/cookie";
-import authApi from "@api/auth";
 import { cookies } from "src/App";
-import useDeleteUser from "@hooks/query/useDeleteUser";
 import useLogout from "@hooks/query/useLogout";
 
 const ServerSettingBar = () => {
   const navigate = useNavigate();
   const { resetUser } = useUserStore();
-  const { mutate: deleteFriend } = useLogout();
+  const { mutate: logoutUser } = useLogout();
 
   const logout = async () => {
-    deleteFriend();
+    logoutUser();
 
     cookies.remove(COOKIE_KEY);
     sessionStorage.clear();

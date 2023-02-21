@@ -4,8 +4,6 @@ interface FriendParams {
   email: string;
 }
 
-const accessToken = sessionStorage.getItem("accessToken");
-
 const friendApi = {
   getAll: async ({ queryKey }: any) => {
     const { email } = queryKey[1];

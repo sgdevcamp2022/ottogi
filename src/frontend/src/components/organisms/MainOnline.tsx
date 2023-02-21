@@ -1,5 +1,6 @@
 import useInput from "@hooks/common/useInput";
 import useGetFriendList from "@hooks/query/useGetFriendList";
+import useGetFriendStatus from "@hooks/query/useGetFriendStatus";
 import { useUserStore } from "@store/useUserStore";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
@@ -31,6 +32,7 @@ const MainOnline = () => {
             {friendList.map(
               ({ email, name, channelId, userId, friendState }) => (
                 <FriendDefaultBox
+                  isTotal={true}
                   key={email}
                   email={email}
                   id={channelId}

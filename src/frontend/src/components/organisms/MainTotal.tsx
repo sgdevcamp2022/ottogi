@@ -36,6 +36,7 @@ const MainTotal = () => {
             {friendList.map(
               ({ email, name, channelId, userId, friendState }) => (
                 <FriendDefaultBox
+                  isTotal={false}
                   key={email}
                   email={email}
                   id={channelId}
