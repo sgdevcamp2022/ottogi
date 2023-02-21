@@ -17,7 +17,7 @@ const useLogin = () => {
     }: any) => {
       const setTokens = async () => {
         cookies.set(COOKIE_KEY, refreshToken);
-        sessionStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("accessToken", accessToken);
       };
 
       const getUserInfo = async () => {

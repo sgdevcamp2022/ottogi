@@ -9,7 +9,7 @@ const useReissue = () => {
       const { accessToken, refreshToken } = data;
 
       cookies.set(COOKIE_KEY, refreshToken);
-      sessionStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("accessToken", accessToken);
     },
   });
 };

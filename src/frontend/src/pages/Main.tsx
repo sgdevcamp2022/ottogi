@@ -6,15 +6,18 @@ import { useEffect } from "react";
 import useUserSettingModalStore from "@store/useUserSettingModalStore";
 
 const Main = () => {
-  const { userSettingModal, setUserSettingModal } = useUserSettingModalStore();
+  const { setUserSettingModal } = useUserSettingModalStore();
   const navigate = useNavigate();
   const isMain = useMatch("/");
+
   useEffect(() => {
     setUserSettingModal(false);
   }, []);
+
   if (isMain) {
     navigate("/@me");
   }
+
   return (
     <>
       <HeaderHelmet title="Discord | 친구" />

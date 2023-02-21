@@ -22,7 +22,7 @@ interface addChatLogProps {
   type: string;
 }
 
-const accessToken = sessionStorage.getItem("accessToken");
+const accessToken = localStorage.getItem("accessToken");
 
 const MainDirectBody = () => {
   const { channelId = "" } = useParams();
