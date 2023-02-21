@@ -34,12 +34,14 @@ public class MemberController {
     @GetMapping("/info")
     public CommonResponse<Object> findMemberInfoById(HttpServletRequest request) {
         Long userId = Long.parseLong(request.getHeader("id"));
-        return responseService.getSuccessResponse(VIEW_SUCCESS, memberService.findMemberInfoById(userId));
+        log.info("유저 정보 불러오기 [IN] : {}", userId);
+        CommonResponse<Object> response = responseService.getSuccessResponse(VIEW_SUCCESS, memberService.findMemberInfoById(userId));
+        log.info("유저 정보 불러오기 [DONE] : {}", userId);
+        return response;
     }
 
     @GetMapping("/{email}")
     public ResponseEntity<MemberResponseDto> findMemberInfoByEmail(@PathVariable String email) {
-        log.info("/email 호출");
         return ResponseEntity.ok(memberService.findMemberInfoByEmail(email));
     }
 
@@ -104,7 +106,6 @@ public class MemberController {
     @PatchMapping("/modify/password")
     public CommonResponse<Object> modifyUserPassword(HttpServletRequest request, @RequestBody MemberModifyRequestDto memberModifyRequestDto){
 
-        log.info("비밀번호 수정 로직");
         Long userId = Long.parseLong(request.getHeader("id"));
 
         // 비밀번호 검증
@@ -123,17 +124,6 @@ public class MemberController {
     public CommonResponse<Object> deleteUser(HttpServletRequest request){
         Long userId = Long.parseLong(request.getHeader("id"));
         return responseService.getSuccessResponse(USER_DELETE_SUCCESS, memberService.userDelete(userId));
-    }
-
-    @GetMapping("/invitation")
-    public CommonResponse<Object> loadInvitation(HttpServletRequest request) {
-        Long userId = Long.parseLong(request.getHeader("id"));
-        return responseService.getSuccessResponse(INVITATION_VIEW_SUCCESS, memberService.loadInvitation(userId));
-    }
-
-    @DeleteMapping("/invitation")
-    public CommonResponse<Object> acceptOrRejectInvitation(@RequestBody InvitationProcessDto invitationProcessDto) {
-        return responseService.getSuccessResponse(INVITATION_VIEW_SUCCESS, memberService.acceptOrRejectInvitation(Long.parseLong(invitationProcessDto.getInvitation_Id())));
     }
 
 }

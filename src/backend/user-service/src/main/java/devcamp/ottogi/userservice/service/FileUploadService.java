@@ -8,6 +8,7 @@ import devcamp.ottogi.userservice.entity.Member;
 import devcamp.ottogi.userservice.exception.ApiException;
 import devcamp.ottogi.userservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import static devcamp.ottogi.userservice.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FileUploadService {
 
     private final MemberRepository memberRepository;
@@ -33,7 +35,9 @@ public class FileUploadService {
     private final AmazonS3 amazonS3;
 
     public String uploadFile(Long userId, MultipartFile file){
-        String fileName = createFileName(file.getOriginalFilename());
+        log.info("사진 업로드 요청 [IN] : {}", userId);
+        String fileName = "userProfile/";
+        fileName += createFileName(file.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
@@ -51,7 +55,9 @@ public class FileUploadService {
         String imageUrl = "https://" + bucket + ".s3." +  region + ".amazonaws.com/" + fileName;
 
         member.modifyProfileImagePath(imageUrl);
+        memberRepository.save(member);
 
+        log.info("사진 업로드 요청 [DONE] : {}", userId);
         return imageUrl;
     }
 

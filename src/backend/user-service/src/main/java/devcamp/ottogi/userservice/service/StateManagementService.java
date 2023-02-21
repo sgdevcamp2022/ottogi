@@ -1,6 +1,7 @@
 package devcamp.ottogi.userservice.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,20 +14,25 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StateManagementService {
 
     @Value("${state-management-url}")
     private String STATE_MANAGEMENT_URI;
 
     public void sendLoginState(String userId){
-        sendStatus(userId, "", "1");
+        log.info("로그인 state 날리기 [IN] userId : {}", userId);
+        sendStatus(userId, "", "1", "login", HttpMethod.POST);
+        log.info("로그인 state 날리기 [DONE] userId : {}", userId);
     }
 
     public void sendLogoutState(String userId){
-        sendStatus(userId, "", "0");
+        log.info("로그아웃 state 날리기 [IN] userId : {}", userId);
+        sendStatus(userId, "", "0", "logout", HttpMethod.POST);
+        log.info("로그아웃 state 날리기 [DONE] userId : {}", userId);
     }
 
-    public void sendStatus(String userId, String channelId, String status){
+    public void sendStatus(String userId, String channelId, String status, String path, HttpMethod method){
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("userId", userId);
         params.add("channelId", channelId);
@@ -42,8 +48,8 @@ public class StateManagementService {
 
         //전송 및 결과 처리
         ResponseEntity<String> response = rt.exchange(
-                STATE_MANAGEMENT_URI,
-                HttpMethod.POST,
+                STATE_MANAGEMENT_URI + path,
+                method,
                 entity,
                 String.class
         );

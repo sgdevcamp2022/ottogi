@@ -52,6 +52,8 @@ public class AuthService {
 
     @Transactional
     public TokenDto login(MemberLoginRequestDto memberLoginDto) {
+        log.info("로그인 요청 [IN] email : {}", memberLoginDto.getEmail());
+
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
 
@@ -71,6 +73,8 @@ public class AuthService {
                     .orElseThrow(()-> new ApiException(NO_MEMBER_ERROR));
 
             stateManagementService.sendLoginState(member.getId().toString());
+
+            log.info("로그인 요청 [DONE] email : {}", memberLoginDto.getEmail());
 
             return tokenDto;
 
@@ -94,6 +98,7 @@ public class AuthService {
 
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
+        log.info("Token 재발행 [IN]");
         // 1. Refresh Token 검증
         tokenProvider.validateToken(tokenRequestDto.getRefreshToken());
 
@@ -114,6 +119,8 @@ public class AuthService {
         // 6. 저장소 정보 업데이트
         redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
         //토큰 발급
+        log.info("Token 재발행 [DONE]");
+
         return tokenDto;
     }
 }
