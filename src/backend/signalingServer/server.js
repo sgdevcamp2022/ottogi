@@ -53,7 +53,7 @@ async function createMediasoupWorker() {
 
   const mediaCodecs = config.mediasoup.routerOptions.mediaCodecs;
   router = await worker.createRouter({ mediaCodecs });
-  console.log("-- mediasoup worker start. --");
+  console, log("-- mediasoup worker start. --");
   return worker;
 }
 //=====================================================================================================

@@ -5,6 +5,7 @@ function consoleLog(data) {
 }
 
 function socketMain(io, _worker, _router) {
+  let router = _router;
   const connections = io.of('/video-broadcast');
   const MODE_STREAM = 'stream';
   const MODE_SHARE_SCREEN = 'share_screen';
@@ -369,8 +370,7 @@ function socketMain(io, _worker, _router) {
   });
 
   // ========= mediasoup ===========
-  let worker = _worker;
-  let router = _router;
+
 
   //
   // Room {
