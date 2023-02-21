@@ -12,10 +12,10 @@ const ServerList = () => {
   const params = useParams();
   const data = [];
   const { userInfo } = useUserStore();
-  const { data: res, isSuccess } = useGetServerList({
+  const { data: res } = useGetServerList({
     userId: userInfo.id,
   });
-  // console.log(res);
+
   const onMain = () => {
     navigate("/@me");
   };
@@ -56,11 +56,12 @@ const ServerList = () => {
     );
   };
 
-  if (!isSuccess || !res?.data.data) {
+  if (!res?.data.data) {
     return <EmptyContainer />;
   }
   console.log("res", res);
   const List = res?.data.data[0].split("},");
+  console.log(11, List);
   if (List[0] === "") return <EmptyContainer />;
 
   if (List.length > 0) {
@@ -72,6 +73,7 @@ const ServerList = () => {
       }
     }
   }
+
   return (
     <BarContainer>
       <ScrollableBox>

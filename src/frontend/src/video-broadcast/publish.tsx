@@ -867,7 +867,9 @@ function Publish(props: any) {
     if (socketRef.current == null) {
       const io: any = socketIOClient(
         config.SERVER_ENDPOINT + '/video-broadcast',
-        { transports: ["websocket"] }
+        { transports: ["websocket"],
+          rejectUnauthorized: false,
+        }
       );
       socketRef.current = io;
     }

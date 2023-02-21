@@ -22,12 +22,8 @@ const useLogin = () => {
 
       const getUserInfo = async () => {
         const data = await authApi.getUserInfo({ accessToken });
-        console.log("3. userinfo", data);
-        setUserInfo(data.data);
+        setUserInfo(data.data.data);
       };
-
-      console.log("1. at", accessToken);
-      console.log("2. rt", refreshToken);
 
       setTokens();
       getUserInfo();
