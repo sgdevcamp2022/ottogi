@@ -91,7 +91,6 @@ async function runWebServer() {
     const tls = {
         cert: fs.readFileSync(config.https.tls.cert, "utf-8"),
         key: fs.readFileSync(config.https.tls.key, "utf-8"),
-        requestCert: false,
         rejectUnauthorized: false,
     };
 
@@ -116,7 +115,6 @@ async function runSocketServer() {
             origin: `*`,
             methods: ['GET', 'POST'],
             transports: ['websocket'],
-            rejectUnauthorized : false
         },
     });
     socketMain(io, worker, router);
