@@ -83,7 +83,6 @@ async function runExpressApp() {
 
 //=====================================================================================================
 async function runWebServer() {
-<<<<<<< HEAD
     const { key, cert } = config.https.tls;
     if (!fs.existsSync(key) || !fs.existsSync(cert)) {
         console.error("SSL files are not found. check your config.js file");
@@ -104,36 +103,12 @@ async function runWebServer() {
         console.log("server is running");
         console.log(`open https://${ip}:${listenPort} in your web browser`);
         resolve();
-        });
-=======
-  const { key, cert } = config.https.tls;
-  if (!fs.existsSync(key) || !fs.existsSync(cert)) {
-    console.error("SSL files are not found. check your config.js file");
-    process.exit(0);
-  }
-  const tls = {
-    cert: fs.readFileSync(config.https.tls.cert, "utf-8"),
-    key: fs.readFileSync(config.https.tls.key, "utf-8"),
-  };
-
-  httpsServer = https.createServer(tls, expressApp);
-  httpsServer.on("error", (err) => {
-    console.error("starting web server failed:", err.message);
-  });
-  await new Promise((resolve) => {
-    httpsServer.listen(listenPort, () => {
-      console.log("server is running");
-      console.log(`open https://${ip}:${listenPort} in your web browser`);
-      resolve();
->>>>>>> 1578cf35b1a83f389b6ecb709f8051bdbed6bbed
-    });
-  });
-}
+        })});
+    }
 //=====================================================================================================
 
 const socketMain = require("./server/video-broadcast");
 async function runSocketServer() {
-<<<<<<< HEAD
     const io = Server(httpsServer, {
         cors: {
             origin: `*`,
@@ -145,17 +120,4 @@ async function runSocketServer() {
 
     console.log('running WebSocketServer...');
     // logger.info('running WebSocketServer...');
-=======
-  const io = Server(httpsServer, {
-    cors: {
-      origin: `*`,
-      methods: ["GET", "POST"],
-      transports: ["websocket"],
-    },
-  });
-  socketMain(io, worker, router);
-
-  console.log("running WebSocketServer...");
-  // logger.info('running WebSocketServer...');
->>>>>>> 1578cf35b1a83f389b6ecb709f8051bdbed6bbed
 }
