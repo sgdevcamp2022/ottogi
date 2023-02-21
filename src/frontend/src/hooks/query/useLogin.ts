@@ -15,23 +15,23 @@ const useLogin = () => {
         data: { accessToken, refreshToken },
       },
     }: any) => {
-      console.log(0);
       const setTokens = async () => {
-        console.log(1);
         cookies.set(COOKIE_KEY, refreshToken);
         sessionStorage.setItem("accessToken", accessToken);
       };
 
       const getUserInfo = async () => {
-        const data = await authApi.getUserInfo();
-        console.log(111, data);
+        const data = await authApi.getUserInfo({ accessToken });
+        console.log("3. userinfo", data);
         setUserInfo(data.data);
       };
 
-      await setTokens();
+      console.log("1. at", accessToken);
+      console.log("2. rt", refreshToken);
+
+      setTokens();
       getUserInfo();
-      console.log(1);
-      // navigate("/@me");
+      navigate("/@me");
     },
   });
 };
