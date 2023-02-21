@@ -12,12 +12,7 @@ const { listenIp, listenPort } = config.https;
 const listenIps = config.mediasoup.webRtcTransportOptions.listenIps[0];
 const ip = listenIps.announcedIp || listenIps.ip;
 
-
-
-
 const Server = require("socket.io"); // server side
-
-
 
 let worker = null;
 let router = null;
@@ -58,7 +53,7 @@ async function createMediasoupWorker() {
     
     const mediaCodecs = config.mediasoup.routerOptions.mediaCodecs;
     router = await worker.createRouter({ mediaCodecs });
-    console,log('-- mediasoup worker start. --');
+    console.log('-- mediasoup worker start. --');
     return worker;
 }
 //=====================================================================================================
@@ -119,6 +114,7 @@ async function runSocketServer() {
             origin: `*`,
             methods: ['GET', 'POST'],
             transports: ['websocket'],  
+            rejectUnauthorized: false,
         },
     });
     socketMain(io, worker, router);
