@@ -7,9 +7,13 @@ import Tab2MainHeader from "../organisms/Tab2MainHeader";
 import Tab3MainHeader from "../organisms/Tab3MainHeader";
 import useUserSettingModalStore from "@store/useUserSettingModalStore";
 import UserSetting from "@pages/UserSetting";
+import { useEffect } from "react";
 
 const MainPage = () => {
-  const { userSettingModal } = useUserSettingModalStore();
+  const { userSettingModal, setUserSettingModal } = useUserSettingModalStore();
+  useEffect(() => {
+    setUserSettingModal(false);
+  }, []);
   return (
     <>
       <ServerList />
