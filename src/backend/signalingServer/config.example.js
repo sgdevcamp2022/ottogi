@@ -137,12 +137,12 @@ module.exports = {
 			],
 			initialAvailableOutgoingBitrate : 1000000,
 			minimumAvailableOutgoingBitrate : 600000,
-			maxSctpMessageSize              : 262144,
+			// maxSctpMessageSize              : 262144,
 			// Additional options that are not part of WebRtcTransportOptions.
 			maxIncomingBitrate              : 1500000,
 			// enableUdp : true,
       // enableTcp : true,
-      // preferUdp : true,  // have to choose prefer UDP or prefer TCP
+      preferUdp : true,  // have to choose prefer UDP or prefer TCP
       // preferTcp : false, // have to choose prefer TCP or prefer UDP
 		},
 		// mediasoup PlainTransport options for legacy RTP endpoints (FFmpeg,
@@ -153,7 +153,7 @@ module.exports = {
 			listenIp :
 			{
 				ip          : process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
-				announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP
+				announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP // || set listenIps ex) your Ip
 			},
 			maxSctpMessageSize : 262144
 		}
