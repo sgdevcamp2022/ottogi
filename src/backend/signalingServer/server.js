@@ -91,6 +91,8 @@ async function runWebServer() {
     const tls = {
         cert: fs.readFileSync(config.https.tls.cert, "utf-8"),
         key: fs.readFileSync(config.https.tls.key, "utf-8"),
+        requestCert: false,
+        rejectUnauthorized: false,
     };
 
     httpsServer = https.createServer(tls, expressApp);
@@ -113,7 +115,7 @@ async function runSocketServer() {
         cors: {
             origin: `*`,
             methods: ['GET', 'POST'],
-            transports: ['websocket'],  
+            transports: ['websocket'],
             rejectUnauthorized: false,
         },
     });
