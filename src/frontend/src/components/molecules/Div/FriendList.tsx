@@ -22,14 +22,17 @@ const FriendList = () => {
       <DirectMessage />
       <ScrollableBox>
         <ListContainer>
-          {friendList.map(({ name, userId, channelId }: FriendType) => (
-            <DirectButton
-              key={name}
-              name={name}
-              userId={userId}
-              id={channelId}
-            />
-          ))}
+          {friendList.map(
+            ({ name, userId, channelId, profileImagePath }: FriendType) => (
+              <DirectButton
+                key={name}
+                name={name}
+                userId={userId}
+                id={channelId}
+                src={profileImagePath}
+              />
+            )
+          )}
         </ListContainer>
       </ScrollableBox>
     </FriendListContainer>

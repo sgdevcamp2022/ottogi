@@ -16,4 +16,5 @@ interface FriendType {
   friendState: FriendStateType;
   channelId: string;
   createdAt: Date;
+  profileImagePath: string;
 }

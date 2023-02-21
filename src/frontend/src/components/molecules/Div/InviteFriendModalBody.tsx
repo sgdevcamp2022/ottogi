@@ -17,7 +17,6 @@ const InviteFriendModalBody = () => {
 
   if (!data) return <></>;
   const friendList = data.data.data;
-  console.log(friendList);
   const num = friendList.length;
 
   return (

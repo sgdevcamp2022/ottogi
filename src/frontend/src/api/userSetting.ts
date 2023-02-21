@@ -23,8 +23,12 @@ const userSettingApi = {
   },
 
   // 유저 이미지 변경
-  modifyImage: async () => {
-    return await clientApi.patch("user/member/userdelete");
+  modifyImage: async ({ formData }: any) => {
+    return await clientApi.patch("user/member/modify/image", formData, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
   },
 
   // 서버 프로필명 이름 변경

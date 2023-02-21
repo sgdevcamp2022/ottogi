@@ -1,36 +1,57 @@
+import userSettingApi from "@api/userSetting";
+import FieldButton from "@components/atoms/Button/fieldButton";
 import CameraIcon from "@components/atoms/Icons/CameraIcon";
 import ServerAddIcon from "@components/atoms/Icons/ServerAddIcon";
 import Text from "@components/atoms/Text/Text";
+import useUserSetStore from "@store/useUserSetStore";
+import { useUserStore } from "@store/useUserStore";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRef, useState } from "react";
 import styled from "styled-components";
 
 const ServerLogoUpload = () => {
-  const [file, setFile] = useState<File>();
+  let formData = new FormData();
+  const { userInfo, setUserInfo } = useUserStore();
+  const { data: res, mutate: modifyImage } = useMutation(
+    userSettingApi.modifyImage,
+    { onSuccess: () => {} }
+  );
   const onSelectFile = async (event: any) => {
     const junk = event.target.files[0];
     // setFile(file);
     console.log(junk);
-    const convertedFile = await convertToBase64(junk);
-    const s3URL = await axios.post("http://localhost:3001/upload", {
-      image: convertedFile,
-      imageName: junk.name,
-    });
+    formData.append("file", junk);
+    console.log(formData.values);
+    for (let value in formData.values) {
+      console.log(value);
+    }
+    // const convertedFile = await convertToBase64(junk);
+    // const s3URL = await axios.post("http://localhost:3000/upload", {
+    //   image: convertedFile,
+    //   imageName: junk.name,
+    // });
     // const reader = new FileReader();
     // reader.readAsDataURL(junk);
     // reader.onloadend = () => {
     //   setFile(reader.result);
     // };
     // Request will be sent from here in the future
+    // console.log(convertedFile);
   };
-  const convertToBase64 = (file: Blob) => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-    });
+  // const convertToBase64 = (file: Blob) => {
+  //   return new Promise((resolve) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       resolve(reader.result);
+  //     };
+  //   });
+  // };
+  const changeImage = () => {
+    modifyImage({ formData });
+
+    console.log("res", res);
   };
   return (
     <StyledBorder>
@@ -48,6 +69,7 @@ const ServerLogoUpload = () => {
         onChange={onSelectFile}
         accept=".jpg,.jpeg,.png,.gif"
       />
+      <FieldButton text="아바타 변경하기" onClick={() => changeImage()} />
     </StyledBorder>
   );
 };

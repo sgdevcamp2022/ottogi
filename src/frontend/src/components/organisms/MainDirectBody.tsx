@@ -136,6 +136,7 @@ const MainDirectBody = () => {
             minute={2}
             createdAt={new Date()}
           /> */}
+            {/* id: krokerdile@naver.com pw: 12345678 */}
             {chatLog.map(
               ({ message, name, createdAt, imagePath, type }, idx) => {
                 return (
@@ -150,6 +151,7 @@ const MainDirectBody = () => {
                         createdAt={getFormatDate(createdAt)}
                         hasImage
                         imageUrl={imagePath}
+                        key={idx}
                       />
                     ) : (
                       <MessageLog text={message} createdAt={createdAt} />

@@ -1,7 +1,9 @@
 import getFormatTime from "@utils/getFormatTime";
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
 import styled from "styled-components";
 import { ColorType, FontSizeType } from "@styles/theme";
+import LinkText from "../Text/LinkText";
+import { useNavigate } from "react-router-dom";
 
 interface MessageTextProps {
   text: string;
@@ -11,6 +13,26 @@ interface MessageTextProps {
 
 const MessageText = forwardRef<HTMLParagraphElement, MessageTextProps>(
   ({ text, hasDate, createdAt }, ref) => {
+    const hasLink = useMemo(() => {
+      return /(https?:\/\/[^\s]+)/g.test(text);
+    }, [text]);
+    const words = text.split(" ");
+    const link = words[0];
+    words.splice(0, 1);
+    const chat2 = words.join(" ");
+    const navigate = useNavigate();
+
+    // const [link, onlyText] = useMemo(() => {
+    //   if (/(https?:\/\/[^\s]+)/g.test(text)) {
+    //   }
+    // }, [text]);
+
+    if (hasLink) {
+      console.log(true);
+    } else {
+      console.log(false);
+    }
+
     return (
       <MessageTextContainer>
         {hasDate && (
@@ -21,9 +43,23 @@ const MessageText = forwardRef<HTMLParagraphElement, MessageTextProps>(
           </MessageDate>
         )}
         <TextContainer>
-          <Text ref={ref} color="msg">
-            {text}
-          </Text>
+          {hasLink ? (
+            <>
+              <LinkText text={link} onClick={() => navigate(link)} />
+              {/* <a href={link} target="_blank">
+                {link}
+              </a> */}
+              <Text ref={ref} color="msg">
+                {/* {chat2} // {hasLink.toString()} */}
+                {chat2}
+              </Text>
+            </>
+          ) : (
+            <Text ref={ref} color="msg">
+              {text}
+              {/* // {hasLink.toString()} */}
+            </Text>
+          )}
         </TextContainer>
       </MessageTextContainer>
     );
