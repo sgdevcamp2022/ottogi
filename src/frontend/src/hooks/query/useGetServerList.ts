@@ -4,7 +4,7 @@ import serverSettingApi from "@api/server";
 
 const useGetServerList = ({ userId }: any) => {
   const [list, setList] = useState([]);
-  const { data: res, isLoading } = useQuery(
+  const { data: res } = useQuery(
     ["ServerList", { userId }],
     serverSettingApi.getList
   );

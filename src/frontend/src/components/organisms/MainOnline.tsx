@@ -17,7 +17,7 @@ const MainOnline = () => {
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data?.data.data.filter(
+  const friendList: FriendType[] = data.filter(
     (friend: FriendType) => friend.friendState === "ACCEPTED"
   );
   const num = friendList.length;
