@@ -6,6 +6,32 @@ import { promise } from './socketUtils';
 
 const MODE_STREAM = 'stream';
 const MODE_SHARE_SCREEN = 'share_screen';
+/*
+ 크게 사용되는 모듈 및 UI버튼은 총 4가지입니다
+ 1. Connect & 2. Disconnect
+ handleConnect() 및 handleDisconnect
+ 이 버튼을 누르면, 화면 공유와 동시에 socket에 connect 및 disconnect 진행이 됩니다
+ 만약 IP주소가 올바르지 않다면 (ex. 올바른 IP에 연결이 정상적으로 되지 않았을 경우?)
+화면이 disconnect 되니 
+꼭 server에 있는 config.listenannouncedIp와 
+사용하고있는 IP를 맞춰주셔야 합니다
+
+
+ 3. handle Audio & 4. handle Video
+  - 이 버튼들은 어떤 track을 사용할껀지 알려주는 변수들입니다
+ on off 를 활용하여 버튼을 켜고 끄게되는데,
+ 코드가 조금 달라져서 영상이 공유중에 버튼을 켜고 끌 때 정상적으로 바뀌는지 확인하지 못했습니다
+
+
+ 
+ Ps 1. 현재 첫번재로 connect를 진행하면, 빈 값이 들어가버리는 버그가 발생합니다.
+ 꼭 connect를 진행한 후 Disconnect를 진행한 다음 다시 connect를 진행하시길 바랍니다.
+ 
+ Ps 2. Screensharing 버튼
+ 코드를 한번 더 뜯어보니, screehnshareing이 구현이 되어있어 그대로 가져왔습니다.
+ 어제 확인을 하려다 인증관련 오류가 발생하여서 정상적으로 확인은 못하였지만,
+ 연결의 진행은 되었으니 추가적인 부분은 이후에 와서 또 확인하도록 하겠습니다.
+*/
 
 const CreateRemoteVideos = (props: any) => {
     const remoteVideo: any = React.useRef();
@@ -67,7 +93,7 @@ function Publish(props: any) {
   const [isShareScreen, setIsShareScreen] = React.useState(false);
 
     // ============ UI button ==========
-
+    // 화면공유 
     const handleStartScreenShare = () => {
       if (localStreamScreen.current) {
           console.warn('WARN: local media ALREADY started');
@@ -92,21 +118,13 @@ function Publish(props: any) {
               console.error('media ERROR:', err);
           });
   };
-
+  // 화면공유에 내장되어있는 함수입니다.
   async function handleConnectScreenShare() {
       let trigger = await handleStartMedia();
       if (!trigger) {
           console.warn('WARN: local media NOT READY');
           return;
       }
-
-      // // --- connect socket.io ---
-      // await connectSocket().catch((err: any) => {
-      //     console.error(err);
-      //     return;
-      // });
-
-      // console.log('connected');
 
       // --- get capabilities --
       const data = await sendRequest('getRouterRtpCapabilities', {});
@@ -224,6 +242,7 @@ function Publish(props: any) {
       await sendRequest('producerStopShareScreen', {});
   }
 
+
   const handleUseVideo = (e: any) => {
       setUseVideo(!useVideo);
   };
@@ -231,6 +250,7 @@ function Publish(props: any) {
       setUseAudio(!useAudio);
   };
 
+  // Media를 틀면서 Socket
   const handleStartMedia = async() => {
       if (localStream.current) {
           console.warn('WARN: local media ALREADY started');
@@ -376,26 +396,6 @@ function Publish(props: any) {
           return { ...consumersStream.current };
       });
 
-      // setRemoteVideos((peers: any) => {
-      //     const newPeers: any = peers;
-      //     if (newPeers[id] == undefined) {
-      //         newPeers[id] = {};
-      //     }
-      //     newPeers[id][mode] = {
-      //         stream: newStream,
-      //         socket_id: id,
-      //     };
-      //     return { ...peers, ...newPeers };
-      // });
-      // setShouldLoadConsumerShareScreen
-
-      // playVideo(video, newStream)
-      //     .then(() => {
-      //         video.volume = 1.0;
-      //     })
-      //     .catch((err: any) => {
-      //         console.error('media ERROR:', err);
-      //     });
   }
 
   function addRemoteVideo(id: any) {
@@ -414,16 +414,6 @@ function Publish(props: any) {
       return element;
   }
 
-  // function removeRemoteVideoByMode(id: any, mode: string) {
-  //     console.log(' ---- removeRemoteVideo() id=' + id);
-  //     delete consumersStream.current[id][mode];
-  //     setRemoteVideos((peers: any) => {
-  //         const newPeers: any = peers;
-  //         delete newPeers[id][mode];
-
-  //         return { ...peers, ...newPeers };
-  //     });
-  // }
 
   function removeRemoteVideo(id: any, mode: string) {
       console.log(' ---- removeRemoteVideo() id=' + id);
@@ -456,13 +446,14 @@ function Publish(props: any) {
 
           return { ...newPeers };
       });
-      // while (remoteContainer.firstChild) {
-      //     remoteContainer.firstChild.pause();
-      //     remoteContainer.firstChild.srcObject = null;
-      //     remoteContainer.removeChild(remoteContainer.firstChild);
-      // }
-  }
 
+  }
+  // ======================================================
+  // ======================================================
+  // 이 부분 부터는 Socket 과 통신하는 부분이 나오게 됩니다.
+  // 아래까지 확인하실 필요는 없으실 것 같습니다.
+  // ======================================================
+  // ======================================================
   async function consumeAdd(
       transport: any,
       remoteSocketId: any,
@@ -843,15 +834,6 @@ function Publish(props: any) {
       }
   }
 
-  // function getConsumer(id: any, kind: any) {
-  //     if (kind === 'video') {
-  //         return videoConsumers.current[id];
-  //     } else if (kind === 'audio') {
-  //         return audioConsumers.current[id];
-  //     } else {
-  //         console.warn('UNKNOWN consumer kind=' + kind);
-  //     }
-  // }
 
   function addConsumer(id: any, consumer: any, kind: any, mode: any) {
       if (id === clientId.current) {
@@ -975,14 +957,7 @@ function Publish(props: any) {
               removeConsumer(remoteId, kind, mode);
               removeRemoteVideo(remoteId, mode);
           });
-          // socket.on('shareScreenClosed', function (payload: any) {
-          //     console.log('socket.io shareScreenClosed:', payload);
-          //     const callerID = payload.callerID;
 
-          //     removeConsumer(callerID, 'video', MODE_SHARE_SCREEN);
-          //     removeConsumer(callerID, 'audio', MODE_SHARE_SCREEN);
-          //     removeRemoteVideoByMode(callerID, MODE_SHARE_SCREEN);
-          // });
       });
   };
 
