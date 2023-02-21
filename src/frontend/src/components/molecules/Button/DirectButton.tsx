@@ -11,9 +11,10 @@ interface DirectButtonProps {
   id: string;
   name: string;
   userId: number;
+  src?: string;
 }
 
-const DirectButton = ({ id, name, userId }: DirectButtonProps) => {
+const DirectButton = ({ id, name, userId, src }: DirectButtonProps) => {
   const { setUserId, setUserName } = useMainStore();
   const { data: status, isLoading } = useGetFriendStatus({ userId });
   const { channelId } = useParams();
@@ -38,7 +39,7 @@ const DirectButton = ({ id, name, userId }: DirectButtonProps) => {
       color="inactive"
     >
       <DirectButtonContainer>
-        <UserState32 status={status?.data.data} />
+        <UserState32 status={status?.data.data} src={src} />
         <Text text={name} />
       </DirectButtonContainer>
     </ButtonWrapper>

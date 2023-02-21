@@ -10,15 +10,17 @@ import ScrollableBox from "@components/molecules/Div/scrollableBox";
 const ServerList = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const data = [];
+  // const data = [];
   const { userInfo } = useUserStore();
-  const { data: res } = useGetServerList({
-    userId: userInfo.id,
-  });
+  // const { data: res } = useGetServerList({
+  //   userId: userInfo.id,
+  // });
+  const { list } = useGetServerList({ userId: userInfo.id });
 
   const onMain = () => {
     navigate("/@me");
   };
+
   const onServer = (v: Number) => {
     navigate("/" + v);
   };
@@ -26,53 +28,55 @@ const ServerList = () => {
   const onCreateServer = () => {
     navigate("/CreateServer");
   };
+
   if (params === null) {
     onMain();
+    return null;
   }
 
-  const EmptyContainer = () => {
-    return (
-      <BarContainer>
-        <ScrollableBox>
-          <ul>
-            <li onClick={onMain}>
-              <ServerImage
-                avatarHeight={3}
-                avatarWidth={3}
-                name="메인"
-                id={10000}
-              />
-            </li>
-            <Divider />
+  // const EmptyContainer = () => {
+  //   return (
+  //     <BarContainer>
+  //       <ScrollableBox>
+  //         <ul>
+  //           <li onClick={onMain}>
+  //             <ServerImage
+  //               avatarHeight={3}
+  //               avatarWidth={3}
+  //               name="메인"
+  //               id={10000}
+  //             />
+  //           </li>
+  //           <Divider />
 
-            <li onClick={onCreateServer}>
-              <ServerImage avatarHeight={3} avatarWidth={3} name="" id={10001}>
-                <AddIcon />
-              </ServerImage>
-            </li>
-          </ul>
-        </ScrollableBox>
-      </BarContainer>
-    );
-  };
+  //           <li onClick={onCreateServer}>
+  //             <ServerImage avatarHeight={3} avatarWidth={3} name="" id={10001}>
+  //               <AddIcon />
+  //             </ServerImage>
+  //           </li>
+  //         </ul>
+  //       </ScrollableBox>
+  //     </BarContainer>
+  //   );
+  // };
 
-  if (!res?.data.data) {
-    return <EmptyContainer />;
-  }
-  console.log("res", res);
-  const List = res?.data.data[0].split("},");
-  console.log(11, List);
-  if (List[0] === "") return <EmptyContainer />;
+  // if (!res?.data.data) {
+  //   return <EmptyContainer />;
+  // }
 
-  if (List.length > 0) {
-    for (let i = 0; i < List?.length; i++) {
-      if (i !== List.length - 1) {
-        data.push(JSON.parse(List[i] + "}"));
-      } else {
-        data.push(JSON.parse(List[i]));
-      }
-    }
-  }
+  // console.log("res", res);
+  // const List = res?.data.data[0].split("},");
+  // if (List[0] === "") return <EmptyContainer />;
+
+  // if (List.length > 0) {
+  //   for (let i = 0; i < List?.length; i++) {
+  //     if (i !== List.length - 1) {
+  //       data.push(JSON.parse(List[i] + "}"));
+  //     } else {
+  //       data.push(JSON.parse(List[i]));
+  //     }
+  //   }
+  // }
 
   return (
     <BarContainer>
@@ -87,7 +91,7 @@ const ServerList = () => {
             />
           </li>
           <Divider />
-          {data.map((v: any, idx) => {
+          {list.map((v: any, idx) => {
             return (
               <li key={idx} onClick={() => onServer(v.community_id)}>
                 <ServerImage

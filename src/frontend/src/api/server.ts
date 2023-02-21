@@ -5,7 +5,7 @@ const accessToken = sessionStorage.getItem("accessToken");
 const serverApi = {
   sendInvite: async ({ communityId, userId, shortUrl }: any) => {
     return await clientApi.post(
-      `/community/invite/member`,
+      `/invite/member`,
       { communityId, userId, shortUrl }
       // {
       //   headers: {
@@ -62,13 +62,13 @@ const serverApi = {
     // formData.append("img", img);
     // formData.append("userId", userId);
     // formData.append("profile", profile);
-    for (let key of formData.keys()) {
-      console.log(key);
-      console.log(formData[key]);
-    }
-    for (let value of formData.values()) {
-      console.log(value);
-    }
+    // for (let key of formData.keys()) {
+    //   console.log(key);
+    //   console.log(formData[key]);
+    // }
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
     return await clientApi.post("/community/create", formData, {
       headers: {
         Authorization: "Bearer " + accessToken,

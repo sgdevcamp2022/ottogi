@@ -22318,7 +22318,7 @@ function url (uri, loc) {
       }
     }
 
-    if (!/^(https?|wss?):\/\//.test(uri)) {
+    if (!/^(https?|ws?):\/\//.test(uri)) {
       debug('protocol-less url %s', uri);
       if ('undefined' !== typeof loc) {
         uri = loc.protocol + '//' + uri;

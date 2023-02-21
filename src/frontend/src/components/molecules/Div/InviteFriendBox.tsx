@@ -22,8 +22,11 @@ const InviteFriendBox = ({ name, userId, channelId }: friend) => {
   const { userInfo } = useUserStore();
   const { serverId: communityId } = useParams();
   const { mutate: sendInviteToChat } = useSendInviteToChat();
-  let shortUrl = "fdgdgddf";
 
+  let backUrl = process.env.REACT_APP_BASE_URL;
+  let uuid = crypto.randomUUID();
+  // console.log(typeof uuid);
+  let shortUrl = uuid;
   const onSendInvite = () => {
     sendInvite({
       communityId,
@@ -33,9 +36,9 @@ const InviteFriendBox = ({ name, userId, channelId }: friend) => {
     sendInviteToChat({
       sender: userInfo.name,
       channelId: channelId,
-      linkMessage: `http://localhost:8090/community/invite/${shortUrl}/${userId}`,
+      linkMessage: `${backUrl}/invite/${shortUrl}/${userId}`,
     });
-    console.log(`http://localhost:8090/community/invite/${shortUrl}/${userId}`);
+    console.log(`${backUrl}/invite/${shortUrl}/${userId}`);
   };
   // const name = "nno3onn";
   return (
