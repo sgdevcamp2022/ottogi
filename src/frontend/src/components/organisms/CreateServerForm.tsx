@@ -16,7 +16,7 @@ const CreateServerForm = () => {
   const { userInfo } = useUserStore();
   const navigate = useNavigate();
   let formData = new FormData();
-  const [img, setImg] = useState();
+  const [img, setImg] = useState<Blob | undefined>();
   const [name, changeName] = useInput();
   const [nickName, setNickName] = useState(userInfo.name);
   const { mutate: createServer } = useMutation(serverSettingApi.create, {
@@ -34,7 +34,6 @@ const CreateServerForm = () => {
       "profile",
       JSON.stringify({ userName: nickName, img: null, 한줄소개: "한줄소개" })
     );
-    console.log(formData);
     createServer({ formData });
     navigate(-1);
   };
