@@ -10,24 +10,7 @@ import UserInfoButton from "../molecules/Button/UserInfoButton";
 import UserOnOffButton from "../molecules/Button/UserOnOffButton";
 
 const Tab2Footer = () => {
-  const navigate = useNavigate();
-
-  const userSetting = () => {
-    navigate("/UserSetting");
-  };
   const { setUserSettingModal } = useUserSettingModalStore();
-
-  const clickMic = () => {
-    // navigator.mediaDevices.getUserMedia({ audio: !mic }).then((stream: any) => {
-    //   setMic(!mic);
-    // });
-  };
-
-  const clickSound = () => {
-    // navigator.mediaDevices.getUserMedia({ video: !sound }).then((stream: any) => {
-    // setSound(!sound);
-    // });
-  };
 
   return (
     <>
