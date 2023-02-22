@@ -13,6 +13,7 @@ interface MessageTextProps {
 
 const MessageText = forwardRef<HTMLParagraphElement, MessageTextProps>(
   ({ text, hasDate, createdAt }, ref) => {
+    const navigate = useNavigate();
     const hasLink = useMemo(() => {
       return /(https?:\/\/[^\s]+)/g.test(text);
     }, [text]);
@@ -20,18 +21,6 @@ const MessageText = forwardRef<HTMLParagraphElement, MessageTextProps>(
     const link = words[0];
     words.splice(0, 1);
     const chat2 = words.join(" ");
-    const navigate = useNavigate();
-
-    // const [link, onlyText] = useMemo(() => {
-    //   if (/(https?:\/\/[^\s]+)/g.test(text)) {
-    //   }
-    // }, [text]);
-
-    if (hasLink) {
-      console.log(true);
-    } else {
-      console.log(false);
-    }
 
     return (
       <MessageTextContainer>

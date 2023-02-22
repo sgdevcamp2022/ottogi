@@ -9,6 +9,7 @@ interface FriendBoxProps {
   status: "0" | "1" | "2" | "3";
   onClick: MouseEventHandler<HTMLDivElement>;
   Buttons: ReactElement;
+  src: string;
 }
 
 const statusTable = {
@@ -18,12 +19,12 @@ const statusTable = {
   "3": "보낸 친구 요청",
 };
 
-const FriendBox = ({ name, status, onClick, Buttons }: FriendBoxProps) => {
+const FriendBox = ({ name, status, onClick, Buttons, src }: FriendBoxProps) => {
   return (
     <ButtonWrapper onClick={onClick}>
       <FriendDefaultBoxContainer>
         <UserContainer>
-          <UserState32 status={status} />
+          <UserState32 src={src} status={status} />
           <UserText>
             <Text text={name} color="white" fontWeight="bold" mb={3} />
             <Text text={statusTable[status]} fontSize="sm" color="auth-desc" />

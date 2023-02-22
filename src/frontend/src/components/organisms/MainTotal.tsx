@@ -22,7 +22,7 @@ const MainTotal = () => {
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data?.data.data.filter(
+  const friendList: FriendType[] = data.filter(
     (f: FriendType) => f.friendState === "ACCEPTED"
   );
   const num = friendList.length;
@@ -34,8 +34,16 @@ const MainTotal = () => {
           <LabelText label={"모든 친구"} num={num} />
           <ScrollableBox>
             {friendList.map(
-              ({ email, name, channelId, userId, friendState }) => (
+              ({
+                email,
+                name,
+                channelId,
+                userId,
+                friendState,
+                profileImagePath,
+              }) => (
                 <FriendDefaultBox
+                  src={profileImagePath}
                   isTotal={false}
                   key={email}
                   email={email}

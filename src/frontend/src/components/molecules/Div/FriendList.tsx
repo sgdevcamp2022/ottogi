@@ -10,10 +10,9 @@ const FriendList = () => {
     userInfo: { email },
   } = useUserStore();
   const { data, isSuccess } = useGetFriendList(email);
-
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data?.data.data.filter(
+  const friendList: FriendType[] = data.filter(
     (friend: FriendType) => friend.friendState === "ACCEPTED"
   );
 

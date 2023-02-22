@@ -17,8 +17,6 @@ const SideBar = ({ children }: SideBarProps) => {
 
   if (!data) return <></>;
 
-  const friendList: FriendType[] = data.data.data;
-
   return (
     <SideBarContainer>
       <Text
@@ -29,7 +27,7 @@ const SideBar = ({ children }: SideBarProps) => {
         mb={16}
       />
       <NobodyActive />
-      {/* {friendList ? <>{children}</> : <NobodyActive />} */}
+      {/* {data ? <>{children}</> : <NobodyActive />} */}
     </SideBarContainer>
   );
 };

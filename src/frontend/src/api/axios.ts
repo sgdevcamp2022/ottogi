@@ -1,7 +1,4 @@
-import { COOKIE_KEY } from "@configs/cookie";
 import axios from "axios";
-import { cookies } from "src/App";
-import authApi from "./auth";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 const accessToken = localStorage.getItem("accessToken");

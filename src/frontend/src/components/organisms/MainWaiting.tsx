@@ -21,7 +21,7 @@ const MainWaiting = () => {
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data?.data.data.filter(
+  const friendList: FriendType[] = data.filter(
     (friend: FriendState) =>
       friend.friendState === "REQUEST" || friend.friendState === "WAIT"
   );
@@ -34,14 +34,17 @@ const MainWaiting = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"대기 중"} num={num} />
           <ScrollableBox>
-            {friendList.map(({ email, name, friendState }: FriendType) => (
-              <FriendWaitingBox
-                key={email}
-                email={email}
-                name={name}
-                status={friendState}
-              />
-            ))}
+            {friendList.map(
+              ({ email, name, friendState, profileImagePath }: FriendType) => (
+                <FriendWaitingBox
+                  src={profileImagePath}
+                  key={email}
+                  email={email}
+                  name={name}
+                  status={friendState}
+                />
+              )
+            )}
           </ScrollableBox>
         </>
       ) : (

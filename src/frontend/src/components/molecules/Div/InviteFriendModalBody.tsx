@@ -13,10 +13,10 @@ const InviteFriendModalBody = () => {
   const {
     userInfo: { email },
   } = useUserStore();
-  const { data } = useGetFriendList(email);
+  const { data: friendList, isSuccess } = useGetFriendList(email);
 
-  if (!data) return <></>;
-  const friendList = data.data.data;
+  if (!isSuccess) return <></>;
+
   const num = friendList.length;
 
   return (
