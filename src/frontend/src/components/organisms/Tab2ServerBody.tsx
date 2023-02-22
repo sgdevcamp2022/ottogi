@@ -1,7 +1,6 @@
 import ServerLabel from "../molecules/Div/ServerLabel";
 import ServerRoomButton from "../molecules/Div/ServerRoomButton";
 import { useNavigate, useParams } from "react-router-dom";
-import { useUserStore } from "@store/useUserStore";
 import useGetCategoryList from "@hooks/query/useGetCategoryList";
 import UserChannelOnBox from "@components/molecules/Div/UserChannelOnBox";
 
@@ -78,7 +77,9 @@ const Tab2ServerBody = () => {
                     serverId={serverId}
                     channelId={room["channel_id"]}
                   />
-                  <UserChannelOnBox />
+                  {room["channel_id"] === Number(channelId) && (
+                    <UserChannelOnBox />
+                  )}
                 </>
               ))}
           </>
