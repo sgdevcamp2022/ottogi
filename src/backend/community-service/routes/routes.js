@@ -24,6 +24,8 @@ router.post('/community/create', upload.single('img'), community.communityCreate
 router.post('/community/join', community.communityJoin);
 //커뮤니티 정보 변경(이름)
 router.patch('/community/update', community.communityRename);
+//커뮤니티 이미지 변경
+router.patch('/community/imgupload', upload.single('img'), community.communityImage);
 //커뮤니티 정보 변경(프로필)
 router.patch('/community/profile', community.updateProfile);
 //커뮤니티 삭제 

@@ -72,6 +72,38 @@ module.exports = {
         }
     },
 
+    // 커뮤니티 이미지 변경
+
+    communityImage: async(req, res) => {
+        const {communityId, userId} = req.body;
+        const img = req.file ?? '';
+
+        if (!communityId || !userId) {
+            res.json({
+                success: false,
+                message: 'ERROR: Invalid parmas',
+                data: null,
+            })
+        } else {
+            if(await isAdmin(communityId, userId)){
+                console.log(communityId)
+                community.imgupdate(communityId, img.location);
+                res.json({
+                    success: true,
+                    message: `Community: ${communityId}, img updated` ,
+                    data: null,
+                });
+            }
+            else {
+                res.json({
+                    success: false,
+                    message: 'ERROR: NOT ADMIN',
+                    data: null,
+                })
+            }
+        }
+    },
+
     //커뮤니티 삭제
     communityDelete: async (req, res) => {
         const {communityId, userId} = req.body;

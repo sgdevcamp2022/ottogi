@@ -187,11 +187,20 @@ const checkprofile = (userId, communityId)=>{
 }
 
 module.exports = {
+    // 이미지 변경
+    imgupdate: (communityId, img) => {
+        console.log(`커뮤니티 이미지 변경 요청 [IN] communityId : ${communityId}`)
+        communityId = Number(communityId);
+        let sql = `UPDATE community SET img = ${db.escape(img)} WHERE id = ${db.escape(communityId)}`;
+        db.query(sql);
+        console.log(`커뮤니티 이미지 변경 요청 [DONE] communityId : ${communityId}`)
+    },
+
     //커뮤니티 생성 디비 명령어? (모델)
     create: (communityName, img, userId, profile) => {
         console.log(`커뮤니티 생성 요청 [IN] userId : ${userId}, communityName : ${communityName}`)
 
-        let sql = `INSERT INTO community(name, img) VALUES('${communityName}', '${img}');`;
+        let sql = `INSERT INTO community(name, img) VALUES('${communityName}', '${img}')`;
         db.query(sql, async (err, res) => {
             if (err) {
                 console.log(err);
