@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 const MODE_STREAM = 'stream';
 const MODE_SHARE_SCREEN = 'share_screen';
-const roomName = window.location.pathname.split('/')[2]
+const roomName = window.location.pathname.split('/')[1]
 
 /*
 크게 사용되는 모듈 및 UI버튼은 총 4가지입니다

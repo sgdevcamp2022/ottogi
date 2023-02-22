@@ -175,7 +175,7 @@ async function runSocketServer() {
             transports: ['websocket'],
         },
     });
-    socketMain(io, worker, router);
+    socketMain(io, mediasoupWorkers);
 
     console.log('running WebSocketServer...');
     // logger.info('running WebSocketServer...');
