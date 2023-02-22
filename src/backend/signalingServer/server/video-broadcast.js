@@ -1,11 +1,16 @@
 const config = require('../config')
+const _room = require('../lib/room_')
+const rooms = new Map();
+let nextMediasoupWorkerIdx = 0;
+let room;
 
 function consoleLog(data) {
   console.log(data);
 }
 
-function socketMain(io, _worker, _router) {
-  let router = _router;
+
+function socketMain(io, _workers) {
+  let router;
   const connections = io.of('/video-broadcast');
   const MODE_STREAM = 'stream';
   const MODE_SHARE_SCREEN = 'share_screen';
@@ -24,7 +29,17 @@ function socketMain(io, _worker, _router) {
           cleanUpPeer(socket);
       });
 
-      socket.on('getRouterRtpCapabilities', (data, callback) => {
+      socket.on('getRouterRtpCapabilities', async (data, callback) => {
+          const roomName = data.roomName;
+          if (!rooms.has(roomName))
+          {
+            room = await getOrCreateRoom({roomName})
+          }
+          else{
+            room = await rooms.get(roomName)
+          }
+          router = room.mediasoupRouter;
+          
           if (router) {
               consoleLog(
                   'getRouterRtpCapabilities: ',
@@ -371,7 +386,6 @@ function socketMain(io, _worker, _router) {
 
   // ========= mediasoup ===========
 
-
   //
   // Room {
   //   id,
@@ -717,5 +731,29 @@ function socketMain(io, _worker, _router) {
           },
       };
   }
+
+  async function getOrCreateRoom({ roomName })
+  {
+      let room = rooms.get(roomName);
+      // If the Room does not exist create a new one.
+      if (!room)
+      {
+          // logger.info('creating a new Room [roomName:%s]', roomName);
+          console.log('creating a new Room [roomName:%s]', roomName);
+          const mediasoupWorker =  getMediasoupWorker();
+          room = await _room.create({mediasoupWorker, roomName});
+          rooms.set(roomName, room);
+          // console.log(room)
+      }
+      return room; // room 에 있는 mediassoup worker를 통해 Router 제작 후 실행
+  }
+
+  function getMediasoupWorker()
+{
+    const worker = _workers[nextMediasoupWorkerIdx];
+    if (++nextMediasoupWorkerIdx === _workers.length)
+        nextMediasoupWorkerIdx = 0;
+    return worker;
+}
 }
 module.exports = socketMain;
