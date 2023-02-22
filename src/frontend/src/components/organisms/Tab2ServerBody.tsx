@@ -3,8 +3,9 @@ import ServerRoomButton from "../molecules/Div/ServerRoomButton";
 import { useNavigate, useParams } from "react-router-dom";
 import useGetCategoryList from "@hooks/query/useGetCategoryList";
 import UserChannelOnBox from "@components/molecules/Div/UserChannelOnBox";
-import useGetChatFriends from "@hooks/query/useGetChatFriends";
 import { useUserStore } from "@store/useUserStore";
+import UserFriendChannelOnBox from "@components/molecules/Div/UserFriendChannelOnBox";
+import useGetFriendList from "@hooks/query/useGetFriendList";
 
 interface CategoryType {
   category_id: number;
@@ -20,17 +21,15 @@ interface RoomType {
 
 const Tab2ServerBody = () => {
   const navigate = useNavigate();
-  const { userInfo } = useUserStore();
   const { serverId, channelId } = useParams();
   const { data: res, isSuccess } = useGetCategoryList({
     communityId: serverId,
   });
-  const { data: friendList, isSuccess: getChatFriendsSuccess } =
-    useGetChatFriends(userInfo.id);
-  console.log("friendList", friendList, ", success:", getChatFriendsSuccess);
+  const { userInfo } = useUserStore();
+  const { data: friendList } = useGetFriendList(userInfo.email);
 
   const data = res?.data?.data;
-  if (!serverId || !isSuccess || !getChatFriendsSuccess) return <></>;
+  if (!serverId || !isSuccess) return <></>;
 
   const List = JSON.parse(JSON.stringify(data[0])).split("},");
   const List2 = JSON.parse(JSON.stringify(data[1])).split("},");
@@ -85,6 +84,12 @@ const Tab2ServerBody = () => {
                 {room["channel_id"] === Number(channelId) && (
                   <UserChannelOnBox />
                 )}
+                {friendList.map((friend: FriendType) => (
+                  <UserFriendChannelOnBox
+                    friend={friend}
+                    channelId={room["channel_id"]}
+                  />
+                ))}
               </>
             ))}
         </>

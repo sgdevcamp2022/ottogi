@@ -4,7 +4,13 @@ import ChatIcon from "@components/atoms/Icons/ChatIcon";
 import MoreIcon from "@components/atoms/Icons/MoreIcon";
 import useGetFriendStatus from "@hooks/query/useGetFriendStatus";
 import useMainStore from "@store/useMainStore";
-import { MouseEvent, MouseEventHandler, ReactElement, useState } from "react";
+import {
+  Dispatch,
+  MouseEvent,
+  ReactElement,
+  SetStateAction,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import RoundButton from "../Button/RoundButton";
@@ -12,7 +18,7 @@ import EtcModal from "./EtcModal";
 import FriendBox from "./FriendBox";
 
 interface FriendDefaultBoxProps {
-  isTotal: boolean;
+  setNum: Dispatch<SetStateAction<number>>;
   email: string;
   id: string;
   name: string;
@@ -22,7 +28,7 @@ interface FriendDefaultBoxProps {
 }
 
 const FriendDefaultBox = ({
-  isTotal,
+  setNum,
   email,
   id,
   name,
@@ -38,10 +44,8 @@ const FriendDefaultBox = ({
 
   if (isLoading) return <></>;
 
-  if (!isTotal) {
-    if (isOnline?.data.data !== "1") {
-      return <></>;
-    }
+  if (isOnline?.data.data !== "1") {
+    return <></>;
   }
 
   const enterDM = () => {

@@ -1,6 +1,7 @@
 import DarkModal from "@components/atoms/Div/DarkModal";
 import useRejectFriend from "@hooks/query/useRejectFriend";
 import useMainStore from "@store/useMainStore";
+import { MouseEvent } from "react";
 import DarkModalButton from "../Button/DarkModalButton";
 
 const EtcModal = () => {
@@ -8,7 +9,8 @@ const EtcModal = () => {
   console.log(deleteFriendEmail);
   const { mutate: deleteFriend } = useRejectFriend();
 
-  const clickDeleteFriend = () => {
+  const clickDeleteFriend = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     deleteFriend({ email: deleteFriendEmail });
   };
 
