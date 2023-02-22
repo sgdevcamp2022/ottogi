@@ -5,32 +5,41 @@ import devcamp.ottogi.userservice.dto.request.MemberRegisterRequestDto;
 import devcamp.ottogi.userservice.dto.request.TokenRequestDto;
 import devcamp.ottogi.userservice.dto.request.EmailCodeRequestDto;
 import devcamp.ottogi.userservice.exception.ApiException;
-import devcamp.ottogi.userservice.repository.FriendRepository;
 import devcamp.ottogi.userservice.response.CommonResponse;
-import devcamp.ottogi.userservice.service.AuthService;
-import devcamp.ottogi.userservice.service.EmailService;
-import devcamp.ottogi.userservice.service.ResponseService;
+import devcamp.ottogi.userservice.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import static devcamp.ottogi.userservice.domain.TextMessages.*;
+import javax.servlet.http.HttpServletRequest;
+
+import static devcamp.ottogi.userservice.domain.SuccessMessages.*;
 import static devcamp.ottogi.userservice.exception.ErrorCode.*;
 
 @RestController
 @RequestMapping("/user/auth")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin
 public class AuthController {
     private final AuthService authService;
     private final EmailService emailService;
     private final ResponseService responseService;
-    private final FriendRepository friendRepository;
     private String userEmail;
     private MemberRegisterRequestDto userMemberRequestDto;
+    private final FileUploadService fileUploadService;
+    private final StateManagementService stateManagementService;
+
+    @GetMapping("/test")
+    public String test(){
+        return "유저 서버 테스트 성공!";
+    }
+
 
     @PostMapping("/register")
     public CommonResponse<Object> register(@RequestBody MemberRegisterRequestDto memberRequestDto) {
+        log.info("회원가입 요청 : {}",memberRequestDto.getEmail());
 
         userMemberRequestDto = new MemberRegisterRequestDto(memberRequestDto);
         userEmail = memberRequestDto.getEmail();
@@ -38,7 +47,7 @@ public class AuthController {
 
         // 로직 검사
         if(password.length() < 8){
-            throw new ApiException(SIGNUP_PW_ERROR);
+            throw new ApiException(REGISTER_PW_LEN_ERROR);
         }
 
         emailService.sendSimpleMessage(memberRequestDto.getEmail());
@@ -55,10 +64,10 @@ public class AuthController {
 
         // 로직 검사
         if(password.length() < 8){
-            throw new ApiException(SIGNUP_PW_ERROR);
+            throw new ApiException(REGISTER_PW_LEN_ERROR);
         }
 
-        authService.signup(userMemberRequestDto);
+        authService.register(userMemberRequestDto);
         return responseService.getSuccessResponse(SIGNUP_SUCCESS, null);
     }
 
@@ -71,7 +80,7 @@ public class AuthController {
             throw new ApiException(EMAIL_INPUT_ERROR);
         }
 
-        authService.signup(userMemberRequestDto);
+        authService.register(userMemberRequestDto);
         return responseService.getSuccessResponse(SIGNUP_SUCCESS, userEmail);
     }
 
@@ -80,8 +89,15 @@ public class AuthController {
         return responseService.getSuccessResponse(LOGIN_SUCCESS, authService.login(memberLoginDto));
     }
 
+
     @PostMapping("/reissue") //재발급
     public CommonResponse<Object> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         return responseService.getSuccessResponse(REISSUE_SUCCESS, authService.reissue(tokenRequestDto));
+    }
+
+    @PatchMapping("/modifyimage")
+    public CommonResponse<Object> modifyProfileImage(HttpServletRequest request, @RequestPart MultipartFile file) throws Exception{
+        Long userId = Long.parseLong(request.getHeader("id"));
+        return responseService.getSuccessResponse(FILE_UPLOAD_SUCCESS, fileUploadService.uploadFile(userId, file));
     }
 }
