@@ -173,6 +173,7 @@ function socketMain(io, _workers) {
           return;
       });
 
+
       socket.on('getCurrentProducers', async (data, callback) => {
           const clientId = data.localId;
           consoleLog('-- getCurrentProducers for Id=' + clientId);
@@ -191,6 +192,7 @@ function socketMain(io, _workers) {
           );
       });
 
+        /// 방 생성시 발생하는 문제를 빠르게 Fix 하기 위해서 해결을 위해서 문제를 알고있는 부분을 try except로 채워버렸음... bug fix 진행 해야함 {다른 router에 있는 producer까지 탐색하는 문제가 있음..!} 
       socket.on('consumeAdd', async (data, callback) => {
         try{         
           const localId = getId(socket);
@@ -718,6 +720,7 @@ function socketMain(io, _workers) {
           },
       };
   }
+
 
   async function createConsumer(socketId, transport, producer, rtpCapabilities) {
       let consumer = null;
