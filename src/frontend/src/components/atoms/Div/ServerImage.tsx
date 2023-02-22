@@ -99,7 +99,9 @@ const StyledIconButton = styled(IconButton)<ServerIconButtonProps>`
   padding: 0rem !important;
   border-radius: 5rem;
   width: ${({ width }) => width + "rem"};
-  height: ${({ height }) => height + "rem"}; ;
+  height: ${({ height }) => height + "rem"};
+
+  border: 3px solid white;
 `;
 
 const ClickedWrapper = styled.div`

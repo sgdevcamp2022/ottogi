@@ -19,7 +19,9 @@ const CardUserInfo = () => {
           fontSize="lg"
           fontWeight="bold"
           color="white"
+          mb={4}
         />
+        <Text text={userInfo.introduction} fontSize="sm" color="setting-tab" />
       </NameWrapper>
       <ButtonWrapper>
         <SettingButton
@@ -69,6 +71,7 @@ const ButtonWrapper = styled.div`
 const NameWrapper = styled.div`
   width: auto;
   display: flex;
+  flex-direction: column;
 `;
 
 export default CardUserInfo;

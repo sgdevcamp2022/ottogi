@@ -6,7 +6,7 @@ import AddIcon from "@components/atoms/Icons/AddIcon";
 import useGetServerList from "@hooks/query/useGetServerList";
 import { useUserStore } from "@store/useUserStore";
 import ScrollableBox from "@components/molecules/Div/scrollableBox";
-
+import Ottogi from "../../assets/images/OttogiOttogi.png";
 const ServerList = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -16,6 +16,7 @@ const ServerList = () => {
   //   userId: userInfo.id,
   // });
   const { list } = useGetServerList({ userId: userInfo.id });
+  console.log(list);
 
   const onMain = () => {
     navigate("/@me");
@@ -88,6 +89,7 @@ const ServerList = () => {
               avatarWidth={3}
               name="메인"
               id={10000}
+              src={Ottogi}
             />
           </li>
           <Divider />
@@ -99,6 +101,7 @@ const ServerList = () => {
                   avatarWidth={3}
                   name={v.name}
                   id={v.community_id}
+                  src={v.img}
                 />
               </li>
             );

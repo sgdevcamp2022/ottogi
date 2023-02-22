@@ -47,14 +47,7 @@ const ServerList = () => {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              <li onClick={() => console.log(1)}>
-                <ServerImage
-                  avatarHeight={3}
-                  avatarWidth={3}
-                  name="메인"
-                  id={-1}
-                />
-              </li>
+              ...
               <Divider />
               {array &&
                 array.map(({ id, title }, index) => {
@@ -79,14 +72,7 @@ const ServerList = () => {
                   );
                 })}
               {provided.placeholder}
-              <li onClick={() => console.log(array.length)}>
-                <ServerImage
-                  avatarHeight={3}
-                  avatarWidth={3}
-                  name="서버 추가"
-                  id={array.length}
-                />
-              </li>
+              ...
             </ul>
           )}
         </Droppable>

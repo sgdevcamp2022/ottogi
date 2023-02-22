@@ -3,8 +3,8 @@ import Text from "@components/atoms/Text/Text";
 import DefaultInput from "@components/atoms/Input/DefaultInput";
 import useInput from "@hooks/common/useInput";
 
-const ServerInput = () => {
-  const [name, changeName] = useInput();
+const ServerInput = ({ name, changeName }: any) => {
+  // setCommunityName(name);
   return (
     <ServerInputContainer>
       <Text

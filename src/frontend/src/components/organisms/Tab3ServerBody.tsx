@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import MainDirectBody from "./MainDirectBody";
+import MainVoiceRoomBody from "./MainVoiceRoomBody";
 
 const Tab3ServerBody = () => {
   return (
@@ -10,8 +11,8 @@ const Tab3ServerBody = () => {
 };
 
 const Tab3ServerBodyContainer = styled.div`
-  padding: 0 20px;
-  margin-top: 4px;
+  /* padding: 0 20px;
+  margin-top: 4px; */
   position: relative;
   height: calc(100vh - 55px);
   /* flex: 1; */

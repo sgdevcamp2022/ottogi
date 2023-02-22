@@ -19,12 +19,20 @@ const userSettingApi = {
 
   // 계정 삭제하기
   deleteUser: async () => {
-    return await clientApi.delete("user/member/userdelete");
+    return await clientApi.delete("/user/member/userdelete");
   },
 
   // 유저 이미지 변경
   modifyImage: async ({ formData }: any) => {
-    return await clientApi.patch("user/member/modify/image", formData);
+    return await clientApi.patch("/user/member/modify/image", formData);
+  },
+
+  // 유저 자기 소개 변경
+
+  modifyIntro: async ({ introduction }: any) => {
+    return await clientApi.patch("/user/member/modify/introduction", {
+      introduction,
+    });
   },
 
   // 서버 프로필명 이름 변경

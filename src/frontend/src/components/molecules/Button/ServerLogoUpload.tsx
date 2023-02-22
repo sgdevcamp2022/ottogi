@@ -3,6 +3,7 @@ import FieldButton from "@components/atoms/Button/fieldButton";
 import CameraIcon from "@components/atoms/Icons/CameraIcon";
 import ServerAddIcon from "@components/atoms/Icons/ServerAddIcon";
 import Text from "@components/atoms/Text/Text";
+import { Button } from "@mui/material";
 import useUserSetStore from "@store/useUserSetStore";
 import { useUserStore } from "@store/useUserStore";
 import { useMutation } from "@tanstack/react-query";
@@ -10,22 +11,19 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import styled from "styled-components";
 
-const ServerLogoUpload = () => {
-  let formData = new FormData();
-  const { userInfo, setUserInfo } = useUserStore();
-  const { data: res, mutate: modifyImage } = useMutation(
-    userSettingApi.modifyImage,
-    { onSuccess: () => {} }
-  );
+const ServerLogoUpload = ({ setImg }: any) => {
+  // let formData = new FormData();
+  // const { userInfo, setUserInfo } = useUserStore();
+  // const { data: res, mutate: modifyImage } = useMutation(
+  //   userSettingApi.modifyImage,
+  //   { onSuccess: () => {} }
+  // );
   const onSelectFile = async (event: any) => {
     const junk = event.target.files[0];
     // setFile(file);
     console.log(junk);
-    formData.append("file", junk);
-    console.log(formData.values);
-    for (let value in formData.values) {
-      console.log(value);
-    }
+    setImg(junk);
+    // formData.append("img", junk);
     // const convertedFile = await convertToBase64(junk);
     // const s3URL = await axios.post("http://localhost:3000/upload", {
     //   image: convertedFile,
@@ -48,38 +46,41 @@ const ServerLogoUpload = () => {
   //     };
   //   });
   // };
-  const changeImage = () => {
-    modifyImage({ formData });
 
-    console.log("res", res);
-  };
   return (
-    <StyledBorder>
-      <CameraIcon />
-      <Text
-        text={"UPLOAD"}
-        color={"black"}
-        fontWeight={"bold"}
-        fontSize={"xs"}
-      />
-      <ServerAddIcon />
-      <input
-        type="file"
-        tabIndex={0}
-        onChange={onSelectFile}
-        accept=".jpg,.jpeg,.png,.gif"
-      />
-      <FieldButton text="아바타 변경하기" onClick={() => changeImage()} />
-    </StyledBorder>
+    <Wrapper>
+      <StyledBorder>
+        <CameraIcon />
+        <Text
+          text={"UPLOAD"}
+          color={"black"}
+          fontWeight={"bold"}
+          fontSize={"xs"}
+        />
+        <ServerAddIcon />
+        <input
+          type="file"
+          tabIndex={0}
+          onChange={onSelectFile}
+          accept=".jpg,.jpeg,.png,.gif"
+        />
+      </StyledBorder>
+    </Wrapper>
   );
 };
 
 export default ServerLogoUpload;
 
+const Wrapper = styled.div`
+  width: 80px;
+  .button {
+    width: 100px;
+  }
+`;
+
 const StyledBorder = styled.div`
   display: flex;
   justify-content: center;
-
   /* border 커스터마이징 안된다고 해서 만들어주는 사이트에서 들고와봄 */
   background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='100' ry='100' stroke='%23333' stroke-width='4' stroke-dasharray='5%2c 13' stroke-dashoffset='14' stroke-linecap='square'/%3e%3c/svg%3e");
   border-radius: 100px;
