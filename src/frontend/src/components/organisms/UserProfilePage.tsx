@@ -5,12 +5,39 @@ import LinkText from "../atoms/Text/LinkText";
 import Modal from "@components/organisms/Modal";
 import { useCallback, useState } from "react";
 import ServerLogoUpload from "@components/molecules/Button/ServerLogoUpload";
+import useModifyUserImage from "@hooks/query/useModifyUserImage";
 
-const ImageChange = () => {
+const ImageChange = ({ setOpenModal }: any) => {
+  const formData = new FormData();
+  const { data: res, mutate: modifyImage } = useModifyUserImage();
   console.log(1);
+  const [img, setImg] = useState<Blob | undefined>();
+  console.log("img", img);
+  console.log(typeof img);
+  let imgString = JSON.stringify(img);
+  console.log();
+  console.log(imgString);
+  const updateImage = () => {
+    // console.log("img1", img);
+    if (!img) return;
+    // const convertedFile = await convertToBase64(img);
+    // console.log(convertedFile);
+    // console.log(typeof convertedFile);
+    formData.append("file", img);
+    // console.log(img);
+    // for (var value in formData.values()) {
+    //   console.log(value);
+    // }
+
+    modifyImage({ formData });
+    setOpenModal(false);
+  };
   return (
     <Wrapper>
-      <ServerLogoUpload />
+      <ServerLogoUpload setImg={setImg} />
+      <AvatarWrapper>
+        <FieldButton text="변경하기" onClick={() => updateImage()} />
+      </AvatarWrapper>
     </Wrapper>
   );
 };
@@ -29,7 +56,7 @@ const UserProfilePage = () => {
     <MainWrapper>
       {isOpenModal && (
         <Modal onClickToggleModal={onClickToggleModal}>
-          <ImageChange />
+          <ImageChange setOpenModal={setOpenModal} />
         </Modal>
       )}
       <BlockWrapper>

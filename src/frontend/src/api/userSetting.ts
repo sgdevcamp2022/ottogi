@@ -19,15 +19,29 @@ const userSettingApi = {
 
   // 계정 삭제하기
   deleteUser: async () => {
-    return await clientApi.delete("user/member/userdelete");
+    return await clientApi.delete("/user/member/userdelete");
   },
 
   // 유저 이미지 변경
   modifyImage: async ({ formData }: any) => {
-    return await clientApi.patch("user/member/modify/image", formData, {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
+    let keys = formData.keys();
+    for (const pair of keys) {
+      console.log(pair);
+    }
+
+    // 폼 객체 values 값을 순회.
+    let values = formData.values();
+    for (const pair of values) {
+      console.log("hello", pair);
+    }
+    return await clientApi.patch("/user/member/modify/image", formData);
+  },
+
+  // 유저 자기 소개 변경
+
+  modifyIntro: async ({ introduction }: any) => {
+    return await clientApi.patch("/user/member/modify/introduction", {
+      introduction,
     });
   },
 

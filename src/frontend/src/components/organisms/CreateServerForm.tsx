@@ -10,11 +10,13 @@ import serverSettingApi from "@api/server";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@store/useUserStore";
 import { useState } from "react";
+import BackgroundModal from "./BackgroundModal";
 
 const CreateServerForm = () => {
   const { userInfo } = useUserStore();
   const navigate = useNavigate();
   let formData = new FormData();
+  const [img, setImg] = useState();
   const [name, changeName] = useInput();
   const [nickName, setNickName] = useState(userInfo.name);
   const { mutate: createServer } = useMutation(serverSettingApi.create, {
@@ -22,25 +24,28 @@ const CreateServerForm = () => {
       navigate(-1);
     },
   });
-  formData.append("communityName", name);
-  formData.append("img", "");
-  formData.append("userId", JSON.stringify(userInfo.id));
-  formData.append(
-    "profile",
-    JSON.stringify({ userName: nickName, img: null, 한줄소개: "한줄소개" })
-  );
-  console.log(formData);
 
   const MakeServer = () => {
+    formData.append("communityName", name);
+    formData.append("userId", JSON.stringify(userInfo.id));
+    if (!img) return 0;
+    formData.append("img", img);
+    formData.append(
+      "profile",
+      JSON.stringify({ userName: nickName, img: null, 한줄소개: "한줄소개" })
+    );
+    console.log(formData);
     createServer({ formData });
     navigate(-1);
   };
 
   return (
-    <ServerModal width={440}>
-      <ServerContainer>
+    // <ServerModal width={440}>
+    // <ServerContainer>
+    <BackgroundModal width={440} p={0} onClick={() => null}>
+      <>
         <CreateServerText />
-        <ServerLogoUpload />
+        <ServerLogoUpload setImg={setImg} />
         <DefaultInput value={name} onChange={changeName} type="text" />
         <Bottom>
           <DefaultButton
@@ -61,8 +66,10 @@ const CreateServerForm = () => {
             }
           />
         </Bottom>
-      </ServerContainer>
-    </ServerModal>
+      </>
+    </BackgroundModal>
+    // {/* </ServerContainer> */}
+    // </ServerModal>
   );
 };
 

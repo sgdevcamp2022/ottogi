@@ -16,6 +16,7 @@ const ServerList = () => {
   //   userId: userInfo.id,
   // });
   const { list } = useGetServerList({ userId: userInfo.id });
+  console.log(list);
 
   const onMain = () => {
     navigate("/@me");
@@ -99,6 +100,7 @@ const ServerList = () => {
                   avatarWidth={3}
                   name={v.name}
                   id={v.community_id}
+                  src={v.img}
                 />
               </li>
             );
