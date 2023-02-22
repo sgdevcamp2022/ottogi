@@ -4,7 +4,7 @@ import ChatIcon from "@components/atoms/Icons/ChatIcon";
 import MoreIcon from "@components/atoms/Icons/MoreIcon";
 import useGetFriendStatus from "@hooks/query/useGetFriendStatus";
 import useMainStore from "@store/useMainStore";
-import { ReactElement, useState } from "react";
+import { MouseEvent, MouseEventHandler, ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import RoundButton from "../Button/RoundButton";
@@ -18,6 +18,7 @@ interface FriendDefaultBoxProps {
   name: string;
   userId: number;
   status: FriendStateType;
+  src: string;
 }
 
 const FriendDefaultBox = ({
@@ -27,6 +28,7 @@ const FriendDefaultBox = ({
   name,
   userId,
   status,
+  src,
 }: FriendDefaultBoxProps) => {
   const { setDeleteFriendEmail } = useMainStore();
   const navigate = useNavigate();
@@ -48,7 +50,8 @@ const FriendDefaultBox = ({
     setUserId(userId);
   };
 
-  const clickChatIcon = () => {
+  const clickChatIcon = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     setDeleteFriendEmail(email);
     setShowEtcModal(!showEtcModal);
   };
@@ -77,9 +80,10 @@ const FriendDefaultBox = ({
   }
   return (
     <FriendBox
+      src={src}
       name={name}
       status={isOnline?.data.data}
-      onClick={() => null}
+      onClick={enterDM}
       Buttons={Buttons}
     />
   );

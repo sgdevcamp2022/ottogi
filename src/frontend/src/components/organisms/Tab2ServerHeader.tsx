@@ -7,7 +7,7 @@ import ServerModal from "../molecules/Div/ServerModal";
 
 const Tab2ServerHeader = () => {
   const [showModal, setShowModal] = useState(false);
-  const serverName = "test";
+  const serverName = "자바스크립트 스터디";
   return (
     <>
       <Tab2HeaderContainer
@@ -17,7 +17,7 @@ const Tab2ServerHeader = () => {
         <Text text={serverName} color="white" />
         <ArrowBottomIcon />
       </Tab2HeaderContainer>
-      {showModal && <ServerModal />}
+      {showModal && <ServerModal setShowModal={setShowModal} />}
       <TabDivider />
     </>
   );

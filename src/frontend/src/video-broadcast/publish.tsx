@@ -2,7 +2,8 @@ import React, { Suspense, lazy } from "react";
 import { Device } from "mediasoup-client";
 import { io as socketIOClient } from "socket.io-client";
 import { config } from "src/app.config";
-import { promise } from './socketUtils';
+import { promise } from "./socketUtils";
+import styled from "styled-components";
 
 const MODE_STREAM = 'stream';
 const MODE_SHARE_SCREEN = 'share_screen';
@@ -24,6 +25,8 @@ handleConnect() 및 handleDisconnect
 on off 를 활용하여 버튼을 켜고 끄게되는데,
 코드가 조금 달라져서 영상이 공유중에 버튼을 켜고 끌 때 정상적으로 바뀌는지 확인하지 못했습니다
 
+Ps 1. 현재 첫번재로 connect를 진행하면, 빈 값이 들어가버리는 버그가 발생합니다.
+꼭 connect를 진행한 후 Disconnect를 진행한 다음 다시 connect를 진행하시길 바랍니다.
 
 
 Ps 1. 현재 첫번재로 connect를 진행하면, 빈 값이 들어가버리는 버그가 발생합니다.
@@ -36,37 +39,37 @@ Ps 2. Screensharing 버튼
 */
 
 const CreateRemoteVideos = (props: any) => {
-    const remoteVideo: any = React.useRef();
-    React.useEffect(() => {
-        // if (remoteVideo.current.srcObject) {
-        //     remoteVideo.current.srcObject.addTrack(props.track);
-        //         return;
-        //     }
-        console.log('CreateRemoteVideos');
-        console.log(props);
-        props
-            .playVideo(remoteVideo.current, props.peer.stream)
-            ?.then(() => {
-                remoteVideo.current.volume = 1;
-                console.log('remoteVideo.current');
-                console.log(remoteVideo.current);
-            })
-            .catch((err: any) => {
-                console.error('media ERROR:', err);
-            });
-    }, []);
-    return (
-        <video
-            ref={remoteVideo}
-            controls
-            autoPlay
-            style={{
-                width: '240px',
-                height: '180px',
-                border: '1px solid black',
-            }}
-        ></video>
-    );
+  const remoteVideo: any = React.useRef();
+  React.useEffect(() => {
+    // if (remoteVideo.current.srcObject) {
+    //     remoteVideo.current.srcObject.addTrack(props.track);
+    //         return;
+    //     }
+    console.log("CreateRemoteVideos");
+    console.log(props);
+    props
+      .playVideo(remoteVideo.current, props.peer.stream)
+      ?.then(() => {
+        remoteVideo.current.volume = 1;
+        console.log("remoteVideo.current");
+        console.log(remoteVideo.current);
+      })
+      .catch((err: any) => {
+        console.error("media ERROR:", err);
+      });
+  }, []);
+  return (
+    <video
+      ref={remoteVideo}
+      controls
+      autoPlay
+      style={{
+        width: "400px",
+        height: "300px",
+        border: "1px solid black",
+      }}
+    ></video>
+  );
 };
 export const MemoizedCreateRemoteVideos = React.memo(CreateRemoteVideos);
 
@@ -670,400 +673,360 @@ async function subscribe() {
     //  }
 
     // --- prepare transport ---
-    console.log('--- createConsumerTransport --');
+    console.log("--- createConsumerTransport --");
     if (!consumerTransport.current) {
-        const params = await sendRequest('createConsumerTransport', {});
-        console.log('transport params:', params);
-        consumerTransport.current = device.current.createRecvTransport(
-            params
-        );
-        console.log('createConsumerTransport:', consumerTransport.current);
+      const params = await sendRequest("createConsumerTransport", {});
+      console.log("transport params:", params);
+      consumerTransport.current = device.current.createRecvTransport(params);
+      console.log("createConsumerTransport:", consumerTransport.current);
 
-        // --- join & start publish --
-        consumerTransport.current.on(
-            'connect',
-            async (
-                { dtlsParameters }: any,
-                callback: any,
-                errback: any
-            ) => {
-                console.log('--consumer trasnport connect');
-                sendRequest('connectConsumerTransport', {
-                    dtlsParameters: dtlsParameters,
-                })
-                    .then(callback)
-                    .catch(errback);
-            }
-        );
-
-        consumerTransport.current.on(
-            'connectionstatechange',
-            (state: any) => {
-                switch (state) {
-                    case 'connecting':
-                        console.log('subscribing...');
-                        break;
-
-                    case 'connected':
-                        console.log('subscribed');
-                        //consumeCurrentProducers(clientId);
-                        break;
-
-                    case 'failed':
-                        console.log('failed');
-                        producerTransport.current.close();
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        );
-
-        consumeCurrentProducers(clientId.current);
-    }
-}
-
-async function loadDevice(routerRtpCapabilities: any) {
-    try {
-        device.current = new Device();
-    } catch (error: any) {
-        if (error.name === 'UnsupportedError') {
-            console.error('browser not supported');
+      // --- join & start publish --
+      consumerTransport.current.on(
+        "connect",
+        async ({ dtlsParameters }: any, callback: any, errback: any) => {
+          console.log("--consumer trasnport connect");
+          sendRequest("connectConsumerTransport", {
+            dtlsParameters: dtlsParameters,
+          })
+            .then(callback)
+            .catch(errback);
         }
+      );
+
+      consumerTransport.current.on("connectionstatechange", (state: any) => {
+        switch (state) {
+          case "connecting":
+            console.log("subscribing...");
+            break;
+
+          case "connected":
+            console.log("subscribed");
+            //consumeCurrentProducers(clientId);
+            break;
+
+          case "failed":
+            console.log("failed");
+            producerTransport.current.close();
+            break;
+
+          default:
+            break;
+        }
+      });
+
+      consumeCurrentProducers(clientId.current);
+    }
+  }
+
+  async function loadDevice(routerRtpCapabilities: any) {
+    try {
+      device.current = new Device();
+    } catch (error: any) {
+      if (error.name === "UnsupportedError") {
+        console.error("browser not supported");
+      }
     }
     await device.current.load({ routerRtpCapabilities });
-}
+  }
 
-function sendRequest(type: any, data: any) {
+  function sendRequest(type: any, data: any) {
     return new Promise((resolve: any, reject: any) => {
-        socketRef.current.emit(type, data, (err: any, response: any) => {
-            if (!err) {
-                // Success response, so pass the mediasoup response to the local Room.
-                resolve(response);
-            } else {
-                reject(err);
-            }
-        });
+      socketRef.current.emit(type, data, (err: any, response: any) => {
+        if (!err) {
+          // Success response, so pass the mediasoup response to the local Room.
+          resolve(response);
+        } else {
+          reject(err);
+        }
+      });
     });
-}
+  }
 
-async function consumeCurrentProducers(clientId: any) {
-    console.log('-- try consuleAll() --');
-    const remoteInfo: any = await sendRequest('getCurrentProducers', {
-        localId: clientId.current,
+  async function consumeCurrentProducers(clientId: any) {
+    console.log("-- try consuleAll() --");
+    const remoteInfo: any = await sendRequest("getCurrentProducers", {
+      localId: clientId.current,
     }).catch((err) => {
-        console.error('getCurrentProducers ERROR:', err);
-        return;
+      console.error("getCurrentProducers ERROR:", err);
+      return;
     });
     //console.log('remoteInfo.producerIds:', remoteInfo.producerIds);
-    console.log('remoteInfo.remoteVideoIds:', remoteInfo.remoteVideoIds);
-    console.log('remoteInfo.remoteAudioIds:', remoteInfo.remoteAudioIds);
+    console.log("remoteInfo.remoteVideoIds:", remoteInfo.remoteVideoIds);
+    console.log("remoteInfo.remoteAudioIds:", remoteInfo.remoteAudioIds);
     consumeAll(
-        consumerTransport.current,
-        remoteInfo.remoteVideoIds,
-        remoteInfo.remoteAudioIds
+      consumerTransport.current,
+      remoteInfo.remoteVideoIds,
+      remoteInfo.remoteAudioIds
     );
-}
+  }
 
-function consumeAll(
-    transport: any,
-    remoteVideoIds: any,
-    remotAudioIds: any
-) {
-    console.log('----- consumeAll() -----');
+  function consumeAll(transport: any, remoteVideoIds: any, remotAudioIds: any) {
+    console.log("----- consumeAll() -----");
 
     remoteVideoIds.forEach((rId: any) => {
-        consumeAdd(transport, rId, null, 'video', MODE_STREAM).then(
-            (resp: any) => {
-                consumeAdd(
-                    transport,
-                    rId,
-                    null,
-                    'video',
-                    MODE_SHARE_SCREEN
-                );
-            }
-        );
+      consumeAdd(transport, rId, null, "video", MODE_STREAM).then(
+        (resp: any) => {
+          consumeAdd(transport, rId, null, "video", MODE_SHARE_SCREEN);
+        }
+      );
     });
     let audioIdsCount = 0;
     remotAudioIds.forEach((rId: any) => {
-        consumeAdd(transport, rId, null, 'audio', MODE_STREAM).then(
-            (resp: any) => {
-                consumeAdd(
-                    transport,
-                    rId,
-                    null,
-                    'audio',
-                    MODE_SHARE_SCREEN
-                );
-            }
-        );
+      consumeAdd(transport, rId, null, "audio", MODE_STREAM).then(
+        (resp: any) => {
+          consumeAdd(transport, rId, null, "audio", MODE_SHARE_SCREEN);
+        }
+      );
     });
-}
+  }
 
-function disconnectSocket() {
+  function disconnectSocket() {
     if (socketRef.current) {
-        socketRef.current.close();
-        socketRef.current = null;
-        clientId.current = null;
-        console.log('socket.io closed..');
+      socketRef.current.close();
+      socketRef.current = null;
+      clientId.current = null;
+      console.log("socket.io closed..");
     }
-}
+  }
 
-function removeConsumer(id: any, kind: any, mode: string) {
+  function removeConsumer(id: any, kind: any, mode: string) {
     if (mode == undefined) {
-        return false;
+      return false;
     }
-    if (kind === 'video') {
-        if (mode == MODE_STREAM) {
-            delete videoConsumers.current[id];
-        } else {
-            delete videoConsumers.current[id][mode];
-        }
+    if (kind === "video") {
+      if (mode === MODE_STREAM) {
+        delete videoConsumers.current[id];
+      } else {
+        delete videoConsumers.current[id][mode];
+      }
 
-        console.log(
-            'videoConsumers count=' +
-                Object.keys(videoConsumers.current).length
-        );
-    } else if (kind === 'audio') {
-        if (mode == MODE_STREAM) {
-            delete audioConsumers.current[id];
-        } else {
-            delete audioConsumers.current[id][mode];
-        }
+      console.log(
+        "videoConsumers count=" + Object.keys(videoConsumers.current).length
+      );
+    } else if (kind === "audio") {
+      if (mode === MODE_STREAM) {
+        delete audioConsumers.current[id];
+      } else {
+        delete audioConsumers.current[id][mode];
+      }
 
-        console.log(
-            'audioConsumers count=' +
-                Object.keys(audioConsumers.current).length
-        );
+      console.log(
+        "audioConsumers count=" + Object.keys(audioConsumers.current).length
+      );
     } else {
-        console.warn('UNKNOWN consumer kind=' + kind);
+      console.warn("UNKNOWN consumer kind=" + kind);
     }
-}
+  }
 
-
-function addConsumer(id: any, consumer: any, kind: any, mode: any) {
+  function addConsumer(id: any, consumer: any, kind: any, mode: any) {
     if (id === clientId.current) {
-        return false;
+      return false;
     }
-    if (kind === 'video') {
-        if (videoConsumers.current[id] == undefined) {
-            videoConsumers.current[id] = {};
-        }
-        videoConsumers.current[id][mode] = consumer;
-        console.log(
-            'videoConsumers count=' +
-                Object.keys(videoConsumers.current).length
-        );
-    } else if (kind === 'audio') {
-        if (audioConsumers.current[id] == undefined) {
-            audioConsumers.current[id] = {};
-        }
-        audioConsumers.current[id][mode] = consumer;
+    if (kind === "video") {
+      if (videoConsumers.current[id] == undefined) {
+        videoConsumers.current[id] = {};
+      }
+      videoConsumers.current[id][mode] = consumer;
+      console.log(
+        "videoConsumers count=" + Object.keys(videoConsumers.current).length
+      );
+    } else if (kind === "audio") {
+      if (audioConsumers.current[id] == undefined) {
+        audioConsumers.current[id] = {};
+      }
+      audioConsumers.current[id][mode] = consumer;
 
-        console.log(
-            'audioConsumers count=' +
-                Object.keys(audioConsumers.current).length
-        );
+      console.log(
+        "audioConsumers count=" + Object.keys(audioConsumers.current).length
+      );
     } else {
-        console.warn('UNKNOWN consumer kind=' + kind);
+      console.warn("UNKNOWN consumer kind=" + kind);
     }
-}
+  }
 
-const connectSocket: any = () => {
+  const connectSocket: any = () => {
     if (socketRef.current == null) {
-    const io: any = socketIOClient(
-        config.SERVER_ENDPOINT + '/video-broadcast',
-        { transports: ["websocket"],}
-    );
-    socketRef.current = io;
+      const io: any = socketIOClient(
+        config.SERVER_ENDPOINT + "/video-broadcast",
+        { transports: ["websocket"], rejectUnauthorized: false }
+      );
+      socketRef.current = io;
     }
     return new Promise((resolve: any, reject: any) => {
-        socketRef.current.on('connection-success', function (evt: any) {
-            console.log('socket.io connected()');
-        });
-        socketRef.current.on('error', function (err: any) {
-            console.error('socket.io ERROR:', err);
-            reject(err);
-        });
-        socketRef.current.on('message', function (message: any) {
-            console.log('socket.io message:', message);
-            if (message.type === 'welcome') {
-                if (socketRef.current.id !== message.id) {
-                    console.warn(
-                        'WARN: something wrong with clientID',
-                        socketRef.current.io,
-                        message.id
-                    );
-                }
-
-                clientId.current = message.id;
-                console.log(
-                    'connected to server. clientId=' + clientId.current
-                );
-                resolve();
-            } else {
-                console.error('UNKNOWN message from server:', message);
-            }
-        });
-        socketRef.current.on('newProducer', function (message: any) {
-            console.log('socket.io newProducer:', message);
-            const remoteId = message.socketId;
-            const prdId = message.producerId;
-            const kind = message.kind;
-            const mode = message.mode;
-
-            if (kind === 'video') {
-                console.log(
-                    '--try consumeAdd remoteId=' +
-                        remoteId +
-                        ', prdId=' +
-                        prdId +
-                        ', kind=' +
-                        kind
-                );
-                consumeAdd(
-                    consumerTransport.current,
-                    remoteId,
-                    prdId,
-                    kind,
-                    mode
-                );
-            } else if (kind === 'audio') {
-                //console.warn('-- audio NOT SUPPORTED YET. skip remoteId=' + remoteId + ', prdId=' + prdId + ', kind=' + kind);
-                console.log(
-                    '--try consumeAdd remoteId=' +
-                        remoteId +
-                        ', prdId=' +
-                        prdId +
-                        ', kind=' +
-                        kind
-                );
-                consumeAdd(
-                    consumerTransport.current,
-                    remoteId,
-                    prdId,
-                    kind,
-                    mode
-                );
-            }
-        });
-
-        socketRef.current.on('producerClosed', function (message: any) {
-            console.log('socket.io producerClosed:', message);
-            const localId = message.localId;
-            const remoteId = message.remoteId;
-            const kind = message.kind;
-            const mode = message.mode;
-            console.log(
-                '--try removeConsumer remoteId=%s, localId=%s, track=%s',
-                remoteId,
-                localId,
-                kind
+      socketRef.current.on("connection-success", function (evt: any) {
+        console.log("socket.io connected()");
+      });
+      socketRef.current.on("error", function (err: any) {
+        console.error("socket.io ERROR:", err);
+        reject(err);
+      });
+      socketRef.current.on("message", function (message: any) {
+        console.log("socket.io message:", message);
+        if (message.type === "welcome") {
+          if (socketRef.current.id !== message.id) {
+            console.warn(
+              "WARN: something wrong with clientID",
+              socketRef.current.io,
+              message.id
             );
-            removeConsumer(remoteId, kind, mode);
-            removeRemoteVideo(remoteId, mode);
-        });
+          }
 
+          clientId.current = message.id;
+          console.log("connected to server. clientId=" + clientId.current);
+          resolve();
+        } else {
+          console.error("UNKNOWN message from server:", message);
+        }
+      });
+      socketRef.current.on("newProducer", function (message: any) {
+        console.log("socket.io newProducer:", message);
+        const remoteId = message.socketId;
+        const prdId = message.producerId;
+        const kind = message.kind;
+        const mode = message.mode;
+
+        if (kind === "video") {
+          console.log(
+            "--try consumeAdd remoteId=" +
+              remoteId +
+              ", prdId=" +
+              prdId +
+              ", kind=" +
+              kind
+          );
+          consumeAdd(consumerTransport.current, remoteId, prdId, kind, mode);
+        } else if (kind === "audio") {
+          //console.warn('-- audio NOT SUPPORTED YET. skip remoteId=' + remoteId + ', prdId=' + prdId + ', kind=' + kind);
+          console.log(
+            "--try consumeAdd remoteId=" +
+              remoteId +
+              ", prdId=" +
+              prdId +
+              ", kind=" +
+              kind
+          );
+          consumeAdd(consumerTransport.current, remoteId, prdId, kind, mode);
+        }
+      });
+
+      socketRef.current.on("producerClosed", function (message: any) {
+        console.log("socket.io producerClosed:", message);
+        const localId = message.localId;
+        const remoteId = message.remoteId;
+        const kind = message.kind;
+        const mode = message.mode;
+        console.log(
+          "--try removeConsumer remoteId=%s, localId=%s, track=%s",
+          remoteId,
+          localId,
+          kind
+        );
+        removeConsumer(remoteId, kind, mode);
+        removeRemoteVideo(remoteId, mode);
+      });
     });
-};
+  };
 
-return (
-    <div>
-        <div>
-            <input
-                disabled={isStartMedia}
-                onChange={handleUseVideo}
-                type='checkbox'
-                checked={useVideo}
-            ></input>
-            <label>video</label>
-        </div>
-        <div>
-            <input
-                disabled={isStartMedia}
-                onChange={handleUseAudio}
-                type='checkbox'
-                checked={useAudio}
-            ></input>
-            <label>audio</label>
-        </div>
+  return (
+    <VideoWrapper>
+      <div>
+        <input
+          disabled={isStartMedia}
+          onChange={handleUseVideo}
+          type="checkbox"
+          checked={useVideo}
+        ></input>
+        <label>video</label>
+      </div>
 
-        {!isConnected ? (
-            <button
-                disabled={isConnected}
-                onClick={handleStartMedia}
-            >
-                Connect
-            </button>
-        ) : (
-            <button
-                disabled={!isConnected}
-                onClick={handleDisconnect}
-            >
-                Disconnect
-            </button>
-        )}
+      <div>
+        <input
+          disabled={isStartMedia}
+          onChange={handleUseAudio}
+          type="checkbox"
+          checked={useAudio}
+        ></input>
+        <label>audio</label>
+      </div>
 
-        {isShareScreen ? (
-            <button
-                disabled={!isStartMedia || !isConnected}
-                onClick={handleDisconnectScreenShare}
-            >
-                Stop Screen
-            </button>
-        ) : (
-            <button
-                disabled={!isStartMedia || !isConnected}
-                onClick={handleStartScreenShare}
-            >
-                Start Screen
-            </button>
-        )}
+      {!isConnected ? (
+        <button disabled={isConnected} onClick={handleStartMedia}>
+          Connect
+        </button>
+      ) : (
+        <button disabled={!isConnected} onClick={handleDisconnect}>
+          Disconnect
+        </button>
+      )}
 
-        <div>
-            local video
-            <video
-                ref={localVideo}
-                autoPlay
-                controls
-                style={{
-                    width: '240px',
-                    height: '180px',
-                    border: '1px solid black',
-                }}
-            ></video>
-            <video
-                ref={localScreen}
-                controls
-                autoPlay
-                style={{
-                    width: '240px',
-                    height: '180px',
-                    border: '1px solid black',
-                }}
-            ></video>
-        </div>
-        <div>remote videos</div>
-        {Object.keys(remoteVideos).map((key: any, index: number) => {
-            return Object.keys(remoteVideos[key]).map(
-                (key2: any, index2: number) => {
-                    const peer: any = remoteVideos[key][key2];
+      {isShareScreen ? (
+        <button
+          disabled={!isStartMedia || !isConnected}
+          onClick={handleDisconnectScreenShare}
+        >
+          Stop Screen
+        </button>
+      ) : (
+        <button
+          disabled={!isStartMedia || !isConnected}
+          onClick={handleStartScreenShare}
+        >
+          Start Screen
+        </button>
+      )}
 
-                    return (
-                        <MemoizedCreateRemoteVideos
-                            key={peer.socket_id + '__' + key2}
-                            peer={peer}
-                            playVideo={playVideo}
-                        />
-                    );
-                }
+      <video
+        ref={localVideo}
+        autoPlay
+        style={{
+          width: "400px",
+          height: "300px",
+          border: "1px solid black",
+        }}
+      ></video>
+      {/* {isShareScreen && ( */}
+      <video
+        ref={localScreen}
+        autoPlay
+        style={{
+          width: "400px",
+          height: "300px",
+          border: "1px solid black",
+        }}
+      ></video>
+      {/* )} */}
+      {/* <div>remote videos</div> */}
+      {Object.keys(remoteVideos).map((key: any, index: number) => {
+        return Object.keys(remoteVideos[key]).map(
+          (key2: any, index2: number) => {
+            const peer: any = remoteVideos[key][key2];
+
+            return (
+              <MemoizedCreateRemoteVideos
+                key={peer.socket_id + "__" + key2}
+                peer={peer}
+                playVideo={playVideo}
+              />
             );
-        })}
-    </div>
-);
+          }
+        );
+      })}
+    </VideoWrapper>
+  );
 }
 
-
 export default Publish;
+
+const VideoWrapper = styled.div`
+  display: block;
+  width: 100%;
+  height: 100%;
+  video {
+    margin: 0.5rem;
+    border-radius: 0.3rem;
+  }
+  color: white;
+  button {
+    color: white;
+  }
+`;

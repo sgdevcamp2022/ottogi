@@ -7,10 +7,11 @@ import UserState80 from "./UserState80";
 
 const CardUserInfo = () => {
   const { userInfo } = useUserStore();
+
   return (
     <InfoContainer>
       <Logo>
-        <UserState80 status="1" />
+        <UserState80 src={userInfo.profileImagePath} status="1" />
       </Logo>
       <NameWrapper>
         <Text
@@ -18,7 +19,9 @@ const CardUserInfo = () => {
           fontSize="lg"
           fontWeight="bold"
           color="white"
+          mb={4}
         />
+        <Text text={userInfo.introduction} fontSize="sm" color="setting-tab" />
       </NameWrapper>
       <ButtonWrapper>
         <SettingButton
@@ -68,6 +71,7 @@ const ButtonWrapper = styled.div`
 const NameWrapper = styled.div`
   width: auto;
   display: flex;
+  flex-direction: column;
 `;
 
 export default CardUserInfo;

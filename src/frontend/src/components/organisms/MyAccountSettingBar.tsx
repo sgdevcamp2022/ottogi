@@ -15,12 +15,11 @@ const ServerSettingBar = () => {
   const { mutate: logoutUser } = useLogout();
 
   const logout = async () => {
-    logoutUser();
-
     cookies.remove(COOKIE_KEY);
-    sessionStorage.clear();
+    localStorage.clear();
     resetUser();
 
+    logoutUser();
     navigate("/login");
   };
 

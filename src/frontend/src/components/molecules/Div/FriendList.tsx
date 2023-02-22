@@ -10,10 +10,9 @@ const FriendList = () => {
     userInfo: { email },
   } = useUserStore();
   const { data, isSuccess } = useGetFriendList(email);
-
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data?.data.data.filter(
+  const friendList: FriendType[] = data.filter(
     (friend: FriendType) => friend.friendState === "ACCEPTED"
   );
 
@@ -22,14 +21,17 @@ const FriendList = () => {
       <DirectMessage />
       <ScrollableBox>
         <ListContainer>
-          {friendList.map(({ name, userId, channelId }: FriendType) => (
-            <DirectButton
-              key={name}
-              name={name}
-              userId={userId}
-              id={channelId}
-            />
-          ))}
+          {friendList.map(
+            ({ name, userId, channelId, profileImagePath }: FriendType) => (
+              <DirectButton
+                key={name}
+                name={name}
+                userId={userId}
+                id={channelId}
+                src={profileImagePath}
+              />
+            )
+          )}
         </ListContainer>
       </ScrollableBox>
     </FriendListContainer>

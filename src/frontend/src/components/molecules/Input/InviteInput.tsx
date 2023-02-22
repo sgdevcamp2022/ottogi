@@ -15,9 +15,6 @@ const InviteInput = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("default");
   const { mutate: requestFriend } = useRequestFriend({
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["friendList"] });
-    },
     onError: () => {
       setEmail("");
       setStatus("danger");
@@ -25,6 +22,9 @@ const InviteInput = () => {
     onSuccess: () => {
       setEmail("");
       setStatus("success");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["friendList"] });
     },
   });
 

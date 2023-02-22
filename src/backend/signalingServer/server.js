@@ -141,16 +141,17 @@ expressApp.get("/test", (req, res) => {
 
 //=====================================================================================================
 async function runWebServer() {
-    const { key, cert } = config.https.tls;
-    if (!fs.existsSync(key) || !fs.existsSync(cert)) {
-        console.error("SSL files are not found. check your config.js file");
-        process.exit(0);
-    }
-    const tls = {
-        cert: fs.readFileSync(config.https.tls.cert, "utf-8"),
-        key: fs.readFileSync(config.https.tls.key, "utf-8"),
-        rejectUnauthorized: false,
-    };
+  const { key, cert } = config.https.tls;
+  if (!fs.existsSync(key) || !fs.existsSync(cert)) {
+    console.error("SSL files are not found. check your config.js file");
+    process.exit(0);
+  }
+  const tls = {
+    cert: fs.readFileSync(config.https.tls.cert, "utf-8"),
+    key: fs.readFileSync(config.https.tls.key, "utf-8"),
+    rejectUnauthorized: false,
+    requestCert: false,
+  };
 
     httpsServer = https.createServer(tls, expressApp);
     httpsServer.on("error", (err) => {
@@ -161,9 +162,8 @@ async function runWebServer() {
         console.log("server is running");
         console.log(`open https://${ip}:${listenPort} in your web browser`);
         resolve();
-        })}
-    );
-}
+        })});
+    }
 //=====================================================================================================
 
 const socketMain = require("./server/video-broadcast");
@@ -175,7 +175,8 @@ async function runSocketServer() {
             transports: ['websocket'],
         },
     });
-    socketMain(io, mediasoupWorkers);
+    socketMain(io, worker, router);
 
     console.log('running WebSocketServer...');
+    // logger.info('running WebSocketServer...');
 }
