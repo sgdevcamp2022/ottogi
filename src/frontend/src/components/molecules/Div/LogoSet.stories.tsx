@@ -6,5 +6,5 @@ export default {
 };
 
 export const MessageLog = () => (
-  <MessageLogDiv text="안녕하세요" createdAt={new Date()} />
+  <MessageLogDiv text="안녕하세요" createdAt={""} />
 );

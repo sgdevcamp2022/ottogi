@@ -6,4 +6,6 @@ export default {
   component: DivLogoImage,
 };
 
-export const LogoImage = () => <DivLogoImage onClick={action("clicked")} />;
+export const LogoImage = () => (
+  <DivLogoImage height={3} width={3} onClick={action("clicked")} />
+);

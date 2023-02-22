@@ -10,12 +10,12 @@ interface SideBarProps {
 }
 
 const SideBar = ({ children }: SideBarProps) => {
-  const { userInfo } = useUserStore();
-  const { data, isSuccess } = useGetFriendList(userInfo);
+  const {
+    userInfo: { email },
+  } = useUserStore();
+  const { data } = useGetFriendList(email);
 
   if (!data) return <></>;
-
-  const friendList: FriendType[] = data.data.data;
 
   return (
     <SideBarContainer>
@@ -26,7 +26,8 @@ const SideBar = ({ children }: SideBarProps) => {
         fontWeight="bold"
         mb={16}
       />
-      {friendList ? <>{children}</> : <NobodyActive />}
+      <NobodyActive />
+      {/* {data ? <>{children}</> : <NobodyActive />} */}
     </SideBarContainer>
   );
 };

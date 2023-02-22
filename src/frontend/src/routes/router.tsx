@@ -6,10 +6,11 @@ import Server from "../pages/Server";
 import ProtectAuth from "../components/organisms/ProtectAuth";
 import ProtectPage from "../components/organisms/ProtectHome";
 import NotFound from "../pages/NotFound";
-import Chat from "../pages/Chat";
 import ServerSetting from "../pages/ServerSetting";
 import UserSetting from "../pages/UserSetting";
 import CreateServer from "@pages/CreateServer";
+import Home from "src/video-broadcast/home";
+import BroadHome from "src/video-broadcast";
 
 const Router = () => {
   return (
@@ -22,45 +23,9 @@ const Router = () => {
           </ProtectPage>
         }
       />
-      <Route
-        path={"/@me"}
-        element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
-        }
-      />
-      <Route
-        path="/@me/:userId"
-        element={
-          <ProtectPage>
-            <Main />
-          </ProtectPage>
-        }
-      />
+      <Route path="/Home" element={<Home />} />
+      <Route path="/broadcast/:view" element={<BroadHome />} />
 
-      {/* 테스트 용으로 만들어 둔거. */}
-      <Route path="/ServerSetting" element={<ServerSetting />} />
-      <Route path="/UserSetting" element={<UserSetting />} />
-      <Route path="/CreateServer" element={<CreateServer />} />
-      {/* <Route path="/:serverId/" element={<Server />} /> */}
-      <Route
-        path="/:serverId"
-        element={
-          <ProtectPage>
-            <Server />
-          </ProtectPage>
-        }
-      />
-      <Route
-        path="/:serverId/:chatroomId"
-        element={
-          <ProtectPage>
-            <Server />
-          </ProtectPage>
-        }
-      />
-      <Route path="chat" element={<Chat />} />
       <Route
         path="/login"
         element={
@@ -77,6 +42,47 @@ const Router = () => {
           </ProtectAuth>
         }
       />
+
+      <Route
+        path={"/@me"}
+        element={
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
+        }
+      />
+      <Route
+        path="/@me/:channelId"
+        element={
+          <ProtectPage>
+            <Main />
+          </ProtectPage>
+        }
+      />
+
+      {/* 테스트 용으로 만들어 둔거. */}
+      <Route path="/ServerSetting" element={<ServerSetting />} />
+      <Route path="/UserSetting" element={<UserSetting />} />
+      <Route path="/CreateServer" element={<CreateServer />} />
+      {/* <Route path="/:serverId/" element={<Server />} /> */}
+
+      <Route
+        path="/:serverId"
+        element={
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
+        }
+      />
+      <Route
+        path="/:serverId/:channelId"
+        element={
+          // <ProtectPage>
+          <Server />
+          // </ProtectPage>
+        }
+      />
+
       <Route path="/*" element={<NotFound />} />
     </Routes>
   );

@@ -6,6 +6,7 @@ import RegisterStep1 from "../components/organisms/RegisterStep1";
 import RegisterStep2 from "../components/organisms/RegisterStep2";
 import RegisterStep3 from "../components/organisms/RegisterStep3";
 import { useEffect } from "react";
+import backgroundImage from "../assets/images/auth.png";
 
 const Register = () => {
   const { step, resetStep } = useRegisterStore(({ step, resetStep }) => ({
@@ -31,7 +32,9 @@ const Register = () => {
 };
 
 const LoginContainer = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor.primary};
+  background-image: url(${backgroundImage});
+  background-size: cover;
+  background-position: center;
 `;
 
 export default Register;

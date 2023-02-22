@@ -13,18 +13,19 @@ interface FriendState {
 }
 
 const MainWaiting = () => {
-  const { userInfo } = useUserStore();
-  const { data, isSuccess } = useGetFriendList(userInfo);
+  const {
+    userInfo: { email },
+  } = useUserStore();
+  const { data, isSuccess } = useGetFriendList(email);
   const [value, onChangeValue] = useInput();
 
   if (!isSuccess) return <></>;
 
-  const friendList: FriendType[] = data.data.data.filter(
+  const friendList: FriendType[] = data.filter(
     (friend: FriendState) =>
       friend.friendState === "REQUEST" || friend.friendState === "WAIT"
   );
   const num = friendList.length;
-  console.log(friendList);
 
   return (
     <>
@@ -33,9 +34,17 @@ const MainWaiting = () => {
           <BigSearchInputBox value={value} onChange={onChangeValue} />
           <LabelText label={"대기 중"} num={num} />
           <ScrollableBox>
-            {friendList.map(({ email, friendState }: FriendType) => (
-              <FriendWaitingBox name={email} status={friendState} />
-            ))}
+            {friendList.map(
+              ({ email, name, friendState, profileImagePath }: FriendType) => (
+                <FriendWaitingBox
+                  src={profileImagePath}
+                  key={email}
+                  email={email}
+                  name={name}
+                  status={friendState}
+                />
+              )
+            )}
           </ScrollableBox>
         </>
       ) : (

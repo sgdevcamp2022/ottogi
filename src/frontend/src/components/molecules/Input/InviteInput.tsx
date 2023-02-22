@@ -15,9 +15,6 @@ const InviteInput = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("default");
   const { mutate: requestFriend } = useRequestFriend({
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["friendList"] });
-    },
     onError: () => {
       setEmail("");
       setStatus("danger");
@@ -25,6 +22,9 @@ const InviteInput = () => {
     onSuccess: () => {
       setEmail("");
       setStatus("success");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["friendList"] });
     },
   });
 
@@ -37,7 +37,7 @@ const InviteInput = () => {
 
   const inviteFriend = () => {
     if (!userInfo) navigate("/login");
-    requestFriend({ email, accessToken: userInfo.accessToken });
+    requestFriend({ email });
   };
 
   return (
@@ -94,7 +94,7 @@ const InviteInputContainer = styled.label<{ borderColor: any }>`
     border-color: ${({ theme, borderColor }) =>
       borderColor === "default"
         ? theme.borderColor.focus
-        : borderColor.borderColor[borderColor]};
+        : theme.borderColor[borderColor]};
   }
 `;
 

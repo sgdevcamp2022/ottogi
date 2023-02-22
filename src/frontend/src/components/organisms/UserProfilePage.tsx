@@ -3,15 +3,38 @@ import FieldButton from "../atoms/Button/fieldButton";
 import Text from "../atoms/Text/Text";
 import LinkText from "../atoms/Text/LinkText";
 import Modal from "@components/organisms/Modal";
-import { SketchPicker } from "react-color";
 import { useCallback, useState } from "react";
 import ServerLogoUpload from "@components/molecules/Button/ServerLogoUpload";
+import useModifyUserImage from "@hooks/query/useModifyUserImage";
+import { useUserStore } from "@store/useUserStore";
 
-const ImageChange = () => {
+const ImageChange = ({ setOpenModal }: any) => {
+  const formData = new FormData();
+  const { mutate: modifyImage } = useModifyUserImage({
+    onSuccess: (data: any) => {
+      console.log("data", data);
+      setUserInfo({ ...userInfo, profileImagePath: data.data.data });
+    },
+  });
   console.log(1);
+  const [img, setImg] = useState<Blob | undefined>();
+  console.log("img", img);
+  console.log(typeof img);
+  let imgString = JSON.stringify(img);
+  console.log(imgString);
+  const { userInfo, setUserInfo } = useUserStore();
+  const updateImage = () => {
+    if (!img) return;
+    formData.append("file", img);
+    modifyImage({ formData });
+    setOpenModal(false);
+  };
   return (
     <Wrapper>
-      <ServerLogoUpload />
+      <ServerLogoUpload setImg={setImg} />
+      <AvatarWrapper>
+        <FieldButton text="변경하기" onClick={() => updateImage()} />
+      </AvatarWrapper>
     </Wrapper>
   );
 };
@@ -19,7 +42,6 @@ const ImageChange = () => {
 const UserProfilePage = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const onClickToggleModal = useCallback(() => {
-    console.log(1);
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
   // const [backgroundColor, setBackgroundColor] = useState("#fff");
@@ -31,7 +53,7 @@ const UserProfilePage = () => {
     <MainWrapper>
       {isOpenModal && (
         <Modal onClickToggleModal={onClickToggleModal}>
-          <ImageChange />
+          <ImageChange setOpenModal={setOpenModal} />
         </Modal>
       )}
       <BlockWrapper>
@@ -92,8 +114,10 @@ const MainWrapper = styled.div`
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   position: relative;
+  padding: 1rem;
   background-color: ${({ theme }) => theme.backgroundColor["tab3"]};
 `;
 

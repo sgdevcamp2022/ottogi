@@ -18,7 +18,7 @@ const BackgroundModal = ({
 }: BackgroundModalProps) => {
   return (
     <BackgroundWrapper onClick={onClick}>
-      <DefaultModal width={width} p={p}>
+      <DefaultModal width={width} p={p} onClick={(e) => e.stopPropagation()}>
         {children}
       </DefaultModal>
     </BackgroundWrapper>
@@ -30,7 +30,7 @@ const BackgroundWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   position: fixed;
-  z-index: 9999;
+  z-index: 10000;
   background-color: rgba(0, 0, 0, 0.8);
 `;
 

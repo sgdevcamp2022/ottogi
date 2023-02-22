@@ -17,7 +17,7 @@ const ButtonWrapper = styled.div<ButtonWrapperProps>`
   align-items: center;
   width: ${({ width }) => (width === "100%" ? "100%" : `${width}px`)};
   height: ${({ height }) => (height === "100%" ? "100%" : `${height}px`)};
-  color: ${({ theme, color }) => theme.color[color]};
+  color: ${({ theme, color, active }) => theme.color[active ? "white" : color]};
   background-color: ${({ theme, active }) =>
     theme.backgroundColor[active ? "active" : "trans"]};
   opacity: ${({ blur }) => (blur ? 30 : 100)}%;

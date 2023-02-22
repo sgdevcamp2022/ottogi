@@ -2,13 +2,13 @@ import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
 import Text from "@components/atoms/Text/Text";
 import { useUserStore } from "@store/useUserStore";
 import styled from "styled-components";
-import UserState32, { StateType } from "../Div/UserState32";
+import UserState32 from "../Div/UserState32";
 
 interface UserInfoButtonProps {
-  status?: StateType;
+  status: "0" | "1" | "2" | "3";
 }
 
-const UserInfoButton = ({ status = "on" }: UserInfoButtonProps) => {
+const UserInfoButton = ({ status }: UserInfoButtonProps) => {
   const { userInfo } = useUserStore();
 
   return (
@@ -19,7 +19,7 @@ const UserInfoButton = ({ status = "on" }: UserInfoButtonProps) => {
       ph={0}
     >
       <InfoContainer>
-        <UserState32 status={status} />
+        <UserState32 status={status} src={userInfo.profileImagePath} />
         <Text
           text={userInfo.email}
           fontWeight="bold"

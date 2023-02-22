@@ -20,16 +20,16 @@ const CreateDirectMessageModal = ({
   left = 0,
   right = 0,
 }: CreateDirectMessageModalProps) => {
-  const { userInfo } = useUserStore();
-  const { data, isSuccess } = useGetFriendList(userInfo);
+  const {
+    userInfo: { email },
+  } = useUserStore();
+  const { data: friendList, isSuccess } = useGetFriendList(email);
 
   const [search, changeSearch] = useInput();
 
-  // if (!isSuccess) return <></>;
+  if (!isSuccess) return <></>;
 
-  // const friendList: FriendType[] = data.data.data;
-  // const num = friendList.length;
-  const num = 0;
+  const num = friendList.length;
 
   return (
     <CreateDirectMessageModalContainer
@@ -47,14 +47,11 @@ const CreateDirectMessageModal = ({
       <>
         {num > 0 ? (
           <ScrollableBox>
-            <SelectFriend />
-            <SelectFriend check />
-            <SelectFriend />
-            <SelectFriend />
-            <SelectFriend check />
-            {/* {friendList.map((friend) => (
-                <SelectFriend check={check} />
-              ))} */}
+            {/* <SelectFriend />   
+            <SelectFriend check /> */}
+            {friendList.map((friend: FriendType) => (
+              <SelectFriend check={true} status="1" />
+            ))}
           </ScrollableBox>
         ) : (
           <SearchContainer>

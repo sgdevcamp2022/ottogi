@@ -6,6 +6,10 @@ import useServerSetStore, {
 } from "../store/useServerSetStore";
 import ServerSettingDefault from "../components/organisms/ServerSettingDefault";
 import ServerSettingInvite from "../components/organisms/ServerSettingInvite";
+import BackgroundModal from "@components/organisms/BackgroundModal";
+import useServerSettingModalStore from "@store/useServerSettingModalStore";
+import CancelIcon from "@components/atoms/Icons/CancelIcon";
+import { useUserStore } from "@store/useUserStore";
 
 const serverComponent = {
   일반: ServerSettingDefault,
@@ -25,21 +29,41 @@ const ServerSetting = () => {
       setSettingStatus,
     })
   );
+
+  const { setServerSettingModal } = useServerSettingModalStore();
   return (
-    <SettingBox>
-      <Side>
-        <ServerSettingBar />
-      </Side>
-      <Container>
-        {/* <SeverSettingMember />
-         */}
-        {getStatus(setStatus)}
-      </Container>
-    </SettingBox>
+    <BackgroundModal
+      width={800}
+      p={0}
+      onClick={() => setServerSettingModal(false)}
+    >
+      <SettingBox>
+        <Side>
+          <ServerSettingBar />
+        </Side>
+        <Container>
+          <CancelIconWrapper onClick={() => setServerSettingModal(false)}>
+            <CancelIcon />
+          </CancelIconWrapper>
+          {/* <SeverSettingMember />
+           */}
+          {getStatus(setStatus)}
+        </Container>
+      </SettingBox>
+    </BackgroundModal>
   );
 };
 
 export default ServerSetting;
+
+const CancelIconWrapper = styled.div`
+  font-size: 5rem;
+  color: ${({ theme }) => theme.color["auth-desc"]};
+  cursor: pointer;
+  position: absolute;
+  right: 500px;
+  top: 25px;
+`;
 
 const SettingBox = styled.div`
   width: 100%;

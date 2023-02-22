@@ -5,17 +5,17 @@ const GlobalStyle = createGlobalStyle`${css`
   ${reset}
   @font-face {
     font-family: "ggsans-Normal";
-    src: url("fonts/ggsans-Normal.woff") format("truetype");
+    src: url("../assets/fonts/ggsans-Normal.woff") format("truetype");
     font-style: normal;
   }
   @font-face {
     font-family: "ggsans-Semibold";
-    src: url("fonts/ggsans-Semibold.woff") format("truetype");
+    src: url("f@onts/ggsans-Semibold.woff") format("truetype");
     font-style: 500;
   }
   @font-face {
     font-family: "ggsans-Bold";
-    src: url("fonts/ggsans-Bold.woff") format("truetype");
+    src: url("@fonts/ggsans-Bold.woff") format("truetype");
     font-style: bold;
   }
 
@@ -62,9 +62,9 @@ const GlobalStyle = createGlobalStyle`${css`
     box-sizing: border-box;
   }
   body {
-    font-family: "ggsans-Normal", Apple SD Gothic Neo, NanumBarunGothic,
-      "맑은 고딕", "Malgun Gothic", Gulim, 굴림, Dotum, 돋움, "Noto Sans",
-      "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Apple SD Gothic Neo, NanumBarunGothic, "맑은 고딕",
+      "Malgun Gothic", Gulim, 굴림, Dotum, 돋움, "Noto Sans", "Helvetica Neue",
+      Helvetica, Arial, sans-serif;
   }
   a {
     text-decoration: none;

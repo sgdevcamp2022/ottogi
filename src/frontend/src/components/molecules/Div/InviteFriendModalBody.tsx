@@ -1,14 +1,24 @@
 import Text from "@components/atoms/Text/Text";
 import useInput from "@hooks/common/useInput";
+import { useUserStore } from "@store/useUserStore";
 import { flexCenter } from "@styles/flexCenter";
 import styled from "styled-components";
 import SearchInput from "../Input/SearchInput";
 import InviteFriendBox from "./InviteFriendBox";
 import ScrollableBox from "./scrollableBox";
+import useGetFriendList from "@hooks/query/useGetFriendList";
 
 const InviteFriendModalBody = () => {
   const [search, changeSearch] = useInput();
-  const num = 10;
+  const {
+    userInfo: { email },
+  } = useUserStore();
+  const { data: friendList, isSuccess } = useGetFriendList(email);
+
+  if (!isSuccess) return <></>;
+
+  const num = friendList.length;
+
   return (
     <InviteFriendModalBodyContainer>
       <SearchInputWrapper>
@@ -24,7 +34,13 @@ const InviteFriendModalBody = () => {
         <ScrollableBox>
           <FriendListContainer>
             {num > 0 ? (
-              new Array(num).fill(null).map((v) => <InviteFriendBox />)
+              friendList.map(({ name, userId, channelId }: FriendType) => (
+                <InviteFriendBox
+                  name={name}
+                  userId={userId}
+                  channelId={channelId}
+                />
+              ))
             ) : (
               <TextWrapper>
                 <Text
@@ -53,9 +69,8 @@ const SearchInputWrapper = styled.div`
 
 const Divider = styled.div<{ color: string }>`
   position: sticky;
-  left: -1rem;
   height: 0.0625rem;
-  width: 27.5rem;
+  width: 100%;
   background-color: ${({ theme, color }) => theme.backgroundColor[color]};
 `;
 

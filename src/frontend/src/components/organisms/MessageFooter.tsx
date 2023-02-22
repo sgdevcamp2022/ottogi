@@ -1,22 +1,38 @@
 import FileUploadModal from "@components/molecules/Div/FileUploadeModal";
-import { useState } from "react";
+import useSendToStore from "@store/useSendToStore";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import MessageBox from "../molecules/Div/MessageBox";
 
-const MessageFooter = () => {
-  const { serverId: isServer } = useParams();
-  const [value, setValue] = useState("");
+interface MessageFooterProps {
+  message: string;
+  setMessage: Dispatch<SetStateAction<string>>;
+  addChatMessage: () => void;
+}
+
+const MessageFooter = ({
+  message,
+  setMessage,
+  addChatMessage,
+}: MessageFooterProps) => {
+  const { serverId } = useParams();
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const onChange = (v: string) => setValue(v);
+  const { sendTo } = useSendToStore();
+
+  const onChange = (v: string) => {
+    // enter 누르면 onClick처리
+    setMessage(v);
+  };
 
   return (
-    <MessageFooterContainer isServer={!!isServer}>
+    <MessageFooterContainer isServer={!!serverId}>
       <MessageBox
-        value={value}
+        value={message}
         onChange={onChange}
         onClick={() => setShowUploadModal((prev) => !prev)}
-        nickname="허다은"
+        nickname={sendTo}
+        addChatMessage={addChatMessage}
       />
       {showUploadModal && <FileUploadModal />}
     </MessageFooterContainer>

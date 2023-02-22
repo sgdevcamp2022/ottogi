@@ -5,4 +5,4 @@ export default {
   component: UserState32Div,
 };
 
-export const UserState32 = () => <UserState32Div />;
+export const UserState32 = () => <UserState32Div status="1" />;
