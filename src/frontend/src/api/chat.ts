@@ -10,6 +10,13 @@ const chatApi = {
       },
     });
   },
+
+  enter: async () => {
+    return await clientApi.post("/chat/community_enter", {
+      name: "종인",
+      channelId: "220",
+    });
+  },
 };
 
 export default chatApi;
