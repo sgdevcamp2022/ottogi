@@ -1,0 +1,60 @@
+const db = require('../db/index');
+
+const getChannel = (categoryId)=>{
+  let channelList = [];
+  let findsql = `SELECT JSON_OBJECT ('channel_id', id, 'channel_name', name, 'type', type, 'category_id', ${categoryId}) FROM channel WHERE category_id = ${db.escape(categoryId)}`;
+
+  return new Promise((resolve, reject) => {
+      db.query(findsql, (err, res) => {
+          if (err) {
+              reject(err);
+          } else {
+              for (let data of res) {
+                channelList.push(Object.values(data));
+              };
+              resolve(channelList);
+          }
+      })
+  })
+}
+
+module.exports = {
+    //채널 생성 디비 명령어? (권한 x)
+    create: (channelName, categoryId, type) => {
+        console.log(`채널 생성 요청 [IN] (new)channelName : ${channelName}, categoryId : ${categoryId}`)
+
+        let sql = `INSERT INTO channel(name, category_id, type) VALUES('${channelName}', ${categoryId}, ${type});`;
+        db.query(sql, async(err,res)=>{
+          if(err) console.log(err);
+          else {
+            console.log(`채널 생성 요청 [DONE] (new)channelName : ${channelName}, categoryId : ${categoryId}`)
+          }
+        });
+    },
+
+    join: (channelId, userId) => {
+      let sql = `INSERT INTO channelmember (channelId, user_id) VALUES (${db.escape(channelId)}, ${db.escape(userId)})`;
+      db.query(sql)
+  },
+
+    //채널 정보 변경 명령어
+    rename: (channelName, channelId) => {
+        let sql = `UPDATE channel SET name = ${db.escape(channelName)} WHERE id = ${db.escape(channelId)}`;
+        return db.query(sql);
+    },
+
+    //채널 삭제 명령
+    delete: (channelId) => {
+        let sql = `DELETE FROM channel WHERE id = ${channelId}`;
+        db.query(sql);
+    },
+
+  load: async(categoryId)=>{
+    let list = [];
+    const response = await getChannel(categoryId);
+    for(let data of response){
+        list.push(data);
+    }
+    return list;
+},
+};
