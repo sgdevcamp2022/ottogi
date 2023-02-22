@@ -6,29 +6,26 @@ import Modal from "@components/organisms/Modal";
 import { useCallback, useState } from "react";
 import ServerLogoUpload from "@components/molecules/Button/ServerLogoUpload";
 import useModifyUserImage from "@hooks/query/useModifyUserImage";
+import { useUserStore } from "@store/useUserStore";
 
 const ImageChange = ({ setOpenModal }: any) => {
   const formData = new FormData();
-  const { data: res, mutate: modifyImage } = useModifyUserImage();
+  const { mutate: modifyImage } = useModifyUserImage({
+    onSuccess: (data: any) => {
+      console.log("data", data);
+      setUserInfo({ ...userInfo, profileImagePath: data.data.data });
+    },
+  });
   console.log(1);
   const [img, setImg] = useState<Blob | undefined>();
   console.log("img", img);
   console.log(typeof img);
   let imgString = JSON.stringify(img);
-  console.log();
   console.log(imgString);
+  const { userInfo, setUserInfo } = useUserStore();
   const updateImage = () => {
-    // console.log("img1", img);
     if (!img) return;
-    // const convertedFile = await convertToBase64(img);
-    // console.log(convertedFile);
-    // console.log(typeof convertedFile);
     formData.append("file", img);
-    // console.log(img);
-    // for (var value in formData.values()) {
-    //   console.log(value);
-    // }
-
     modifyImage({ formData });
     setOpenModal(false);
   };
@@ -117,8 +114,10 @@ const MainWrapper = styled.div`
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   position: relative;
+  padding: 1rem;
   background-color: ${({ theme }) => theme.backgroundColor["tab3"]};
 `;
 

@@ -6,7 +6,7 @@ import AddIcon from "@components/atoms/Icons/AddIcon";
 import useGetServerList from "@hooks/query/useGetServerList";
 import { useUserStore } from "@store/useUserStore";
 import ScrollableBox from "@components/molecules/Div/scrollableBox";
-
+import Ottogi from "../../assets/images/OttogiOttogi.png";
 const ServerList = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -89,6 +89,7 @@ const ServerList = () => {
               avatarWidth={3}
               name="메인"
               id={10000}
+              src={Ottogi}
             />
           </li>
           <Divider />

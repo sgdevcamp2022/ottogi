@@ -34,7 +34,10 @@ const MessageText = forwardRef<HTMLParagraphElement, MessageTextProps>(
         <TextContainer>
           {hasLink ? (
             <>
-              <LinkText text={link} onClick={() => navigate(link)} />
+              <LinkText
+                text={link}
+                onClick={() => window.location.replace(link)}
+              />
               {/* <a href={link} target="_blank">
                 {link}
               </a> */}

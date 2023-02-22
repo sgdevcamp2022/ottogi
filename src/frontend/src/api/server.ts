@@ -60,18 +60,16 @@ const serverApi = {
     }
     return await clientApi.patch("/community/imgupload", formData);
   },
+  // 커뮤니티 삭제
+  delete: async ({ communityId, userId }: any) => {
+    return await clientApi.patch("/community/delete", { communityId, userId });
+  },
   // 커뮤니티 이름 변경
   update: async ({ communityName, communityId, userId }: any) => {
     return await clientApi.patch("/community/update", {
       communityName,
       communityId,
       userId,
-    });
-  },
-  // 커뮤니티 삭제
-  delete: async (communityId: string) => {
-    return await clientApi.delete("/community/delete", {
-      params: { communityId },
     });
   },
 };

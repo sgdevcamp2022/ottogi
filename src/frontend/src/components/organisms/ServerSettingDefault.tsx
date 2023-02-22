@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Button } from "@mui/material";
 import serverApi from "@api/server";
 import { useUserStore } from "@store/useUserStore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useInput from "@hooks/common/useInput";
 import useModifyServerImage from "@hooks/query/useModifyServerImage";
 
@@ -20,16 +20,27 @@ const SeverSettingDefault = () => {
   const { data: res, mutate: modifyImage } = useModifyServerImage();
   const [img, setImg] = useState();
   const { serverId: communityId } = useParams();
-  console.log(communityId);
   const { userInfo } = useUserStore();
-  const { mutate: update } = useMutation(serverApi.update);
+  const { data: resp, mutate: update } = useMutation(serverApi.update);
   const [name, changeName] = useInput();
   const onChangeName = () => {
     console.log(name);
     update({ communityName: name, communityId, userId: userInfo.id });
   };
+  const navigate = useNavigate();
+  const { mutate: deleteCommunity } = useMutation(serverApi.delete);
+  const DeleteServer = () => {
+    if (!communityId) return;
+    deleteCommunity({ communityId, userId: userInfo.id });
+    console.log(resp);
+    window.location.replace("/@me");
+  };
   const changeImage = () => {
-    formData.append("communityId", JSON.stringify(communityId));
+    console.log(communityId, userInfo.id);
+    console.log(typeof communityId);
+    console.log(typeof userInfo.id);
+    if (!communityId) return;
+    formData.append("communityId", communityId);
     formData.append("userId", JSON.stringify(userInfo.id));
     if (!img) return;
     formData.append("img", img);
@@ -71,6 +82,14 @@ const SeverSettingDefault = () => {
       <ServerInput name={name} changeName={changeName} />
       <ButtonWrapper>
         <FieldButton text="서버이름 변경하기" onClick={() => onChangeName()} />
+      </ButtonWrapper>
+      <ButtonWrapper>
+        <FieldButton
+          text="서버 삭제하기"
+          onClick={() => DeleteServer()}
+          backgroundColor="voice-hangup"
+          fontWeight="bold"
+        />
       </ButtonWrapper>
     </SettingWrapper>
   );

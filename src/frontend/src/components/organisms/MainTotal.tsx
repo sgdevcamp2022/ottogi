@@ -44,7 +44,7 @@ const MainTotal = () => {
               }) => (
                 <FriendDefaultBox
                   src={profileImagePath}
-                  isTotal={false}
+                  isTotal={true}
                   key={email}
                   email={email}
                   id={channelId}

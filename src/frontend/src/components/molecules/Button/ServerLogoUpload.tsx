@@ -72,7 +72,7 @@ const ServerLogoUpload = ({ setImg }: any) => {
 export default ServerLogoUpload;
 
 const Wrapper = styled.div`
-  width: 120px;
+  width: 80px;
   .button {
     width: 100px;
   }

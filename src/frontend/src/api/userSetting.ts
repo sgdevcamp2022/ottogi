@@ -24,16 +24,6 @@ const userSettingApi = {
 
   // 유저 이미지 변경
   modifyImage: async ({ formData }: any) => {
-    let keys = formData.keys();
-    for (const pair of keys) {
-      console.log(pair);
-    }
-
-    // 폼 객체 values 값을 순회.
-    let values = formData.values();
-    for (const pair of values) {
-      console.log("hello", pair);
-    }
     return await clientApi.patch("/user/member/modify/image", formData);
   },
 

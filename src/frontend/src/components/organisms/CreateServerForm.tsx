@@ -43,7 +43,7 @@ const CreateServerForm = () => {
     // <ServerModal width={440}>
     // <ServerContainer>
     <BackgroundModal width={440} p={0} onClick={() => null}>
-      <>
+      <ServerContainer>
         <CreateServerText />
         <ServerLogoUpload setImg={setImg} />
         <DefaultInput value={name} onChange={changeName} type="text" />
@@ -66,7 +66,7 @@ const CreateServerForm = () => {
             }
           />
         </Bottom>
-      </>
+      </ServerContainer>
     </BackgroundModal>
     // {/* </ServerContainer> */}
     // </ServerModal>
@@ -82,6 +82,8 @@ const ServerContainer = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
+  padding: 1rem;
+  background-color: ${({ theme }) => theme.backgroundColor["white"]};
 `;
 
 const Bottom = styled.div`

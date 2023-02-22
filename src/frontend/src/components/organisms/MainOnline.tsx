@@ -39,7 +39,7 @@ const MainOnline = () => {
               }) => (
                 <FriendDefaultBox
                   src={profileImagePath}
-                  isTotal={true}
+                  isTotal={false}
                   key={email}
                   email={email}
                   id={channelId}
