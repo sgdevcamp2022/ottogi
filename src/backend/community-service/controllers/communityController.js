@@ -75,6 +75,7 @@ module.exports = {
     // 커뮤니티 이미지 변경
 
     communityImage: async(req, res) => {
+        console.log("커뮤니티 이미지 변경 요청 [IN]")
         const {communityId, userId} = req.body;
         const img = req.file ?? '';
 
@@ -106,16 +107,18 @@ module.exports = {
 
     //커뮤니티 삭제
     communityDelete: async (req, res) => {
+        console.log("커뮤니티 삭제 컨트롤러 요청 [IN] ");
         const {communityId, userId} = req.body;
         if (!communityId) {
             res.json({
                 success: false,
-                message: 'ERROR: Invalid parmas',
+                message: 'ERROR: Invalid params',
                 data: null,
             })
         } else {
             if(await isAdmin(communityId, userId)){
                 community.delete(communityId);
+                console.log("커뮤니티 삭제 컨트롤러 요청 [DONE] ");
                 res.json({
                     success: true,
                     message: `Community ID : ${communityId} Deleted` ,

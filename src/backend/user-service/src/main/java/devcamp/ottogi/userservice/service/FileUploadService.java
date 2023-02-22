@@ -57,6 +57,7 @@ public class FileUploadService {
         member.modifyProfileImagePath(imageUrl);
         memberRepository.save(member);
 
+        log.info("받아온 이미지 : {}", imageUrl);
         log.info("사진 업로드 요청 [DONE] : {}", userId);
         return imageUrl;
     }

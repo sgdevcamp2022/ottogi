@@ -68,7 +68,7 @@ module.exports = {
                 data: null,
             })
         } else {
-            const response = await state.load(userId);
+            const response = await state.loadChannel(userId);
             res.json({
                 success: true,
                 message: 'State Change Success',
