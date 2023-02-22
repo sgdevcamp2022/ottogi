@@ -27,7 +27,7 @@ const useLogin = () => {
 
       await setTokens();
       await getUserInfo();
-      navigate("/@me");
+      window.location.reload();
     },
   });
 };

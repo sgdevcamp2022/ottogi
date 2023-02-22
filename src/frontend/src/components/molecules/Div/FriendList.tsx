@@ -10,7 +10,6 @@ const FriendList = () => {
     userInfo: { email },
   } = useUserStore();
   const { data, isSuccess } = useGetFriendList(email);
-
   if (!isSuccess) return <></>;
 
   const friendList: FriendType[] = data.filter(
