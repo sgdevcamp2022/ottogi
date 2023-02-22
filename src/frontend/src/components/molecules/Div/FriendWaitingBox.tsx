@@ -13,9 +13,15 @@ interface FriendWaitingBoxProps {
   name: string;
   email: string;
   status: FriendStateType;
+  src: string;
 }
 
-const FriendWaitingBox = ({ name, email, status }: FriendWaitingBoxProps) => {
+const FriendWaitingBox = ({
+  name,
+  email,
+  status,
+  src,
+}: FriendWaitingBoxProps) => {
   const navigate = useNavigate();
   const { userInfo } = useUserStore();
   const { mutate: acceptFriend } = useAcceptFriend();
@@ -51,6 +57,7 @@ const FriendWaitingBox = ({ name, email, status }: FriendWaitingBoxProps) => {
 
   return (
     <FriendBox
+      src={src}
       name={name}
       status={status === "WAIT" ? "2" : "3"}
       onClick={() => null}

@@ -1,6 +1,5 @@
 import useInput from "@hooks/common/useInput";
 import useGetFriendList from "@hooks/query/useGetFriendList";
-import useGetFriendStatus from "@hooks/query/useGetFriendStatus";
 import { useUserStore } from "@store/useUserStore";
 import BigSearchInputBox from "../molecules/Div/BigSearchInputBox";
 import EmptyContainer from "../molecules/Div/EmptyContainer";
@@ -30,8 +29,16 @@ const MainOnline = () => {
           <LabelText label={"온라인"} num={num} />
           <ScrollableBox>
             {friendList.map(
-              ({ email, name, channelId, userId, friendState }) => (
+              ({
+                email,
+                name,
+                channelId,
+                userId,
+                friendState,
+                profileImagePath,
+              }) => (
                 <FriendDefaultBox
+                  src={profileImagePath}
                   isTotal={true}
                   key={email}
                   email={email}
