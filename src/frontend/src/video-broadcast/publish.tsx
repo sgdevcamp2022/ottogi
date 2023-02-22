@@ -5,8 +5,10 @@ import { config } from "src/app.config";
 import { promise } from "./socketUtils";
 import styled from "styled-components";
 
-const MODE_STREAM = "stream";
-const MODE_SHARE_SCREEN = "share_screen";
+const MODE_STREAM = 'stream';
+const MODE_SHARE_SCREEN = 'share_screen';
+const roomName = window.location.pathname.split('/')[1]
+
 /*
 크게 사용되는 모듈 및 UI버튼은 총 4가지입니다
 1. Connect & 2. Disconnect
@@ -23,6 +25,8 @@ handleConnect() 및 handleDisconnect
 on off 를 활용하여 버튼을 켜고 끄게되는데,
 코드가 조금 달라져서 영상이 공유중에 버튼을 켜고 끌 때 정상적으로 바뀌는지 확인하지 못했습니다
 
+Ps 1. 현재 첫번재로 connect를 진행하면, 빈 값이 들어가버리는 버그가 발생합니다.
+꼭 connect를 진행한 후 Disconnect를 진행한 다음 다시 connect를 진행하시길 바랍니다.
 
 
 Ps 1. 현재 첫번재로 connect를 진행하면, 빈 값이 들어가버리는 버그가 발생합니다.
@@ -70,211 +74,220 @@ const CreateRemoteVideos = (props: any) => {
 export const MemoizedCreateRemoteVideos = React.memo(CreateRemoteVideos);
 
 function Publish(props: any) {
-  const localScreen: any = React.useRef();
-  const localStreamScreen: any = React.useRef();
+const localScreen: any = React.useRef();
+const localStreamScreen: any = React.useRef();
 
-  const localVideo: any = React.useRef();
-  const localStream: any = React.useRef();
-  const clientId: any = React.useRef();
-  const device: any = React.useRef();
-  const producerTransport: any = React.useRef();
-  const videoProducer: any = React.useRef({});
-  const audioProducer: any = React.useRef({});
-  const consumerTransport: any = React.useRef();
-  const videoConsumers: any = React.useRef({});
-  const audioConsumers: any = React.useRef({});
-  const consumersStream: any = React.useRef({});
-  const socketRef: any = React.useRef();
+const localVideo: any = React.useRef();
+const localStream: any = React.useRef();
+const clientId: any = React.useRef();
+const device: any = React.useRef();
+const producerTransport: any = React.useRef();
+const videoProducer: any = React.useRef({});
+const audioProducer: any = React.useRef({});
+const consumerTransport: any = React.useRef();
+const videoConsumers: any = React.useRef({});
+const audioConsumers: any = React.useRef({});
+const consumersStream: any = React.useRef({});
+const socketRef: any = React.useRef();
 
-  const [useVideo, setUseVideo] = React.useState(true);
-  const [useAudio, setUseAudio] = React.useState(true);
-  const [isStartMedia, setIsStartMedia] = React.useState(false);
-  const [isConnected, setIsConnected] = React.useState(false);
-  const [remoteVideos, setRemoteVideos]: any = React.useState({});
-  const [isShareScreen, setIsShareScreen] = React.useState(false);
+const [useVideo, setUseVideo] = React.useState(true);
+const [useAudio, setUseAudio] = React.useState(true);
+const [isStartMedia, setIsStartMedia] = React.useState(false);
+const [isConnected, setIsConnected] = React.useState(false);
+const [remoteVideos, setRemoteVideos]: any = React.useState({});
+const [isShareScreen, setIsShareScreen] = React.useState(false);
 
-  // ============ UI button ==========
-  // 화면공유
-  const handleStartScreenShare = () => {
+    // ============ UI button ==========
+    // 화면공유 
+    const handleStartScreenShare = () => {
     if (localStreamScreen.current) {
-      console.warn("WARN: local media ALREADY started");
-      return;
+        console.warn('WARN: local media ALREADY started');
+        return;
     }
 
     const mediaDevices: any = navigator.mediaDevices;
     mediaDevices
-      .getDisplayMedia({ audio: useAudio, video: useVideo })
-      .then((stream: any) => {
-        localStreamScreen.current = stream;
+        .getDisplayMedia({ audio: useAudio, video: useVideo })
+        .then((stream: any) => {
+            localStreamScreen.current = stream;
 
-        playVideo(localScreen.current, localStreamScreen.current);
-        handleConnectScreenShare();
-        setIsShareScreen(true);
-        const screenTrack = stream.getTracks()[0];
-        screenTrack.onended = function () {
-          handleDisconnectScreenShare();
-        };
-      })
-      .catch((err: any) => {
-        console.error("media ERROR:", err);
-      });
-  };
-  // 화면공유에 내장되어있는 함수입니다.
-  async function handleConnectScreenShare() {
+            playVideo(localScreen.current, localStreamScreen.current);
+            handleConnectScreenShare();
+            setIsShareScreen(true);
+            const screenTrack = stream.getTracks()[0];
+            screenTrack.onended = function () {
+                handleDisconnectScreenShare();
+            };
+        })
+        .catch((err: any) => {
+            console.error('media ERROR:', err);
+        });
+};
+// 화면공유에 내장되어있는 함수입니다.
+async function handleConnectScreenShare() {
     let trigger = await handleStartMedia();
     if (!trigger) {
-      console.warn("WARN: local media NOT READY");
-      return;
+        console.warn('WARN: local media NOT READY');
+        return;
     }
-
+    console.log("엥",roomName)
     // --- get capabilities --
-    const data = await sendRequest("getRouterRtpCapabilities", {});
-    console.log("getRouterRtpCapabilities:", data);
+    const data = await sendRequest('getRouterRtpCapabilities', {
+        roomName : roomName,
+    });
+    console.log('getRouterRtpCapabilities:', data);
     await loadDevice(data);
 
     // --- get transport info ---
-    console.log("--- createProducerTransport --");
-    const params = await sendRequest("createProducerTransport", {
-      mode: MODE_SHARE_SCREEN,
+    console.log('--- createProducerTransport --');
+    const params = await sendRequest('createProducerTransport', {
+        mode: MODE_SHARE_SCREEN,
     });
-    console.log("transport params:", params);
+    console.log('transport params:', params);
     producerTransport.current = device.current.createSendTransport(params);
-    console.log("createSendTransport:", producerTransport.current);
+    console.log('createSendTransport:', producerTransport.current);
 
     // --- join & start publish --
     producerTransport.current.on(
-      "connect",
-      async ({ dtlsParameters }: any, callback: any, errback: any) => {
-        console.log("--trasnport connect");
-        sendRequest("connectProducerTransport", {
-          dtlsParameters: dtlsParameters,
-        })
-          .then(callback)
-          .catch(errback);
-      }
+        'connect',
+        async ({ dtlsParameters }: any, callback: any, errback: any) => {
+            console.log('--trasnport connect');
+            sendRequest('connectProducerTransport', {
+                dtlsParameters: dtlsParameters,
+            })
+                .then(callback)
+                .catch(errback);
+        }
     );
 
     producerTransport.current.on(
-      "produce",
-      async ({ kind, rtpParameters }: any, callback: any, errback: any) => {
-        console.log("--trasnport produce");
-        try {
-          const { id }: any = await sendRequest("produce", {
-            transportId: producerTransport.current.id,
-            kind,
-            rtpParameters,
-            mode: MODE_SHARE_SCREEN,
-          });
-          callback({ id });
-          console.log("--produce requested, then subscribe ---");
-          subscribe();
-        } catch (err) {
-          errback(err);
+        'produce',
+        async (
+            { kind, rtpParameters }: any,
+            callback: any,
+            errback: any
+        ) => {
+            console.log('--trasnport produce');
+            try {
+                const { id }: any = await sendRequest('produce', {
+                    transportId: producerTransport.current.id,
+                    kind,
+                    rtpParameters,
+                    mode: MODE_SHARE_SCREEN,
+                });
+                callback({ id });
+                console.log('--produce requested, then subscribe ---');
+                subscribe();
+            } catch (err) {
+                errback(err);
+            }
         }
-      }
     );
 
-    producerTransport.current.on("connectionstatechange", (state: any) => {
-      switch (state) {
-        case "connecting":
-          console.log("publishing...");
-          break;
+    producerTransport.current.on('connectionstatechange', (state: any) => {
+        switch (state) {
+            case 'connecting':
+                console.log('publishing...');
+                break;
 
-        case "connected":
-          console.log("published");
-          //  setIsConnected(true);
-          break;
+            case 'connected':
+                console.log('published');
+                //  setIsConnected(true);
+                break;
 
-        case "failed":
-          console.log("failed");
-          producerTransport.current.close();
-          break;
+            case 'failed':
+                console.log('failed');
+                producerTransport.current.close();
+                break;
 
-        default:
-          break;
-      }
+            default:
+                break;
+        }
     });
 
     if (useVideo) {
-      const videoTrack = localStreamScreen.current.getVideoTracks()[0];
-      if (videoTrack) {
-        const trackParams = { track: videoTrack };
-        videoProducer.current[MODE_SHARE_SCREEN] =
-          await producerTransport.current.produce(trackParams);
-      }
+        const videoTrack = localStreamScreen.current.getVideoTracks()[0];
+        if (videoTrack) {
+            const trackParams = { track: videoTrack };
+            videoProducer.current[
+                MODE_SHARE_SCREEN
+            ] = await producerTransport.current.produce(trackParams);
+        }
     }
     if (useAudio) {
-      const audioTrack = localStreamScreen.current.getAudioTracks()[0];
-      if (audioTrack) {
-        const trackParams = { track: audioTrack };
-        audioProducer.current[MODE_SHARE_SCREEN] =
-          await producerTransport.current.produce(trackParams);
-      }
+        const audioTrack = localStreamScreen.current.getAudioTracks()[0];
+        if (audioTrack) {
+            const trackParams = { track: audioTrack };
+            audioProducer.current[
+                MODE_SHARE_SCREEN
+            ] = await producerTransport.current.produce(trackParams);
+        }
     }
-  }
+}
 
-  function handleStopScreenShare() {
+function handleStopScreenShare() {
     if (localStreamScreen.current) {
-      pauseVideo(localScreen.current);
-      stopLocalStream(localStreamScreen.current);
-      localStreamScreen.current = null;
-      setIsShareScreen(false);
+        pauseVideo(localScreen.current);
+        stopLocalStream(localStreamScreen.current);
+        localStreamScreen.current = null;
+        setIsShareScreen(false);
     }
-  }
-  async function handleDisconnectScreenShare() {
+}
+async function handleDisconnectScreenShare() {
     handleStopScreenShare();
     {
-      const producer = videoProducer.current[MODE_SHARE_SCREEN];
-      producer?.close();
-      delete videoProducer.current[MODE_SHARE_SCREEN];
+        const producer = videoProducer.current[MODE_SHARE_SCREEN];
+        producer?.close();
+        delete videoProducer.current[MODE_SHARE_SCREEN];
     }
     {
-      const producer = audioProducer.current[MODE_SHARE_SCREEN];
-      producer?.close();
-      delete audioProducer.current[MODE_SHARE_SCREEN];
+        const producer = audioProducer.current[MODE_SHARE_SCREEN];
+        producer?.close();
+        delete audioProducer.current[MODE_SHARE_SCREEN];
     }
 
-    await sendRequest("producerStopShareScreen", {});
-  }
+    await sendRequest('producerStopShareScreen', {});
+}
 
-  const handleUseVideo = (e: any) => {
+
+const handleUseVideo = (e: any) => {
     setUseVideo(!useVideo);
-  };
-  const handleUseAudio = (e: any) => {
+};
+const handleUseAudio = (e: any) => {
     setUseAudio(!useAudio);
-  };
+};
 
-  // Media를 틀면서 Socket
-  const handleStartMedia = async () => {
+// Media를 틀면서 Socket
+const handleStartMedia = async() => {
     if (localStream.current) {
-      console.warn("WARN: local media ALREADY started");
-      return false;
+        console.warn('WARN: local media ALREADY started');
+        return false;
     }
 
     navigator.mediaDevices
-      .getUserMedia({ audio: useAudio, video: useVideo })
-      .then((stream: any) => {
-        localStream.current = stream;
-        playVideo(localVideo.current, localStream.current);
-        handleConnect();
-        setIsStartMedia(true);
-      })
-      .catch((err: any) => {
-        console.error("media ERROR:", err);
-      });
+        .getUserMedia({ audio: useAudio, video: useVideo })
+        .then((stream: any) => {
+            localStream.current = stream;
+            playVideo(localVideo.current, localStream.current);
+            handleConnect()
+            setIsStartMedia(true);
+        })
+        .catch((err: any) => {
+            console.error('media ERROR:', err);
+        });
     return true;
-  };
+};
 
-  function handleStopMedia() {
+function handleStopMedia() {
     if (localStream.current) {
-      pauseVideo(localVideo.current);
-      stopLocalStream(localStream.current);
-      localStream.current = null;
-      setIsStartMedia(false);
+        pauseVideo(localVideo.current);
+        stopLocalStream(localStream.current);
+        localStream.current = null;
+        setIsStartMedia(false);
     }
-  }
+}
 
-  function handleDisconnect() {
+function handleDisconnect() {
     handleStopMedia();
     handleStopScreenShare();
     // if (videoProducer.current) {
@@ -282,143 +295,146 @@ function Publish(props: any) {
     //     videoProducer.current = null;
     // }
     {
-      for (const mode in videoProducer.current) {
-        const producer = videoProducer.current[mode];
-        producer?.close();
-        delete videoProducer.current[mode];
-      }
+        for (const mode in videoProducer.current) {
+            const producer = videoProducer.current[mode];
+            producer?.close();
+            delete videoProducer.current[mode];
+        }
     }
     {
-      for (const mode in audioProducer.current) {
-        const producer = audioProducer.current[mode];
-        producer?.close();
-        delete audioProducer.current[mode];
-      }
+        for (const mode in audioProducer.current) {
+            const producer = audioProducer.current[mode];
+            producer?.close();
+            delete audioProducer.current[mode];
+        }
     }
     // if (audioProducer.current) {
     //     audioProducer.current.close(); // localStream will stop
     //     audioProducer.current = null;
     // }
     if (producerTransport.current) {
-      producerTransport.current.close(); // localStream will stop
-      producerTransport.current = null;
+        producerTransport.current.close(); // localStream will stop
+        producerTransport.current = null;
     }
 
     for (const key in videoConsumers.current) {
-      for (const key2 in videoConsumers.current[key]) {
-        const consumer = videoConsumers.current[key][key2];
-        consumer.close();
-        delete videoConsumers.current[key][key2];
-      }
+        for (const key2 in videoConsumers.current[key]) {
+            const consumer = videoConsumers.current[key][key2];
+            consumer.close();
+            delete videoConsumers.current[key][key2];
+        }
     }
     for (const key in audioConsumers.current) {
-      for (const key2 in audioConsumers.current[key]) {
-        const consumer = audioConsumers.current[key][key2];
-        consumer.close();
-        delete audioConsumers.current[key][key2];
-      }
+        for (const key2 in audioConsumers.current[key]) {
+            const consumer = audioConsumers.current[key][key2];
+            consumer.close();
+            delete audioConsumers.current[key][key2];
+        }
     }
 
     if (consumersStream.current) {
-      consumersStream.current = {};
+        consumersStream.current = {};
     }
 
     if (consumerTransport.current) {
-      consumerTransport.current.close();
-      consumerTransport.current = null;
+        consumerTransport.current.close();
+        consumerTransport.current = null;
     }
 
     removeAllRemoteVideo();
 
     disconnectSocket();
     setIsConnected(false);
-  }
+}
 
-  function playVideo(element: any, stream: any) {
+function playVideo(element: any, stream: any) {
     if (element.srcObject) {
-      console.warn("element ALREADY playing, so ignore");
-      return;
+        console.warn('element ALREADY playing, so ignore');
+        return;
     }
     element.srcObject = stream;
     element.volume = 0;
     return element.play();
-  }
+}
 
-  function pauseVideo(element: any) {
+function pauseVideo(element: any) {
     element.pause();
     element.srcObject = null;
-  }
+}
 
-  function stopLocalStream(stream: any) {
+function stopLocalStream(stream: any) {
     let tracks = stream.getTracks();
     if (!tracks) {
-      console.warn("NO tracks");
-      return;
+        console.warn('NO tracks');
+        return;
     }
 
     tracks.forEach((track: any) => track.stop());
-  }
+}
 
-  function addRemoteTrack(id: any, track: any, mode: string) {
+function addRemoteTrack(id: any, track: any, mode: string) {
+
     if (id === clientId.current) {
-      return false;
+        return false;
     }
 
-    console.log("addremotetrack");
+    console.log('addremotetrack');
     console.log(track);
 
     if (consumersStream.current[id] == undefined) {
-      consumersStream.current[id] = {};
+        consumersStream.current[id] = {};
     }
 
     if (consumersStream.current[id][mode] == undefined) {
-      const newStream = new MediaStream();
-      newStream.addTrack(track);
-      consumersStream.current[id][mode] = {
-        stream: newStream,
-        socket_id: id,
-      };
+        const newStream = new MediaStream();
+        newStream.addTrack(track);
+        consumersStream.current[id][mode] = {
+            stream: newStream,
+            socket_id: id,
+        };
     } else {
-      //add audiotrack
-      consumersStream.current[id][mode].stream.addTrack(track);
+        //add audiotrack
+        consumersStream.current[id][mode].stream.addTrack(track);
     }
 
     setRemoteVideos((peers: any) => {
-      const newPeers: any = peers;
+        const newPeers: any = peers;
 
-      return { ...consumersStream.current };
+        return { ...consumersStream.current };
     });
-  }
 
-  function addRemoteVideo(id: any) {
+}
+
+function addRemoteVideo(id: any) {
     let existElement = findRemoteVideo(id);
     if (existElement) {
-      console.warn("remoteVideo element ALREADY exist for id=" + id);
-      return existElement;
+        console.warn('remoteVideo element ALREADY exist for id=' + id);
+        return existElement;
     }
 
-    let element = document.createElement("video");
+    let element = document.createElement('video');
     return element;
-  }
+}
 
-  function findRemoteVideo(id: any) {
+function findRemoteVideo(id: any) {
     let element = remoteVideos.current[id];
     return element;
-  }
+}
 
-  function removeRemoteVideo(id: any, mode: string) {
-    console.log(" ---- removeRemoteVideo() id=" + id);
+
+function removeRemoteVideo(id: any, mode: string) {
+    console.log(' ---- removeRemoteVideo() id=' + id);
     if (mode == MODE_STREAM) {
-      delete consumersStream.current[id];
+        delete consumersStream.current[id];
     } else {
-      delete consumersStream.current[id][mode];
+        delete consumersStream.current[id][mode];
     }
 
     setRemoteVideos((peers: any) => {
-      const newPeers: any = peers;
-      delete newPeers[id];
+        const newPeers: any = peers;
+        delete newPeers[id];
 
-      return { ...consumersStream.current };
+        return { ...consumersStream.current };
     });
     // if (element) {
     //     element.pause();
@@ -427,218 +443,232 @@ function Publish(props: any) {
     // } else {
     //     console.log('child element NOT FOUND');
     // }
-  }
+}
 
-  function removeAllRemoteVideo() {
-    console.log(" ---- removeAllRemoteVideo() id");
+function removeAllRemoteVideo() {
+    console.log(' ---- removeAllRemoteVideo() id');
     consumersStream.current = {};
     setRemoteVideos((peers: any) => {
-      const newPeers = {};
+        const newPeers = {};
 
-      return { ...newPeers };
+        return { ...newPeers };
     });
-  }
-  // ======================================================
-  // ======================================================
-  // 이 부분 부터는 Socket 과 통신하는 부분이 나오게 됩니다.
-  // 아래까지 확인하실 필요는 없으실 것 같습니다.
-  // ======================================================
-  // ======================================================
-  async function consumeAdd(
+
+}
+// ======================================================
+// ======================================================
+// 이 부분 부터는 Socket 과 통신하는 부분이 나오게 됩니다.
+// 아래까지 확인하실 필요는 없으실 것 같습니다.
+// ======================================================
+// ======================================================
+async function consumeAdd(
     transport: any,
     remoteSocketId: any,
     prdId: any,
     trackKind: any,
     mode: any = MODE_STREAM
-  ) {
-    console.log("--start of consumeAdd -- kind=%s", trackKind);
+) {
+    console.log('--start of consumeAdd -- kind=%s', trackKind);
     const { rtpCapabilities } = device.current;
     //const data = await socket.request('consume', { rtpCapabilities });
-    const data = await sendRequest("consumeAdd", {
-      rtpCapabilities: rtpCapabilities,
-      remoteId: remoteSocketId,
-      kind: trackKind,
-      mode: mode,
+    const data = await sendRequest('consumeAdd', {
+        rtpCapabilities: rtpCapabilities,
+        remoteId: remoteSocketId,
+        kind: trackKind,
+        mode: mode,
     }).catch((err) => {
-      console.error("consumeAdd ERROR:", err);
+        console.error('consumeAdd ERROR:', err);
     });
     const { producerId, id, kind, rtpParameters }: any = data;
     if (prdId && prdId !== producerId) {
-      console.warn("producerID NOT MATCH");
+        console.warn('producerID NOT MATCH');
     }
 
     let codecOptions = {};
     const consumer = await transport.consume({
-      id,
-      producerId,
-      kind,
-      rtpParameters,
-      codecOptions,
-      mode,
+        id,
+        producerId,
+        kind,
+        rtpParameters,
+        codecOptions,
+        mode,
     });
     //const stream = new MediaStream();
     //stream.addTrack(consumer.track);
 
     addConsumer(remoteSocketId, consumer, kind, mode);
     consumer.remoteId = remoteSocketId;
-    consumer.on("transportclose", () => {
-      console.log("--consumer transport closed. remoteId=" + consumer.remoteId);
-      //consumer.close();
-      //removeConsumer(remoteId);
-      //removeRemoteVideo(consumer.remoteId);
+    consumer.on('transportclose', () => {
+        console.log(
+            '--consumer transport closed. remoteId=' + consumer.remoteId
+        );
+        //consumer.close();
+        //removeConsumer(remoteId);
+        //removeRemoteVideo(consumer.remoteId);
     });
-    consumer.on("producerclose", () => {
-      console.log("--consumer producer closed. remoteId=" + consumer.remoteId);
-      consumer.close();
-      removeConsumer(consumer.remoteId, kind, mode);
-      removeRemoteVideo(consumer.remoteId, mode);
+    consumer.on('producerclose', () => {
+        console.log(
+            '--consumer producer closed. remoteId=' + consumer.remoteId
+        );
+        consumer.close();
+        removeConsumer(consumer.remoteId, kind, mode);
+        removeRemoteVideo(consumer.remoteId, mode);
     });
-    consumer.on("trackended", () => {
-      console.log("--consumer trackended. remoteId=" + consumer.remoteId);
-      //consumer.close();
-      //removeConsumer(remoteId);
-      //removeRemoteVideo(consumer.remoteId);
+    consumer.on('trackended', () => {
+        console.log('--consumer trackended. remoteId=' + consumer.remoteId);
+        //consumer.close();
+        //removeConsumer(remoteId);
+        //removeRemoteVideo(consumer.remoteId);
     });
 
-    console.log("--end of consumeAdd");
+    console.log('--end of consumeAdd');
     //return stream;
 
-    if (kind === "video") {
-      console.log("--try resumeAdd --");
-      sendRequest("resumeAdd", {
-        remoteId: remoteSocketId,
-        kind: kind,
-        mode,
-      })
-        .then(() => {
-          console.log("resumeAdd OK");
+    if (kind === 'video') {
+        console.log('--try resumeAdd --');
+        sendRequest('resumeAdd', {
+            remoteId: remoteSocketId,
+            kind: kind,
+            mode,
         })
-        .catch((err) => {
-          console.error("resumeAdd ERROR:", err);
-        });
+            .then(() => {
+                console.log('resumeAdd OK');
+            })
+            .catch((err) => {
+                console.error('resumeAdd ERROR:', err);
+            });
     }
     return new Promise((resolve: any, reject: any) => {
-      addRemoteTrack(remoteSocketId, consumer.track, mode);
-      resolve();
+        addRemoteTrack(remoteSocketId, consumer.track, mode);
+        resolve();
     });
-  }
+}
 
-  async function handleConnect() {
+async function handleConnect() {
     setIsConnected(true);
-
+    
     if (!localStream.current) {
-      console.warn("WARN: local media NOT READY");
-      return;
+        console.warn('WARN: local media NOT READY');
+        return;
     }
 
     // --- connect socket.io ---
     await connectSocket().catch((err: any) => {
-      console.error("살려주세용...", err);
-      return;
+        console.error(err);
+        return;
     });
 
-    console.log("connected");
+    console.log('connected', roomName);
 
     // --- get capabilities --
-    const data = await sendRequest("getRouterRtpCapabilities", {});
-    console.log("getRouterRtpCapabilities:", data);
+    const data = await sendRequest('getRouterRtpCapabilities', {
+        roomName : roomName,
+    });
+    console.log('getRouterRtpCapabilities:', data);
     await loadDevice(data);
 
     // --- get transport info ---
-    console.log("--- createProducerTransport --");
-    const params = await sendRequest("createProducerTransport", {
-      mode: MODE_STREAM,
+    console.log('--- createProducerTransport --');
+    const params = await sendRequest('createProducerTransport', {
+        mode: MODE_STREAM,
     });
-    console.log("transport params:", params);
+    console.log('transport params:', params);
     producerTransport.current = device.current.createSendTransport(params);
-    console.log("createSendTransport:", producerTransport.current);
+    console.log('createSendTransport:', producerTransport.current);
 
     // --- join & start publish --
     producerTransport.current.on(
-      "connect",
-      async ({ dtlsParameters }: any, callback: any, errback: any) => {
-        console.log("--trasnport connect");
-        sendRequest("connectProducerTransport", {
-          dtlsParameters: dtlsParameters,
-        })
-          .then(callback)
-          .catch(errback);
-      }
+        'connect',
+        async ({ dtlsParameters }: any, callback: any, errback: any) => {
+            console.log('--trasnport connect');
+            sendRequest('connectProducerTransport', {
+                dtlsParameters: dtlsParameters,
+            })
+                .then(callback)
+                .catch(errback);
+        }
     );
 
     producerTransport.current.on(
-      "produce",
-      async ({ kind, rtpParameters }: any, callback: any, errback: any) => {
-        console.log("--trasnport produce");
-        try {
-          const { id }: any = await sendRequest("produce", {
-            transportId: producerTransport.current.id,
-            kind,
-            rtpParameters,
-            mode: MODE_STREAM,
-          });
-          callback({ id });
-          console.log("--produce requested, then subscribe ---");
-          subscribe();
-        } catch (err) {
-          errback(err);
+        'produce',
+        async (
+            { kind, rtpParameters }: any,
+            callback: any,
+            errback: any
+        ) => {
+            console.log('--trasnport produce');
+            try {
+                const { id }: any = await sendRequest('produce', {
+                    transportId: producerTransport.current.id,
+                    kind,
+                    rtpParameters,
+                    mode: MODE_STREAM,
+                });
+                callback({ id });
+                console.log('--produce requested, then subscribe ---');
+                subscribe();
+            } catch (err) {
+                errback(err);
+            }
         }
-      }
     );
 
-    producerTransport.current.on("connectionstatechange", (state: any) => {
-      console.log(producerTransport);
-      switch (state) {
-        case "connecting":
-          console.log("publishing...");
-          break;
+    producerTransport.current.on('connectionstatechange', (state: any) => {
+        switch (state) {
+            case 'connecting':
+                console.log('publishing...');
+                break;
 
-        case "connected":
-          console.log("published");
-          setIsConnected(true);
-          break;
+            case 'connected':
+                console.log('published');
+                setIsConnected(true);
+                break;
 
-        case "failed":
-          console.log("failed");
-          producerTransport.current.close();
-          break;
+            case 'failed':
+                console.log('failed');
+                producerTransport.current.close();
+                break;
 
-        default:
-          break;
-      }
+            default:
+                break;
+        }
     });
 
     if (useVideo) {
-      const videoTrack = localStream.current.getVideoTracks()[0];
-      localStream.current.getVideoTracks();
-      if (videoTrack) {
-        const trackParams = { track: videoTrack };
-        videoProducer.current[MODE_STREAM] =
-          await producerTransport.current.produce(trackParams);
-      }
+        const videoTrack = localStream.current.getVideoTracks()[0];
+        localStream.current.getVideoTracks()
+        if (videoTrack) {
+            const trackParams = { track: videoTrack };
+            videoProducer.current[
+                MODE_STREAM
+            ] = await producerTransport.current.produce(trackParams);
+        }
     }
     if (useAudio) {
-      const audioTrack = localStream.current.getAudioTracks()[0];
-      if (audioTrack) {
-        const trackParams = { track: audioTrack };
-        audioProducer.current[MODE_STREAM] =
-          await producerTransport.current.produce(trackParams);
-      }
+        const audioTrack = localStream.current.getAudioTracks()[0];
+        if (audioTrack) {
+            const trackParams = { track: audioTrack };
+            audioProducer.current[
+                MODE_STREAM
+            ] = await producerTransport.current.produce(trackParams);
+        }
     }
-  }
+}
 
-  async function subscribe() {
+async function subscribe() {
     // console.log(socketRef.current);
     if (!socketRef.current) {
-      await connectSocket().catch((err: any) => {
-        console.error(err);
-        return;
-      });
+        await connectSocket().catch((err: any) => {
+            console.error(err);
+            return;
+        });
     }
 
     // --- get capabilities --
-    const data = await sendRequest("getRouterRtpCapabilities", {});
-    console.log("getRouterRtpCapabilities:", data);
+    const data = await sendRequest('getRouterRtpCapabilities', {
+        roomName : roomName,
+    });
+    console.log('getRouterRtpCapabilities:', data);
     await loadDevice(data);
     //  }
 

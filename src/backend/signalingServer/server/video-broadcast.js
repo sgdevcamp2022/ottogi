@@ -1,17 +1,23 @@
 const config = require('../config')
-
+const _room = require('../lib/room_')
+const rooms = new Map();
+let nextMediasoupWorkerIdx = 0;
+let room;
+let peers = {}
 function consoleLog(data) {
   console.log(data);
 }
 
-function socketMain(io, _worker, _router) {
-  let router = _router;
+
+function socketMain(io, _workers) {
+
   const connections = io.of('/video-broadcast');
   const MODE_STREAM = 'stream';
   const MODE_SHARE_SCREEN = 'share_screen';
 
   connections.on('connection', (socket) => {
       consoleLog('conference');
+      console.log("안녕하세요!",socket.id)
 
       socket.on('disconnect', function () {
           //   close user connection
@@ -24,13 +30,42 @@ function socketMain(io, _worker, _router) {
           cleanUpPeer(socket);
       });
 
-      socket.on('getRouterRtpCapabilities', (data, callback) => {
-          if (router) {
+      socket.on('getRouterRtpCapabilities', async (data, callback) => {
+          const roomName = data.roomName;
+          if (!rooms.has(roomName))
+          {
+            room = await getOrCreateRoom({roomName})
+            peers[socket.id] = {
+              socket,
+              roomName,
+              peerDetails : {
+                  name : '',
+                  isAdmin : false, // Not update NOw
+              }
+          }
+          }
+          else{
+            room = await rooms.get(roomName)
+            peers[socket.id] = {
+              socket,
+              roomName,
+              peerDetails : {
+                  name : '',
+                  isAdmin : false, // Not update NOw
+              }
+            }
+          }
+          console.log("HERE!! ",peers)
+          rooms.get(roomName).peers = [...rooms.get(roomName).peers,
+        socket.id]
+          let router1 = room.mediasoupRouter;
+
+          if (router1) {
               consoleLog(
                   'getRouterRtpCapabilities: ',
-                  router.rtpCapabilities
+                  router1.rtpCapabilities
               );
-              sendResponse(router.rtpCapabilities, callback);
+              sendResponse(router1.rtpCapabilities, callback);
           } else {
               sendReject({ text: 'ERROR- router NOT READY' }, callback);
           }
@@ -41,7 +76,7 @@ function socketMain(io, _worker, _router) {
           consoleLog('-- createProducerTransport ---');
           const mode = data.mode;
 
-          const { transport, params } = await createTransport();
+          const { transport, params } = await createTransport(socket.id);
           addProducerTrasport(getId(socket), transport);
           transport.observer.on('close', () => {
               const id = getId(socket);
@@ -97,7 +132,8 @@ function socketMain(io, _worker, _router) {
       // --- consumer ----
       socket.on('createConsumerTransport', async (data, callback) => {
           consoleLog('-- createConsumerTransport -- id=' + getId(socket));
-          const { transport, params } = await createTransport();
+          console.log("HERE!! ", socket.id)
+          const { transport, params } = await createTransport(socket.id);
           addConsumerTrasport(getId(socket), transport);
           transport.observer.on('close', () => {
               const localId = getId(socket);
@@ -137,6 +173,7 @@ function socketMain(io, _worker, _router) {
           return;
       });
 
+
       socket.on('getCurrentProducers', async (data, callback) => {
           const clientId = data.localId;
           consoleLog('-- getCurrentProducers for Id=' + clientId);
@@ -155,7 +192,9 @@ function socketMain(io, _worker, _router) {
           );
       });
 
+        /// 방 생성시 발생하는 문제를 빠르게 Fix 하기 위해서 해결을 위해서 문제를 알고있는 부분을 try except로 채워버렸음... bug fix 진행 해야함 {다른 router에 있는 producer까지 탐색하는 문제가 있음..!} 
       socket.on('consumeAdd', async (data, callback) => {
+        try{         
           const localId = getId(socket);
           const kind = data.kind;
           const mode = data.mode;
@@ -187,7 +226,8 @@ function socketMain(io, _worker, _router) {
               return;
           }
 
-          const { consumer, params } = await createConsumer(
+          const { consumer, params } = await createConsumer(     
+              socket.id,
               transport,
               producer,
               rtpCapabilities
@@ -219,6 +259,10 @@ function socketMain(io, _worker, _router) {
 
           consoleLog('-- consumer ready ---');
           sendResponse(params, callback);
+
+          }catch{
+            console.log("HEllo")
+          }
       });
 
       socket.on('resumeAdd', async (data, callback) => {
@@ -370,7 +414,6 @@ function socketMain(io, _worker, _router) {
   });
 
   // ========= mediasoup ===========
-
 
   //
   // Room {
@@ -659,7 +702,9 @@ function socketMain(io, _worker, _router) {
       }
   }
 
-  async function createTransport() {
+  async function createTransport(socketId) {
+    const { roomName } = peers[socketId]
+    const router = rooms.get(roomName).mediasoupRouter
       const transport = await router.createWebRtcTransport(
           config.mediasoup.webRtcTransportOptions
       );
@@ -676,8 +721,13 @@ function socketMain(io, _worker, _router) {
       };
   }
 
-  async function createConsumer(transport, producer, rtpCapabilities) {
+
+  async function createConsumer(socketId, transport, producer, rtpCapabilities) {
       let consumer = null;
+      const {roomName} = peers[socketId]
+      console.log(roomName, socketId)
+      const router = rooms.get(roomName).mediasoupRouter
+      console.log("ee",router.id)
       if (
           !router.canConsume({
               producerId: producer.id,
@@ -687,7 +737,7 @@ function socketMain(io, _worker, _router) {
           console.error('can not consume');
           return;
       }
-
+    try{
       //consumer = await producerTransport.consume({ // NG: try use same trasport as producer (for loopback)
       consumer = await transport
           .consume({
@@ -716,6 +766,38 @@ function socketMain(io, _worker, _router) {
               producerPaused: consumer.producerPaused,
           },
       };
+    }catch{
+        console.log("Hello World")
+    }
+
   }
+
+  async function getOrCreateRoom({ roomName })
+  {
+      let room = rooms.get(roomName);
+      // If the Room does not exist create a new one.
+      if (!room)
+      {
+          // logger.info('creating a new Room [roomName:%s]', roomName);
+          console.log('creating a new Room [roomName:%s]', roomName);
+          console.log(roomName)
+          const mediasoupWorker =  getMediasoupWorker();
+          room = await _room.create({mediasoupWorker, roomName});
+          rooms.set(roomName, room);
+          // console.log(room)
+      }
+      return room; // room 에 있는 mediassoup worker를 통해 Router 제작 후 실행
+  }
+
+  function getMediasoupWorker()
+{
+    console.log(_workers)
+    const worker = _workers[nextMediasoupWorkerIdx];
+    if (++nextMediasoupWorkerIdx === _workers.length){
+        nextMediasoupWorkerIdx = 0;
+    }
+        
+    return worker;
+}
 }
 module.exports = socketMain;
