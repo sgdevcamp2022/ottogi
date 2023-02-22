@@ -10,11 +10,8 @@ const useGetServerList = ({ userId }: any) => {
   );
 
   useEffect(() => {
-    if (!res) {
-      return;
-    }
+    if (!res) return;
 
-    console.log("useEffect", res);
     const List = (res as any)?.data.data[0].split("},") || [];
     if (List[0] === "") {
       return setList([]);
@@ -31,7 +28,6 @@ const useGetServerList = ({ userId }: any) => {
       }
     }
 
-    ///
     setList(parsedData);
   }, [res]);
 

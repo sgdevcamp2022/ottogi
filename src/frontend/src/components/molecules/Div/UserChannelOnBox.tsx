@@ -5,7 +5,7 @@ import { useUserStore } from "@store/useUserStore";
 import React from "react";
 import styled from "styled-components";
 
-const UserChannelOnBox = () => {
+const UserChannelOnBox = ({ friend }: any) => {
   const {
     userInfo: { profileImagePath, name },
   } = useUserStore();

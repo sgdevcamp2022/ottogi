@@ -1,5 +1,4 @@
 import { COOKIE_KEY } from "@configs/cookie";
-import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useUserStore } from "@store/useUserStore";
 import authApi from "@api/auth";
@@ -7,7 +6,6 @@ import { cookies } from "src/App";
 
 const useLogin = () => {
   const { setUserInfo } = useUserStore();
-  const navigate = useNavigate();
 
   return useMutation(authApi.login, {
     onSuccess: async ({
@@ -27,7 +25,7 @@ const useLogin = () => {
 
       await setTokens();
       await getUserInfo();
-      navigate("/@me");
+      window.location.reload();
     },
   });
 };
