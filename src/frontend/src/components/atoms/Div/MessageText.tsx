@@ -3,7 +3,7 @@ import { forwardRef, useMemo } from "react";
 import styled from "styled-components";
 import { ColorType, FontSizeType } from "@styles/theme";
 import LinkText from "../Text/LinkText";
-import { useNavigate } from "react-router-dom";
+import useEnterInvitation from "@hooks/query/useEnterInvitation";
 
 interface MessageTextProps {
   text: string;
@@ -13,7 +13,7 @@ interface MessageTextProps {
 
 const MessageText = forwardRef<HTMLParagraphElement, MessageTextProps>(
   ({ text, hasDate, createdAt }, ref) => {
-    const navigate = useNavigate();
+    const { mutate: enterInvitation } = useEnterInvitation();
     const hasLink = useMemo(() => {
       return /(https?:\/\/[^\s]+)/g.test(text);
     }, [text]);
@@ -21,6 +21,11 @@ const MessageText = forwardRef<HTMLParagraphElement, MessageTextProps>(
     const link = words[0];
     words.splice(0, 1);
     const chat2 = words.join(" ");
+
+    const clickInvitation = () => {
+      enterInvitation();
+      window.location.replace(link);
+    };
 
     return (
       <MessageTextContainer>
@@ -34,22 +39,15 @@ const MessageText = forwardRef<HTMLParagraphElement, MessageTextProps>(
         <TextContainer>
           {hasLink ? (
             <>
-              <LinkText
-                text={link}
-                onClick={() => window.location.replace(link)}
-              />
-              {/* <a href={link} target="_blank">
-                {link}
-              </a> */}
+              <LinkText text={link} onClick={clickInvitation} />
+
               <Text ref={ref} color="msg">
-                {/* {chat2} // {hasLink.toString()} */}
                 {chat2}
               </Text>
             </>
           ) : (
             <Text ref={ref} color="msg">
               {text}
-              {/* // {hasLink.toString()} */}
             </Text>
           )}
         </TextContainer>
