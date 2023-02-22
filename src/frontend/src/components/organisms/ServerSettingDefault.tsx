@@ -13,6 +13,7 @@ import { useUserStore } from "@store/useUserStore";
 import { useNavigate, useParams } from "react-router-dom";
 import useInput from "@hooks/common/useInput";
 import useModifyServerImage from "@hooks/query/useModifyServerImage";
+import useDeleteCommunity from "@hooks/query/useDeleteCommnunity";
 
 const SeverSettingDefault = () => {
   // const [formData, setFormData] = useState<FormData>();
@@ -28,7 +29,7 @@ const SeverSettingDefault = () => {
     update({ communityName: name, communityId, userId: userInfo.id });
   };
   const navigate = useNavigate();
-  const { mutate: deleteCommunity } = useMutation(serverApi.delete);
+  const { mutate: deleteCommunity } = useDeleteCommunity();
   const DeleteServer = () => {
     if (!communityId) return;
     deleteCommunity({ communityId, userId: userInfo.id });
