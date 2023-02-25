@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.js": "/static/js/main.2001a97e.js",
+    "static/js/787.cda612ba.chunk.js": "/static/js/787.cda612ba.chunk.js",
+    "static/media/ggsansBold.ttf": "/static/media/ggsansBold.474c9b4e4b46202fc059.ttf",
+    "static/media/ggsansNormal.ttf": "/static/media/ggsansNormal.5e3cb65b9a804d263414.ttf",
+    "index.html": "/index.html",
+    "main.2001a97e.js.map": "/static/js/main.2001a97e.js.map",
+    "787.cda612ba.chunk.js.map": "/static/js/787.cda612ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.2001a97e.js"
+  ]
+}
