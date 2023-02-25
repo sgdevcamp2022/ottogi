@@ -2,12 +2,16 @@ import ButtonWrapper from "@components/atoms/Button/ButtonWrapper";
 import LogoImage from "@components/atoms/Div/LogoImage";
 import Text from "@components/atoms/Text/Text";
 import { useUserStore } from "@store/useUserStore";
-import React from "react";
 import styled from "styled-components";
 
-const UserChannelOnBox = ({ friend }: any) => {
+interface UserChannelOnBoxProps {
+  name?: string;
+  src?: string;
+}
+
+const UserChannelOnBox = ({ name, src }: UserChannelOnBoxProps) => {
   const {
-    userInfo: { profileImagePath, name },
+    userInfo: { profileImagePath: mysrc, name: myname },
   } = useUserStore();
 
   return (
@@ -15,12 +19,12 @@ const UserChannelOnBox = ({ friend }: any) => {
       <ButtonWrapper onClick={() => null} height={30}>
         <UserChannelOnBoxContainer>
           <LogoImage
-            src={profileImagePath}
+            src={src || mysrc}
             width={1.5}
             height={1.5}
             onClick={() => null}
           />
-          <Text text={name} color="white" />
+          <Text text={name || myname} color="white" />
         </UserChannelOnBoxContainer>
       </ButtonWrapper>
     </Container>

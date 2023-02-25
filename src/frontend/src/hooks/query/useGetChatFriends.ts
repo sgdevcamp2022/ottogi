@@ -4,10 +4,12 @@ import chatApi from "@api/chat";
 const useGetChatFriends = (userId: number) => {
   const { data, isSuccess } = useQuery(
     ["chatFriends", { userId }],
-    chatApi.getChatFriends
+    chatApi.getChatFriends,
+    {
+      staleTime: 1000,
+      // cacheTime: Infinity,
+    }
   );
-  console.log("data", data);
-  console.log("data2", data?.data.data);
 
   return { data: data?.data.data, isSuccess };
 };
