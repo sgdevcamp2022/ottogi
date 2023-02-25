@@ -5,7 +5,8 @@ import MainVoiceRoomBody from "./MainVoiceRoomBody";
 const Tab3ServerBody = () => {
   return (
     <Tab3ServerBodyContainer>
-      <MainDirectBody />
+      {/* <MainDirectBody /> */}
+      <MainVoiceRoomBody/>
     </Tab3ServerBodyContainer>
   );
 };
