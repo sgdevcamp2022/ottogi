@@ -1,4 +1,4 @@
-# 👩‍💻스마일게이트 개발 캠프 2022 - 윈터 개발 캠프 2기 - Ottogi
+# 👩‍💻스마일게이트 윈터 개발 캠프 2기 - Ottogi
 
 <b>Discord Clone을 목표</b>로 개발을 진행한 <b>Team Ottogi</b> 입니다.
 
