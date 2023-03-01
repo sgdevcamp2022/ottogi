@@ -1,0 +1,95 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.6",
+    "@mui/styled-engine-sc": "^5.11.0",
+    "@stomp/stompjs": "^7.0.0",
+    "@tanstack/react-query": "^4.23.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/shortid": "^0.0.29",
+    "axios": "^1.2.5",
+    "mediasoup-client": "^3.6.80",
+    "moment": "^2.29.4",
+    "randomstring": "^1.2.3",
+    "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-cookie": "^4.1.1",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^1.3.0",
+    "react-router-dom": "^6.8.0",
+    "react-scripts": "5.0.1",
+    "shortid": "^2.2.16",
+    "socket.io-client": "^4.6.0",
+    "sockjs-client": "^1.6.1",
+    "storybook-addon-knobs-color-options": "^6.2.0-rc.2",
+    "styled-components": "^5.3.6",
+    "styled-reset": "^4.4.5",
+    "typescript": "^4.4.2",
+    "web-vitals": "^2.1.0",
+    "zustand": "^4.3.5"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "chromatic": "chromatic",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.0.0",
+    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-interactions": "^6.5.16",
+    "@storybook/addon-knobs": "^6.4.0",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/builder-webpack5": "^6.5.16",
+    "@storybook/manager-webpack5": "^6.5.16",
+    "@storybook/node-logger": "^6.5.16",
+    "@storybook/preset-create-react-app": "^4.1.2",
+    "@storybook/react": "^6.5.16",
+    "@storybook/testing-library": "^0.0.13",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-beautiful-dnd": "^13.1.3",
+    "@types/react-dom": "^18.0.0",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/sockjs": "^0.3.33",
+    "@types/sockjs-client": "^1.5.1",
+    "@types/stompjs": "^2.3.5",
+    "@types/styled-components": "^5.1.26",
+    "babel-plugin-named-exports-order": "^0.0.2",
+    "chromatic": "^6.15.0",
+    "craco-alias": "^3.0.1",
+    "prop-types": "^15.8.1",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "webpack": "^5.75.0"
+  }
+}

@@ -7,7 +7,11 @@ const community = require('../controllers/communityController');
 const invite = require('../controllers/invitationController');
 
 router.get('/community/test', (req, res) => {
+<<<<<<< HEAD
     res.send('good connect!');
+=======
+    res.send('community good connect!');
+>>>>>>> 69f76bb1527d1206c06c29960199ecc6ea952e7d
 })
 
 //커뮤니티 하위 카테고리, 채널 조회 -> json 형식으로 보내주기
@@ -29,7 +33,11 @@ router.patch('/community/imgupload', upload.single('img'), community.communityIm
 //커뮤니티 정보 변경(프로필)
 router.patch('/community/profile', community.updateProfile);
 //커뮤니티 삭제 
+<<<<<<< HEAD
 router.delete('/community/delete', community.communityDelete);
+=======
+router.patch('/community/delete', community.communityDelete);
+>>>>>>> 69f76bb1527d1206c06c29960199ecc6ea952e7d
 //커뮤니티 나가기
 router.post('/community/out', community.goOut);
 
