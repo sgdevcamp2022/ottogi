@@ -1,13 +1,10 @@
-<<<<<<< HEAD
 import Router from "./routes/router";
 import { Cookies, withCookies } from "react-cookie";
 
 export const cookies = new Cookies();
-=======
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
->>>>>>> 15ec666afa6c7d7599d0c8422b632e9266e55f81
 
 function App() {
   return (
