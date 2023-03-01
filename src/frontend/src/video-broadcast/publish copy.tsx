@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React from "react";
 import { Device } from "mediasoup-client";
 import { io as socketIOClient } from "socket.io-client";
 import { config } from "src/app.config";
@@ -306,9 +306,9 @@ function Publish(props: any) {
       </button>
 
       <button disabled={isPublished || !isStartMedia} onClick={handlePublish}>
-        publish 
+        publish
       </button>
-      <button 
+      <button
         disabled={!isPublished || !isStartMedia}
         onClick={handleDisconnect}
       >
