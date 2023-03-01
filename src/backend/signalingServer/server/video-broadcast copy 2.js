@@ -79,9 +79,9 @@ function socketMain(io, _workers) {
         socket.on('createProducerTransport', async (data, callback) => {
             consoleLog('-- createProducerTransport ---');
             const mode = data.mode;
-            const { roomName } = peers[socket.id]
+
             const { transport, params } = await createTransport(socket.id);
-            addProducerTrasport(roomName, getId(socket), transport);
+            addProducerTrasport(getId(socket), transport);
             transport.observer.on('close', () => {
                 const id = getId(socket);
                 const videoProducer = getProducer(id, 'video', mode);
@@ -101,49 +101,44 @@ function socketMain(io, _workers) {
         });
 
         socket.on('connectProducerTransport', async (data, callback) => {
-            const {transport, room4Producer} = getProducerTrasnport(getId(socket));
-            const {roomName} = peers[socket.id]
-            if (roomName === room4Producer){
-                await transport.connect({ dtlsParameters: data.dtlsParameters });
-                sendResponse({}, callback);
-            }
+            const transport = getProducerTrasnport(getId(socket));
+            await transport.connect({ dtlsParameters: data.dtlsParameters });
+            sendResponse({}, callback);
         });
 
         socket.on('produce', async (data, callback) => {
             const { kind, rtpParameters, mode } = data;
             consoleLog('-- produce --- kind=' + kind);
+
             const id = getId(socket);
-            const {roomName} = peers[id]
-            const {transport, room4Producer} = getProducerTrasnport(id);
-            if (roomName === room4Producer){
-                if (!transport) {
-                    console.error('transport NOT EXIST for id=' + id);
-                    return;
-                }
-                const producer = await transport.produce({ kind, rtpParameters });
-                addProducer(id, producer, kind, mode);
-                producer.observer.on('close', () => {
-                    consoleLog('producer closed --- kind=' + kind);
-                });
-                sendResponse({ id: producer.id }, callback);
-    
-                // inform clients about new producer
-                consoleLog('--broadcast newProducer ---');
-                socket.broadcast.emit('newProducer', { // 나 빼고 다
-                    socketId: id,
-                    producerId: producer.id,
-                    kind: producer.kind,
-                    mode: mode,
-                });
+            const transport = getProducerTrasnport(id);
+            if (!transport) {
+                console.error('transport NOT EXIST for id=' + id);
+                return;
             }
+            const producer = await transport.produce({ kind, rtpParameters });
+            addProducer(id, producer, kind, mode);
+            producer.observer.on('close', () => {
+                consoleLog('producer closed --- kind=' + kind);
+            });
+            sendResponse({ id: producer.id }, callback);
+
+            // inform clients about new producer
+            consoleLog('--broadcast newProducer ---');
+            socket.broadcast.emit('newProducer', {
+                socketId: id,
+                producerId: producer.id,
+                kind: producer.kind,
+                mode: mode,
+            });
         });
 
         // --- consumer ----
         socket.on('createConsumerTransport', async (data, callback) => {
             consoleLog('-- createConsumerTransport -- id=' + getId(socket));
-            const { roomName } = peers[socket.id]
+            console.log("HERE!! ", socket.id)
             const { transport, params } = await createTransport(socket.id);
-            addConsumerTrasport(roomName, getId(socket), transport);
+            addConsumerTrasport(getId(socket), transport);
             transport.observer.on('close', () => {
                 const localId = getId(socket);
                 removeConsumerSetDeep(localId, MODE_STREAM);
@@ -163,7 +158,7 @@ function socketMain(io, _workers) {
 
         socket.on('connectConsumerTransport', async (data, callback) => {
             consoleLog('-- connectConsumerTransport -- id=' + getId(socket));
-            let {transport, room4Consumer} = getConsumerTrasnport(getId(socket));
+            let transport = getConsumerTrasnport(getId(socket));
             if (!transport) {
                 console.error('transport NOT EXIST for id=' + getId(socket));
                 return;
@@ -186,6 +181,7 @@ function socketMain(io, _workers) {
         socket.on('getCurrentProducers', async (data, callback) => {
             const clientId = data.localId;
             consoleLog('-- getCurrentProducers for Id=' + clientId);
+
             const remoteVideoIds = getRemoteIds(clientId, 'video');
             consoleLog('-- remoteVideoIds:', remoteVideoIds);
             const remoteAudioIds = getRemoteIds(clientId, 'audio');
@@ -202,19 +198,13 @@ function socketMain(io, _workers) {
 
             /// 방 생성시 발생하는 문제를 빠르게 Fix 하기 위해서 해결을 위해서 문제를 알고있는 부분을 try except로 채워버렸음... bug fix 진행 해야함 {다른 router에 있는 producer까지 탐색하는 문제가 있음..!} 
         socket.on('consumeAdd', async (data, callback) => {
-
+            try{         
             const localId = getId(socket);
             const kind = data.kind;
             const mode = data.mode;
-            const {roomName} = peers[socket.id]
             consoleLog('-- consumeAdd -- localId=%s kind=%s', localId, kind);
 
-            let {transport, room4Consumer} = getConsumerTrasnport(localId);
-
-            if (room4Consumer !== roomName){
-                return
-            }
-
+            let transport = getConsumerTrasnport(localId);
             if (!transport) {
                 console.error('transport NOT EXIST for id=' + localId);
                 return;
@@ -273,6 +263,10 @@ function socketMain(io, _workers) {
 
             consoleLog('-- consumer ready ---');
             sendResponse(params, callback);
+
+            }catch{
+                console.log("HEllo")
+            }
         });
 
         socket.on('resumeAdd', async (data, callback) => {
@@ -299,6 +293,7 @@ function socketMain(io, _workers) {
             const id = getId(socket);
 
             removeConsumerSetDeep(id, MODE_SHARE_SCREEN);
+
             {
                 const videoProducer = getProducer(
                     id,
@@ -378,7 +373,7 @@ function socketMain(io, _workers) {
             }
             */
 
-            const {transport, room4Consumer} = getConsumerTrasnport(id);
+            const transport = getConsumerTrasnport(id);
             if (transport) {
                 transport.close();
                 removeConsumerTransport(id);
@@ -421,7 +416,7 @@ function socketMain(io, _workers) {
                 }
             }
 
-            const {producerTransport, room4Producer} = getProducerTrasnport(id);
+            const producerTransport = getProducerTrasnport(id);
             if (producerTransport) {
                 producerTransport.close();
                 removeProducerTransport(id);
@@ -449,11 +444,8 @@ function socketMain(io, _workers) {
         return producerTransports[id];
     }
 
-    function addProducerTrasport(roomName, id, transport) {
-        producerTransports[id] = {
-            transport : transport,
-            room : roomName
-        };
+    function addProducerTrasport(id, transport) {
+        producerTransports[id] = transport;
         consoleLog(
             'producerTransports count=' + Object.keys(producerTransports).length
         );
@@ -571,11 +563,8 @@ function socketMain(io, _workers) {
         return consumerTransports[id];
     }
 
-    function addConsumerTrasport(roomName, id, transport) {
-        consumerTransports[id] = {
-            transport : transport,
-            room : roomName
-        };
+    function addConsumerTrasport(id, transport) {
+        consumerTransports[id] = transport;
         consoleLog(
             'consumerTransports count=' + Object.keys(consumerTransports).length
         );
@@ -759,6 +748,7 @@ function socketMain(io, _workers) {
             console.error('can not consume');
             return;
         }
+        try{
         //consumer = await producerTransport.consume({ // NG: try use same trasport as producer (for loopback)
         consumer = await transport
             .consume({
@@ -787,6 +777,10 @@ function socketMain(io, _workers) {
                 producerPaused: consumer.producerPaused,
             },
         };
+        }catch{
+            console.log("Hello World")
+        }
+
     }
 
     async function getOrCreateRoom({ roomName })

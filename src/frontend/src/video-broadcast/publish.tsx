@@ -130,7 +130,7 @@ async function handleConnectScreenShare() {
         console.warn('WARN: local media NOT READY');
         return;
     }
-    console.log("엥",roomName)
+
     // --- get capabilities --
     const data = await sendRequest('getRouterRtpCapabilities', {
         roomName : roomName,
