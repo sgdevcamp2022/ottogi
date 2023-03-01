@@ -75,7 +75,10 @@ module.exports = {
     // 커뮤니티 이미지 변경
 
     communityImage: async(req, res) => {
+<<<<<<< HEAD
+=======
         console.log("커뮤니티 이미지 변경 요청 [IN]")
+>>>>>>> 69f76bb1527d1206c06c29960199ecc6ea952e7d
         const {communityId, userId} = req.body;
         const img = req.file ?? '';
 
@@ -107,18 +110,28 @@ module.exports = {
 
     //커뮤니티 삭제
     communityDelete: async (req, res) => {
+<<<<<<< HEAD
+=======
         console.log("커뮤니티 삭제 컨트롤러 요청 [IN] ");
+>>>>>>> 69f76bb1527d1206c06c29960199ecc6ea952e7d
         const {communityId, userId} = req.body;
         if (!communityId) {
             res.json({
                 success: false,
+<<<<<<< HEAD
+                message: 'ERROR: Invalid parmas',
+=======
                 message: 'ERROR: Invalid params',
+>>>>>>> 69f76bb1527d1206c06c29960199ecc6ea952e7d
                 data: null,
             })
         } else {
             if(await isAdmin(communityId, userId)){
                 community.delete(communityId);
+<<<<<<< HEAD
+=======
                 console.log("커뮤니티 삭제 컨트롤러 요청 [DONE] ");
+>>>>>>> 69f76bb1527d1206c06c29960199ecc6ea952e7d
                 res.json({
                     success: true,
                     message: `Community ID : ${communityId} Deleted` ,

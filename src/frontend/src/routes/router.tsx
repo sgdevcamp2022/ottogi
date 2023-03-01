@@ -5,10 +5,10 @@ import Register from "../pages/Register";
 import Server from "../pages/Server";
 import ProtectAuth from "../components/organisms/ProtectAuth";
 import ProtectPage from "../components/organisms/ProtectHome";
-import NotFound from '@pages/NotFound';
 import ServerSetting from "../pages/ServerSetting";
 import UserSetting from "../pages/UserSetting";
 import CreateServer from "@pages/CreateServer";
+import NotFound from "@pages/NotFound";
 import Home from "src/video-broadcast/home";
 import BroadHome from "src/video-broadcast";
 

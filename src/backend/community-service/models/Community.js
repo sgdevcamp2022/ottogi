@@ -249,11 +249,16 @@ module.exports = {
 
     //커뮤니티 삭제 명령
     delete: (communityId) => {
+<<<<<<< HEAD
+        let sql = `DELETE FROM community WHERE id = ${communityId}`;
+        db.query(sql);
+=======
         console.log(`커뮤니티 삭제요청 [IN] communityId : ${communityId}`)
         let sql = `DELETE FROM community WHERE id = ${communityId}`;
         db.query(sql);
         console.log(`커뮤니티 삭제요청 [DONE] communityId : ${communityId}`)
 
+>>>>>>> 69f76bb1527d1206c06c29960199ecc6ea952e7d
     },
 
     //프로필 업데이트

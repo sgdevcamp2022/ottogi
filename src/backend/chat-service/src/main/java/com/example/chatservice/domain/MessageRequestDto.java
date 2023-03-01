@@ -27,7 +27,11 @@ public class MessageRequestDto {
     public MessageRequestDto convertEnterDto(ChatEnterDto chatEnterDto){
         return MessageRequestDto.builder()
                 .channelId(chatEnterDto.getChannelId())
+<<<<<<< HEAD
+                .name("OTTOGI")
+=======
                 .name(chatEnterDto.getName())
+>>>>>>> 69f76bb1527d1206c06c29960199ecc6ea952e7d
                 .type(ENTER)
                 .message(chatEnterDto.getName() + " 님이 커뮤니티에 함께 합니다!")
                 .build();
