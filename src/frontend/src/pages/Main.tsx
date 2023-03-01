@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import MainPage from "@components/templates/MainPage";
 import HeaderHelmet from "@components/atoms/Helmet";
 import PageContainer from "@components/atoms/Div/PageContainer";
@@ -30,5 +29,3 @@ const Main = () => {
 };
 
 export default Main;
-=======
->>>>>>> 15ec666afa6c7d7599d0c8422b632e9266e55f81

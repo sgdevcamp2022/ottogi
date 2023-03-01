@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Route, Routes } from "react-router-dom";
 import Main from "../pages/Main";
 import Login from "../pages/Login";
@@ -6,10 +5,10 @@ import Register from "../pages/Register";
 import Server from "../pages/Server";
 import ProtectAuth from "../components/organisms/ProtectAuth";
 import ProtectPage from "../components/organisms/ProtectHome";
-import NotFound from '@pages/NotFound';
 import ServerSetting from "../pages/ServerSetting";
 import UserSetting from "../pages/UserSetting";
 import CreateServer from "@pages/CreateServer";
+import NotFound from "@pages/NotFound";
 import Home from "src/video-broadcast/home";
 import BroadHome from "src/video-broadcast";
 
@@ -90,5 +89,3 @@ const Router = () => {
 };
 
 export default Router;
-=======
->>>>>>> 15ec666afa6c7d7599d0c8422b632e9266e55f81
