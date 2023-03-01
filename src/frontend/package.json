@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.0",
@@ -19,20 +18,10 @@
     "mediasoup-client": "^3.6.80",
     "moment": "^2.29.4",
     "randomstring": "^1.2.3",
-=======
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
->>>>>>> 15ec666afa6c7d7599d0c8422b632e9266e55f81
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
-<<<<<<< HEAD
     "react-helmet-async": "^1.3.0",
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
@@ -42,14 +31,10 @@
     "storybook-addon-knobs-color-options": "^6.2.0-rc.2",
     "styled-components": "^5.3.6",
     "styled-reset": "^4.4.5",
-=======
-    "react-scripts": "5.0.1",
->>>>>>> 15ec666afa6c7d7599d0c8422b632e9266e55f81
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-<<<<<<< HEAD
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
@@ -57,12 +42,6 @@
     "chromatic": "chromatic",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
-=======
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
->>>>>>> 15ec666afa6c7d7599d0c8422b632e9266e55f81
   },
   "eslintConfig": {
     "extends": [
@@ -81,7 +60,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-<<<<<<< HEAD
   },
   "devDependencies": {
     "@craco/craco": "^7.0.0",
@@ -112,7 +90,5 @@
     "prop-types": "^15.8.1",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "webpack": "^5.75.0"
-=======
->>>>>>> 15ec666afa6c7d7599d0c8422b632e9266e55f81
   }
 }
