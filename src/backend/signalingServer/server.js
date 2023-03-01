@@ -16,26 +16,24 @@ const ip = listenIps.announcedIp || listenIps.ip;
 const Server = require("socket.io"); // server side
 
 const mediasoupWorkers = [];
-let worker = null;
-let router = null;
 
 let httpsServer;
 let expressApp;
 
 run();
 async function run() {
-try {
-    await createMediasoupWorkers();
+    try {
+        await createMediasoupWorkers();
 
-    await runExpressApp();
+        await runExpressApp();
 
-    await runWebServer();
+        await runWebServer();
 
-    await runSocketServer();
-    // Log rooms status every X seconds.
-} catch (err) {
-    console.error(err);
-}
+        await runSocketServer();
+        // Log rooms status every X seconds.
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 //=====================================================================================================
@@ -113,15 +111,16 @@ router = await worker.createRouter({ mediaCodecs });
 console.log("-- mediasoup worker start. --");
 return worker;
 }
+
 //=====================================================================================================
 async function runExpressApp() {
-expressApp = express();
-expressApp.use(bodyParser.json());
-expressApp.use(bodyParser.urlencoded({ extended: false }));
-// expressApp.use('/rooms/:roomId',express.static(__dirname + '/public'));
-expressApp.get("/test", (req, res) => {
-    res.send("연결성공");
-});
+    expressApp = express();
+    expressApp.use(bodyParser.json());
+    expressApp.use(bodyParser.urlencoded({ extended: false }));
+    // expressApp.use('/rooms/:roomId',express.static(__dirname + '/public'));
+    expressApp.get("/test", (req, res) => {
+        res.send("연결성공");
+    });
 
     expressApp.use((error, req, res, next) => {
         console.log(req);
@@ -141,17 +140,17 @@ expressApp.get("/test", (req, res) => {
 
 //=====================================================================================================
 async function runWebServer() {
-  const { key, cert } = config.https.tls;
-  if (!fs.existsSync(key) || !fs.existsSync(cert)) {
-    console.error("SSL files are not found. check your config.js file");
-    process.exit(0);
-  }
-  const tls = {
-    cert: fs.readFileSync(config.https.tls.cert, "utf-8"),
-    key: fs.readFileSync(config.https.tls.key, "utf-8"),
-    rejectUnauthorized: false,
-    requestCert: false,
-  };
+    const { key, cert } = config.https.tls;
+    if (!fs.existsSync(key) || !fs.existsSync(cert)) {
+        console.error("SSL files are not found. check your config.js file");
+        process.exit(0);
+    }
+    const tls = {
+        cert: fs.readFileSync(config.https.tls.cert, "utf-8"),
+        key: fs.readFileSync(config.https.tls.key, "utf-8"),
+        rejectUnauthorized: false,
+        requestCert: false,
+    };
 
     httpsServer = https.createServer(tls, expressApp);
     httpsServer.on("error", (err) => {
