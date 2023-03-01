@@ -1,0 +1,30 @@
+{
+  "name": "statement_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "bin": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "pkg": {
+    "scripts": "*.js",
+    "targets": [
+      "node12-win-x64"
+    ]
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "eureka-js-client": "^4.5.0",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "node-eureka": "^0.0.2",
+    "nodemon": "^2.0.20"
+  }
+}

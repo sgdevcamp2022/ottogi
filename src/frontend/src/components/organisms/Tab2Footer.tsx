@@ -1,3 +1,4 @@
+import useUserSettingModalStore from "@store/useUserSettingModalStore";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeadsetIcon from "../atoms/Icons/HeadsetIcon";
@@ -10,36 +11,53 @@ import UserOnOffButton from "../molecules/Button/UserOnOffButton";
 
 const Tab2Footer = () => {
   const navigate = useNavigate();
+
   const userSetting = () => {
     navigate("/UserSetting");
   };
+  const { setUserSettingModal } = useUserSettingModalStore();
+
+  const clickMic = () => {
+    // navigator.mediaDevices.getUserMedia({ audio: !mic }).then((stream: any) => {
+    //   setMic(!mic);
+    // });
+  };
+
+  const clickSound = () => {
+    // navigator.mediaDevices.getUserMedia({ video: !sound }).then((stream: any) => {
+    // setSound(!sound);
+    // });
+  };
 
   return (
-    <Tab2FooterContainer>
-      <InfoContainer>
-        <UserInfoButton />
-      </InfoContainer>
-      <ButtonContainer>
-        <UserOnOffButton
-          text="음소거"
-          OnIcon={<MicIcon />}
-          OffIcon={<MicOffIcon />}
-          onClick={() => null}
-        />
-        <UserOnOffButton
-          text="헤드셋 음소거"
-          OnIcon={<HeadsetIcon />}
-          OffIcon={<HeadsetOffIcon />}
-          onClick={() => null}
-        />
-        <UserOnOffButton
-          text="사용자 설정"
-          OnIcon={<SettingsIcon />}
-          OffIcon={<SettingsIcon />}
-          onClick={() => userSetting()}
-        />
-      </ButtonContainer>
-    </Tab2FooterContainer>
+    <>
+      <Tab2FooterContainer>
+        <InfoContainer>
+          <UserInfoButton status="1" />
+        </InfoContainer>
+        <ButtonContainer>
+          <UserOnOffButton
+            text="음소거"
+            OnIcon={<MicIcon />}
+            OffIcon={<MicOffIcon />}
+            onClick={() => null}
+          />
+          <UserOnOffButton
+            text="헤드셋 음소거"
+            OnIcon={<HeadsetIcon />}
+            OffIcon={<HeadsetOffIcon />}
+            onClick={() => null}
+          />
+          <UserOnOffButton
+            text="사용자 설정"
+            OnIcon={<SettingsIcon />}
+            OffIcon={<SettingsIcon />}
+            // onClick={() => userSetting()}
+            onClick={() => setUserSettingModal(true)}
+          />
+        </ButtonContainer>
+      </Tab2FooterContainer>
+    </>
   );
 };
 

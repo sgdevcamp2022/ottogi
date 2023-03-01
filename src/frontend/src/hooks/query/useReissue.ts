@@ -1,19 +1,15 @@
 import { COOKIE_KEY } from "@configs/cookie";
-import { useCookies } from "react-cookie";
 import { useMutation } from "@tanstack/react-query";
-import { useUserStore } from "@store/useUserStore";
 import authApi from "@api/auth";
+import { cookies } from "src/App";
 
 const useReissue = () => {
-  const [cookies, setCookies] = useCookies([COOKIE_KEY]);
-  const { setAccessToken } = useUserStore();
-
   return useMutation(authApi.reissue, {
     onSuccess: ({ data }) => {
       const { accessToken, refreshToken } = data;
 
-      setCookies(COOKIE_KEY, refreshToken);
-      setAccessToken(accessToken);
+      cookies.set(COOKIE_KEY, refreshToken);
+      localStorage.setItem("accessToken", accessToken);
     },
   });
 };

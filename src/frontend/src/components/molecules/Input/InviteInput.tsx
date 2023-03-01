@@ -11,13 +11,10 @@ import styled from "styled-components";
 const InviteInput = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { userInfo, accessToken } = useUserStore();
+  const { userInfo } = useUserStore();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("default");
   const { mutate: requestFriend } = useRequestFriend({
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["friendList"] });
-    },
     onError: () => {
       setEmail("");
       setStatus("danger");
@@ -25,6 +22,9 @@ const InviteInput = () => {
     onSuccess: () => {
       setEmail("");
       setStatus("success");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["friendList"] });
     },
   });
 
@@ -37,7 +37,7 @@ const InviteInput = () => {
 
   const inviteFriend = () => {
     if (!userInfo) navigate("/login");
-    requestFriend({ email, accessToken });
+    requestFriend({ email });
   };
 
   return (

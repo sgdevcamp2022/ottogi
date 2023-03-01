@@ -9,15 +9,75 @@ import useInput from "@hooks/common/useInput";
 import useModifyPassword from "@hooks/query/useModifyPassword";
 import { useUserStore } from "@store/useUserStore";
 import useModifyName from "@hooks/query/useModifyName";
-import LoginForm from "@components/molecules/Form/LoginForm";
+import useModifyIntro from "@hooks/query/useModifyIntro";
 
-const NameChange = () => {
+const IntroChange = ({ setOpenModal3 }: any) => {
+  const { userInfo, setUserInfo } = useUserStore();
+  const [introduction, changeIntroduction] = useInput();
+  const { mutate: modifyIntro } = useModifyIntro();
+  const updataIntro = () => {
+    modifyIntro({
+      introduction,
+    });
+    setUserInfo({ ...userInfo, introduction });
+    setOpenModal3(false);
+  };
+  return (
+    <>
+      <TopWrapper>
+        <TextWrapper>
+          <Text
+            text="자기소개 작성하기"
+            fontSize="xxl"
+            fontWeight="bold"
+            mb={12}
+            color="white"
+          />
+          <Text
+            text="한줄로 자기소개를 작성해주세요!"
+            fontSize="base"
+            color="setting-tab"
+            mb={20}
+          />
+        </TextWrapper>
+        <Wrapper>
+          {/* <Text
+            text="Self-Introduction"
+            color="setting-tab"
+            fontSize="xs"
+            mb={10}
+            fontWeight="bold"
+          /> */}
+          <DefaultInput
+            value={introduction}
+            onChange={changeIntroduction}
+            backgroundColor="voice-modal"
+            fontSize="base"
+            color="white"
+            type="text"
+          />
+        </Wrapper>
+      </TopWrapper>
+      <Bottom>
+        <DefaultButton text="완료" onClick={() => updataIntro()} />
+      </Bottom>
+    </>
+  );
+};
+
+const NameChange = ({ setOpenModal }: any) => {
+  const { userInfo, setUserInfo } = useUserStore();
   const [name, changeName] = useInput();
   const [password, changePassword] = useInput();
-  const { userInfo, accessToken } = useUserStore();
   const { mutate: modifyName } = useModifyName();
-  console.log(accessToken);
-
+  const updataUserName = () => {
+    modifyName({
+      name,
+      password,
+    });
+    setUserInfo({ ...userInfo, name });
+    setOpenModal(false);
+  };
   return (
     <>
       <TopWrapper>
@@ -73,29 +133,25 @@ const NameChange = () => {
         </Wrapper>
       </TopWrapper>
       <Bottom>
-        <DefaultButton
-          text="완료"
-          onClick={() =>
-            modifyName({
-              name,
-              password,
-              accessToken,
-            })
-          }
-        />
+        <DefaultButton text="완료" onClick={() => updataUserName()} />
       </Bottom>
     </>
   );
 };
 
-const PwChange = () => {
-  const { userInfo, accessToken } = useUserStore();
+const PwChange = ({ setOpenModal2 }: any) => {
   const [passwordConfirm, changePasswordConfirm] = useInput();
   const [password, changePassword] = useInput();
   const [originalPassword, changeOriginalPassword] = useInput();
 
   const { mutate: modifyPassword } = useModifyPassword();
-
+  const OnChangePw = () => {
+    modifyPassword({
+      password,
+      originalPassword,
+    });
+    setOpenModal2(false);
+  };
   return (
     <>
       <TopWrapper>
@@ -168,16 +224,7 @@ const PwChange = () => {
         </Wrapper>
       </TopWrapper>
       <Bottom>
-        <DefaultButton
-          text="완료"
-          onClick={() =>
-            modifyPassword({
-              password,
-              originalPassword,
-              accessToken,
-            })
-          }
-        />
+        <DefaultButton text="완료" onClick={() => OnChangePw()} />
       </Bottom>
     </>
   );
@@ -187,29 +234,37 @@ const FieldList = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const [password, changePassword] = useInput();
   const [isOpenModal2, setOpenModal2] = useState<boolean>(false);
+  const [isOpenModal3, setOpenModal3] = useState<boolean>(false);
   const { userInfo } = useUserStore();
   const onClickToggleModal = useCallback(() => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
-
   const onClickToggleModal2 = useCallback(() => {
     setOpenModal2(!isOpenModal2);
   }, [isOpenModal2]);
+  const onClickToggleModal3 = useCallback(() => {
+    setOpenModal3(!isOpenModal3);
+  }, [isOpenModal3]);
   return (
     <ListWrapper>
       {isOpenModal && (
         <Modal onClickToggleModal={onClickToggleModal}>
-          <NameChange />
+          <NameChange setOpenModal={setOpenModal} />
         </Modal>
       )}
       {isOpenModal2 && (
         <Modal onClickToggleModal={onClickToggleModal2}>
-          <PwChange />
+          <PwChange setOpenModal2={setOpenModal2} />
+        </Modal>
+      )}
+      {isOpenModal3 && (
+        <Modal onClickToggleModal={onClickToggleModal3}>
+          <IntroChange setOpenModal3={setOpenModal3} />
         </Modal>
       )}
       <FieldContinaer>
         <LeftRow>
-          <Text text="사용자명" fontSize="xs" color="setting-tab" />
+          <Text text="사용자명" fontSize="xs" color="setting-tab" mb={8} />
           <Text text={userInfo.name} fontSize="base" color="white" />
         </LeftRow>
         <ButtonWrappper>
@@ -222,7 +277,7 @@ const FieldList = () => {
       </FieldContinaer>
       <FieldContinaer>
         <LeftRow>
-          <Text text="이메일" fontSize="xs" color="setting-tab" />
+          <Text text="이메일" fontSize="xs" color="setting-tab" mb={8} />
           <Text text={userInfo.email} fontSize="base" color="white" />
         </LeftRow>
         {/* <ButtonWrappper>
@@ -235,11 +290,20 @@ const FieldList = () => {
       </FieldContinaer>
       <FieldContinaer>
         <LeftRow>
-          <Text text="비밀번호" fontSize="xs" color="setting-tab" />
-          <Text text="xxxx" fontSize="base" color="white" />
+          <Text text="비밀번호" fontSize="xs" color="setting-tab" mb={8} />
+          <Text text="********" fontSize="base" color="white" />
         </LeftRow>
         <ButtonWrappper>
           <FieldButton text="변경하기" onClick={onClickToggleModal2} />
+        </ButtonWrappper>
+      </FieldContinaer>
+      <FieldContinaer>
+        <LeftRow>
+          <Text text="자기소개" fontSize="base" color="setting-tab" mb={8} />
+          {/* <Text text="****" fontSize="base" color="white" /> */}
+        </LeftRow>
+        <ButtonWrappper>
+          <FieldButton text="변경하기" onClick={onClickToggleModal3} />
         </ButtonWrappper>
       </FieldContinaer>
     </ListWrapper>
@@ -263,7 +327,9 @@ const FieldContinaer = styled.div`
   padding-bottom: 1rem;
 `;
 
-const LeftRow = styled.div``;
+const LeftRow = styled.div`
+  align-items: center;
+`;
 
 const ButtonWrappper = styled.div`
   width: auto;

@@ -21,12 +21,12 @@ const getBodyByStatus = (status: MainStatusType) => {
 };
 
 const MainBody = () => {
-  const info = useMatch("/@me");
+  const isMain = useMatch("/@me");
   const { mainStatus } = useMainStore(({ mainStatus }) => ({ mainStatus }));
 
   return (
     <MainBodyContainer>
-      {info ? (
+      {isMain ? (
         <MainFriendBody>{getBodyByStatus(mainStatus)}</MainFriendBody>
       ) : (
         <MainDirectBody />

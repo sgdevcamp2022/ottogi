@@ -12,13 +12,11 @@ const InviteFriendModalBody = () => {
   const [search, changeSearch] = useInput();
   const {
     userInfo: { email },
-    accessToken,
   } = useUserStore();
-  const { data } = useGetFriendList({ email, accessToken });
+  const { data: friendList, isSuccess } = useGetFriendList(email);
 
-  if (!data) return <></>;
-  const friendList = data.data.data;
-  console.log(friendList);
+  if (!isSuccess) return <></>;
+
   const num = friendList.length;
 
   return (
@@ -36,7 +34,13 @@ const InviteFriendModalBody = () => {
         <ScrollableBox>
           <FriendListContainer>
             {num > 0 ? (
-              friendList.map((v: FriendType) => <InviteFriendBox />)
+              friendList.map(({ name, userId, channelId }: FriendType) => (
+                <InviteFriendBox
+                  name={name}
+                  userId={userId}
+                  channelId={channelId}
+                />
+              ))
             ) : (
               <TextWrapper>
                 <Text

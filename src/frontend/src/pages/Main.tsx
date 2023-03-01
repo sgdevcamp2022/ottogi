@@ -3,16 +3,20 @@ import HeaderHelmet from "@components/atoms/Helmet";
 import PageContainer from "@components/atoms/Div/PageContainer";
 import { useMatch, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import useUserSettingModalStore from "@store/useUserSettingModalStore";
 
 const Main = () => {
+  const { setUserSettingModal } = useUserSettingModalStore();
   const navigate = useNavigate();
   const isMain = useMatch("/");
 
   useEffect(() => {
-    if (isMain) {
-      navigate("/@me");
-    }
+    setUserSettingModal(false);
   }, []);
+
+  if (isMain) {
+    navigate("/@me");
+  }
 
   return (
     <>

@@ -9,9 +9,12 @@ import GlobalStyle from "./styles/globalStyle";
 import theme from "./styles/theme";
 import { CookiesProvider } from "react-cookie";
 
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+
 const queryClient = new QueryClient();
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={theme}>
