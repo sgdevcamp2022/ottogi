@@ -1,0 +1,25 @@
+server:
+  port: 3030
+
+spring:
+  application:
+    name: chat-service
+
+  redis:
+    host: localhost
+    port: 6379
+
+
+eureka:
+  instance:
+    instance-id: chat-microservice-instance
+
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+server_image : https://ottogi-file-server.s3.ap-northeast-2.amazonaws.com/web-development.png
+
+state-management-url : http://localhost:8090/state/

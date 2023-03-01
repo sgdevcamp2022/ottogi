@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { createGlobalStyle, css } from "styled-components";
 import reset from "styled-reset";
 
@@ -89,3 +90,5 @@ const GlobalStyle = createGlobalStyle`${css`
 `}`;
 
 export default GlobalStyle;
+=======
+>>>>>>> 15ec666afa6c7d7599d0c8422b632e9266e55f81

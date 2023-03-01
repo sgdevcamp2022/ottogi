@@ -13,20 +13,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class MemberResponseDto {
+    private Long id;
     private String email;
     private String name;
     private String introduction;
     private String profileImagePath;
-    private String profileImageName;
     private LocalDateTime createdAt;
 
     public static MemberResponseDto of(Member member) {
         return MemberResponseDto.builder()
+                .id(member.getId())
                 .email(member.getEmail())
                 .name(member.getName())
                 .introduction(member.getIntroduction())
                 .profileImagePath(member.getProfileImagePath())
-                .profileImageName(member.getProfileImageName())
                 .createdAt(member.getCreatedAt())
                 .build();
     }
