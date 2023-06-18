@@ -18,7 +18,7 @@
 
 <br><br>
 
-# Architecture
+# Architecture 🚧
 
 ![image](https://user-images.githubusercontent.com/75191916/221621967-5e8d7265-d89f-491a-be7f-512fb817cae0.png)
 
@@ -40,7 +40,7 @@
 
 <br><br>
 
-# 기술 스택
+# 기술 스택 🎮
 
 #### FRONT END 🔮
 
@@ -67,7 +67,7 @@
 
 <bR>
 
-# 기능
+# 주요 기능 🚀
 
 - <i>회원가입 및 로그인</i>
 
@@ -85,30 +85,56 @@
 
 <br>
 
-# 영상 및 일부 실행 사진
+# 실행 화면 👨‍💻
 
-시연 영상 링크 : [VIDEO](https://github.com/sgdevcamp2022/ottogi/tree/main/video)
-
-- ### 로그인
-
-![image](https://user-images.githubusercontent.com/75191916/221626092-b9d73427-5cb7-4e8f-b359-2ccb5dbdb181.png)
+영상 링크 : [VIDEO](https://github.com/sgdevcamp2022/ottogi/tree/main/video)
 
 <br>
 
-- ### 메인 화면
+- ### 회원가입 및 로그인
+  - `Google SMTP를 활용한 메일인증을 통하여 회원가입 진행`
 
-![image](https://user-images.githubusercontent.com/75191916/221625710-3fdcb085-470d-427f-93bc-975d60765b4a.png)
+![1  회원가입 및 로그인](https://github.com/sgdevcamp2022/ottogi/assets/75191916/71ebb161-cb55-477b-afac-7b81522ad369)
 
-<br>
-
-- ### DM
-
-![image](https://user-images.githubusercontent.com/75191916/221625844-0969666a-ca90-473a-84b9-82aa02cfd7c2.png)
 
 <br>
 
-- ### 커뮤니티 채팅
+- ### 프로필 확인 및 변경
+  - `프로필 사진, 이름, 비밀번호, 자기소개 변경 가능`
 
-![image](https://user-images.githubusercontent.com/75191916/221625954-fd453218-aa1d-4e9e-93ba-3b42822ec65c.png)
+![2  프로필 변경](https://github.com/sgdevcamp2022/ottogi/assets/75191916/b9ee8df3-2f7f-43fd-8a12-d55ef9ab29f3)
+
 
 <br>
+
+- ### 친구추가 기능 및 1:1 DM
+  - `메일을 통한 친구추가 가능`
+  - `친구 수락 및 삭제 가능`
+  - `친구 온/오프라인 여부 확인 가능`
+  - `친구간 1:1 채팅 (DM) 가능`
+    
+![3  친구 추가 및 채팅](https://github.com/sgdevcamp2022/ottogi/assets/75191916/ec5cb05f-c21b-4d7f-9e46-aa0cddc39bf4)
+
+
+<br>
+
+- ### 커뮤니티 생성
+  - `사진 및 이름 설정하여 커뮤니티 생성 가능`
+
+![4  커뮤니티 생성](https://github.com/sgdevcamp2022/ottogi/assets/75191916/2c76f2fb-a2e7-446c-9552-95b84685b296)
+
+
+  <br>
+
+
+- ### 커뮤니티 초대 및 채팅
+  - `친구 목록에서 커뮤니티 초대 가능`
+  - `채팅 메세지로 오는 초대로 가입 가능`
+  - `커뮤니티 가입시 웰컴 메세지 전송`
+  - `커뮤니티 멤버간 1:N 채팅 가능`
+
+![5  커뮤니티 초대 및 채팅](https://github.com/sgdevcamp2022/ottogi/assets/75191916/57c2614b-fb6a-4b7c-8375-1bca82d8d77f)
+
+
+<br>
+
